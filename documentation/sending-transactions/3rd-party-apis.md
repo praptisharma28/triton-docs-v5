@@ -1,5 +1,5 @@
 ---
-description: Trading APIs Triton hosts on your RPC endpoint: swaps, quotes, and bundle simulation.
+description: Trading APIs Triton hosts on your RPC endpoint for swaps, quotes, and bundle simulation.
 ---
 
 # 3rd party APIs

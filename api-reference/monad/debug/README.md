@@ -1,7 +1,5 @@
 ---
 description: Pull raw, RLP-encoded chain data and step-by-step execution traces.
-  The `debug_*` namespace: raw block/header/receipt/transaction access and
-  transaction tracing.
 ---
 
 # Debug & tracing

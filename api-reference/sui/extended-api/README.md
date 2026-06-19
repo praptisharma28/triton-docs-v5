@@ -1,7 +1,5 @@
 ---
 description: Query owned objects, dynamic fields, events, names, and live streams beyond the core reads.
-  Indexer-backed queries: owned objects, dynamic fields, events, the name
-  service, and subscriptions.
 ---
 
 # Extended API

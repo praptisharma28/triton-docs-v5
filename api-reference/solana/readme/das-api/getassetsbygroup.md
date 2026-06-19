@@ -1,5 +1,5 @@
 ---
-description: '{% hint style="warning" %} Temporary Suspension'.
+description: The assets in a group, such as a collection. Temporarily suspended.
 ---
 
 # getAssetsByGroup
