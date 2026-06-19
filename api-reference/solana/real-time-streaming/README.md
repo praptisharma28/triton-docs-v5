@@ -29,6 +29,8 @@ Two interfaces stream live updates; pick by transport and throughput:
 | Whirligig WebSockets | Standard WebSocket subscriptions to accounts, programs, logs, signatures, slots, and roots. |
 | gRPC (Dragon's Mouth) | High-throughput, backend-to-backend Geyser streaming of accounts, transactions, slots, blocks, and entries. |
 
+On gRPC, [Deshred](yellowstone-grpc/deshred.md) streams transactions reconstructed from shreds before the validator executes them, for the earliest possible signal (beta).
+
 ***
 
 <i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
