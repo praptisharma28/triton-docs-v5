@@ -43,7 +43,7 @@ How to run real-time Solana streams reliably and at low latency.
 
 ## Use deshred only for the earliest signal
 
-* **Deshred (beta) delivers transactions reconstructed from shreds before execution** — the earliest usable signal, for arbitrage, market making, copy trading, liquidations, and HFT.
+* **Deshred delivers transactions reconstructed from shreds before execution**, the earliest usable signal for arbitrage, market making, copy trading, liquidations, and HFT.
 * **Don't rely on it for execution results or finality.** It has no confirmation guarantee (a transaction may fail, fork, or never confirm); pair it with the normal `transactions` stream if you need those. `SubscribeDeshred` is a separate RPC.
 
 ## Fumarole reliability and failover

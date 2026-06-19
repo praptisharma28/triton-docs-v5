@@ -1,7 +1,7 @@
 ---
 description: >-
   Stream pre-execution (deshred) transactions over gRPC, before they are
-  executed (beta).
+  executed.
 ---
 
 # Deshred transactions

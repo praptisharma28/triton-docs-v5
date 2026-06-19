@@ -1,18 +1,83 @@
 ---
-description: How to send Solana transactions reliably through Triton's SWQoS routing.
+description: Direct HTTP endpoint for submitting Solana transactions through Cascade without JSON-RPC overhead.
 ---
 
 # sendTx
 
-Reliable transaction delivery on Solana is a client-side strategy. These practices significantly increase your inclusion rate on Triton's SWQoS routing.
+`POST /sendtx` is a direct HTTP transaction submission path on Cascade-enabled Solana endpoints. It takes a serialized transaction over plain HTTP and skips the JSON-RPC layer, removing several sources of latency that a standard [sendTransaction](sendtransaction.md) call carries. Reach for it on latency-sensitive workloads where every millisecond of submission overhead matters.
 
-* **Handle retries in your own code.** Do not rely on the RPC node to retry for you. Build asynchronous retry logic, re-fetching a recent blockhash and re-signing every few seconds.
-* **Set `maxRetries: 0`** in your `sendTransaction` options, so the node does not use its legacy retry queue.
-* **Set `skipPreflight: true`.** If you need a simulation, run `simulateTransaction()` separately beforehand.
-* **Use a `finalized` or `confirmed` blockhash.** Never use `processed` for blockhashes.
-* **Set a tight compute-unit budget and a competitive priority fee.**
+## Why use it over sendTransaction
 
-For the method itself, see [sendTransaction](sendtransaction.md). For percentile-based priority-fee estimates, see [getRecentPrioritizationFees](getrecentprioritizationfees.md).
+A `sendTransaction` call wraps your transaction in a JSON-RPC envelope, which adds overhead at every stage. `/sendtx` strips that away:
+
+* **No JSON parsing.** The server reads your transaction bytes directly, with no JSON deserialisation.
+* **No CORS preflight.** With `Content-Type: application/octet-stream` or `text/plain`, browsers skip the preflight `OPTIONS` request, saving a full round-trip.
+* **Smaller payloads.** Without the `jsonrpc`, `id`, `method`, and `params` wrapper, the request body is smaller on the wire.
+* **Simpler clients.** A single HTTP `POST`, with no Solana JSON-RPC client library.
+
+This suits browser apps that are sensitive to preflight latency and high-frequency backends sending large volumes. If you need full `sendTransaction` options such as `skipPreflight`, keep using [sendTransaction](sendtransaction.md).
+
+## Request
+
+| Field  | Value      |
+| ------ | ---------- |
+| Method | `POST`     |
+| Path   | `/sendtx`  |
+
+Send the serialized transaction as the request body, one of two ways:
+
+* **Raw bytes.** Set `Content-Type: application/octet-stream` and send the transaction as a binary payload.
+* **Encoded string.** Set `Content-Type: text/plain` and send the transaction as base58 or base64 text, with the `encoding` parameter set to match.
+
+### Query parameters
+
+| Parameter     | Values             | Required    | Description                                                            |
+| ------------- | ------------------ | ----------- | --------------------------------------------------------------------- |
+| `encoding`    | `base58`, `base64` | No          | Encoding of a text-body transaction. Defaults to `base58`.            |
+| `response`    | `signature`        | Recommended | When set, the response body returns the transaction signature on success. |
+| `max_retries` | integer            | No          | Override the default retry count for this transaction.                 |
+
+### Optional headers
+
+| Header                     | Description                                                                          |
+| -------------------------- | ----------------------------------------------------------------------------------- |
+| `solana-forwardingpolicies` | Comma-separated Yellowstone Shield policy addresses to apply when forwarding.        |
+
+## Examples
+
+{% tabs %}
+{% tab title="Raw bytes" %}
+```bash
+curl -X POST 'https://<your-endpoint>/sendtx?response=signature&max_retries=3' \
+  -H 'Content-Type: application/octet-stream' \
+  --data-binary @transaction.bin
+```
+{% endtab %}
+
+{% tab title="Base64" %}
+```bash
+curl -X POST 'https://<your-endpoint>/sendtx?encoding=base64&response=signature' \
+  -H 'Content-Type: text/plain' \
+  -d '<base64-encoded-transaction>'
+```
+{% endtab %}
+
+{% tab title="Base64 + Shield policy" %}
+```bash
+curl -X POST 'https://<your-endpoint>/sendtx?encoding=base64&response=signature' \
+  -H 'solana-forwardingpolicies: <policy-address>' \
+  -d '<base64-encoded-transaction>'
+```
+{% endtab %}
+{% endtabs %}
+
+## Response
+
+On success, the endpoint returns **HTTP 200**. If `response=signature` was set, the body is the transaction signature as plain text. Otherwise the body is empty, and you derive the signature client-side from the signed transaction before submitting, since it is deterministic.
+
+On failure, it returns **HTTP 4xx or 5xx** with error details in the body.
+
+`/sendtx` is submission only: it does not simulate or support other RPC methods. For client-side retries, compute budgets, and competitive [priority fees](getrecentprioritizationfees.md), apply the same delivery tactics as [sendTransaction](sendtransaction.md).
 
 ***
 

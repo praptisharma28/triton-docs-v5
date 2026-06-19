@@ -22,17 +22,12 @@ layout:
 
 # Sending transactions
 
-Start here to land transactions reliably:
-
-| Method | What it does |
-| ------ | ------------ |
-| `sendTx` | How to land transactions reliably through Triton's SWQoS routing. |
-
 These submit and simulate transactions:
 
 | Method | What it does |
 | ------ | ------------ |
-| `sendTransaction` | Submits a signed transaction and returns its signature. |
+| `sendTx` | Direct HTTP submission endpoint that bypasses JSON-RPC for the lowest submission latency. |
+| `sendTransaction` | Submits a signed transaction over JSON-RPC and returns its signature. |
 | `simulateTransaction` | Runs a signed transaction against current chain data without sending it. |
 
 These size the fee before you send:
