@@ -44,7 +44,7 @@ Yes. `mainnet.sui.rpcpool.com:443` is a free, shared, rate-limited gRPC endpoint
 
 <summary>Should I use gRPC or JSON-RPC?</summary>
 
-Use gRPC. It's generally available and supports both unary point lookups and real-time server-side streaming. JSON-RPC still works but is deprecated and scheduled for deactivation in July 2026, so migrate production integrations to gRPC.
+Use gRPC. It's generally available and supports both unary point lookups and real-time server-side streaming. JSON-RPC still works but is deprecated and scheduled for deactivation on 31 July 2026, so migrate production integrations to gRPC.
 
 </details>
 
