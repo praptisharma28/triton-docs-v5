@@ -1,7 +1,7 @@
 ---
 description: >-
-  Tour of the Triton customer portal: get endpoints and tokens, monitor usage,
-  manage members, and top up your balance.
+  View your endpoints and tokens, monitor usage, manage members, and top up your
+  balance.
 layout:
   width: default
   title:
@@ -22,9 +22,7 @@ layout:
     visible: true
 ---
 
-# Platform overview
-
-The Triton customer portal is where you get your endpoints and tokens, monitor usage, and top up your balance. This page is a quick tour so you know where to find everything.
+# Customer dashboard tour
 
 ## What's in the portal
 

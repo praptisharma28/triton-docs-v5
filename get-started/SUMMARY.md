@@ -7,7 +7,7 @@
 * [Endpoints, regions, and routing](endpoints-regions-routing.md)
 * [Auth and security](authentication.md)
 * [Privacy and data protection](privacy-and-security.md)
-* [Platform overview](platform-overview.md)
+* [Customer dashboard tour](platform-overview.md)
 * [Account management API](account-management-api/README.md)
   * [Auth & headers](account-management-api/auth-headers.md)
   * [Accounts](account-management-api/accounts.md)
