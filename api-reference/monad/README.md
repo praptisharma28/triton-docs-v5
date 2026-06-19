@@ -1,7 +1,7 @@
 ---
 description: >-
-  Monad RPC on Triton: the Ethereum-compatible eth_* JSON-RPC, the debug
-  namespace, Monad extensions, and speculative subscriptions.
+  Ethereum-compatible eth_* JSON-RPC, the debug namespace, Monad extensions, and
+  speculative subscriptions.
 ---
 
 # Overview
@@ -22,8 +22,6 @@ Find your exact endpoint in the [customer dashboard](https://customers.triton.on
 * **Subscriptions**: `eth_subscribe` over WebSockets, including Monad's speculative `monadNewHeads` and `monadLogs`.
 * **Debug & tracing**: the `debug_*` namespace.
 * **Monad extensions**: `eth_sendRawTransactionSync`, `admin_ethCallStatistics`, and the `txpool_*` methods.
-
-For the canonical Monad reference and any chain-specific differences, see the [official Monad JSON-RPC reference](https://docs.monad.xyz/reference/json-rpc/).
 
 ***
 
