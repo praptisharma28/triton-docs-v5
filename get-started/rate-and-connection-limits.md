@@ -1,66 +1,88 @@
+---
+description: Flexible limits across all the networks, services, and infrastructure types
+layout:
+  width: default
+  title:
+    visible: true
+  description:
+    visible: true
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: false
+  metadata:
+    visible: true
+  tags:
+    visible: true
+  actions:
+    visible: true
+---
+
 # Rate and connection limits
 
-We apply 2 kinds of limits: rate limits for HTTP requests (per IP, 10-second window) and connection limits for streaming (simultaneous connections per endpoint).
+We apply limits per IP to keep legitimate application traffic flowing smoothly while preventing abuse:
 
-## Rate limits
+* **Rate limits** cap how many HTTP RPC requests an IP can send in a 10-second window.
+* **Connection limits** cap the number of simultaneous streaming connections an IP can open and the number of subscriptions each connection can hold.
 
-Two budgets apply at the same time, both reset every 10 seconds, both keyed to the IP making the request:
+Standard limits apply to every network Triton serves. Some Solana RPC methods have additional limits applied on top.
 
-* **Total RPS** is the budget across every method. If your IP sends 1,000 `getBalance` and 1,000 `getSlot` in 10 seconds, that counts as 2,000 against this budget.
-* **Per-method RPS** is a separate budget for each individual RPC method. Even if your total is under the cap, you can hit the per-method cap on a single hot method (most often `getProgramAccounts`, `sendTransaction`, or `getBlock`).
+New accounts on the shared service default to a tier sized for typical workloads (frontends, indexers, light backends). If your traffic is heavier, we can raise yours on request at no extra cost.
 
-```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'},'flowchart':{'nodeSpacing':18,'rankSpacing':32,'padding':6,'curve':'linear'}}}%%
-flowchart LR
-    Req("Request from your IP") --> Total("Total RPS<br/>< 2,000 per 10s?")
-    Total -->|No| Block("HTTP 429")
-    Total -->|Yes| Method("Per-method RPS<br/>under cap?")
-    Method -->|No| Block
-    Method -->|Yes| OK("Request processed")
-```
+## Rate limits (JSON-RPC)
 
-If either check fails, the response is `HTTP 429 Too Many Requests`. In practice, most 429s come from the per-method limit, not the total.
+Two request budgets apply to your endpoint at the same time, resetting every 10 seconds:
 
-{% hint style="info" %}
-**Per IP** means the IP making the request. Backends sharing one IP share one budget.
+* **Total requests.** Send up to 1,200 requests across all methods (e.g. your IP can send 600 `getBalance` and 600 `getSlot` during a 10s window).
+* **Per-method limits.** Heavy Solana methods have a lower cap applied on top (e.g. you can hit a `getProgramAccounts` cap after 50 requests, while your total is still under 1,200)
+
+{% hint style="warning" %}
+If either check fails, you get `HTTP 429 Too Many Requests`. Pause all requests from that IP for the full 10-second window before retrying. Retrying sooner only returns more 429s and won't clear the limit.
 {% endhint %}
 
-## Defaults
+### Solana per-method limits
 
-New accounts on the shared service default to a tier sized for typical workloads (frontends, indexers, light backends). Heavier traffic, especially trading bots and analytics pipelines, often wants higher per-method caps. We can raise yours on request; contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).
+Methods not listed here fall back to the 1,200 total. Each method below has its own cap per 10 seconds:
 
-## Per-method limits
+| Method                        | Per 10s                               |
+| ----------------------------- | ------------------------------------- |
+| `getClusterNodes`             | 400                                   |
+| `getMultipleAccounts`         | 400                                   |
+| `getVoteAccounts`             | 400                                   |
+| `getBlock`                    | 200                                   |
+| `getConfirmedTransaction`     | 200                                   |
+| `getLeaderSchedule`           | 200                                   |
+| `getLatestBlockhash`          | 100                                   |
+| `getRecentPerformanceSamples` | 100                                   |
+| `getTokenAccountsByOwner`     | 100                                   |
+| `sendTransaction`             | 100                                   |
+| `getProgramAccounts`          | 50                                    |
+| `getLargestAccounts`          | 0 (disabled on shared infrastructure) |
+| `getTokenLargestAccounts`     | 0 (disabled on shared infrastructure) |
 
-Methods not listed below fall back to the 2,000-per-10s global budget. Limits group by cap, so methods that share a budget appear on the same row.
+## Connection limits (Streaming)
 
-### Standard JSON-RPC
+Streaming caps the number of **simultaneous connections and subscriptions per IP**. A single connection can have many subscriptions.
 
-| Per 10s | Methods                                                                                           |
-| ------- | ------------------------------------------------------------------------------------------------- |
-| 2,000   | Total RPS per IP, `getAccountInfo`, `getTransaction`                                              |
-| 400     | `getMultipleAccounts`, `getVoteAccounts`, `getClusterNodes`                                       |
-| 200     | `getBlock`, `getConfirmedTransaction`, `getLeaderSchedule`                                        |
-| 100     | `getRecentPerformanceSamples`, `getLatestBlockhash`, `getTokenAccountsByOwner`, `sendTransaction` |
-| 50      | `getProgramAccounts`, `getTokenLargestAccounts`                                                   |
+| Pool                                    | Concurrent connections per IP | Subscriptions per IP |
+| --------------------------------------- | :---------------------------: | :------------------: |
+| Shared, WebSocket (Whirligig)           |              250              |        200,000       |
+| Shared, gRPC (Dragon's Mouth, Fumarole) |              400              |        200,000       |
+| Dedicated node                          |             no cap            |        no cap        |
 
-### Streaming services (gRPC)
+Dedicated nodes run on isolated hardware and apply no connection or subscription cap: they carry as many connections as the node can serve.
 
-| Per 10s | Service      | Methods                                              |
-| ------- | ------------ | ---------------------------------------------------- |
-| 5,000   | Old Faithful | `GetBlockTime`, `StreamBlocks`, `StreamTransactions` |
-| 2,000   | Fumarole     | all methods                                          |
-| 1,000   | Old Faithful | `GetBlock`, `GetTransaction`, `Get`, `GetVersion`    |
-| 1,000   | Vixen        | `Subscribe`, `ProgramStreams.Subscribe`              |
-
-## Read your live limits
+## Query your limits in real-time
 
 Every endpoint exposes its current limits at `/ratelimits`:
 
 ```bash
-curl https://<your-app>.mainnet.rpcpool.com/<token>/ratelimits
+curl https://<your-endpoint>/<token>/ratelimits
 ```
 
-The response is JSON, listing the request budget per window, every per-method override, and the connection cap. It's the source of truth for **your** endpoint's exact numbers, which can differ from the defaults above if support has tuned them.
+The response is JSON, listing the request budget per window, every per-method override, and the connection cap. It's the source of truth for **your** endpoint's exact numbers, which can differ from the defaults above if our team has tuned them.
 
 Every JSON-RPC response also carries `X-Ratelimit-*` headers. Watch them in your client to back off **before** you hit a 429:
 
@@ -72,26 +94,21 @@ Every JSON-RPC response also carries `X-Ratelimit-*` headers. Watch them in your
 | `X-Ratelimit-Method-Limit`     | Per-method cap for this RPC                   |
 | `X-Ratelimit-Method-Remaining` | How many of this method you have left         |
 
-If you do hit a 429, see the Error handling guide for the full debug flow.
+## Client-side browser limits
 
-## Browser concurrency
+If you connect through a browser, it caps how many requests run in parallel to one host, so a busy frontend can throttle itself before Triton's limits ever apply. To avoid it:
 
-Browsers cap parallel HTTP/2 streams to a single host, so a frontend with many parallel calls can self-throttle before Triton's limits ever apply. Best practices:
-
-* Use a single shared `Connection` (web3.js) per page
-* Batch reads with `getMultipleAccounts` instead of N parallel `getAccountInfo` calls
-* Move heavy reads (program scans, signature crawls) to your backend
-
-## Connection limits
-
-Streaming products (Yellowstone gRPC, Whirligig WebSockets, Fumarole) cap **simultaneous connections per endpoint**, not request rate.
-
-Connection limits are flexible. If you hit one, contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one) and we'll work with you to either optimise usage or raise the cap.
-
-{% hint style="info" %}
-A single gRPC connection can multiplex many subscriptions. The right pattern is one connection plus many subscribe messages, not one connection per filter. See Multiplexing in one connection on Dragon's Mouth for the canonical example.
-{% endhint %}
+* Reuse one connection per page instead of opening one per call.
+* Batch reads with `getMultipleAccounts` instead of many parallel `getAccountInfo` calls.
+* Move heavy reads (program scans, signature crawls) to your backend.
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-credit-card">:credit-card:</i> <strong>Plans and billing</strong></td><td>Pay-as-you-go vs invoiced, top-ups, and the cost calculator across shared and dedicated setups.</td><td><a href="plans-and-billing">plans-and-billing</a></td></tr><tr><td><i class="fa-server">:server:</i> <strong>Dedicated gRPC node</strong></td><td>Private node with isolated CPU and unlimited concurrent gRPC connections. For latency-sensitive or heavy streaming workloads.</td><td></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-laptop">:laptop:</i> <strong>Customer dashboard tour</strong></td><td>Find your endpoints, add users and allowed origins, and manage billing and support</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/platform-overview">https://kate-6.gitbook.io/triton-one-docs-v5/platform-overview</a></td></tr><tr><td><i class="fa-earth-americas">:earth-americas:</i> <strong>Endpoints, regions, and routing</strong></td><td>All available endpoints, regions they're served from, routing options, and how to use each</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/endpoints-regions-routing">https://kate-6.gitbook.io/triton-one-docs-v5/endpoints-regions-routing</a></td></tr></tbody></table>
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

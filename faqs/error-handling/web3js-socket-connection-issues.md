@@ -1,3 +1,9 @@
+---
+description: >-
+  Fix Web3.js socket failures from NodeJS port exhaustion using a global agent,
+  Bun, or the latest @solana/web3.js.
+---
+
 # Web3JS socket/connection issues
 
 Why high-throughput Solana web3.js apps in NodeJS hit ECONNREFUSED, ECONNRESET, fetch failed, and how to fix it with connection pooling.
@@ -110,7 +116,7 @@ The [Bun](https://bun.sh/) runtime is a modern alternative to NodeJS. Based on o
 
 ### 3. Using the new version of `@solana/web3.js`
 
-Anza Labs is developing a new and improved [version of the library](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library) which, as of this writing, is in technical preview. It uses the [`undici`](https://www.npmjs.com/package/undici) library and the errors are less frequent in it. If encountered, with the configuration mentioned in [section 1](#1-limit-connections-with-a-global-agent-recommended) they should be resolved. Do note that the library is not compatible with the current version, meaning that it'll be a ground up rewrite of your codebase.
+Anza Labs is developing a new and improved [version of the library](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library) which, as of this writing, is in technical preview. It uses the [`undici`](https://www.npmjs.com/package/undici) library and the errors are less frequent in it. If encountered, with the configuration mentioned in [section 1](web3js-socket-connection-issues.md#1-limit-connections-with-a-global-agent-recommended) they should be resolved. Do note that the library is not compatible with the current version, meaning that it'll be a ground up rewrite of your codebase.
 
 ### 4. A note on other libraries
 
@@ -121,3 +127,10 @@ new https.Agent({
   maxSockets: 50,
 });
 ```
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

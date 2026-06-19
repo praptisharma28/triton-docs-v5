@@ -1,12 +1,34 @@
+---
+description: List, create, and update subscription types
+layout:
+  width: default
+  title:
+    visible: true
+  description:
+    visible: true
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: false
+  metadata:
+    visible: true
+  tags:
+    visible: true
+  actions:
+    visible: true
+---
+
 # Subscription types
 
-### **Overview**
+## **Overview**
 
 A Subscription Type defines what kind of pool a subscription is for. This is how endpoints are distinguished between a dedicated pool and a shared pool. It also can determine which Solana RPC environment the subscription and endpoints target.
 
 The developer subscription is used to encapsulate the devnet and testnet Solana environments. Any endpoints or tokens created under a developer Subscription will automatically be usable for both Solana environments, typically at no cost.
 
-### **List Subscription Types**
+## **List subscription types**
 
 <mark style="color:red;">This API is only limited to account management API tokens created with the reseller role.</mark>
 
@@ -62,6 +84,13 @@ Returns all subscription types that a Subscription can get created with.
 }
 ```
 
-### **Create Subscription Type / Update Subscription Type**
+## **Create subscription type / update subscription type**
 
 <mark style="color:red;">This API is only limited to account management API tokens created with the admin role.</mark>
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

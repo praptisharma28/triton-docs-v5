@@ -4,7 +4,7 @@ Pre-execution transaction stream reconstructed from shreds, before the validator
 
 ## What is Deshred
 
-Deshred is a separate gRPC method (`SubscribeDeshred`) on the same yellowstone-grpc service as [Dragon's Mouth](dragon-s-mouth-grpc). It delivers transactions reconstructed from shreds **before** the validator executes them.
+Deshred is a separate gRPC method (`SubscribeDeshred`) on the same yellowstone-grpc service as Dragon's Mouth. It delivers transactions reconstructed from shreds **before** the validator executes them.
 
 This is the earliest usable on-chain signal Triton exposes. It's designed for latency-sensitive systems that care about transaction intent as early as possible: arbitrage, market making, copy trading, liquidations, HFT.
 
@@ -185,4 +185,11 @@ For a deeper overview of architecture and tradeoffs, see [Deshred transactions: 
 
 ## What's next?
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="dragon-s-mouth-grpc">dragon-s-mouth-grpc</a></td></tr><tr><td><i class="fa-book-marked">:book-marked:</i> <strong>Deshred blog post</strong></td><td>Architecture, tradeoffs, and how Deshred fits the Solana shred pipeline.</td><td><a href="https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/">https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td></td></tr><tr><td><i class="fa-book-marked">:book-marked:</i> <strong>Deshred blog post</strong></td><td>Architecture, tradeoffs, and how Deshred fits the Solana shred pipeline.</td><td><a href="https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/">https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/</a></td></tr></tbody></table>
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

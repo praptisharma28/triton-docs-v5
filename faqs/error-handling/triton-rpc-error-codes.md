@@ -1,3 +1,9 @@
+---
+description: >-
+  Triton RPC symptoms and HTTP error codes (500, 502, 503, 504, 403) with their
+  likely causes and fixes.
+---
+
 # Triton RPC error codes
 
 Possible RPC symptoms and the full list of Triton-specific RPC error codes for HTTP, WebSocket, and gRPC services.
@@ -58,7 +64,7 @@ Possible RPC symptoms and the full list of Triton-specific RPC error codes for H
 
 **Explanation:** The Load balancer might be inconsistently distributing traffic, or failover to backup nodes could fail, leading to unstable request handling.
 
-### Historical data requests (e.g., via Hydrant) return incomplete or stale results
+### Historical data requests (e.g., via Superbank) return incomplete or stale results
 
 **Problem:** Archival node sync failure or Clickhouse integration issue.
 
@@ -115,8 +121,15 @@ Possible RPC symptoms and the full list of Triton-specific RPC error codes for H
 | Server failed to parse the request protocol buffer.                                                                                                                                                                                                                    | INTERNAL             | Server                 |
 | Switch to a supported compression method.                                                                                                                                                                                                                              | UNIMPLEMENTED        | Server                 |
 | Ensure your client sends a single request per call.                                                                                                                                                                                                                    | UNIMPLEMENTED        | Server                 |
-| Wait 10–15 seconds and retry -- load may ease. Check usage in customers.triton.one. Request a higher limit.                                                                                                                                                            | RESOURCE\_EXHAUSTED  | Server                 |
+| Wait 10 seconds and retry -- load may ease. Check usage in customers.triton.one. Request a higher limit.                                                                                                                                                               | RESOURCE\_EXHAUSTED  | Server                 |
 | The client does not have enough memory to hold the server response. Implement exponential backoff and reduce request frequency. Close unused WebSocket subscriptions. Upgrade to a dedicated node for higher limits.                                                   | RESOURCE\_EXHAUSTED  | Client                 |
 | Reduce message size.                                                                                                                                                                                                                                                   | RESOURCE\_EXHAUSTED  | Both                   |
 | Verify your API key and IP whitelist. Ensure credentials match channel settings.                                                                                                                                                                                       | UNAUTHENTICATED      | Both                   |
 | The requested resource doesn't exist or isn't synced on the custom node. Verify the resource ID, ensure your custom endpoint is configured to include the resource.                                                                                                    | NOT\_FOUND           | Client                 |
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

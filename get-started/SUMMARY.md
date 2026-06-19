@@ -1,17 +1,14 @@
-# Summary
+# Table of contents
 
-* [Welcome to Triton](README.md)
+* [Welcome to Triton One](README.md)
 * [Quickstart](quickstart.md)
 * [Plans and billing](plans-and-billing.md)
 * [Rate and connection limits](rate-and-connection-limits.md)
-* [Endpoints and regions](endpoints-and-regions.md)
-* [Authentication](authentication.md)
-* [Privacy and security](privacy-and-security.md)
+* [Endpoints, regions, and routing](endpoints-regions-routing.md)
+* [Auth and security](authentication.md)
+* [Privacy and data protection](privacy-and-security.md)
 * [Platform overview](platform-overview.md)
-* [Agents / MCP](agents-mcp.md)
-  * [Quickstart](agents-mcp/quickstart.md)
-  * [MCP server](agents-mcp/mcp-server.md)
-* [Account management API](account-management-api.md)
+* [Account management API](account-management-api/README.md)
   * [Auth & headers](account-management-api/auth-headers.md)
   * [Accounts](account-management-api/accounts.md)
   * [Address watch lists](account-management-api/address-watch-lists.md)

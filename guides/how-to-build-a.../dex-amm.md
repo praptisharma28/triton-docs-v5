@@ -1,3 +1,0 @@
-# DEX / AMM
-
-Coming soon.

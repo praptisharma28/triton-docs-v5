@@ -1,8 +1,9 @@
-# Summary
+# Table of contents
 
 ## Solana
+
 * [General](README.md)
-* [My account](my-account.md)
+* [Customer dashboard](customer-dashboard.md)
 * [RPC requests](rpc-requests.md)
 * [Real-time streaming](streaming-data.md)
 * [Sending transactions](sending-transactions.md)
@@ -13,7 +14,11 @@
   * [Web3JS socket/connection issues](error-handling/web3js-socket-connection-issues.md)
   * [Verify your gRPC endpoint](error-handling/verify-your-grpc-endpoint.md)
   * [Streams disconnecting](error-handling/streams-disconnecting.md)
+
 ## Sui
-* [Placeholder](sui/README.md)
+
+* [General](sui/README.md)
+
 ## Monad
-* [Placeholder](monad/README.md)
+
+* [General](monad/README.md)

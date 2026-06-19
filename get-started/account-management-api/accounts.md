@@ -1,10 +1,34 @@
+---
+description: >-
+  List, retrieve, create, and update accounts, the billing entities your
+  subscriptions belong to.
+layout:
+  width: default
+  title:
+    visible: true
+  description:
+    visible: true
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: false
+  metadata:
+    visible: true
+  tags:
+    visible: true
+  actions:
+    visible: true
+---
+
 # Accounts
 
-### **Overview**
+## **Overview**
 
 Accounts are only used for billing. You cannot create new accounts yourself. Instead, you'll need to ask an administrator to do this for you, if you'd like to have separate billing for your subscriptions.
 
-### List Accounts
+## List accounts
 
 <mark style="color:blue;">`GET /api/v1/accounts`</mark>
 
@@ -32,7 +56,7 @@ curl 'https://customers.triton.one/api/v1/accounts?name=Account-123' -H "Authori
 curl 'https://customers.triton.one/api/v1/accounts?per=10&page=2' -H "Authorization: secret-api-token" -H "Content-Type: application/json" -H "Accept:application/json" 
 ```
 
-#### Response
+### Response
 
 Returns a hash with the `accounts` key containing an array of account objects and the `meta` containing pagination data.
 
@@ -55,7 +79,7 @@ Returns a hash with the `accounts` key containing an array of account objects an
 }
 ```
 
-### Get Account
+## Get account
 
 <mark style="color:blue;">`GET /api/v1/accounts/:account-uuid`</mark>
 
@@ -73,7 +97,7 @@ Example request containing `account-uuid`
 curl 'https://customers.triton.one/api/v1/accounts/c92a9cea-47cc-494b-b1b0-4230a2316ee5' -H "Authorization: secret-api-token" -H "Content-Type: application/json" -H "Accept:application/json" 
 ```
 
-#### Response
+### Response
 
 Returns a hash with the `account` key containing an account object. The response data for the account object is the same as for <mark style="color:blue;">`GET /api/v1/accounts`</mark>. Below is the sample response.
 
@@ -140,11 +164,11 @@ Returns a hash with the `account` key containing an account object. The response
 }
 ```
 
-### **Create Account**
+## **Create account**
 
 <mark style="color:red;">This API is only limited to account management API tokens created with the admin role.</mark>
 
-### **Update Account**
+## **Update account**
 
 <mark style="color:blue;">`PUT /api/v1/accounts/:account-uuid`</mark>
 
@@ -212,3 +236,10 @@ Returns a hash with the `account` key containing an account object. The response
    }
 }
 ```
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

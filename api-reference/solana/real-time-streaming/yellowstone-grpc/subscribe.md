@@ -1,0 +1,60 @@
+---
+description: >-
+  Open a Dragon's Mouth gRPC stream and subscribe to one or more data types in a
+  single request.
+---
+
+# Subscribe
+
+`Subscribe` is a single bidirectional gRPC stream. You send one `SubscribeRequest` describing every data type you want, and the server streams back matching `SubscribeUpdate` messages until you close the connection. You can update the request at any time by sending a new one on the same stream.
+
+## Request
+
+A `SubscribeRequest` carries one map per data type, each keyed by a label you choose, plus stream-wide options:
+
+**`accounts`** · map: see [Account updates](accounts.md)
+
+**`transactions`** · map: see [Transaction updates](transactions.md)
+
+**`transactions_status`** · map: see [Transaction status](transaction-status.md)
+
+**`slots`** · map: see [Slot updates](slots.md)
+
+**`blocks`** · map: see [Block updates](blocks.md)
+
+**`blocks_meta`** · map: see [Block metadata](blocks-meta.md)
+
+**`entry`** · map: see [Entry updates](entries.md)
+
+**`commitment`** · optional CommitmentLevel: `PROCESSED`, `CONFIRMED`, or `FINALIZED`.
+
+**`accounts_data_slice`** · repeated: return only a slice (`offset`, `length`) of each account's data.
+
+**`from_slot`** · optional uint64: replay from this slot before going live (subject to the replay window, see subscribeReplayInfo).
+
+**`ping`** · optional: in-stream keepalive. Send `SubscribeRequestPing { id }` and the server returns a `SubscribeUpdatePong { id }` on the same stream. This is the keepalive ping, distinct from the standalone unary `ping`.
+
+## Example
+
+{% tabs %}
+{% tab title="grpcurl" %}
+```bash
+grpcurl \
+  -d '{"slots": {"all": {}}, "accounts": {"usdc": {"account": ["EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"]}}, "commitment": "CONFIRMED"}' \
+  -H "x-token: <your-token>" \
+  <your-endpoint>.mainnet.rpcpool.com:443 \
+  geyser.Geyser/Subscribe
+```
+{% endtab %}
+{% endtabs %}
+
+## Update
+
+Every message is a `SubscribeUpdate` carrying `filters` (the labels that matched) and exactly one of the type payloads above, plus `created_at`. Subscribe to a specific type to see its shape.
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

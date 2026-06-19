@@ -1,3 +1,0 @@
-# NFT marketplace
-
-Coming soon.

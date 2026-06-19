@@ -1,3 +1,9 @@
+---
+description: >-
+  A step-by-step path to check your setup, find the cause, and fix Triton RPC,
+  gRPC, and streaming errors.
+---
+
 # Error handling
 
 A step-by-step process to diagnose and fix issues with your Triton One RPC.
@@ -13,13 +19,13 @@ A step-by-step process to diagnose and fix issues with your Triton One RPC.
 
 First, determine if the error is Solana-wide or specific to Triton by attempting the same method against the Solana public RPC `https://api.mainnet-beta.solana.com`.
 
-If the same issue exists with Solana, identify the bug and resolution by following the standard list of [Common Solana JSON-RPC codes](error-handling/common-solana-errors).
+If the same issue exists with Solana, identify the bug and resolution by following the standard list of Common Solana JSON-RPC codes.
 
 If you fail to resolve your issue on Solana's public RPC, it's time to troubleshoot with possible and known Triton One errors:
 
-* Determine if your issue returns any of the [Triton RPC error codes](error-handling/triton-rpc-error-codes).
-* Determine if your issue exhibits any of the [possible Triton RPC symptoms](error-handling/triton-rpc-error-codes).
-* Determine if your issue fits any of the [uncommon Web3JS errors](error-handling/common-solana-errors) we helped some of our customers resolve.
+* Determine if your issue returns any of the Triton RPC error codes.
+* Determine if your issue exhibits any of the possible Triton RPC symptoms.
+* Determine if your issue fits any of the uncommon Web3JS errors we helped some of our customers resolve.
 
 If you fail to resolve your issue despite the steps above, it's time to call in the big guns!
 
@@ -38,3 +44,10 @@ Prepare the following information:
 In your customer dashboard at the bottom right, open a chat with us. Please include all of the info above so we can investigate and get back to you with something helpful as quickly as possible!
 
 [Log in to Triton One](https://customers.triton.one)
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

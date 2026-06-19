@@ -1,3 +1,9 @@
+---
+description: >-
+  Triton RPC and gRPC reliability, rate limits, endpoint configuration,
+  geographic routing, and latency troubleshooting.
+---
+
 # RPC requests
 
 Questions about Triton's RPC services, latency, rate limits, scripts and monitoring.
@@ -24,7 +30,7 @@ It's a big topic, but at a high level, we do it through:
 
 * **GeoDNS:** Routes traffic to the nearest server in shared pools.
 * **Geyser integration:** Streams intra-slot updates via Dragon's Mouth, unlike end-of-slot updates in traditional RPC.
-* **Custom indexes:** Steamboat optimises `getProgramAccounts` (gPA) calls to improve query performance.
+* **Custom indexes:** Cloudbreak optimises `getProgramAccounts` (gPA) calls to improve query performance.
 
 </details>
 
@@ -53,7 +59,7 @@ If traffic exceeds your node's capacity, it may lag behind the network's latest 
 
 <summary>What happens if I hit my rate limit?</summary>
 
-Your application will receive `HTTP 429` errors. When this happens, pause requests for 10 seconds to clear the limit. We strongly recommend implementing a backoff-and-retry mechanism. See Handle 429 rate-limit errors for the pattern, or our Rate and connection limits page for the budgets and headers.
+Your application will receive `HTTP 429` errors. When this happens, pause requests for 10 seconds to clear the limit. We strongly recommend implementing a backoff-and-retry mechanism. See [Handle 429 rate-limit errors](error-handling/handle-429-rate-limit-errors.md) for the pattern, or the [Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs-v5/get-started/rate-and-connection-limits) page for the budgets and headers.
 
 </details>
 
@@ -75,9 +81,7 @@ Tokens, endpoints, allowed origins, regions, and the capabilities Triton support
 
 Customers with dedicated nodes get a Grafana dashboard with real-time metrics: request volume, latency, error rates, and bandwidth usage.
 
-```
-For shared (pay-as-you-go) customers, open the **v3 Billing** tab in your [customer dashboard](https://customers.triton.one). You'll see total requests and GB used (the two dimensions you're billed on), plus a per-service breakdown table with product-level detail. Click **Export CSV** in the top-right corner to download.
-```
+For shared (pay-as-you-go) usage, see [Where can I see my usage?](customer-dashboard.md).
 
 </details>
 
@@ -101,25 +105,6 @@ Don't remove it. If you do and leave the allowed origins list empty, the endpoin
 
 <details>
 
-<summary>How does Triton secure dedicated node endpoints?</summary>
-
-Dedicated node endpoints use:
-
-* **API keys:** unique per client, revocable from the [customer dashboard](https://customers.triton.one).
-* **Rate monitoring:** alerts for unusual spikes to detect misuse.
-
-</details>
-
-<details>
-
-<summary>Can I have multiple API keys for the dedicated nodes? Can I manage them by myself?</summary>
-
-Yes. If you have an operator role, you should be able to add them yourself.
-
-</details>
-
-<details>
-
 <summary>Can I choose the geographic location of my RPC nodes?</summary>
 
 Yes, dedicated node users can select primary regions (US, EU, or Asia Pacific) or request multi-region setups for redundancy and lower latency based on their user base.
@@ -130,7 +115,7 @@ Yes, dedicated node users can select primary regions (US, EU, or Asia Pacific) o
 
 <summary>Are shared RPC subscriptions restricted to a single domain?</summary>
 
-No. You can whitelist as many domains as you need via the **Allowed origins** list on each endpoint. In your [customer dashboard](https://customers.triton.one), click into the mainnet subscription, click the endpoint name to open its settings, and under **Allowed origins** hit `+` to add a new domain. All subdomains are automatically allowed. See [How can I add domains to the allowed origins?](my-account) for the full walk-through.
+No. You can whitelist as many domains as you need. See [How can I add domains to the allowed origins?](customer-dashboard.md) for the steps.
 
 </details>
 
@@ -183,3 +168,10 @@ To detect delays, examine the `slot` field included in all gRPC messages. The mo
 If you suspect your Geyser stream is experiencing a drastically different latency, check whether your receiving server is not providing back pressure to the RPC node due to bandwidth constraints.
 
 </details>
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

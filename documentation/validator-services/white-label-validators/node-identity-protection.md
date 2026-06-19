@@ -13,3 +13,10 @@ One of our node operators will then authenticate with our secured, encrypted sec
 This ensures that the node identity is never stored in an unencrypted form anywhere. It is also never transferred anywhere between the validator node and our encrypted storage. This transit of the node key happens over an entirely authenticated and encrypted stream.
 
 Without access to the validator memory space, you would be unable to retrieve the node identity, and there is no durable storage of the identity on the node itself.
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

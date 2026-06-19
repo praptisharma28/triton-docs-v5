@@ -1,76 +1,39 @@
 # Jito bundles
 
-Triton offers support for **Jito RPC for all plans**. This primarily gives access to the improved simulation support that Jito offers and allows you to simulate bundles of transactions.
+Triton enables Jito RPC on every plan, which gives you Jito's improved simulation support so you can simulate bundles of transactions.
 
-> 🔧 Note: Triton One provides the Jito-enabled RPC node only. It is the customer's responsibility to have their IP whitelisted with Jito’s Block Engine in order to use certain features.
+{% hint style="warning" %}
+**Triton simulates Jito bundles, it does not forward them.** `simulateBundle` runs on Triton's Jito-enabled RPC nodes. Submitting a bundle for inclusion uses `sendBundle`, a Jito-exclusive call that needs a direct, active connection to the Jito Block Engine, so it does not route through Triton. To send bundles, connect to the Jito Block Engine yourself: your IP must be whitelisted with Jito to use those features.
+{% endhint %}
 
-The `sendBundle` method is a Jito-exclusive RPC call and requires an active connection to the Jito Block Engine.
+## simulateBundle
 
-<br>
+Simulates a transaction bundle. Send it as a JSON-RPC `POST` to your Triton endpoint.
 
-### Resources
+### Request body
 
-* 🔍 [Jito Searcher Examples](https://github.com/jito-labs/searcher-examples)
-* 📄 [Jito Documentation – Low Latency Transactions](https://docs.jito.wtf/lowlatencytxnsend)
+| Name                      | Type   | Description                                                               |
+| ------------------------- | ------ | ------------------------------------------------------------------------- |
+| `transactions` (required) | array  | The list of transactions to simulate.                                     |
+| `config`                  | object | Optional `RpcSimulateBundleConfig` controlling the simulation. See below. |
 
-<br>
+### Response
 
-### simulateBundle
+A JSON-RPC response matching this Rust struct:
 
-<mark style="color:green;">`POST`</mark> `https://xyz.mainnet.rpcpool.com/`
-
-Simulates a transaction bundle.
-
-#### Request Body
-
-| Name                                           | Type   | Description                                                                                                                                       |
-| ---------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| transactions<mark style="color:red;">\*</mark> | Vector | List of transactions to simulate.                                                                                                                 |
-| config                                         | Object | (optional) Object of type RpcSimulateBundleConfig, provide configuration for the transaction simulation. See description of this parameter below. |
-
-{% tabs %}
-{% tab title="200: OK JSON RPC response body (RpcSimulateBundleResult)" %}
-Returns a JSON RPC response corresponding to the following Rust struct:
-
-```
+```rust
 pub struct RpcSimulateBundleResult {
     pub summary: RpcBundleSimulationSummary,
     pub transaction_results: Vec<RpcSimulateBundleTransactionResult>,
 }
 
 pub enum RpcBundleSimulationSummary {
-    /// error and offending transaction signature if applicable
+    // Error and offending transaction signature, if applicable.
     Failed {
         error: RpcBundleExecutionError,
         tx_signature: Option<String>,
     },
     Succeeded,
-}
-
-pub enum RpcBundleExecutionError {
-    #[error("The bank has hit the max allotted time for processing transactions")]
-    BankProcessingTimeLimitReached,
-
-    #[error("Error locking bundle because a transaction is malformed")]
-    BundleLockError,
-
-    #[error("Bundle execution timed out")]
-    BundleExecutionTimeout,
-
-    #[error("The bundle exceeds the cost model")]
-    ExceedsCostModel,
-
-    #[error("Invalid pre or post accounts")]
-    InvalidPreOrPostAccounts,
-
-    #[error("PoH record error: {0}")]
-    PohRecordError(String),
-
-    #[error("Tip payment error: {0}")]
-    TipError(String),
-
-    #[error("A transaction in the bundle failed to execute: [signature={0}, error={1}]")]
-    TransactionFailure(Signature, String),
 }
 
 pub struct RpcSimulateBundleTransactionResult {
@@ -82,52 +45,58 @@ pub struct RpcSimulateBundleTransactionResult {
     pub return_data: Option<UiTransactionReturnData>,
 }
 ```
-{% endtab %}
-{% endtabs %}
 
 <details>
 
-<summary>RpcSimulateBundleConfig: Bundle configuration</summary>
+<summary>RpcBundleExecutionError variants</summary>
 
-You can pass an optional configuration parameter when simulating bundle. The optional configuration takes the following format:
-
-```
-pub struct RpcSimulateBundleConfig {
-    /// Gives the state of accounts pre/post transaction execution.
-    /// The length of each of these must be equal to the number transactions.   
-    pub pre_execution_accounts_configs: Vec<Option<RpcSimulateTransactionAccountsConfig>>,
-    pub post_execution_accounts_configs: Vec<Option<RpcSimulateTransactionAccountsConfig>>,
-
-    /// Specifies the encoding scheme of the contained transactions.
-    pub transaction_encoding: Option<UiTransactionEncoding>,
-
-    /// Specifies the bank to run simulation against.
-    pub simulation_bank: Option<SimulationSlotConfig>,
-
-    /// Opt to skip sig-verify for faster performance.
-    #[serde(default)]
-    pub skip_sig_verify: bool,
-
-    /// Replace recent blockhash to simulate old transactions without resigning.
-    #[serde(default)]
-    pub replace_recent_blockhash: bool,
-}
-
-pub struct RpcSimulateTransactionAccountsConfig {
-    pub encoding: Option<UiAccountEncoding>,
-    pub addresses: Vec<String>,
-}
-
-pub enum SimulationSlotConfig {
-    /// Simulate on top of bank with the provided commitment.
-    Commitment(CommitmentConfig),
-
-    /// Simulate on the provided slot's bank.
-    Slot(Slot),
-
-    /// Simulates on top of the RPC's highest slot's bank i.e. the working bank.
-    Tip,
+```rust
+pub enum RpcBundleExecutionError {
+    BankProcessingTimeLimitReached,         // hit the max allotted processing time
+    BundleLockError,                        // a transaction is malformed
+    BundleExecutionTimeout,                 // bundle execution timed out
+    ExceedsCostModel,                       // the bundle exceeds the cost model
+    InvalidPreOrPostAccounts,               // invalid pre or post accounts
+    PohRecordError(String),
+    TipError(String),
+    TransactionFailure(Signature, String),  // a transaction failed to execute
 }
 ```
 
 </details>
+
+<details>
+
+<summary>RpcSimulateBundleConfig</summary>
+
+```rust
+pub struct RpcSimulateBundleConfig {
+    // Pre/post account state. Length must equal the number of transactions.
+    pub pre_execution_accounts_configs: Vec<Option<RpcSimulateTransactionAccountsConfig>>,
+    pub post_execution_accounts_configs: Vec<Option<RpcSimulateTransactionAccountsConfig>>,
+    // Encoding of the contained transactions.
+    pub transaction_encoding: Option<UiTransactionEncoding>,
+    // Which bank to simulate against.
+    pub simulation_bank: Option<SimulationSlotConfig>,
+    // Skip sig-verify for faster performance.
+    pub skip_sig_verify: bool,
+    // Replace the recent blockhash to simulate old transactions without resigning.
+    pub replace_recent_blockhash: bool,
+}
+```
+
+`simulation_bank` accepts a `Commitment`, a specific `Slot`, or `Tip` (the RPC's highest slot, the working bank).
+
+</details>
+
+## Resources
+
+* [Jito searcher examples](https://github.com/jito-labs/searcher-examples)
+* [Jito documentation: low-latency transactions](https://docs.jito.wtf/lowlatencytxnsend)
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

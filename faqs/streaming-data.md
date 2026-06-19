@@ -1,3 +1,9 @@
+---
+description: >-
+  Stream Solana data with Yellowstone gRPC and WebSockets, account subscription
+  limits, Cloudbreak, Fumarole, and stream troubleshooting.
+---
+
 # Real-time streaming
 
 Questions about gRPC streaming, WebSocket connections, and the Yellowstone ecosystem of streaming components.
@@ -10,21 +16,7 @@ What is Yellowstone and which subscriptions include streaming access?
 
 <summary>What is Project Yellowstone?</summary>
 
-Project Yellowstone is Triton's suite of high-performance tools and open-source frameworks designed to enhance RPC and data infrastructure for the Solana ecosystem.
-
-It addresses critical infrastructure challenges: real-time data streaming, historical ledger access, ultra-low latency queries, and custom indexing.
-
-Key components:
-
-| Tool           | Description                                                                                                                                            |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Dragon's Mouth | Core gRPC streaming engine for Solana. Delivers raw real-time data directly from the validator with ultra-low latency using Protobuf.                  |
-| Whirligig      | WebSocket counterpart to Dragon's Mouth -- built for front-end or browser-based apps needing live account and transaction feeds.                       |
-| Fumarole       | Persistent streaming layer with automatic redundancy and 4-day caching. Ensures no data loss even if the connection drops.                             |
-| Steamboat      | Custom indexing engine that accelerates heavy gPA queries by up to 99%, cutting latency for large programs.                                            |
-| Old Faithful   | Full-ledger archival service providing access to Solana's complete historical transaction data -- ideal for analytics, re-indexing, and backtesting.   |
-| Jet            | A transaction submission software that lets you add Stake Weight to your transactions to route them through a priority lane during network congestion. |
-| Shield         | Anti-MEV protection layer integrated with Jet. Allows configurable allow- and block-lists to prevent sandwiching and other frontrunning behaviours.    |
+Triton's suite of high-performance streaming, indexing, and archival tools for Solana: Dragon's Mouth, Whirligig, Fumarole, Cloudbreak, Old Faithful, Jet, and Shield. See [What is Project Yellowstone?](./) for the full breakdown.
 
 </details>
 
@@ -52,7 +44,7 @@ The questions about streaming products built on Yellowstone.
 
 <summary>What is the maximum number of accounts I can subscribe to using Yellowstone gRPC?</summary>
 
-For shared plans, the current limit is \~150,000 account subscriptions per HTTP connection.
+For shared plans, the current limit is 200,000 subscriptions per IP. See [Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs-v5/get-started/rate-and-connection-limits) for connection caps and per-pool detail.
 
 For dedicated nodes, there's no set limit. However, opening too many subscriptions for your servers to ingest can cause backpressure from your backend, leading to poor streaming performance. Please check that your server can handle the amount of data you are subscribing to.
 
@@ -60,9 +52,9 @@ For dedicated nodes, there's no set limit. However, opening too many subscriptio
 
 <details>
 
-<summary>What is Steamboat, and how does it improve latency?</summary>
+<summary>What is Cloudbreak, and how does it improve latency?</summary>
 
-Steamboat is Triton's account indexing engine that delivers `getProgramAccounts`, `getTokenAccountsByOwner`, and `getTokenAccountsByDelegate` up to **50x faster** by serving them from tailored PostgreSQL indexes instead of full account scans. Indexes are built automatically from your query traffic. Available on every Triton plan at standard RPC rates -- no premium for indexed reads. See Steamboat.
+Cloudbreak is Triton's account indexing engine that delivers `getProgramAccounts`, `getTokenAccountsByOwner`, and `getTokenAccountsByDelegate` up to **20x faster** by serving them from tailored PostgreSQL indexes instead of full account scans. Indexes are built automatically from your query traffic. Available on every Triton plan at standard RPC rates -- no premium for indexed reads. See [Cloudbreak](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/cloudbreak-indexed-accounts).
 
 </details>
 
@@ -171,3 +163,10 @@ Your handler is processing events slower than they arrive. Filter more aggressiv
 Sometimes. Some cloud providers (e.g. Cloudflare) close idle streams. If you see disconnections after periods of low traffic, send a periodic ping. Dragon's Mouth gRPC accepts a `ping` field on the subscribe request; Whirligig accepts `{"jsonrpc":"2.0","method":"ping"}`. The server returns `pong` every 15 seconds you can use to confirm liveness.
 
 </details>
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

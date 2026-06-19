@@ -1,3 +1,0 @@
-# Solana game
-
-Coming soon.

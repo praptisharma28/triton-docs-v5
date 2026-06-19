@@ -1,0 +1,15 @@
+---
+description: Execute a swap from a streamed Titan quote.
+---
+
+# Titan /swap
+
+Each Titan quote arrives with the individual Solana instructions needed to execute it, so you compose the swap with your own program logic. All routes are simulated on the same block against fresh on-chain data, so the quote reflects the real expected result rather than a theoretical best case.
+
+## Flow
+
+1. Connect to the Titan WebSocket (see [Titan quote](titan-quote.md)) and receive a live quote.
+2. Take the swap instructions from the quote payload.
+3. Build, sign, and send the transaction with your wallet.
+
+For the instruction payload format and a TypeScript SDK (`@titanexchange/sdk-ts`), see the [Titan DART Swap API docs](https://titan-exchange.gitbook.io/titan/developer-doc/dart-swap-api/overview).

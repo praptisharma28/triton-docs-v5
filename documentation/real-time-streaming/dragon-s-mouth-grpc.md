@@ -13,7 +13,7 @@ It's the fastest live data path available for `processed` events and the recomme
 * **Application middle layer.** Stream directly to your app's middle layer on a cloud provider and update your backend database with the lowest possible latency
 * **Compliance and analytics.** Watch specific addresses or programs, route updates downstream
 
-For browser clients that can't communicate with gRPC, use [Whirligig WebSockets](whirligig-websockets) instead.
+For browser clients that can't communicate with gRPC, use Whirligig WebSockets instead.
 
 ## Features and benefits
 
@@ -25,15 +25,15 @@ Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscr
 
 {% tabs %}
 {% tab title="Streaming subscriptions" %}
-| Stream               | What you receive                                                                                                                                 |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Account writes       | Updates whenever a matching account's data, lamports, or owner changes                                                                           |
-| Transactions         | Every transaction matching your filter, with full `meta` (logs, status, balance deltas)                                                          |
-| Deshred transactions | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See [Deshred transactions](deshred-transactions). |
-| Entries              | Solana ledger entries (low-level, rare use case)                                                                                                 |
-| Block notifications  | Full blocks as they're produced, optionally with their transactions and accounts                                                                 |
-| Block metadata       | Block headers only, without the transaction payload                                                                                              |
-| Slot notifications   | Slot-status events (processed/confirmed/finalized plus intra-slot lifecycle)                                                                     |
+| Stream               | What you receive                                                                                                         |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Account writes       | Updates whenever a matching account's data, lamports, or owner changes                                                   |
+| Transactions         | Every transaction matching your filter, with full `meta` (logs, status, balance deltas)                                  |
+| Deshred transactions | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See Deshred transactions. |
+| Entries              | Solana ledger entries (low-level, rare use case)                                                                         |
+| Block notifications  | Full blocks as they're produced, optionally with their transactions and accounts                                         |
+| Block metadata       | Block headers only, without the transaction payload                                                                      |
+| Slot notifications   | Slot-status events (processed/confirmed/finalized plus intra-slot lifecycle)                                             |
 {% endtab %}
 
 {% tab title="Unary operations" %}
@@ -44,6 +44,8 @@ Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscr
 | `getSlot`             | The current slot at a commitment level                               |
 | `isValidBlockhash`    | Whether a given blockhash is still valid                             |
 | `subscribeReplayInfo` | Earliest slot still available for stream replay                      |
+| `getVersion`          | The Geyser gRPC plugin and Solana version                            |
+| `ping`                | Liveness check; the server replies with a `pong`                     |
 {% endtab %}
 {% endtabs %}
 
@@ -63,18 +65,22 @@ Commitment level for buffering. Optional. Defaults to `processed`.
 | `CONFIRMED` (1) | Voted on by supermajority. Some buffering.             |
 | `FINALIZED` (2) | Max vote lockout. Most buffering.                      |
 
-For maximum performance, work at `processed` and manage commitment client-side by subscribing to [slot notifications](#slots) alongside your data. The pattern:
+For maximum performance, work at `processed` and manage commitment client-side by subscribing to [slot notifications](dragon-s-mouth-grpc.md#slots) alongside your data. The pattern:
 
 1. Subscribe to slot notifications alongside your data stream.
 2. Buffer incoming events by slot.
 3. When you see a slot status change to `confirmed` or `finalized`, release the matching buffer.
 4. You'll always receive the slot's events _before_ its commitment notification.
+
+{% hint style="warning" %}
+**Not every finalized slot notification is issued.** Because of a Geyser quirk (fixed in Solana `master`), some `finalized` slot notifications are never sent. To handle finalized correctly, whenever you receive a `finalized` slot notification, retroactively mark its ancestor slots as finalized too, even if you never got a notification for them.
+{% endhint %}
 {% endtab %}
 
 {% tab title="ping" %}
 Sends a periodic keepalive to prevent idle-stream drops by upstream cloud providers (e.g. Cloudflare). Server replies with `pong`. Optional but recommended for long-running streams.
 
-See [pings](#pings).
+See [pings](dragon-s-mouth-grpc.md#pings).
 {% endtab %}
 
 {% tab title="accountsDataSlice" %}
@@ -86,7 +92,7 @@ Example: `[{ "offset": 32, "length": 40 }]` returns 40 bytes starting at byte 32
 {% tab title="fromSlot" %}
 Replay buffered updates starting from this slot, then continue live on the same stream. Optional. Used for reconnection after short disconnections.
 
-See [replay from a slot](#replay-from-a-slot).
+See [replay from a slot](dragon-s-mouth-grpc.md#replay-from-a-slot).
 {% endtab %}
 {% endtabs %}
 
@@ -94,7 +100,7 @@ See [replay from a slot](#replay-from-a-slot).
 
 A single gRPC connection can carry many subscriptions. Add multiple named entries to any of the filter maps (`accounts`, `transactions`, `slots`, `blocks`, `blocksMeta`, `entry`) and they all stream over the same connection. Each match is tagged with the filter name(s) that produced it, so you can route updates downstream without splitting connections.
 
-The canonical multiplex example is the [Multiple programs Accounts subscription](#accounts) -- two named owner filters under `accounts`, one connection. The same pattern works across stream types: subscribe to accounts AND transactions AND slots in one request.
+The canonical multiplex example is the [Multiple programs Accounts subscription](dragon-s-mouth-grpc.md#accounts) -- two named owner filters under `accounts`, one connection. The same pattern works across stream types: subscribe to accounts AND transactions AND slots in one request.
 
 ### Filter configuration
 
@@ -106,9 +112,9 @@ Each `SubscribeRequest` has a map per stream type. The key is a label you choose
 
 | Parameter | Type               | Required | Description                                                                                                                                          |
 | --------- | ------------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `account` | `string[]`         | —        | List of pubkeys to subscribe to directly. Each must be a base58-encoded address.                                                                     |
-| `owner`   | `string[]`         | —        | List of program owners. Subscribes to every account owned by these programs.                                                                         |
-| `filters` | `AccountsFilter[]` | —        | Content-based filters on the account data. Each filter is one of: `memcmp`, `datasize`, `tokenAccountState`, or `lamports`. Combined as logical AND. |
+| `account` | `string[]`         | -        | List of pubkeys to subscribe to directly. Each must be a base58-encoded address.                                                                     |
+| `owner`   | `string[]`         | -        | List of program owners. Subscribes to every account owned by these programs.                                                                         |
+| `filters` | `AccountsFilter[]` | -        | Content-based filters on the account data. Each filter is one of: `memcmp`, `datasize`, `tokenAccountState`, or `lamports`. Combined as logical AND. |
 
 </details>
 
@@ -118,11 +124,11 @@ Each `SubscribeRequest` has a map per stream type. The key is a label you choose
 
 | Parameter          | Type       | Required | Description                                                        |
 | ------------------ | ---------- | -------- | ------------------------------------------------------------------ |
-| `vote`             | `bool`     | —        | Include or exclude vote transactions. `false` excludes votes.      |
-| `failed`           | `bool`     | —        | Include or exclude failed transactions. `false` excludes failures. |
-| `signature`        | `string`   | —        | Subscribe to a specific signature's status updates.                |
-| `account_include`  | `string[]` | —        | Accounts mentioned anywhere in the transaction.                    |
-| `account_exclude`  | `string[]` | —        | Exclude transactions mentioning these accounts.                    |
+| `vote`             | `bool`     | -        | Include or exclude vote transactions. `false` excludes votes.      |
+| `failed`           | `bool`     | -        | Include or exclude failed transactions. `false` excludes failures. |
+| `signature`        | `string`   | -        | Subscribe to a specific signature's status updates.                |
+| `account_include`  | `string[]` | -        | Accounts mentioned anywhere in the transaction.                    |
+| `account_exclude`  | `string[]` | -        | Exclude transactions mentioning these accounts.                    |
 | `account_required` | `string[]` | Yes      | Accounts that MUST all be mentioned (every one of them).           |
 
 </details>
@@ -133,10 +139,10 @@ Each `SubscribeRequest` has a map per stream type. The key is a label you choose
 
 | Parameter              | Type       | Required | Description                                                             |
 | ---------------------- | ---------- | -------- | ----------------------------------------------------------------------- |
-| `account_include`      | `string[]` | —        | Only deliver transactions and accounts in the block that mention these. |
-| `include_transactions` | `bool`     | —        | Include the block's transactions.                                       |
-| `include_accounts`     | `bool`     | —        | Include accounts updated during the block.                              |
-| `include_entries`      | `bool`     | —        | Include the block's entries.                                            |
+| `account_include`      | `string[]` | -        | Only deliver transactions and accounts in the block that mention these. |
+| `include_transactions` | `bool`     | -        | Include the block's transactions.                                       |
+| `include_accounts`     | `bool`     | -        | Include accounts updated during the block.                              |
+| `include_entries`      | `bool`     | -        | Include the block's entries.                                            |
 
 </details>
 
@@ -146,7 +152,7 @@ Each `SubscribeRequest` has a map per stream type. The key is a label you choose
 
 | Parameter              | Type   | Required | Description                                                                                                   |
 | ---------------------- | ------ | -------- | ------------------------------------------------------------------------------------------------------------- |
-| `filter_by_commitment` | `bool` | —        | If `true`, only receive updates matching the request's `commitment`. If `false`, receive every status change. |
+| `filter_by_commitment` | `bool` | -        | If `true`, only receive updates matching the request's `commitment`. If `false`, receive every status change. |
 
 </details>
 
@@ -176,7 +182,7 @@ Before you start, make sure you have:
 
 The latest protobuf files live in the [yellowstone-grpc repo](https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto). For Rust, use the [yellowstone-grpc-proto crate](https://crates.io/crates/yellowstone-grpc-proto).
 
-The examples below use gRPC JSON for the request body and TypeScript for the client. Other languages use the same shape. Each example assumes you've already created and connected a `Client` (see [clients and SDKs](#clients-and-sdks)).
+The examples below use gRPC JSON for the request body and TypeScript for the client. Other languages use the same shape. Each example assumes you've already created and connected a `Client` (see [clients and SDKs](dragon-s-mouth-grpc.md#clients-and-sdks)).
 
 ### Accounts
 
@@ -544,7 +550,7 @@ Full deep-dive: [Compressed filters for Yellowstone gRPC](https://blog.triton.on
 
 ### Transactions
 
-If you want the **earliest possible signal** on a transaction, we expose [Deshred transactions](deshred-transactions) -- a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the validator executes them.
+If you want the **earliest possible signal** on a transaction, we expose Deshred transactions -- a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the validator executes them.
 
 {% tabs %}
 {% tab title="All non-vote, non-failed" %}
@@ -733,7 +739,7 @@ let request = SubscribeRequest {
 {% endtab %}
 {% endtabs %}
 
-Each update carries a `SlotStatus` enum -- see [intra-slot updates](#intra-slot-updates) for the full lifecycle.
+Each update carries a `SlotStatus` enum -- see [intra-slot updates](dragon-s-mouth-grpc.md#intra-slot-updates) for the full lifecycle.
 
 ### Blocks
 
@@ -1129,6 +1135,35 @@ console.log(info.firstAvailable);
 For teams self-hosting a Yellowstone gRPC server, replay must be enabled by setting `replay_stored_slots` to a value greater than `0`.
 {% endhint %}
 
+### Auto-reconnect (Rust client)
+
+From v13.1.0, the Rust client handles reconnection for you. Enable it when building the client:
+
+```rust
+let client = GeyserGrpcClient::build_from_shared(endpoint)?
+    .x_token(x_token)?
+    .tls_config(ClientTlsConfig::new().with_native_roots())?
+    .set_reconnect_config(ReconnectConfig::default())
+    .connect()
+    .await?;
+
+let mut stream = client.subscribe_once(request).await?;
+
+while let Some(msg) = stream.next().await {
+    // the stream transparently reconnects on disconnect,
+    // replays from the last processed slot, and deduplicates replayed messages
+}
+```
+
+What it does automatically:
+
+* Tracks the last fully processed slot.
+* On disconnect, reconnects with `from_slot` set to that slot.
+* Deduplicates messages replayed during the reconnect window.
+* Falls back to a live subscription if the slot is outside the server's replay window.
+
+Auto-reconnect is disabled by default. Omit `set_reconnect_config` to keep the original single-stream behaviour.
+
 ## Intra-slot updates
 
 Subscribers can listen for "intra-slot" lifecycle events that show what's happening inside a slot, from the first shred received to a fully replayed bank.
@@ -1161,6 +1196,20 @@ flowchart LR
 ## Clients and SDKs
 
 Sample clients in multiple languages live in the [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples) directory. Match your client to the current proto version.
+
+### Prebuilt test binary
+
+For a quick test without building anything, the `yellowstone-grpc` project ships a prebuilt `client-ubuntu` binary for Ubuntu 22.04 and 24.04. Download it from the [Releases](https://github.com/rpcpool/yellowstone-grpc/releases) page.
+
+```shell
+# all accounts and slots
+./client-ubuntu-22.04 --endpoint https://<your-endpoint>.mainnet.rpcpool.com --x-token <your-token> subscribe --accounts --slots
+
+# a specific program, e.g. Raydium AMM v4
+./client-ubuntu-22.04 --endpoint https://<your-endpoint>.mainnet.rpcpool.com --x-token <your-token> subscribe --accounts --slots --accounts-owner 675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8
+```
+
+Add `--stats` to print subscription stats: total accounts and slots streamed, plus bandwidth used.
 
 {% tabs %}
 {% tab title="Rust" %}
@@ -1342,4 +1391,11 @@ The Go example may lag the latest stable proto version. For production-ready cod
 
 ## What's next?
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="deshred-transactions">deshred-transactions</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="whirligig-websockets">whirligig-websockets</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 96h of stored data and built-in cursor resume.</td><td><a href="fumarole-persistent-streams">fumarole-persistent-streams</a></td></tr><tr><td><i class="fa-compass">:compass:</i> <strong>Streaming overview</strong></td><td>Compare every Triton streaming service side by side.</td><td></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 96h of stored data and built-in cursor resume.</td><td></td></tr><tr><td><i class="fa-compass">:compass:</i> <strong>Streaming overview</strong></td><td>Compare every Triton streaming service side by side.</td><td></td></tr></tbody></table>
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

@@ -1,10 +1,32 @@
+---
+description: List, create, update, activate, and deactivate endpoints URLs
+layout:
+  width: default
+  title:
+    visible: true
+  description:
+    visible: true
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: false
+  metadata:
+    visible: true
+  tags:
+    visible: true
+  actions:
+    visible: true
+---
+
 # Endpoints
 
-### **Overview**
+## **Overview**
 
 An Endpoint is what clients will call to consume the RPC. Endpoints belong to a Subscription, which holds its metadata. An endpoint's name is assigned to you when it's created and is randomly assigned.
 
-### List Endpoints
+## List endpoints
 
 <mark style="color:blue;">`GET /api/v1/endpoints`</mark>
 
@@ -28,7 +50,7 @@ curl 'https://customers.triton.one/api/v1/endpoints?account_uuid=c92a9cea-47cc-4
 curl 'https://customers.triton.one/api/v1/endpoints?subscription_uuid=74ea9d9a-4b2a-4f01-af47-1c175f8a2af6' -H "Authorization: secret-api-token" -H "Content-Type: application/json" -H "Accept:application/json" 
 ```
 
-#### Response
+### Response
 
 Returns a hash with the `endpoints` key containing an array of endpoints objects.
 
@@ -74,11 +96,11 @@ Returns a hash with the `endpoints` key containing an array of endpoints objects
 }
 ```
 
-### **Get Endpoint**
+## **Get endpoint**
 
 <mark style="color:red;">This API is not available.</mark>
 
-### **Create Endpoint**
+## **Create endpoint**
 
 <mark style="color:red;">This API is only limited to account management API tokens created with the reseller role.</mark>
 
@@ -152,7 +174,7 @@ All submitted keys, plus the following are returned:
 }    
 ```
 
-### **Update Endpoint**
+## **Update endpoint**
 
 <mark style="color:blue;">`PUT /api/v1/endpoints/:endpoint_uuid`</mark>
 
@@ -227,7 +249,7 @@ All submitted keys, plus the following are returned:
 }
 ```
 
-### **Activate Endpoint**
+## **Activate endpoint**
 
 <mark style="color:red;">This API is only limited to accoutn management API tokens created with the reseller role.</mark>
 
@@ -251,7 +273,7 @@ curl -X PUT 'https://customers.triton.one/api/v1/endpoints/74ea9d9a-4b2a-4f01-af
 204 No Content
 ```
 
-### **Deactivate Endpoint**
+## **Deactivate endpoint**
 
 <mark style="color:red;">This API is only limited to account managemrnt API tokens created with the reseller role.</mark>
 
@@ -283,3 +305,10 @@ curl -X PUT 'https://customers.triton.one/api/v1/endpoints/74ea9d9a-4b2a-4f01-af
 ```json
 204 No Content
 ```
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

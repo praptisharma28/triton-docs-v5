@@ -1,3 +1,9 @@
+---
+description: >-
+  What Triton is, how Project Yellowstone fits, getting an account, plans and
+  payments, and the Triton validator.
+---
+
 # General
 
 Common questions about Triton, our products, plans, payments, and how to start using our services.
@@ -33,7 +39,7 @@ Key components:
 | Dragon's Mouth | Core gRPC streaming engine for Solana. Delivers raw real-time data directly from the validator with ultra-low latency using Protobuf.                  |
 | Whirligig      | WebSocket counterpart to Dragon's Mouth -- built for front-end or browser-based apps needing live account and transaction feeds.                       |
 | Fumarole       | Persistent streaming layer with automatic redundancy and 4-day caching. Ensures no data loss even if the connection drops.                             |
-| Steamboat      | Custom indexing engine that accelerates heavy gPA queries by up to 99%, cutting latency for large programs.                                            |
+| Cloudbreak     | Custom indexing engine that accelerates heavy gPA queries by up to 20x, cutting latency for large programs.                                            |
 | Old Faithful   | Full-ledger archival service providing access to Solana's complete historical transaction data -- ideal for analytics, re-indexing, and backtesting.   |
 | Jet            | A transaction submission software that lets you add Stake Weight to your transactions to route them through a priority lane during network congestion. |
 | Shield         | Anti-MEV protection layer integrated with Jet. Allows configurable allow- and block-lists to prevent sandwiching and other frontrunning behaviours.    |
@@ -55,7 +61,7 @@ Beyond the famous Project Yellowstone, Triton operates additional infrastructure
 | Pyth Hermes         | Real-time price feed for financial market data.                                     |
 | Jito                | Dedicated Jito deployments for bundle simulation and MEV-related infrastructure.    |
 | Titan Swap API      | Swap API for various trading and protocol needs.                                    |
-| Cascade Marketplace | A bandwidth marketplace where trusted validators sell SWQoS bandwidth to consumers. |
+| SWQoS | Stake-weighted routing, applied by default on every Triton endpoint at no extra cost, so transactions from staked senders are prioritised. |
 
 </details>
 
@@ -170,3 +176,10 @@ This is built for people or teams with larger delegations who want steady income
 ```
 
 </details>
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

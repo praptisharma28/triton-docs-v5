@@ -8,7 +8,7 @@ Fumarole runs as **independent regional clusters**. Persistent subscriber state 
 
 This guide walks through the full failover lifecycle: preparation, detection, cutover, and failback.
 
-#### Scope and assumptions
+## Scope and assumptions
 
 This guide assumes:
 
@@ -22,7 +22,7 @@ The example throughout this guide uses **EU (`ams.rpcpool.com`)** as primary and
 Triton does **not** orchestrate failover for you, failover is **customer-managed**. We do not synchronize subscriber state, track your last-consumed slot, or trigger the cutover. Everything described below runs on your side. This page tells you exactly what to do.
 {% endhint %}
 
-#### Before you start
+## Before you start
 
 Failover is only possible if you do the prep work ahead of time. Put these in place during normal operation, not during the outage.
 
@@ -40,7 +40,7 @@ Decide what counts as a cluster-level failure for your workload (see Detecting a
 
 There will be a small overlap window during failover where the same slot may be delivered from both clusters. Your downstream processing must tolerate seeing the same slot twice without producing duplicate side effects.
 
-#### Detecting an outage
+## Detecting an outage
 
 A failover is only worth the effort when the primary is genuinely down. Transient hiccups should be handled by normal reconnect logic, not failover.
 
@@ -57,7 +57,7 @@ Before triggering a failover, make sure the problem is on the cluster and not on
 
 If `fume test-config` succeeds against the failing endpoint and the subscriber exists, but you are not receiving data, that is worth a CS-channel ping before declaring a full failover.
 
-#### Failover procedure
+## Failover procedure
 
 When your detection logic concludes the primary cluster is down, execute the following sequence.
 
@@ -100,7 +100,7 @@ Until the secondary catches up to live tip, you will be receiving historical dat
 
 Once the secondary is at live tip and slots are advancing normally, your failover is complete. Log the cutover and update your monitoring to track the new active cluster.
 
-#### Failing back to the primary
+## Failing back to the primary
 
 When the primary cluster recovers, you have a choice:
 
@@ -119,14 +119,14 @@ If you decide to fail back, run the failover procedure in reverse:
 Failback is a planned operation, not an emergency one. Schedule it during a low-traffic window and verify the primary has been stable for some time before cutting back.
 {% endhint %}
 
-#### Common pitfalls
+## Common pitfalls
 
 * **Failing over on a transient blip.** A single dropped connection is not a cluster outage. Tune your detection thresholds so normal reconnects do not trip failover.
 * **Not persisting the last-consumed slot.** If you only hold it in memory and your process restarts mid-outage, you have lost your resume point. Persist it durably.
 * **Forgetting the subscriber starts at `last_slot + 1`.** Starting at `last_slot` itself replays the slot you already processed, which widens the duplicate window.
 * **Assuming token-or-permission errors mean an outage.** Authentication failures are not outage signals, they indicate a client configuration problem, not a cluster problem.
 
-#### Quick reference
+## Quick reference
 
 | Phase     | What you do                                                                                                                                                                                                                                                            |
 | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -134,3 +134,10 @@ Failback is a planned operation, not an emergency one. Schedule it during a low-
 | Detect    | Run `fume test-config`, watch the `fumarole_offset_lag_from_tip` metric, and check for "not found" / stale errors on your subscriber. See the [Fume CLI reference](https://github.com/rpcpool/yellowstone-fumarole/blob/main/apps/yellowstone-fumarole-cli/README.md). |
 | Cut over  | Stop primary client → read `last_primary_slot` → create subscriber on secondary from `last_primary_slot + 1` → start consuming → confirm progress                                                                                                                      |
 | Fail back | Same procedure in reverse, scheduled rather than reactive                                                                                                                                                                                                              |
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

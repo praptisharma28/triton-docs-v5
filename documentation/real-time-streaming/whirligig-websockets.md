@@ -120,7 +120,7 @@ This method is fully compatiable with Solana WebSocket API. API details: [https:
 
 ### accountUnsubscribe
 
-See [#Unsubscribe](#unsubscribe).
+See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
 
 ### blockSubscribe
 
@@ -174,7 +174,7 @@ stream data example:
 
 ### blockUnsubscribe
 
-See [#Unsubscribe](#unsubscribe).
+See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
 
 ### logsSubscribe
 
@@ -260,7 +260,7 @@ stream data example:
 
 ### logsUnsubscribe
 
-See [#Unsubscribe](#unsubscribe).
+See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
 
 ### programSubscribe
 
@@ -315,7 +315,7 @@ stream data example:
 
 ### programUnsubscribe
 
-See [#Unsubscribe](#unsubscribe).
+See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
 
 ### signatureSubscribe
 
@@ -358,7 +358,7 @@ stream data example:
 
 ### signatureUnsubscribe
 
-See [#Unsubscribe](#unsubscribe).
+See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
 
 ### slotSubscribe
 
@@ -391,7 +391,7 @@ stream data example:
 
 ### slotUnsubscribe
 
-See [#Unsubscribe](#unsubscribe).
+See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
 
 ### transactionSubscribe
 
@@ -641,7 +641,7 @@ stream data example:
             }
           },
           "transaction": [
-            "nMXJYDy61Acdo2FY39i2ENUwNCMDYBWgRi6dNBgJdMHv7NgY4jUS6uwa9YMzyen1nzANm35qQSr189ykkvNzEFRhrULEwNxXA39HRS8JjYwEdUQ7ziXT2bqnFCeJc5rtk2uS7rbrrvEANjeDJ8PVkdJW9ZrxTcpg3nY3S5uVi6t7N2aB2eDmyju1cyRRU5T1aiT9vH1MHornT53XSe9UzuXFEP4sXfJjHovtucUkjqpJqU1PnKcrfK98wNT1Li6zjS8XGreRYNz5N8nNuxhVxFUM9CxQVurQQ3mhAiSYUmsptNgM5RqwSsy1CwebfZRpc35qThUtyu55TGyXh7MAgA8sJCfBrTDCgtWChaDkyqpggKPQ8VnCgLQdPBMwaady3cF3GgMvCpue5ryFW2p3EYgZxME7j6FTgBRjYRd6LuyeyhWp68fsNscYbMY8eZnV6WVVpSoBUpxg9FnyEpCatgS9ZNiTX3Wb8K3Dg4ncxmVutegbxn9uKbEvBNUWn5KV5m2jbmJmSafmMAJrFW3m4pv2HAKHezcEPfNNMCrK5J4Jjjg2JqQBKK9Z1PddhAX4CConAnbF7ZY4xkFnpWVpVi8cJrR6Wsa6VPDMpgzraukYmnwHgrBNx2bQokeZxmpyb7j2f6mWkreQcLZFFDx5tP33XbwSQqNFvtQZzUDJ2zYwMhZmCuN3E4vFgWQgU3Sb9jepy8ev9LniReyPdJRRRGbkJegdxYkbE2XDb3R2p9PF3um3LrKP35MeJgKoDrNBG6UAe6M5Q3cP7JfZGgZVud9GQcVGdnBa9ZbQJyojHnMbV4TDNmi2526dXoi5XqfUhNkrc1PgnAzrKzwZmNyiCX12SSUZLKzgzJTnk7C4gavYNSvhpNcupQyrLEnJf9FkQwhv1uN4WAsYdym6rR5oLuZet9bnebNvJCPWRCT4H59Yrm8y1QTF64hiB9zWazhLawAKAtYdBKteW9gr8BstGDUuo8QRMTyb3jBJYhdoeiKMqZWo",
+            "nMXJYDy61Acdo2FY39i2ENUwNCMDYBWgRi6dNBgJ...YhdoeiKMqZWo",
             "base58"
           ]
         },
@@ -655,4 +655,11 @@ stream data example:
 
 ### transactionUnsubscribe
 
-See [#Unsubscribe](#unsubscribe).
+See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

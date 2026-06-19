@@ -1,6 +1,28 @@
+---
+description: List, create, activate, and deactivate the secret tokens
+layout:
+  width: default
+  title:
+    visible: true
+  description:
+    visible: true
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: false
+  metadata:
+    visible: true
+  tags:
+    visible: true
+  actions:
+    visible: true
+---
+
 # Tokens
 
-### **Overview**
+## **Overview**
 
 Create private access tokens to allow your backend services to make authenticated RPC requests to an Endpoint. This allows you to make requests from any backend origin.
 
@@ -8,7 +30,7 @@ Create private access tokens to allow your backend services to make authenticate
 
 On the load balancers, we support "user:password" style basic authentication if you need to use that form of auth. In those cases, the password is the token. The token\_user is randomly generated, so every token has a unique user.
 
-### List Tokens
+## List tokens
 
 <mark style="color:blue;">`GET /api/v1/tokens`</mark>
 
@@ -35,7 +57,7 @@ curl 'https://customers.triton.one/api/v1/tokens?account_uuid=c92a9cea-47cc-494b
 curl 'https://customers.triton.one/api/v1/tokens?per=10&page=2&subscription_uuid=74ea9d9a-4b2a-4f01-af47-1c175f8a2af6' -H "Authorization: secret-api-token" -H "Content-Type: application/json" -H "Accept:application/json" 
 ```
 
-#### Response
+### Response
 
 Returns a hash with the `tokens` key containing an array of tokens objects and the `meta` containing pagination data.
 
@@ -67,11 +89,11 @@ Returns a hash with the `tokens` key containing an array of tokens objects and t
 }
 ```
 
-### **Get Token**
+## **Get token**
 
 <mark style="color:red;">This API is not available.</mark>
 
-### **Create Token**
+## **Create token**
 
 <mark style="color:blue;">`POST /api/v1/subscriptions/:subscription_uuid/tokens`</mark>
 
@@ -122,7 +144,7 @@ All submitted keys, plus the following are returned:
 }
 ```
 
-### **Activate Token**
+## **Activate token**
 
 <mark style="color:red;">This API is only limited to account management API tokens created with the reseller and operator role.</mark>
 
@@ -146,7 +168,7 @@ curl -X PUT 'https://customers.triton.one/api/v1/tokens/74ea9d9a-4b2a-4f01-af47-
 204 No Content
 ```
 
-### **Deactivate Token**
+## **Deactivate token**
 
 <mark style="color:red;">This API is only limited to account management API tokens created with the reseller and operator role.</mark>
 
@@ -178,3 +200,10 @@ curl -X PUT 'https://customers.triton.one/api/v1/tokens/74ea9d9a-4b2a-4f01-af47-
 ```json
 204 No Content
 ```
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

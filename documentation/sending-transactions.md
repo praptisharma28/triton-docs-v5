@@ -1,7 +1,65 @@
-# Overview
+---
+description: How to send Solana transactions on Triton, and how to choose between standard sendTransaction, the Jet TPU client, and the fee, MEV, and swap tools.
+layout:
+  pagination:
+    visible: false
+---
 
-Send Solana transactions through Triton: SWQoS-routed delivery, priority-fee estimation, swap routers, and Jito bundles.
+# Sending transactions
 
-{% hint style="info" %}
-**Wireframe placeholder.** This page is part of the proposed Solana docs restructure. Content will be added in a later pass -- the structure here is intentional.
-{% endhint %}
+Triton gives you several ways to send Solana transactions and get them to land. This page covers how sending works, what each option does, and how to pick the right one.
+
+## How sending works
+
+You build and sign a transaction, then submit it so a validator includes it in a block. Landing reliably under load comes down to a few things:
+
+* **Delivery.** Reaching the current leader quickly, with stake-weighted quality of service (SWQoS) so your transaction is prioritised.
+* **Fees.** Attaching a priority fee that reflects the real market rate.
+* **Protection.** Optionally restricting which validators can process your transaction, to avoid harmful MEV.
+
+Triton covers each of these while keeping standard Solana behaviour where you want it.
+
+## Pick your send path
+
+Most transactions go through a Triton endpoint, which applies SWQoS and forwards your transaction to the leader's TPU. You can submit two ways, and there is a third path for full client-side control.
+
+|                       |   `sendTransaction`   |             `/sendtx`             |      Jet TPU client      |
+| --------------------- | :-------------------: | :-------------------------------: | :----------------------: |
+| Interface             |    Solana JSON-RPC    |             HTTP POST             |       Rust library       |
+| Reaches the TPU via   | your endpoint (server-side) |       your endpoint (server-side)       |   your client (direct)   |
+| Overhead              |   JSON-RPC envelope   | minimal, no envelope or preflight |            n/a           |
+| SWQoS                 |           ✓           |                 ✓                 |             ✓            |
+| Client to run         |          none         |                none               |            yes           |
+| Best for              |  broad compatibility  |       browsers, HFT backends      |   bots, custom routers   |
+
+* **`sendTransaction`** is the standard Solana JSON-RPC method. SWQoS is applied and your transaction is delivered to the leader for you.
+* **`/sendtx`** is a direct HTTP submission endpoint on your Triton endpoint. It takes the same delivery path as `sendTransaction`, but skips the JSON-RPC envelope, so there is no JSON parsing, no CORS preflight, and a smaller payload. Lower latency, and no RPC client library needed. The [quickstart](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/quickstart) walks through it.
+* **Jet TPU client** is for full client-side control: your own machine sends straight to validator TPUs over QUIC, with per-transaction callbacks, custom routing, and Shield enforcement in your code. It is the sending logic from Yellowstone Jet, Triton's production engine, as a standalone library.
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-paper-plane">:paper-plane:</i> <strong>Jet sender</strong></td><td>Send straight to validator TPUs over QUIC, with callbacks and custom routing.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/jet-sender">Jet sender</a></td></tr><tr><td><i class="fa-shield">:shield:</i> <strong>Shield MEV protection</strong></td><td>Allowlist or blocklist validators with an on-chain policy attached at send time.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection">Shield MEV protection</a></td></tr><tr><td><i class="fa-arrow-trend-up">:arrow-trend-up:</i> <strong>Priority fees API</strong></td><td>Percentile-based priority fee estimates tuned to land under congestion.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api">Priority fees API</a></td></tr></tbody></table>
+
+## Fees and protection
+
+* **Priority fees API.** Triton extends `getRecentPrioritizationFees` with a `percentile` parameter, so you can price a fee against the real market rate instead of the minimum. See [Priority fees API](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api).
+* **Shield MEV protection.** Create an on-chain allowlist or blocklist of validators and attach it when you send, so your transaction only goes to validators you trust. Apply it through Triton RPC (SWQoS) or the Jet TPU client. See [Shield MEV protection](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection).
+
+## Swap APIs
+
+Building swaps? Triton hosts routing and quote engines so you do not have to assemble swap transactions yourself.
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-code-branch">:code-branch:</i> <strong>Metis swap API</strong></td><td>Self-hosted Jupiter routing and quotes across 20+ DEXes. No staked JUP required.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/metis-swap-api">Metis swap API</a></td></tr><tr><td><i class="fa-route">:route:</i> <strong>Titan swap API</strong></td><td>Real-time streaming quotes over WebSocket from the Argos meta-aggregator.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/titan-swap-api">Titan swap API</a></td></tr><tr><td><i class="fa-box">:box:</i> <strong>Jito bundles</strong></td><td>Submit and simulate atomic bundles through Triton's Jito-enabled RPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/jito-bundles">Jito bundles</a></td></tr></tbody></table>
+
+## Pricing
+
+`sendTransaction` is billed as a standard RPC call (`$0.08 / GB` plus `$10 / million`). The Titan API is bandwidth-only (`$0.08 / GB`), and Metis is `$0.08 / GB` plus `$80 / million`. See the pricing page for the full breakdown.
+
+## What's next
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Send a transaction with standard sendTransaction and with the Jet TPU client.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/quickstart">Quickstart</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Land transactions reliably under congestion.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/best-practices">Best practices</a></td></tr></tbody></table>
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

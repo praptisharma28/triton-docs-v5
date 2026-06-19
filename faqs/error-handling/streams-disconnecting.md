@@ -1,3 +1,9 @@
+---
+description: >-
+  A checklist to confirm your environment can keep up with Solana throughput
+  when Dragon's Mouth gRPC streams disconnect.
+---
+
 # Streams disconnecting
 
 If you’ve started experiencing Dragon’s Mouth gRPC disconnects recently, this page is for you. Solana’s average daily TPS has almost doubled since December, and the full-chain feed can now spike to \~1.3-1.8 Gbps.
@@ -35,4 +41,11 @@ If some answers are “no”, that’s ok, we just want you to get the full pict
 
     If you’re using Dragon’s Mouth, we assume your workload prioritises lowest latency over absolute data completeness, persistence, and redundancy.<br>
 
-    If you’d prefer the guarantees over speed, for example, if you run accounting, analytics, indexing, or compliance workloads, consider using Fumarole (beta) instead of raw gRPC.
+    If you’d prefer the guarantees over speed, for example, if you run accounting, analytics, indexing, or compliance workloads, consider using Fumarole instead of raw gRPC.
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

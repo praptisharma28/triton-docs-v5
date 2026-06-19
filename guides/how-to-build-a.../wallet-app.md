@@ -1,3 +1,0 @@
-# Wallet app
-
-Coming soon.

@@ -1,81 +1,60 @@
 # Metis swap API
 
-To utilise Triton One's self-hosted Metis Swap API Binary, you do not need to have any $JUP tokens staked; Triton One has got you covered.
+Metis is Jupiter's routing and quote engine, self-hosted on Triton. You do not need any staked $JUP; Triton runs the binary for you. It scans 20+ DEXes and AMMs across Solana's DeFi ecosystem, finds the optimal route, splits trades when it helps, and builds ready-to-sign swap transactions.
 
-### What is Metis?
+## Key features
 
-Metis is Jupiter's routing and quote engine that brings the power of Jupiter's routing directly to your infrastructure. It scans 20+ DEXes and AMMs across Solana's DeFi ecosystem, calculates optimal routes, splits trades when beneficial, and builds ready-to-sign swap transactions.
+* **Liquidity aggregation**: combines liquidity from multiple AMMs and DEXes into a single route.
+* **Platform fees**: set a fee wallet and pass a platform-fee parameter directly in the quote API.
+* **ExactOut mode**: for payment flows where you need an exact output amount, for example accepting many tokens but settling in USDC.
+* **Circular arbitrage**: Triton enables circular routes (USDC to token to USDC) that Jupiter's public API disables by default.
 
-#### Key Features
+## Use cases
 
-* **Liquidity aggregation**: Combines liquidity from multiple AMMs and DEXes into a single route
-* **Platform fees**: Support for platform fees directly in the quote API - set your fee wallet and pass a platform fee parameter
-* **ExactOut mode**: Perfect for payment flows where you need to receive an exact output amount (e.g., accepting many tokens but settling in USDC)
-* **Circular arbitrage:** Triton enables circular arbitrage routes (e.g. USDC → token → USDC), which are disabled on Jupiter's public API by default
-
-#### Use Cases
-
-Metis API on Triton can power:
+Metis on Triton can power:
 
 * Wallets with simple swap functionality
 * Payment gateways that accept many tokens and settle in a single asset
-* Trading bots and arbitrage systems (incl. circular arbitrage strategies)
+* Trading bots and arbitrage systems, including circular-arbitrage strategies
 * DEX frontends with clean swap flows
 
-### Getting Started
+## Getting started
 
-To start using the Metis Swap API, use the following pathing in your code:
-
-```bash
-curl 'https://<endpoint>.rpcpool.com/<private_token>/metis/quote?
-```
-
-#### Example Request
+Call the API on your Triton endpoint, under the `/metis` path.
 
 ```bash
-curl 'https://endpoint.rpcpool.com/private_token/metis/quote?\
+curl 'https://<your-endpoint>.mainnet.rpcpool.com/<your-token>/metis/quote?\
 inputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&\
 outputMint=So11111111111111111111111111111111111111112&\
 amount=1000000&\
 slippageBps=50'
 ```
 
-### Pricing
+## Executing a swap
 
-The self-hosted Metis Swap API uses metered billing and is not rate-limited.
+After you get a quote from `/quote`:
 
-The price per million Metis queries is $80. There are no rate limits to using this API; therefore, it is recommended to monitor your usage to prevent unexpected costs.
+1. **Get a quote**: call `/quote` as shown above.
+2. **Get swap instructions**: pass the quote response to `/swap` or `/swap-instructions` to build the transaction.
+3. **Sign and send**: sign with your wallet and submit to the network.
 
-### Availability
+Metis builds the ready-to-sign transaction for you.
 
-Metis Swap API is available for all customers with an active Solana Subscription, on both shared RPC pools and dedicated nodes.
+## Pricing
 
-### Executing a Swap
+The self-hosted Metis swap API uses metered billing and is not rate-limited. It is $80 per million Metis queries. Because there are no rate limits, monitor your usage to avoid unexpected costs.
 
-After getting a quote from the <mark style="color:$success;">`/quote`</mark> endpoint, you can execute the swap:
+## Availability
 
-1. **Get a Quote**: Use the <mark style="color:$success;">`/quote`</mark> endpoint (as shown in the example above)
-2. **Get Swap Instructions**: Use the response to build your swap transaction
-3. **Sign and Send**: Sign the transaction with your wallet and submit to the network
+Available to all customers with an active Solana subscription, on both shared RPC pools and dedicated nodes.
 
-The Metis API builds ready-to-sign swap transactions for you.
+## API documentation
 
-#### Example Flow
+For the full parameter set and response shapes, see the [Metis docs](https://metis.builders/docs/get-quote). Background: [Metis API for Solana swaps is live on Triton](https://blog.triton.one/metis-api-for-solana-swaps-is-live-on-triton/).
 
-```bash
-# Step 1: Get a quote
-curl 'https://endpoint.rpcpool.com/private_token/metis/quote?inputMint=...&outputMint=...&amount=...'
+***
 
-# Step 2: Use the quote response to execute the swap
-# (See full documentation for swap endpoint details)
-```
-
-For complete details on executing swaps, including the <mark style="color:$success;">`/swap`</mark> and <mark style="color:$success;">`/swap-instructions`</mark> endpoints, refer to the Metis documentation.
-
-### API Documentation
-
-To understand how to use the binary, please refer to the Metis docs at [https://metis.builders/docs/get-quote](https://metis.builders/docs/get-quote).
-
-Read more: [https://blog.triton.one/metis-api-for-solana-swaps-is-live-on-triton/](https://blog.triton.one/metis-api-for-solana-swaps-is-live-on-triton/)
-
-<br>
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

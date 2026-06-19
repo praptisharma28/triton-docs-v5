@@ -1,3 +1,9 @@
+---
+description: >-
+  Use Triton's known-good Linux test client to tell whether a gRPC error is in
+  your endpoint or your code.
+---
+
 # Verify your gRPC endpoint
 
 Use Triton's known-good Linux test client to figure out whether a gRPC error is on your endpoint or in your application code.
@@ -40,3 +46,10 @@ Add `--stats` to see total accounts, slots, and bandwidth in real time:
 ## Why we ship this
 
 A common support ticket pattern: a customer reports a gRPC error, we ask for their code, and we end up debugging hundreds of lines of someone else's application. The test client cuts through that. It's a baseline -- when both sides know the client itself is correct, the conversation jumps straight to whether the endpoint or the customer's code has the issue.
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

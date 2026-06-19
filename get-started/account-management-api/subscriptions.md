@@ -1,10 +1,32 @@
+---
+description: List, create, update, activate, and deactivate subscriptions
+layout:
+  width: default
+  title:
+    visible: true
+  description:
+    visible: true
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: false
+  metadata:
+    visible: true
+  tags:
+    visible: true
+  actions:
+    visible: true
+---
+
 # Subscriptions
 
-### **Overview**
+## **Overview**
 
 A Subscription is the primary resource, and it encapsulates all things related to the endpoints and tokens you define. This also includes a name, a start and end timestamp, and other metadata. This is one of the first resources that you should create to get started using Triton and making RPC requests. You'll need to have an account and obtain an `account_uuid` to create a subscription.
 
-### **List Subscriptions**
+## **List subscriptions**
 
 <mark style="color:blue;">`GET /api/v1/subscriptions`</mark>
 
@@ -42,7 +64,7 @@ curl 'https://customers.triton.one/api/v1/subscriptions?account_uuid=c92a9cea-47
 curl 'https://customers.triton.one/api/v1/subscriptions?per=10&page=2' -H "Authorization: secret-api-token" -H "Content-Type: application/json" -H "Accept:application/json" 
 ```
 
-#### Response
+### Response
 
 Returns a hash with the `subscriptions` key containing an array of subscriptions objects and the `meta` containing pagination data.
 
@@ -64,7 +86,7 @@ Returns a hash with the `subscriptions` key containing an array of subscriptions
 }
 </code></pre>
 
-### Get Subscription
+## Get subscription
 
 <mark style="color:blue;">`GET /api/v1/subscriptions/:subscription-uuid`</mark>
 
@@ -193,7 +215,7 @@ Returns a hash with the `subscription` key containing a subscription object. The
 }
 ```
 
-### **Create Subscription**
+## **Create subscription**
 
 <mark style="color:red;">This API is only limited to account management API tokens created with the reseller role.</mark>
 
@@ -289,7 +311,7 @@ Returns a hash with the `subscription` key containing a subscription object. Not
  
 ```
 
-### **Update Subscription**
+## **Update subscription**
 
 <mark style="color:blue;">`PUT /api/v1/subscriptions/:subscription_uuid`</mark>
 
@@ -351,7 +373,7 @@ Returns a hash with the `subscription` key containing a subscription object. The
 }
 ```
 
-### **Activate Subscription**
+## **Activate subscription**
 
 <mark style="color:red;">This API is only limited to account management API tokens created with the reseller role.</mark>
 
@@ -375,7 +397,7 @@ curl -X PUT 'https://customers.triton.one/api/v1/subscriptions/74ea9d9a-4b2a-4f0
 204 No Content
 ```
 
-### **Deactivate Subscription**
+## **Deactivate subscription**
 
 <mark style="color:red;">This API is only limited to account management API tokens created with the reseller role.</mark>
 
@@ -407,3 +429,10 @@ curl -X PUT 'https://customers.triton.one/api/v1/subscriptions/74ea9d9a-4b2a-4f0
 ```json
 204 No Content
 ```
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

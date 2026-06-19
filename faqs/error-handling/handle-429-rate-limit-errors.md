@@ -1,3 +1,9 @@
+---
+description: >-
+  Understand Triton's rate-limit window, read the response headers, and back off
+  and retry to clear 429 errors.
+---
+
 # Handle 429 rate-limit errors
 
 What HTTP 429 means on Triton, why you hit it, and how to back off and retry without losing requests.
@@ -11,7 +17,7 @@ Triton's shared infrastructure enforces two budgets on every IP, both reset ever
 * **Total RPS** -- the budget across every method.
 * **Per-method RPS** -- a separate budget for each individual RPC method (most often hit on `getProgramAccounts`, `sendTransaction`, or `getBlock`).
 
-A 429 means at least one of those budgets was exceeded. See Rate and connection limits for the exact defaults and how to read your endpoint's live limits.
+A 429 means at least one of those budgets was exceeded. See [Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs-v5/get-started/rate-and-connection-limits) for the exact defaults and how to read your endpoint's live limits.
 
 ## Read the response headers
 
@@ -66,4 +72,11 @@ async function rpcWithBackoff(url: string, body: unknown, maxAttempts = 5) {
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-gauge">:gauge:</i> <strong>Rate and connection limits</strong></td><td>Per-endpoint and method rate limits, plus streaming connection caps.</td><td></td></tr><tr><td><i class="fa-circle-question">:circle-question:</i> <strong>Common Solana errors</strong></td><td>Solana JSON-RPC error codes and how to handle each one.</td><td><a href="common-solana-errors">common-solana-errors</a></td></tr><tr><td><i class="fa-triangle-exclamation">:triangle-exclamation:</i> <strong>Triton RPC error codes</strong></td><td>Triton-specific error codes you might see and what they mean.</td><td><a href="triton-rpc-error-codes">triton-rpc-error-codes</a></td></tr><tr><td><i class="fa-wrench">:wrench:</i> <strong>How to troubleshoot</strong></td><td>The full debug flow when something's not working as expected.</td><td></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-gauge">:gauge:</i> <strong>Rate and connection limits</strong></td><td>Per-endpoint and method rate limits, plus streaming connection caps.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/get-started/rate-and-connection-limits">https://kate-6.gitbook.io/triton-one-docs-v5/get-started/rate-and-connection-limits</a></td></tr><tr><td><i class="fa-circle-question">:circle-question:</i> <strong>Common Solana errors</strong></td><td>Solana JSON-RPC error codes and how to handle each one.</td><td></td></tr><tr><td><i class="fa-triangle-exclamation">:triangle-exclamation:</i> <strong>Triton RPC error codes</strong></td><td>Triton-specific error codes you might see and what they mean.</td><td></td></tr><tr><td><i class="fa-wrench">:wrench:</i> <strong>How to troubleshoot</strong></td><td>The full debug flow when something's not working as expected.</td><td></td></tr></tbody></table>
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

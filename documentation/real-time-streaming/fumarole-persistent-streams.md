@@ -1,7 +1,107 @@
+---
+description: Scalable and reliable streaming of account and transaction data.
+layout:
+  width: default
+  title:
+    visible: true
+  description:
+    visible: true
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: false
+  metadata:
+    visible: true
+  tags:
+    visible: true
+  actions:
+    visible: true
+---
+
 # Fumarole persistent streams
 
-Persistent gRPC streams with built-in completeness, a 4-day rolling buffer, and seamless resume on disconnect.
+{% hint style="info" %}
+Fumarole is currently in **available by default on all mainnet subscriptions**. For questions or feedback, please reach out through your Triton CS channel.
+{% endhint %}
+
+Fumarole is our new streaming system to allow you to be able to reliably stream accounts and transactions.
+
+#### Fumarole provides
+
+* **High availability**: by collecting data from multiple downstream Solana nodes and merging them into a single stream, your stream does not get interrupted if a node restarts or is upgraded.
+* Persistence: Fumarole stores up to 4 days of historical state and lets you reconnect your stream if your clients go down. Disconnect and resume from your last position any time within that window.
+* **Parallel replay download :** Fumarole can replay in parallel geyser data wherever you left off.
+
+#### How to get started
+
+1. Use your existing mainnet subscription token, no separate access request needed.
+2. Read our launch post and get started with the Fume CLI: [https://blog.triton.one/introducing-yellowstone-fumarole](https://blog.triton.one/introducing-yellowstone-fumarole)
+3. Build your integration with Fumarole via the Rust or Typescript SDKs: [https://github.com/rpcpool/yellowstone-fumarole](https://github.com/rpcpool/yellowstone-fumarole)
+
+#### Regional endpoints
+
+Fumarole runs as **independent regional clusters**. We currently operate:
+
+| Region | Endpoint          | Location  |
+| ------ | ----------------- | --------- |
+| EU     | `ams.rpcpool.com` | Amsterdam |
+| US     | `nyc.rpcpool.com` | New York  |
+
+**Choosing an endpoint**
+
+For Fumarole, connect directly to a **regional endpoint** rather than shared `*.mainnet.rpcpool.com` endpoints. Pick the region closest to your backend infrastructure to minimise latency.
 
 {% hint style="warning" %}
-**Work in progress.** This page is being reviewed -- don't reference it yet, copy isn't final.
+Shared `*.mainnet.rpcpool.com` endpoints are **not recommended for Fumarole**. See the next section for why.
 {% endhint %}
+
+**Why direct regional endpoints matter for Fumarole**
+
+The shared endpoints (`*.mainnet.rpcpool.com`) routes traffic to the closest regional load balancer based on GeoDNS. For stateless RPC calls this is ideal, any region can serve any request.
+
+**Persistent subscribers in Fumarole are stateful per cluster.** A persistent subscriber and the slot offsets it tracks live locally on the cluster where it was created and **do not replicate across regions**.
+
+If you connect through a shared endpoint, your traffic can be routed to a region where your persistent subscriber does not exist - for example, after a routing change, a network event, or a shift in the perceived geography of your backend. When that happens, your subscriber will not be found on the new cluster and you will need to recreate it.
+
+Pointing your Fumarole client directly at a regional endpoint avoids this entirely.
+
+**Switching regions**
+
+To move a persistent subscriber from one regional cluster to another (e.g., EU → US):
+
+1. Recreate your persistent subscriber on the new cluster - subscribers do not carry over between regional clusters.
+2. Point your client to the new regional endpoint.
+3. Reconnect. Your existing token continues to work; no token changes are required.
+
+**Cross-region redundancy (customer-managed)**
+
+With multiple regional clusters available, you can implement cross-region redundancy on the client side. If one cluster experiences a major issue, you can fail over to another region by recreating the persistent subscriber **from the last slot you observed on the failing cluster**.
+
+Fumarole makes this type of redundancy easy to handle in the client since it tracks the last **full** slot you consumed.
+
+This pattern is fully customer-managed:
+
+* Your client tracks the last-seen slot per cluster.
+* Your client detects the failure and triggers the cutover.
+* Triton does not synchronise subscriber state, track last-seen slots, or orchestrate failover between clusters.
+
+If you need this level of redundancy, plan your slot bookkeeping and failover logic accordingly. For the full step-by-step detection, failover, and failback procedure, follow the [Fumarole cluster failover guide](https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/streaming/fumarole-cluster-failover).
+
+#### Migrating from Dragon's Mouth
+
+If you already have code built for our gRPC streams in Dragon's Mouth, integrating with Fumarole for additional reliability is easy. The code changes should be minimal as Fumarole uses the same types as Dragon's Mouth.
+
+The main difference is that you need to manage a **persistent subscriber**, and alter your subscribe request slightly.
+
+For more details see the Github repo:
+
+[Yellowstone-fumarole-client crates.io](https://docs.rs/yellowstone-fumarole-client/0.5.0+solana.3/yellowstone_fumarole_client/)
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
