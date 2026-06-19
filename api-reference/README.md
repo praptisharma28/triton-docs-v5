@@ -1,4 +1,5 @@
 ---
+description: Read the current on-chain state of Solana accounts at any commitment level.
 layout:
   width: default
   title:
@@ -20,8 +21,6 @@ layout:
 ---
 
 # Reading account state
-
-Read the current on-chain state of Solana accounts at any commitment level.
 
 These return an account's data directly, whether you want a single account, many in one call, just the SOL balance, or every account a program owns:
 
