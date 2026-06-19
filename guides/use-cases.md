@@ -1,12 +1,12 @@
 ---
-description: Complete, build-along guides for common Solana applications.
+description: >-
+  Complete RPC, streaming and advanced API integration guides for common Solana
+  applications.
 ---
 
 # Use cases
 
-End-to-end builds for common Solana applications.
-
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-arrow-trend-up">:arrow-trend-up:</i> <a href="use-cases/trading-and-market-making.md"><strong>Trading and market making</strong></a></td><td>Connect to real-time DEX data, get the earliest on-chain signal, price priority fees, and land transactions under congestion.</td><td></td></tr><tr><td><i class="fa-wallet">:wallet:</i> <a href="use-cases/building-a-wallet.md"><strong>Building a wallet</strong></a></td><td>Fetch balances, stream account changes with Dragon's Mouth, pull history, and send SOL and SPL tokens reliably.</td><td></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-arrow-trend-up">:arrow-trend-up:</i> <strong>Trading and market making</strong></td><td>Connect to real-time DEX data, get the earliest on-chain signal, price priority fees, and land transactions under congestion.</td><td><a href="use-cases/trading-and-market-making.md">trading-and-market-making.md</a></td></tr><tr><td><i class="fa-wallet">:wallet:</i> <strong>Building a wallet</strong></td><td>Fetch balances, stream account changes with Dragon's Mouth, pull history, and send SOL and SPL tokens reliably.</td><td><a href="use-cases/building-a-wallet.md">building-a-wallet.md</a></td></tr></tbody></table>
 
 ***
 
