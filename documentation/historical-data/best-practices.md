@@ -1,3 +1,7 @@
+---
+description: Practical tips for querying old Solana transactions, blocks, and address history efficiently.
+---
+
 # Best practices
 
 How to query historical and archival Solana data: old transactions, blocks, and address history.

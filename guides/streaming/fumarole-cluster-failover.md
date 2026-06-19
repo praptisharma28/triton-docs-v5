@@ -1,3 +1,7 @@
+---
+description: Set up Fumarole across regional clusters for automatic streaming failover.
+---
+
 # Fumarole cluster failover
 
 {% hint style="info" %}

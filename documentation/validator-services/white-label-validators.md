@@ -1,3 +1,7 @@
+---
+description: A Solana validator run on Triton infrastructure under your own brand and keys.
+---
+
 # White-label validators
 
 Triton runs a Solana validator under your brand and your keys. You keep your branded validator and your delegators; Triton runs the infrastructure.

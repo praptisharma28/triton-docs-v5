@@ -1,3 +1,7 @@
+---
+description: Run a branded Solana validator or stake for USDC pay-outs on Triton's infrastructure.
+---
+
 # Validator services
 
 White-label and private trusted validator services for institutional staking on Solana.

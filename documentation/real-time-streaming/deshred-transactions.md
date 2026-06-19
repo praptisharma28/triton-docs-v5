@@ -1,3 +1,7 @@
+---
+description: Stream Solana transactions reconstructed from shreds before the validator executes them.
+---
+
 # Deshred transactions
 
 Pre-execution transaction stream reconstructed from shreds, before the validator executes them. The earliest usable on-chain signal exposed by Yellowstone gRPC.

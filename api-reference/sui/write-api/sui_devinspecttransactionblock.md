@@ -2,7 +2,7 @@
 description: >-
   Runs the transaction in dev-inspect mode. Which allows for nearly any
   transaction (or Move call) with any arguments. Detailed results are provided,
-  including both the transaction effects and any retur
+  including both the transaction effects and any retur.
 ---
 
 # sui\_devInspectTransactionBlock

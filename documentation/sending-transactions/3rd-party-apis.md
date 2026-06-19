@@ -1,3 +1,7 @@
+---
+description: Trading APIs Triton hosts on your RPC endpoint: swaps, quotes, and bundle simulation.
+---
+
 # 3rd party APIs
 
 Triton hosts third-party trading APIs on the same endpoint as your RPC, so you can quote, stream, and simulate without running extra infrastructure or staking any tokens. All three are included with an active Solana subscription, on both shared pools and dedicated nodes.

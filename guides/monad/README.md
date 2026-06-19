@@ -1,3 +1,7 @@
+---
+description: Official Monad guides from Monad Labs, from first deploy through indexing.
+---
+
 # Guides by Monad Labs
 
 Building on Monad? These official guides from Monad Labs take you from your first deploy through indexing. Monad is EVM-compatible, so your existing Ethereum tooling works.

@@ -1,5 +1,5 @@
 ---
-description: Return total supply for a coin
+description: Return total supply for a coin.
 ---
 
 # suix\_getTotalSupply

@@ -2,7 +2,7 @@
 description: >-
   This method provides the list of assets created by a particular creator. By
   using this method, developers and users can programmatically access and
-  retrieve the assets created or owned by a specific c
+  retrieve the assets created or owned by a specific c.
 ---
 
 # getAssetsByCreator

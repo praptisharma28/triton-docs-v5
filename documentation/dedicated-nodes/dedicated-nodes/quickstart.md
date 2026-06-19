@@ -1,3 +1,7 @@
+---
+description: How to scope, provision, and connect a dedicated Triton node.
+---
+
 # Quickstart
 
 Dedicated nodes are set up with our team, not self-serve. Here is the path from first contact to a live stream.

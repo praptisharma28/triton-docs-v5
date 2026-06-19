@@ -1,5 +1,5 @@
 ---
-description: Return the validator APY
+description: Return the validator APY.
 ---
 
 # suix\_getValidatorsApy

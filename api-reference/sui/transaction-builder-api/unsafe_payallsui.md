@@ -2,7 +2,7 @@
 description: >-
   Send all SUI coins to one recipient. This is for SUI coin only and does not
   require a separate gas coin object. Specifically, what pay_all_sui does are:
-  1. accumulate all SUI from input coins and depo
+  1. accumulate all SUI from input coins and depo.
 ---
 
 # unsafe\_payAllSui

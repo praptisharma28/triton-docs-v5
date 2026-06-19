@@ -1,5 +1,5 @@
 ---
-description: Return the object data for a list of objects
+description: Return the object data for a list of objects.
 ---
 
 # sui\_multiGetObjects

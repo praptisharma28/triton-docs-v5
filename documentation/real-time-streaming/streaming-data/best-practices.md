@@ -1,3 +1,7 @@
+---
+description: Keep real-time Solana streams reliable and low-latency in production.
+---
+
 # Best practices
 
 How to run real-time Solana streams reliably and at low latency.

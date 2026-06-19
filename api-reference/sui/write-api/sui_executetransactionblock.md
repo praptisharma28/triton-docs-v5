@@ -2,7 +2,7 @@
 description: >-
   Execute the transaction and wait for results if desired. Request types: 1.
   WaitForEffectsCert: waits for TransactionEffectsCert and then return to
-  client. This mode is a proxy for transaction finality
+  client. This mode is a proxy for transaction finality.
 ---
 
 # sui\_executeTransactionBlock

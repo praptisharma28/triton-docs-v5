@@ -1,3 +1,7 @@
+---
+description: Short, task-focused guides for specific Solana workflows.
+---
+
 # How-tos
 
 Task-focused guides for specific Solana workflows.

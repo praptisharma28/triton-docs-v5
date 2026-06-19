@@ -2,7 +2,7 @@
 description: >-
   The method allows users to query and retrieve information about specific NFT
   assets based on certain criteria (custom-query). This query provides filters
-  such as asset name, owner address, collection
+  such as asset name, owner address, collection.
 ---
 
 # searchAssets

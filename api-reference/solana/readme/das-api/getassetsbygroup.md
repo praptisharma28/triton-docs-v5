@@ -1,5 +1,5 @@
 ---
-description: '{% hint style="warning" %} Temporary Suspension'
+description: '{% hint style="warning" %} Temporary Suspension'.
 ---
 
 # getAssetsByGroup

@@ -1,5 +1,5 @@
 ---
-description: Return a structured representation of Move function
+description: Return a structured representation of Move function.
 ---
 
 # sui\_getNormalizedMoveFunction

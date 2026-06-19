@@ -2,7 +2,7 @@
 description: >-
   Send `Coin<T>` to a list of addresses, where `T` can be any coin type,
   following a list of amounts, The object specified in the `gas` field will be
-  used to pay the gas fee for the transaction. The gas
+  used to pay the gas fee for the transaction. The gas.
 ---
 
 # unsafe\_pay

@@ -1,3 +1,7 @@
+---
+description: How Triton safeguards the node identity key while you keep control of your validator.
+---
+
 # Node identity protection
 
 The public-private key pair of the node identity enables the node to vote on behalf of your vote account. We hold this key pair and deploy it to the node.

@@ -1,3 +1,7 @@
+---
+description: A Rust library that sends Solana transactions straight to validator TPUs over QUIC.
+---
+
 # Jet sender
 
 `yellowstone-jet-tpu-client` is a standalone Rust library that sends Solana transactions straight to validator TPUs over QUIC. It carries the SWQoS handling, QUIC connection caching, and leader tracking from Yellowstone Jet, Triton's production transaction engine, extracted so you can use the sending logic without running the whole engine.

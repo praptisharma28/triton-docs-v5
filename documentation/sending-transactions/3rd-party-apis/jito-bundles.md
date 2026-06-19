@@ -1,3 +1,7 @@
+---
+description: Simulate Jito transaction bundles with Triton's Jito RPC support.
+---
+
 # Jito bundles
 
 Triton enables Jito RPC on every plan, which gives you Jito's improved simulation support so you can simulate bundles of transactions.

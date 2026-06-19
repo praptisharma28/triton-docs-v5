@@ -1,5 +1,5 @@
 ---
-description: Return a structured representation of Move struct
+description: Return a structured representation of Move struct.
 ---
 
 # sui\_getNormalizedMoveStruct

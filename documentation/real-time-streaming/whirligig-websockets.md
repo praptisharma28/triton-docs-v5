@@ -1,3 +1,7 @@
+---
+description: An enhanced Solana WebSocket API backed by a Dragon's Mouth gRPC stream.
+---
+
 # Whirligig WebSockets
 
 The Whirligig WebSocket Proxy is a Rust-based proxy between a Dragon's Mouth gRPC server and a WebSocket client. It allows the client to send requests to a WebSocket connection rather than through the gRPC protocol. This can be used when WebSocket connections are preferred, such as in a web3 application.

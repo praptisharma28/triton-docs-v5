@@ -1,3 +1,7 @@
+---
+description: Triton's Geyser gRPC stream for sub-slot Solana account, transaction, slot, and block updates.
+---
+
 # Dragon's Mouth gRPC
 
 Triton's Geyser-fed gRPC streaming interface for Solana. Sub-slot account, transaction, slot, and block subscriptions. The fastest live data path available for processed events.

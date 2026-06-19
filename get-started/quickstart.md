@@ -1,5 +1,5 @@
 ---
-description: Create Triton account and send your first request to the network
+description: Create Triton account and send your first request to the network.
 layout:
   width: default
   title:

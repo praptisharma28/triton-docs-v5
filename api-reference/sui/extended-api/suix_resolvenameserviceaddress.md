@@ -1,5 +1,5 @@
 ---
-description: Return the resolved address given resolver and name
+description: Return the resolved address given resolver and name.
 ---
 
 # suix\_resolveNameServiceAddress

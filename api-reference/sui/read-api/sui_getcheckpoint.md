@@ -1,5 +1,5 @@
 ---
-description: Return a checkpoint
+description: Return a checkpoint.
 ---
 
 # sui\_getCheckpoint

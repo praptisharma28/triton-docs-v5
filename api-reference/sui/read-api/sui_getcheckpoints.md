@@ -1,5 +1,5 @@
 ---
-description: Return paginated list of checkpoints
+description: Return paginated list of checkpoints.
 ---
 
 # sui\_getCheckpoints

@@ -1,5 +1,5 @@
 ---
-description: Return a structured representation of Move module
+description: Return a structured representation of Move module.
 ---
 
 # sui\_getNormalizedMoveModule

@@ -1,5 +1,5 @@
 ---
-description: Return structured representations of all modules in the given package
+description: Return structured representations of all modules in the given package.
 ---
 
 # sui\_getNormalizedMoveModulesByPackage

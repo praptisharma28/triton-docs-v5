@@ -1,5 +1,5 @@
 ---
-description: Triton billing methods, infrastructure options, and per-service rates
+description: Triton billing methods, infrastructure options, and per-service rates.
 layout:
   width: default
   title:

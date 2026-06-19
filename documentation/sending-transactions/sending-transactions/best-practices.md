@@ -1,3 +1,7 @@
+---
+description: Patterns for landing Solana transactions reliably under congestion.
+---
+
 # Best practices
 
 How to land Solana transactions reliably, especially under congestion.

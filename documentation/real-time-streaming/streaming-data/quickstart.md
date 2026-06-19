@@ -1,3 +1,7 @@
+---
+description: Open your first Triton stream and see live Solana data in minutes.
+---
+
 # Quickstart
 
 Test all Triton streaming solutions in 5 minutes. For the streaming overview and product comparison, see the overview page.

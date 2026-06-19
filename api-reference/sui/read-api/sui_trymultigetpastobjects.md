@@ -2,7 +2,7 @@
 description: >-
   Note there is no software-level guarantee/SLA that objects with past versions
   can be retrieved by this API, even if the object and version exists/existed.
-  The result may vary across nodes depending on
+  The result may vary across nodes depending on.
 ---
 
 # sui\_tryMultiGetPastObjects

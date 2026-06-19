@@ -1,5 +1,5 @@
 ---
-description: Subscribe to a stream of Sui event
+description: Subscribe to a stream of Sui event.
 ---
 
 # suix\_subscribeEvent

@@ -1,3 +1,7 @@
+---
+description: A web3.js drop-in that serves Solana account reads from a live stream instead of polling.
+---
+
 # Account-sync
 
 The Triton SDK is a drop-in replacement for `@solana/web3.js` with the magic of streaming.

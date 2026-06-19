@@ -1,3 +1,7 @@
+---
+description: Jupiter's swap routing engine, self-hosted on Triton with no staked JUP required.
+---
+
 # Metis swap API
 
 Metis is Jupiter's routing and quote engine, self-hosted on Triton. You do not need any staked $JUP; Triton runs the binary for you. It scans 20+ DEXes and AMMs across Solana's DeFi ecosystem, finds the optimal route, splits trades when it helps, and builds ready-to-sign swap transactions.

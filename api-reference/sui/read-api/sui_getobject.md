@@ -1,5 +1,5 @@
 ---
-description: Return the object information for a specified object
+description: Return the object information for a specified object.
 ---
 
 # sui\_getObject

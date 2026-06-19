@@ -1,3 +1,7 @@
+---
+description: Single-tenant Solana infrastructure with isolated capacity and a fixed monthly price.
+---
+
 # Dedicated nodes
 
 A dedicated node is single-tenant Triton infrastructure: your own endpoint with isolated capacity, open rate limits, and a fixed monthly price.

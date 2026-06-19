@@ -1,3 +1,7 @@
+---
+description: Official Sui guides from Mysten Labs, from first setup to full applications.
+---
+
 # Guides by Mysten Labs
 
 Building on Sui? These official guides from Mysten Labs take you from first setup to full applications.

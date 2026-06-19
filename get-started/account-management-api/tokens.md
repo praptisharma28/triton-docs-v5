@@ -1,5 +1,5 @@
 ---
-description: List, create, activate, and deactivate the secret tokens
+description: List, create, activate, and deactivate the secret tokens.
 layout:
   width: default
   title:

@@ -1,5 +1,5 @@
 ---
-description: Return the sequence number of the latest checkpoint that has been executed
+description: Return the sequence number of the latest checkpoint that has been executed.
 ---
 
 # sui\_getLatestCheckpointSequenceNumber

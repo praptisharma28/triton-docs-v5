@@ -1,3 +1,7 @@
+---
+description: Query SPL token accounts by mint or owner with getProgramAccounts.
+---
+
 # Query token program
 
 ## Query by mint

@@ -1,5 +1,5 @@
 ---
-description: Return the reference gas price for the network
+description: Return the reference gas price for the network.
 ---
 
 # suix\_getReferenceGasPrice

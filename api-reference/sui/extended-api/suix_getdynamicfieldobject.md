@@ -1,5 +1,5 @@
 ---
-description: Return the dynamic field object information for a specified object
+description: Return the dynamic field object information for a specified object.
 ---
 
 # suix\_getDynamicFieldObject

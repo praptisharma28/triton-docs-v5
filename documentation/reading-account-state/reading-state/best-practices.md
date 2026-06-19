@@ -1,3 +1,7 @@
+---
+description: How to keep Solana account, program, and token reads fast and fresh at scale.
+---
+
 # Best practices
 
 How to read Solana account, program, and token state quickly and reliably. For real-time changes see real-time streaming; for data older than the last few epochs see historical data.

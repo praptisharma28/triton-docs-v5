@@ -1,3 +1,7 @@
+---
+description: Stream Solana swap quotes in real time and execute them, powered by Argos and DART.
+---
+
 # Titan swap API
 
 The Titan swap API streams swap quotes in real time over a WebSocket. The Argos routing engine acts as a meta-aggregator, sourcing from multiple DEX aggregators and RFQ venues. Streaming over a WebSocket keeps latency low and lets a frontend update prices live without overwhelming the server with HTTP requests.

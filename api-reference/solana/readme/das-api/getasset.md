@@ -2,7 +2,7 @@
 description: >-
   This method retrieves detailed information about a specific digital asset/NFT.
   The metadata returned includes information about the asset URL, metadata,
-  collection, creators, authorities, compression
+  collection, creators, authorities, compression.
 ---
 
 # getAsset

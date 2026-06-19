@@ -1,5 +1,5 @@
 ---
-description: Authenticate securely, protecting your endpoint and credentials
+description: Authenticate securely, protecting your endpoint and credentials.
 layout:
   width: default
   title:

@@ -1,3 +1,7 @@
+---
+description: Stream parsed, per-program Solana data with Vixen over gRPC.
+---
+
 # How to use Vixen + gRPC
 
 ## Introduction

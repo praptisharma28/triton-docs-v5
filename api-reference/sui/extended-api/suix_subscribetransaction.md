@@ -1,5 +1,5 @@
 ---
-description: Subscribe to a stream of Sui transaction effects
+description: Subscribe to a stream of Sui transaction effects.
 ---
 
 # suix\_subscribeTransaction

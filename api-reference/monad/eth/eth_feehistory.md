@@ -1,5 +1,5 @@
 ---
-description: Transaction fee history
+description: Transaction fee history.
 ---
 
 # eth\_feeHistory

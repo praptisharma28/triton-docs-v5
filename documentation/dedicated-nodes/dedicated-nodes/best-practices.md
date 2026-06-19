@@ -1,3 +1,7 @@
+---
+description: Operate a dedicated Solana streaming node for the best cost and stability.
+---
+
 # Best practices
 
 Get the most out of a dedicated streaming node.

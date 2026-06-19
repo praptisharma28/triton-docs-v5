@@ -1,7 +1,7 @@
 ---
 description: >-
   Our defence-in-depth security model, designed to protect your data, services,
-  and endpoints
+  and endpoints.
 layout:
   width: default
   title:

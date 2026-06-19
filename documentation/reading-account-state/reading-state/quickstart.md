@@ -1,3 +1,7 @@
+---
+description: Send your first Solana account read with standard RPC or the Account Sync SDK.
+---
+
 # Quickstart
 
 Read Solana account state in five minutes, two ways: the standard JSON-RPC reads, and Account Sync, a web3.js drop-in that serves reads from a live stream. For the overview and a product comparison, see the [Reading account state overview](../../reading-account-state.md).

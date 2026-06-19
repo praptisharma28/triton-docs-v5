@@ -1,5 +1,5 @@
 ---
-description: List, create, update, activate, and deactivate subscriptions
+description: List, create, update, activate, and deactivate subscriptions.
 layout:
   width: default
   title:

@@ -1,5 +1,5 @@
 ---
-description: List, create, update, activate, and deactivate endpoints URLs
+description: List, create, update, activate, and deactivate endpoints URLs.
 layout:
   width: default
   title:

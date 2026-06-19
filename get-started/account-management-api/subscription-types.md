@@ -1,5 +1,5 @@
 ---
-description: List, create, and update subscription types
+description: List, create, and update subscription types.
 layout:
   width: default
   title:

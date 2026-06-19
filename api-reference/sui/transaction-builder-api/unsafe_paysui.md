@@ -2,7 +2,7 @@
 description: >-
   Send SUI coins to a list of addresses, following a list of amounts. This is
   for SUI coin only and does not require a separate gas coin object.
-  Specifically, what pay_sui does are: 1. debit each input_
+  Specifically, what pay_sui does are: 1. debit each input_.
 ---
 
 # unsafe\_paySui

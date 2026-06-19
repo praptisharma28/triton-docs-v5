@@ -1,3 +1,7 @@
+---
+description: Route Solana transactions only through validators you trust, using an on-chain policy.
+---
+
 # Shield MEV protection
 
 Yellowstone Shield lets you control which validators handle your Solana transactions. You create an on-chain policy listing validators you trust (an allowlist) or do not trust (a blocklist), attach the policy when you send, and your transaction only goes to validators that match.

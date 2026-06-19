@@ -1,3 +1,7 @@
+---
+description: How a Solana vote account is created and configured for your validator.
+---
+
 # Vote account setup
 
 NOTE: Should we host your validator, we will set up the vote account for you. The information below is for transparency and educational purposes.

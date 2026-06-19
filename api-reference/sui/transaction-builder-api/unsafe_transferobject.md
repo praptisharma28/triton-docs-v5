@@ -1,7 +1,7 @@
 ---
 description: >-
   Create an unsigned transaction to transfer an object from one address to
-  another. The object's type must allow public transfers
+  another. The object's type must allow public transfers.
 ---
 
 # unsafe\_transferObject

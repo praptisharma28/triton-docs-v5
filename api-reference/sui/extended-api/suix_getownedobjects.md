@@ -2,7 +2,7 @@
 description: >-
   Return the list of objects owned by an address. Note that if the address owns
   more than `QUERY_MAX_RESULT_LIMIT` objects, the pagination is not accurate,
-  because previous page may have been updated wh
+  because previous page may have been updated wh.
 ---
 
 # suix\_getOwnedObjects

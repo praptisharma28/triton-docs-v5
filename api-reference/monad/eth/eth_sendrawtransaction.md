@@ -2,7 +2,7 @@
 description: >-
   Submits a raw transaction. You can create and sign a transaction externally
   using a library such as [web3.js](https://web3js.readthedocs.io/) or
-  [ethers.js](https://docs.ethers.org/). For [EIP-4844](h
+  [ethers.js](https://docs.ethers.org/). For [EIP-4844](h.
 ---
 
 # eth\_sendRawTransaction

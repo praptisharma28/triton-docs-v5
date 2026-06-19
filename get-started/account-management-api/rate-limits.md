@@ -1,5 +1,5 @@
 ---
-description: Check the per-second, per-IP request limits applied to your endpoints
+description: Check the per-second, per-IP request limits applied to your endpoints.
 layout:
   width: default
   title:

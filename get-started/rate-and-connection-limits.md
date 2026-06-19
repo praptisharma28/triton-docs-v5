@@ -1,5 +1,5 @@
 ---
-description: Flexible limits across all the networks, services, and infrastructure types
+description: Flexible limits across all the networks, services, and infrastructure types.
 layout:
   width: default
   title:

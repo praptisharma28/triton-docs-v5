@@ -2,7 +2,7 @@
 description: >-
   Return metadata (e.g., symbol, decimals) for a coin. Note that if the coin's
   metadata was wrapped in the transaction that published its marker type, or the
-  latest version of the metadata object is wra
+  latest version of the metadata object is wra.
 ---
 
 # suix\_getCoinMetadata

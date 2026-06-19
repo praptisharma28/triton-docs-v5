@@ -1,7 +1,7 @@
 ---
 description: >-
   Premium bare-metal infrastructure for production workloads on Solana, Sui, and
-  Monad
+  Monad.
 layout:
   width: default
   title:

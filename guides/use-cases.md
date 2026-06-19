@@ -1,3 +1,7 @@
+---
+description: Complete, build-along guides for common Solana applications.
+---
+
 # Use cases
 
 End-to-end builds for common Solana applications.

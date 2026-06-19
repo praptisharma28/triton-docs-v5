@@ -1,3 +1,7 @@
+---
+description: End-to-end guides for streaming real-time Solana data over gRPC.
+---
+
 # Streaming
 
 Real-time Solana data over gRPC, with reliability and benchmarking guides.

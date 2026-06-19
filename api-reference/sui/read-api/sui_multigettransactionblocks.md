@@ -2,7 +2,7 @@
 description: >-
   Returns an ordered list of transaction responses The method will throw an
   error if the input contains any duplicate or the input size exceeds
-  QUERY_MAX_RESULT_LIMIT
+  QUERY_MAX_RESULT_LIMIT.
 ---
 
 # sui\_multiGetTransactionBlocks

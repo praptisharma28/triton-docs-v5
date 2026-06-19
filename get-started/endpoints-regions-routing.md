@@ -1,5 +1,5 @@
 ---
-description: Triton's points of presence, automatic routing, and region pinning
+description: Triton's points of presence, automatic routing, and region pinning.
 layout:
   width: default
   title:
