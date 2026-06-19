@@ -31,7 +31,7 @@ Here are some uncommon `@solana/web3.js` errors we have previously helped our cu
 
 Suppose you're running high-throughput asynchronous loads in a NodeJS environment. In that case, you might find yourself getting persistent socket and connection errors such as: `ECONNREFUSED`, `ECONNRESET`, Connection Timeout Error, other side closed, fetch failed.
 
-If so, Triton One provides a comprehensive guide on why this occurs and a list of steps you can take to fix the problem in its documentation.
+If so, Triton One provides a [comprehensive guide](https://kate-6.gitbook.io/triton-one-docs-v5/faqs/solana/error-handling/web3js-socket-connection-issues) on why this occurs and the steps to fix it.
 
 ***
 

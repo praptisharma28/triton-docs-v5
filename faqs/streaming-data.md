@@ -70,7 +70,7 @@ Cloudbreak is Triton's account indexing engine that delivers `getProgramAccounts
 
 <summary>What is Fumarole, and how can I get access?</summary>
 
-Fumarole is a streaming system designed for reliable, scalable streaming of account and transaction data. It aggregates data from multiple Solana nodes for high availability and persistence, with up to 4 days of retained stream history. Available on every Triton subscription, with regional endpoints (`ams.rpcpool.com` for Europe, `nyc.rpcpool.com` for the US). See Fumarole.
+Fumarole is a streaming system designed for reliable, scalable streaming of account and transaction data. It aggregates data from multiple Solana nodes for high availability and persistence, with up to 4 days of retained stream history. Available on every Triton subscription, with regional endpoints (`ams.rpcpool.com` for Europe, `nyc.rpcpool.com` for the US). See [Fumarole](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/fumarole-persistent-streams).
 
 </details>
 
@@ -98,7 +98,7 @@ Yes, on both shared and dedicated infrastructure. Your existing WebSocket connec
 
 <summary>How do I connect to WebSockets?</summary>
 
-Replace `https` with `wss` in your RPC endpoint URL. For example: `wss://your-endpoint.rpcpool.com`. For backends, we recommend using gRPC instead -- see Dragon's Mouth gRPC for the lower-latency path.
+Replace `https` with `wss` in your RPC endpoint URL. For example: `wss://your-endpoint.rpcpool.com`. For backends, we recommend using gRPC instead -- see [Dragon’s Mouth gRPC](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc) for the lower-latency path.
 
 </details>
 
@@ -116,7 +116,7 @@ Geyser plugins can be enabled on our dedicated Solana nodes. They provide powerf
 
 Run our prebuilt `client-ubuntu` test client. It's a small Linux CLI we ship for exactly this purpose -- known-good code that hits your endpoint with the same gRPC subscription patterns your app does. If it errors, the issue is on the endpoint and we should look at it. If it streams cleanly, the issue is in your application code.
 
-Full guide: Verify your gRPC endpoint.
+Full guide: [Verify your gRPC endpoint](https://kate-6.gitbook.io/triton-one-docs-v5/faqs/solana/error-handling/verify-your-grpc-endpoint).
 
 </details>
 
