@@ -1,0 +1,113 @@
+---
+description: Create Triton account and send your first request to the network
+layout:
+  width: default
+  title:
+    visible: true
+  description:
+    visible: true
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: false
+  metadata:
+    visible: true
+  tags:
+    visible: true
+  actions:
+    visible: true
+---
+
+# Quickstart
+
+{% stepper %}
+{% step %}
+**Sign up and fund your account**
+
+Create your account at [customers.triton.one](https://customers.triton.one) and activate it with a stablecoin deposit (minimum $125; valid for 12 months). This gives you access to all features across all chains, used up as you go (see Plans and billing for exact rates).
+{% endstep %}
+
+{% step %}
+**Get your endpoint**
+
+Your endpoints are already provisioned. In the [customer portal](https://customers.triton.one), select the network, then click the endpoint name to copy its URL and secret token (see [Authentication](authentication.md) for details).
+{% endstep %}
+
+{% step %}
+**Send your first request**
+
+The example below calls `getSlot` on Solana mainnet. Paste in your endpoint, secret token, and run it:
+
+{% tabs %}
+{% tab title="curl" %}
+```bash
+curl https://<endpoint>.mainnet.rpcpool.com/<token> \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"getSlot"}'
+```
+{% endtab %}
+
+{% tab title="Solana Kit" %}
+```javascript
+import { createSolanaRpc } from "@solana/kit";
+
+const rpc = createSolanaRpc("https://<endpoint>.mainnet.rpcpool.com/<token>");
+const slot = await rpc.getSlot().send();
+console.log(slot);
+```
+{% endtab %}
+
+{% tab title="web3.js" %}
+```javascript
+import { Connection } from '@solana/web3.js';
+
+const conn = new Connection(
+  'https://<endpoint>.mainnet.rpcpool.com/<token>',
+  'confirmed'
+);
+console.log(await conn.getSlot());
+```
+{% endtab %}
+
+{% tab title="python" %}
+```python
+import requests
+
+r = requests.post(
+    'https://<endpoint>.mainnet.rpcpool.com/<token>',
+    json={'jsonrpc': '2.0', 'id': 1, 'method': 'getSlot'},
+)
+print(r.json()['result'])
+```
+{% endtab %}
+
+{% tab title="rust" %}
+```rust
+use solana_client::rpc_client::RpcClient;
+
+let client = RpcClient::new(
+    "https://<endpoint>.mainnet.rpcpool.com/<token>".to_string(),
+);
+println!("{}", client.get_slot()?);
+```
+{% endtab %}
+{% endtabs %}
+
+If you got back something like `{ "jsonrpc": "2.0", "result": 311340987, "id": 1 }`, you're connected.
+{% endstep %}
+{% endstepper %}
+
+## Start building
+
+Once you have an account, select the chain you're integrating to jump to its docs:
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-bolt">:bolt:</i> <strong>Solana</strong></td><td>RPC, streaming, history, and trading APIs for Solana Mainnet and Devnet</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana</a></td></tr><tr><td><i class="fa-droplet">:droplet:</i> <strong>Sui</strong></td><td>gRPC, Seal, Walrus, and ledger endpoints for Sui Mainnet and Testnet</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/sui">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/sui</a></td></tr><tr><td><i class="fa-cube">:cube:</i> <strong>Monad</strong></td><td>RPC and Websocket endpoints for Monad Mainnet and Testnet</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/monad">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/monad</a></td></tr></tbody></table>
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
