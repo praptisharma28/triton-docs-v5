@@ -27,13 +27,13 @@ layout:
 As one of the original validators on Sui we provide full-service Sui API access. We support:
 
 * Mainnet
-  * JSON-RPC (to be deprecated in 2026)
-  * gRPC beta (will be replacing JSON-RPC)
+  * JSON-RPC (deactivates 31 July 2026)
+  * gRPC, generally available (replacing JSON-RPC)
   * Walrus storage, publisher and aggregator
   * Seal permissioned server
 * Testnet
-  * JSON-RPC (to be deprecated in 2026)
-  * gRPC beta (will be replacing JSON-RPC)
+  * JSON-RPC (deactivates 31 July 2026)
+  * gRPC, generally available (replacing JSON-RPC)
   * Walrus storage, publisher and aggregator
   * Seal open and permissioned server
 

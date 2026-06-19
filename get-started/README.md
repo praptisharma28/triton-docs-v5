@@ -48,7 +48,7 @@ We run premium infrastructure clusters for Solana, Sui, and Monad.
 {% tab title="Sui" %}
 <table><thead><tr><th>Network</th><th width="128" align="center">JSON-RPC</th><th align="center">gRPC</th><th align="center">Archival gRPC</th><th align="center">Walrus</th><th align="center">Seal</th></tr></thead><tbody><tr><td>Mainnet</td><td align="center">✓*</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td></tr><tr><td>Testnet</td><td align="center">✓*</td><td align="center">✓</td><td align="center">x</td><td align="center">✓</td><td align="center">✓</td></tr></tbody></table>
 
-\*JSON-RPC is soon to be deprecated by Mysten Labs. GraphQL rollout is planned for Q2 2026.
+\*JSON-RPC is being deprecated by Mysten Labs and deactivates 31 July 2026; migrate to gRPC.
 {% endtab %}
 
 {% tab title="Monad" %}

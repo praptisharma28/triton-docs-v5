@@ -28,7 +28,7 @@ layout:
 
 The Sui gRPC API is a fast, type-safe, and efficient interface for interacting with the Sui blockchain. It replaces the deprecated JSON-RPC protocol and is now generally available. gRPC uses [Protocol Buffers](https://protobuf.dev/overview/) for compact, high-performance data serialisation, and supports both standard request-response calls and real-time server-side streaming -- no polling required.
 
-> **Note:** JSON-RPC is deprecated and will be deactivated in July 2026. Migrating to gRPC is strongly recommended for all production integrations.
+> **Note:** JSON-RPC is deprecated and will be deactivated on 31 July 2026. Migrating to gRPC is strongly recommended for all production integrations.
 
 ### When to use gRPC
 

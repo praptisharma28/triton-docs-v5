@@ -12,8 +12,8 @@ Triton has run a Sui validator since genesis and provides full-service Sui API a
 
 | Interface     | Status                     | Notes                                                                                                                                                                |
 | ------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| JSON-RPC      | Live (deprecating in 2026) | The standard Sui JSON-RPC, documented here. Mysten Labs is migrating to gRPC and GraphQL.                                                                            |
-| gRPC          | Beta                       | The `LedgerService` gRPC interface; will replace JSON-RPC.                                                                                                           |
+| JSON-RPC      | Live (deactivates 31 July 2026) | The standard Sui JSON-RPC, documented here. Mysten Labs is migrating to gRPC and GraphQL.                                                                            |
+| gRPC          | Generally available        | The `LedgerService` gRPC interface that replaces JSON-RPC.                                                                                                           |
 | Archival gRPC | Live                       | Long-term historical access via `LedgerService` at `archive.mainnet.sui.rpcpool.com:443`. Query it explicitly; the standard endpoint does not fall back to archival. |
 | Walrus        | Live                       | Storage, publisher, and aggregator.                                                                                                                                  |
 | Seal          | Live                       | Permissioned server (mainnet); open and permissioned (testnet).                                                                                                      |
