@@ -1,4 +1,5 @@
 ---
+description: Stream live chain updates over standard WebSockets or high-throughput gRPC.
 layout:
   width: default
   title:
@@ -21,9 +22,12 @@ layout:
 
 # Real-time streaming
 
-Subscribe to live Solana updates instead of polling. Two interfaces are available: Whirligig WebSockets, an enhanced Solana WebSocket API, and Yellowstone gRPC (Dragon's Mouth), a high-throughput Geyser gRPC stream.
+Two interfaces stream live updates; pick by transport and throughput:
 
-Use this section to react to on-chain changes as they happen, including account writes, transactions, slots, blocks, and entries. Choose WebSockets for standard subscriptions, or gRPC for high-throughput backend-to-backend streaming.
+| Interface | Best for |
+| --------- | -------- |
+| Whirligig WebSockets | Standard WebSocket subscriptions to accounts, programs, logs, signatures, slots, and roots. |
+| gRPC (Dragon's Mouth) | High-throughput, backend-to-backend Geyser streaming of accounts, transactions, slots, blocks, and entries. |
 
 ***
 

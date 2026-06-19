@@ -1,4 +1,5 @@
 ---
+description: Stream accounts, transactions, slots, blocks, and entries over one gRPC connection.
 layout:
   width: default
   title:
@@ -21,9 +22,20 @@ layout:
 
 # gRPC
 
-Yellowstone gRPC (Dragon's Mouth) is a high-throughput Geyser gRPC interface. The `Subscribe` stream delivers account, transaction, transaction-status, slot, block, block-metadata, and entry updates, plus Deshred transactions.
+The Subscribe stream delivers these update types in one connection:
 
-It is backend-only and requires a token. Alongside the streams, the interface exposes a set of unary calls, documented under Unary calls.
+| Update | What it streams |
+| ------ | --------------- |
+| Account updates | Account writes as they happen. |
+| Transaction updates | Transactions as they are processed. |
+| Transaction status | Lightweight transaction-status notifications. |
+| Slot updates | Slot progression. |
+| Block updates | Full blocks. |
+| Block metadata | Block headers without transactions. |
+| Entry updates | Ledger entries. |
+| Deshred transactions | Transactions reconstructed from shreds pre-execution. |
+
+Alongside the stream, a set of [unary calls](unary-calls/README.md) answer one-shot requests with no open stream.
 
 ***
 

@@ -1,12 +1,23 @@
 ---
-description: Monad-specific methods not present in standard Ethereum.
+description: Use Monad-specific methods for synchronous sends and transaction-pool inspection.
+
 ---
 
 # Monad extensions
 
-Monad-specific methods not present in standard Ethereum.
+This submits a transaction and blocks until it lands:
 
-`eth_sendRawTransactionSync` submits a signed transaction and waits for its receipt before returning. `admin_ethCallStatistics` returns `eth_call` execution statistics, and the `txpool_*` methods report transaction-pool status by address or by hash.
+| Method | What it does |
+| ------ | ------------ |
+| `eth_sendRawTransactionSync` | Submits a signed transaction and waits for its receipt. |
+
+These let you inspect node activity and the pending pool:
+
+| Method | What it does |
+| ------ | ------------ |
+| `admin_ethCallStatistics` | Statistics about eth_call execution on the node. |
+| `txpool_statusByAddress` | The transaction-pool status for an address. |
+| `txpool_statusByHash` | The transaction-pool status for a transaction hash. |
 
 ***
 

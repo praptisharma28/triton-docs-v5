@@ -1,12 +1,24 @@
 ---
-description: Inspect normalized Move modules, functions, and structs.
+description: Inspect the structure of on-chain Move packages, modules, functions, and structs.
+
 ---
 
 # Move utils
 
-Inspect Move packages: normalized modules, functions, and structs, and the argument types of a function.
+These return a structured representation of a deployed module or its whole package:
 
-Use these methods to introspect a deployed package's interface, for example to discover a function's parameters before building a call to it.
+| Method | What it returns |
+| ------ | --------------- |
+| `sui_getNormalizedMoveModule` | A structured representation of a Move module. |
+| `sui_getNormalizedMoveModulesByPackage` | Structured representations of every module in a package. |
+
+These describe the functions and structs inside a module:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `sui_getNormalizedMoveFunction` | A structured representation of a Move function. |
+| `sui_getNormalizedMoveStruct` | A structured representation of a Move struct. |
+| `sui_getMoveFunctionArgTypes` | The argument types of a Move function. |
 
 ***
 

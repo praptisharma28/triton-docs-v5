@@ -1,14 +1,39 @@
 ---
-description: >-
+description: Query owned objects, dynamic fields, events, names, and live streams beyond the core reads.
   Indexer-backed queries: owned objects, dynamic fields, events, the name
   service, and subscriptions.
 ---
 
 # Extended API
 
-Indexer-backed queries that go beyond direct object reads: owned objects, dynamic fields, filtered event and transaction-block queries, Sui Name Service resolution, and event and transaction subscriptions.
+These list what an address or object owns:
 
-Use these methods for paginated lookups and search across the chain. The `subscribeEvent` and `subscribeTransaction` methods stream results over a WebSocket connection.
+| Method | What it returns |
+| ------ | --------------- |
+| `suix_getOwnedObjects` | The objects owned by an address. |
+| `suix_getDynamicFields` | The dynamic fields owned by an object. |
+| `suix_getDynamicFieldObject` | A specific dynamic field object. |
+
+These run filtered queries over events and transactions:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `suix_queryEvents` | The events matching a query. |
+| `suix_queryTransactionBlocks` | The transactions matching a query. |
+
+These resolve SuiNS names to and from addresses:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `suix_resolveNameServiceAddress` | The address a SuiNS name resolves to. |
+| `suix_resolveNameServiceNames` | The names that resolve to an address. |
+
+These open a WebSocket stream of new activity as it lands:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `suix_subscribeEvent` | A stream of events over a WebSocket. |
+| `suix_subscribeTransaction` | A stream of transaction effects over a WebSocket. |
 
 ***
 

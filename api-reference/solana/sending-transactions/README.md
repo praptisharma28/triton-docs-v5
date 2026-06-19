@@ -1,4 +1,5 @@
 ---
+description: Submit signed transactions, simulate them first, and size the fees to land them.
 layout:
   width: default
   title:
@@ -21,9 +22,27 @@ layout:
 
 # Sending transactions
 
-Submit transactions to the network and prepare them for reliable inclusion. This section covers sending and simulating transactions, estimating the fee for a message, and reading priority fees, plus the Metis and Titan swap APIs for building swap transactions.
+Start here to land transactions reliably:
 
-Follow the sendTx guidance for landing transactions reliably on Triton's SWQoS routing: handle retries in your own code, skip preflight, and set a competitive priority fee.
+| Method | What it does |
+| ------ | ------------ |
+| `sendTx` | How to land transactions reliably through Triton's SWQoS routing. |
+
+These submit and simulate transactions:
+
+| Method | What it does |
+| ------ | ------------ |
+| `sendTransaction` | Submits a signed transaction and returns its signature. |
+| `simulateTransaction` | Runs a signed transaction against current chain data without sending it. |
+
+These size the fee before you send:
+
+| Method | What it does |
+| ------ | ------------ |
+| `getFeeForMessage` | The fee the cluster would charge to process a message. |
+| `getRecentPrioritizationFees` | Recent priority-fee samples for setting a competitive fee. |
+
+To build swap transactions, see the [Metis](metis/README.md) and [Titan](titan/README.md) swap APIs.
 
 ***
 

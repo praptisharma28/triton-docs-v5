@@ -1,4 +1,5 @@
 ---
+description: Price tokens, route a swap, and build a ready-to-sign swap transaction.
 layout:
   width: default
   title:
@@ -21,9 +22,13 @@ layout:
 
 # Metis
 
-Metis is Jupiter's routing and quote engine, self-hosted on Triton with no staked JUP required. It scans 20+ DEXes and AMMs to find and build optimal swaps.
+These quote a swap and build it for signing:
 
-This section covers the `/quote`, `/price`, and `/swap` endpoints: get a route and quote, read token prices, and turn a quote into a ready-to-sign swap transaction.
+| Endpoint | What it does |
+| -------- | ------------ |
+| `/price` | Token prices from the Metis engine. |
+| `/quote` | A swap route and quote. |
+| `/swap` | A signed-ready swap transaction built from a quote. |
 
 ***
 

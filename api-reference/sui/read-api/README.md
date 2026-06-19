@@ -1,12 +1,38 @@
 ---
-description: Read objects, transactions, events, checkpoints, and protocol state.
+description: Read objects, transactions, checkpoints, and chain metadata from a Sui full node.
+
 ---
 
 # Read API
 
-Read on-chain state: objects and their contents, transaction blocks, events, checkpoints, and protocol configuration.
+These fetch the current or a past version of an object, one at a time or in batches:
 
-Use these methods to fetch a single object or transaction by ID, batch-read many at once with the `multiGet` methods, and look up past versions of an object. `sui_getChainIdentifier` returns the chain identifier, and `sui_verifyZkLoginSignature` verifies a zkLogin signature.
+| Method | What it returns |
+| ------ | --------------- |
+| `sui_getObject` | The data for one object. |
+| `sui_multiGetObjects` | The data for many objects in one call. |
+| `sui_tryGetPastObject` | A past version of an object, if it is still available. |
+| `sui_tryMultiGetPastObjects` | Past versions of many objects, where available. |
+
+These read transactions and the events they emit:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `sui_getTransactionBlock` | A transaction response by digest. |
+| `sui_multiGetTransactionBlocks` | Transaction responses for many digests. |
+| `sui_getTotalTransactionBlocks` | The total number of transaction blocks the server knows about. |
+| `sui_getEvents` | The events emitted by a transaction. |
+
+These cover checkpoints and the node's view of the chain:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `sui_getCheckpoint` | One checkpoint. |
+| `sui_getCheckpoints` | A paginated list of checkpoints. |
+| `sui_getLatestCheckpointSequenceNumber` | The sequence number of the latest executed checkpoint. |
+| `sui_getProtocolConfig` | The protocol config for a given version. |
+| `sui_getChainIdentifier` | The chain identifier, the first four bytes of the genesis checkpoint digest. |
+| `sui_verifyZkLoginSignature` | Whether a zkLogin signature is valid. |
 
 ***
 

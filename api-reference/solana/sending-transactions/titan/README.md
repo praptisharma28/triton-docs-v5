@@ -1,4 +1,5 @@
 ---
+description: Stream live swap quotes and execute against them over a WebSocket.
 layout:
   width: default
   title:
@@ -21,9 +22,12 @@ layout:
 
 # Titan
 
-Titan streams real-time swap quotes over a WebSocket, using the Argos meta-aggregator and DART routing, which re-optimizes the trade at execution time.
+These stream quotes and execute the swap:
 
-This section covers the `/quote` and `/swap` endpoints: receive live quotes and execute a swap from the instructions included in each quote.
+| Endpoint | What it does |
+| -------- | ------------ |
+| `/quote` | Streams real-time swap quotes over a WebSocket. |
+| `/swap` | Executes a swap from a streamed quote. |
 
 ***
 

@@ -1,12 +1,30 @@
 ---
-description: Query coin balances, metadata, and supply for an address.
+description: Read coin balances, coin objects, and coin metadata for any address.
+
 ---
 
 # Coin query API
 
-Read coin and token information owned by an address: the balance per coin type, the total balance, the individual coin objects, coin metadata, and total supply.
+These read an address's balances across one or every coin type:
 
-Use these methods to display balances, look up a token's decimals and symbol, or select coins to spend in a transaction.
+| Method | What it returns |
+| ------ | --------------- |
+| `suix_getBalance` | The balance of one coin type for an address. |
+| `suix_getAllBalances` | The balance of every coin type for an address. |
+
+These return the underlying coin objects an address holds:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `suix_getCoins` | The coin objects of one type owned by an address. |
+| `suix_getAllCoins` | Every coin object owned by an address. |
+
+These read a coin type's own properties:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `suix_getCoinMetadata` | A coin's metadata, such as its symbol and decimals. |
+| `suix_getTotalSupply` | The total supply of a coin. |
 
 ***
 

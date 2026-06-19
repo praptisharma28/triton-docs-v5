@@ -1,12 +1,25 @@
 ---
-description: Read staking, validators, the committee, and the reference gas price.
+description: Read staking positions, validator returns, and system-level state for the network.
+
 ---
 
 # Governance read API
 
-Read staking and validator state: delegated stakes, the validator set and their APYs, the current committee, the latest system state, and the reference gas price.
+These read an address's delegated staking positions:
 
-Use the reference gas price when setting a transaction's gas price, and the stake methods to display staking positions and rewards.
+| Method | What it returns |
+| ------ | --------------- |
+| `suix_getStakes` | All delegated stakes for an address. |
+| `suix_getStakesByIds` | Delegated stakes looked up by their ids. |
+
+These cover validators, the committee, and network-wide state:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `suix_getValidatorsApy` | The APY of each validator. |
+| `suix_getCommitteeInfo` | The validator committee for an epoch. |
+| `suix_getLatestSuiSystemState` | The latest on-chain system state. |
+| `suix_getReferenceGasPrice` | The network's reference gas price. |
 
 ***
 

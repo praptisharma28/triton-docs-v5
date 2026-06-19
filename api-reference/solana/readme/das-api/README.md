@@ -1,4 +1,5 @@
 ---
+description: Query NFTs, compressed assets, and token accounts through the Metaplex DAS API.
 layout:
   width: default
   title:
@@ -21,9 +22,33 @@ layout:
 
 # Metaplex DAS API
 
-The Digital Asset Standard (DAS) API is Metaplex's read API for NFTs, compressed NFTs (Bubblegum), and fungible tokens. Fetch one asset with `getAsset` or many at once with `getAssets` (`getAssetBatch` is an alias), and list the assets held by a wallet or tied to an authority, creator, or collection with `getAssetsByOwner`, `getAssetsByAuthority`, `getAssetsByCreator`, and `getAssetsByGroup`. `searchAssets` filters across those dimensions in a single query.
+These fetch assets directly or by who owns, controls, or created them:
 
-For compressed assets, `getAssetProof` and `getAssetProofBatch` return the Merkle proof needed to verify or transfer them, and `getSignaturesForAsset` lists an asset's transaction history. `getTokenAccounts` and `getTokenLargestAccounts` cover fungible-token holders, and `getNftEditions` lists the prints of a master edition. Use the DAS API instead of running your own indexer for digital-asset reads, especially compressed NFTs, which standard RPC cannot resolve from account state alone.
+| Method | What it returns |
+| ------ | --------------- |
+| `getAsset` | Detailed information about one digital asset. |
+| `getAssets` | The same, for many assets by ID (getAssetBatch is an alias). |
+| `getAssetsByOwner` | The assets owned by an address. |
+| `getAssetsByAuthority` | The assets under a given authority. |
+| `getAssetsByCreator` | The assets created by a given creator. |
+| `getAssetsByGroup` | The assets in a group, such as a collection. |
+| `searchAssets` | The assets matching a set of filters. |
+
+These verify and trace compressed assets:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `getAssetProof` | The Merkle proof for a compressed asset. |
+| `getAssetProofBatch` | The Merkle proofs for many compressed assets. |
+| `getSignaturesForAsset` | The transaction history of a compressed asset. |
+
+These read token accounts, holders, and editions for a mint:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `getTokenAccounts` | The token accounts for a mint or owner. |
+| `getTokenLargestAccounts` | The 20 largest token accounts for a mint. |
+| `getNftEditions` | The printed editions of a master edition NFT. |
 
 ***
 

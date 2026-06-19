@@ -1,4 +1,5 @@
 ---
+description: Subscribe over WebSockets to live account, program, log, signature, and slot updates.
 layout:
   width: default
   title:
@@ -21,9 +22,29 @@ layout:
 
 # Whirligig WebSockets
 
-Whirligig is Triton's enhanced Solana WebSocket API. Subscribe to accounts, programs, logs, signatures, slots, and roots, plus the Triton `transactionSubscribe` extension.
+These push live updates for accounts and the programs that own them:
 
-Connect with `wss://` and authenticate the same way as RPC. Each subscribe method returns a subscription id; use the matching unsubscribe method to cancel it.
+| Method | What it does |
+| ------ | ------------ |
+| `accountSubscribe` | Notifications when an account's lamports or data change. |
+| `programSubscribe` | Notifications for accounts owned by a program. |
+
+These follow transactions and the logs they emit:
+
+| Method | What it does |
+| ------ | ------------ |
+| `logsSubscribe` | Transaction log messages matching a filter. |
+| `signatureSubscribe` | Status notifications for a transaction signature. |
+| `transactionSubscribe` | Transaction notifications (a Triton extension). |
+
+These track the validator's slot and root progress:
+
+| Method | What it does |
+| ------ | ------------ |
+| `slotSubscribe` | Notifications when the validator processes a new slot. |
+| `rootSubscribe` | Notifications when the validator sets a new root. |
+
+Each has a matching unsubscribe method that cancels it by id (`accountUnsubscribe`, `programUnsubscribe`, and so on).
 
 ***
 

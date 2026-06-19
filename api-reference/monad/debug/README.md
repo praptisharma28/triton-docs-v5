@@ -1,14 +1,28 @@
 ---
-description: >-
+description: Pull raw, RLP-encoded chain data and step-by-step execution traces.
   The `debug_*` namespace: raw block/header/receipt/transaction access and
   transaction tracing.
 ---
 
 # Debug & tracing
 
-The `debug_*` namespace for raw and trace data.
+These give you the raw, RLP-encoded form of chain data:
 
-Fetch RLP-encoded blocks, headers, receipts, and transactions, and trace block, transaction, and call execution with a chosen tracer such as `callTracer`. Use these methods for indexing, analysis, and debugging.
+| Method | What it does |
+| ------ | ------------ |
+| `debug_getRawBlock` | The raw, RLP-encoded block. |
+| `debug_getRawHeader` | The raw, RLP-encoded block header. |
+| `debug_getRawReceipts` | The raw, RLP-encoded receipts of a block. |
+| `debug_getRawTransaction` | The raw, RLP-encoded transaction. |
+
+These replay execution so you can see exactly what ran:
+
+| Method | What it does |
+| ------ | ------------ |
+| `debug_traceBlockByHash` | Execution traces for a block by hash. |
+| `debug_traceBlockByNumber` | Execution traces for a block by number. |
+| `debug_traceTransaction` | Execution traces for a transaction. |
+| `debug_traceCall` | Execution traces for a call against a block. |
 
 ***
 

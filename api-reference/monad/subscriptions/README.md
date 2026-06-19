@@ -1,12 +1,15 @@
 ---
-description: Push subscriptions over WebSockets, including Monad's speculative streams.
+description: Stream live chain updates over a WebSocket, including Monad's speculative feeds.
+
 ---
 
 # Subscriptions
 
-Push subscriptions over a WebSocket connection via `eth_subscribe`.
+This opens a push subscription so updates arrive as they happen, and Monad adds speculative streams on top of the standard ones:
 
-Subscribe to new block headers (`newHeads`) and `logs`, plus Monad's speculative `monadNewHeads` and `monadLogs` streams, which publish about one second earlier on average. Use these to react to chain updates without polling.
+| Method | What it does |
+| ------ | ------------ |
+| `eth_subscribe` | Opens a push subscription over a WebSocket for newHeads, logs, and Monad's speculative monadNewHeads and monadLogs. |
 
 ***
 

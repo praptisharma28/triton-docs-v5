@@ -1,14 +1,57 @@
 ---
-description: >-
+description: Call Monad over the standard Ethereum JSON-RPC interface, which is EVM-equivalent.
   The standard Ethereum `eth_*`, `net_*`, and `web3_*` methods, served by Triton
   on Monad.
 ---
 
 # Ethereum JSON-RPC
 
-The standard Ethereum JSON-RPC, served by Triton on Monad.
+These tell you about the chain and what it costs to transact on it:
 
-Read balances, code, and storage; call contracts and estimate gas; fetch blocks, transactions, receipts, and logs; and submit signed transactions with `eth_sendRawTransaction`. Monad implements these methods to match Ethereum, with some behaviour differences noted in the official Monad reference.
+| Method | What it does |
+| ------ | ------------ |
+| `eth_blockNumber` | The latest block number. |
+| `eth_chainId` | The chain id. |
+| `eth_gasPrice` | The current gas price in wei. |
+| `eth_maxPriorityFeePerGas` | The current max priority fee per gas. |
+| `eth_feeHistory` | Historical fee data. |
+| `eth_syncing` | Sync status, or false if synced. |
+| `net_version` | The current network id. |
+| `web3_clientVersion` | The client version. |
+
+These read the on-chain state at an address:
+
+| Method | What it does |
+| ------ | ------------ |
+| `eth_getBalance` | The balance of an address. |
+| `eth_getCode` | The code at an address. |
+| `eth_getStorageAt` | The value at a storage slot. |
+| `eth_getTransactionCount` | The nonce of an account. |
+
+These run transactions and work out their gas before you send anything:
+
+| Method | What it does |
+| ------ | ------------ |
+| `eth_call` | Executes a call without creating a transaction. |
+| `eth_estimateGas` | Estimates the gas a transaction needs. |
+| `eth_createAccessList` | Generates an access list for a transaction. |
+| `eth_fillTransaction` | Fills in defaults such as gas, nonce, and fees for a transaction. |
+
+These fetch blocks, transactions, and logs, and submit signed transactions:
+
+| Method | What it does |
+| ------ | ------------ |
+| `eth_getBlockByHash` | A block by hash. |
+| `eth_getBlockByNumber` | A block by number. |
+| `eth_getBlockReceipts` | The receipts of a block. |
+| `eth_getBlockTransactionCountByHash` | The transaction count of a block by hash. |
+| `eth_getBlockTransactionCountByNumber` | The transaction count of a block by number. |
+| `eth_getTransactionByHash` | A transaction by hash. |
+| `eth_getTransactionByBlockHashAndIndex` | A transaction by block hash and index. |
+| `eth_getTransactionByBlockNumberAndIndex` | A transaction by block number and index. |
+| `eth_getTransactionReceipt` | The receipt of a transaction. |
+| `eth_getLogs` | The logs matching a filter. |
+| `eth_sendRawTransaction` | Submits a signed raw transaction. |
 
 ***
 

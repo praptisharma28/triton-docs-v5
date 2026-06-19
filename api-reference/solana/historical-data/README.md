@@ -1,4 +1,5 @@
 ---
+description: Look up confirmed blocks, transactions, and signatures from the chain's history.
 layout:
   width: default
   title:
@@ -21,9 +22,34 @@ layout:
 
 # Historical data
 
-Query confirmed blocks, transactions, and signatures from the ledger. These methods fetch a block or transaction by slot or signature, list the signatures and transactions for an address, check signature statuses, and read block production, block time, and recent performance samples.
+These read confirmed blocks and the slots around them:
 
-Use this section for historical lookups and indexing. Triton serves long-range history beyond what a standard node retains, including the `getTransactionsForAddress` address-history method.
+| Method | What it returns |
+| ------ | --------------- |
+| `getBlock` | A confirmed block for a slot, with its metadata and transactions. |
+| `getBlocks` | The confirmed block slots in an inclusive range. |
+| `getBlocksWithLimit` | Up to a limit of confirmed block slots from a start slot. |
+| `getBlockTime` | The estimated production time of a block. |
+| `getBlockHeight` | The block height at the requested commitment. |
+| `getBlockProduction` | Block-production counts per validator identity. |
+| `getBlockCommitment` | The stake-weighted commitment recorded for a slot. |
+| `getFirstAvailableBlock` | The lowest confirmed block slot still in this node's ledger. |
+
+These look up transactions and the signatures that touch an address:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `getTransaction` | A confirmed transaction by signature, or null if not found. |
+| `getTransactionCount` | The total transactions the cluster has processed. |
+| `getSignaturesForAddress` | The confirmed signatures that reference an address. |
+| `getSignatureStatuses` | The current status of each supplied signature. |
+| `getTransactionsForAddress` | An address's full history in one call, with server-side filters and pagination (a Triton extension). |
+
+This samples recent network throughput:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `getRecentPerformanceSamples` | Recent 60-second network performance samples. |
 
 ***
 

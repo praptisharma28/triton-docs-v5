@@ -1,5 +1,5 @@
 ---
-description: One-shot gRPC calls on the Dragon's Mouth Geyser interface.
+description: Make one-shot gRPC requests for blockhashes, slots, version, and connection health.
 layout:
   width: default
   title:
@@ -22,7 +22,22 @@ layout:
 
 # Unary calls
 
-Besides streaming subscriptions, the Dragon's Mouth Geyser gRPC interface exposes one-shot (unary) calls. You send one request and get one response, with no open stream. They are backend-only and authenticate with the `x-token` header.
+These return the current chain position and blockhash state:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `getLatestBlockhash` | The latest blockhash and last valid block height. |
+| `getBlockHeight` | The current block height. |
+| `getSlot` | The current slot. |
+| `isBlockhashValid` | Whether a blockhash is still valid. |
+
+These check the service and the connection itself:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `getVersion` | The Yellowstone gRPC service version. |
+| `ping` | Health-check the gRPC connection. |
+| `subscribeReplayInfo` | The first slot available for replay on a subscription. |
 
 ***
 

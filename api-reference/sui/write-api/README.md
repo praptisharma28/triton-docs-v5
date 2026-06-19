@@ -1,12 +1,17 @@
 ---
-description: Execute, dry-run, and developer-inspect transaction blocks.
+description: Submit a signed transaction, or preview its effects and cost before you commit.
+
 ---
 
 # Write API
 
-Execute and test transaction blocks.
+These execute a transaction or simulate one first to see what it would do:
 
-Use `sui_executeTransactionBlock` to submit a signed transaction to the network. Use `sui_dryRunTransactionBlock` or `sui_devInspectTransactionBlock` to preview a transaction's effects, events, and return values without committing it, for example to estimate gas or simulate a call.
+| Method | What it does |
+| ------ | ------------ |
+| `sui_executeTransactionBlock` | Executes a signed transaction and waits for the results. |
+| `sui_dryRunTransactionBlock` | Returns a transaction's effects and gas cost without committing it. |
+| `sui_devInspectTransactionBlock` | Runs a transaction in dev-inspect mode to preview its results. |
 
 ***
 
