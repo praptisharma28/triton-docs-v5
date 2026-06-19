@@ -86,7 +86,7 @@ Dragon's Mouth delivers account and transaction updates as the node processes th
 const ENDPOINT = "https://your-endpoint.rpcpool.com";
 const TOKEN = "your-token";
 
-// Raydium AMM v4 program -- replace with the DEX program you're trading
+// Raydium AMM v4 program, replace with the DEX program you're trading
 const RAYDIUM_AMM = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8";
 
 async function streamDexData() {
@@ -517,7 +517,7 @@ async function getPriorityFee(
   });
 
   const { result } = await response.json();
-  // result is an array of { slot, prioritizationFee } -- take the most recent
+  // result is an array of { slot, prioritizationFee }, take the most recent
   const fees: { slot: number; prioritizationFee: number }[] = result;
   const latest = fees.sort((a, b) => b.slot - a.slot)[0];
   return latest.prioritizationFee; // micro-lamports per compute unit
@@ -642,7 +642,7 @@ async function sendWithJet(
   endpoint: string,
   token: string
 ): Promise<string> {
-  // Use your Triton endpoint -- Jet routing is handled automatically
+  // Use your Triton endpoint, Jet routing is handled automatically
   const connection = new Connection(`${endpoint}/${token}`, "confirmed");
 
   const signature = await connection.sendRawTransaction(
@@ -783,7 +783,7 @@ async function tradingLoop() {
   stream.on("data", async (data) => {
     if (!data.transaction) return;
 
-    // 1. Signal detected -- decide if you want to act
+    // 1. Signal detected, decide if you want to act
     const shouldTrade = analyseTransaction(data.transaction);
     if (!shouldTrade) return;
 
