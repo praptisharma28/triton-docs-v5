@@ -1,12 +1,10 @@
 ---
 description: >-
-  Triton's Monad JSON-RPC and WebSocket endpoints on Mainnet and Testnet,
-  supported Geth methods, authentication, and getting started.
+  Common questions about running on Monad: endpoints, methods, and how to
+  connect.
 ---
 
 # General
-
-Common questions about running on Monad with Triton: networks, endpoints, methods, and how to connect.
 
 ## Networks and access
 

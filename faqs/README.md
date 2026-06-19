@@ -6,8 +6,6 @@ description: Common questions about Triton's Solana products, and how to get sta
 
 ## About Triton
 
-What Triton is, what we build, and how Project Yellowstone fits into the stack.
-
 <details>
 
 <summary>What is Triton One?</summary>
@@ -43,16 +41,16 @@ Project Yellowstone is Triton's suite of open-source Solana data tools, each nam
 
 <summary>What other products does Triton run outside Project Yellowstone?</summary>
 
-| Product | What it is |
-| --- | --- |
-| Sui & Monad | Full RPC nodes and validators for Sui and Monad, across mainnet and testnet. |
-| Metaplex DAS API | Digital Asset Standard (DAS) API: query NFTs, compressed NFTs, and fungible tokens through one indexed request. |
-| Account Sync | A streaming-backed local cache for account reads: live updates with no polling and no code changes. |
-| Priority Fees API | Priority-fee estimation with tail-aware percentiles, so transactions land without overpaying. |
-| Metis swap API | Swap routing across 20+ DEXes, with exact-out and platform-fee support. |
-| Titan swap API | Real-time streaming quotes and routes over WebSocket, from the Argos meta-aggregator. |
-| Jito | Jito-enabled RPC: simulate atomic transaction bundles. |
-| Dedicated nodes | Private, single-purpose clusters (gRPC streaming, DAS, indexing) with isolated CPU and unlimited concurrent connections. |
+| Product           | What it is                                                                                                               |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Sui & Monad       | Full RPC nodes and validators for Sui and Monad, across mainnet and testnet.                                             |
+| Metaplex DAS API  | Digital Asset Standard (DAS) API: query NFTs, compressed NFTs, and fungible tokens through one indexed request.          |
+| Account Sync      | A streaming-backed local cache for account reads: live updates with no polling and no code changes.                      |
+| Priority Fees API | Priority-fee estimation with tail-aware percentiles, so transactions land without overpaying.                            |
+| Metis swap API    | Swap routing across 20+ DEXes, with exact-out and platform-fee support.                                                  |
+| Titan swap API    | Real-time streaming quotes and routes over WebSocket, from the Argos meta-aggregator.                                    |
+| Jito              | Jito-enabled RPC: simulate atomic transaction bundles.                                                                   |
+| Dedicated nodes   | Private, single-purpose clusters (gRPC streaming, DAS, indexing) with isolated CPU and unlimited concurrent connections. |
 
 </details>
 
@@ -67,8 +65,6 @@ We also offer white-label setups for DAOs, custodians, stake pools, and other in
 </details>
 
 ## Getting started
-
-How to set up an account, decide on a plan, and add users to your customer dashboard.
 
 <details>
 

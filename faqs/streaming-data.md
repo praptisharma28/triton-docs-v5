@@ -1,22 +1,18 @@
 ---
 description: >-
-  Stream Solana data with Yellowstone gRPC and WebSockets, account subscription
-  limits, Cloudbreak, Fumarole, and stream troubleshooting.
+  Questions about gRPC streaming, WebSocket connections, and the Yellowstone
+  suite
 ---
 
 # Real-time streaming
 
-Questions about gRPC streaming, WebSocket connections, and the Yellowstone ecosystem of streaming components.
-
 ## Project Yellowstone
-
-What is Yellowstone and which subscriptions include streaming access?
 
 <details>
 
-<summary>What is Project Yellowstone?</summary>
+<summary>Do you support devnet?</summary>
 
-Triton's suite of high-performance streaming, indexing, and archival tools for Solana: Dragon's Mouth, Whirligig, Fumarole, Cloudbreak, Old Faithful, Jet, and Shield. See [What is Project Yellowstone?](readme) for the full breakdown.
+Yes. Triton offers devnet and testnet endpoints alongside mainnet, with Geyser gRPC and WebSocket streaming available on them. Contact support from your [customer dashboard](https://customers.triton.one) to set up a devnet endpoint.
 
 </details>
 
@@ -27,26 +23,6 @@ Triton's suite of high-performance streaming, indexing, and archival tools for S
 You don't need to install anything. All Geyser streaming products (Dragon's Mouth, Whirligig) are pre-installed on Triton infrastructure and enabled automatically for all subscriptions.
 
 </details>
-
-<details>
-
-<summary>Is Geyser streaming available with all subscriptions?</summary>
-
-Yes. All subscriptions include Geyser streaming by default, with no setup required. It's available as soon as your subscription is active.
-
-</details>
-
-<details>
-
-<summary>Do you support devnet?</summary>
-
-Yes. Triton offers devnet and testnet endpoints alongside mainnet, with Geyser gRPC and WebSocket streaming available on them. Contact support from your [customer dashboard](https://customers.triton.one) to set up a devnet endpoint.
-
-</details>
-
-## Yellowstone components
-
-The questions about streaming products built on Yellowstone.
 
 <details>
 
@@ -75,8 +51,6 @@ Fumarole is a streaming system designed for reliable, scalable streaming of acco
 </details>
 
 ## gRPC and WebSocket
-
-Connecting to streaming services from backend code, browsers, or via Geyser plugins.
 
 <details>
 
@@ -121,8 +95,6 @@ Full guide: [Verify your gRPC endpoint](https://kate-6.gitbook.io/triton-one-doc
 </details>
 
 ## Troubleshooting
-
-Common operational questions when a stream isn't behaving the way you expect.
 
 <details>
 

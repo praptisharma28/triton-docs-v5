@@ -1,16 +1,14 @@
 ---
 description: >-
-  Sign-in help, allowed origins, API-key safety, topping up, usage, and
-  invoicing for your Triton account.
+  Questions about signing in, allowed origins, API-key safety, usage, and
+  invoicing.
 ---
 
 # Customer dashboard
 
-Questions about your Triton account, sign-in, allowed origins, billing, top-ups, invoices, and cancellation.
+If you already know what you want to do and just need the steps, the [**Customer dashboard tour**](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/platform-overview) walks you through the most common actions.
 
-## Sign-in and getting help
-
-Logging in, recovering your username, and where to find support when something breaks.
+## Signing in and getting help
 
 <details>
 
@@ -37,8 +35,6 @@ The login form takes your username, not your email address. If you've forgotten 
 </details>
 
 ## Account security
-
-Configuring allowed origins on your endpoints, and what to do if an API key leaks.
 
 <details>
 
@@ -76,8 +72,6 @@ Yes. If you have an operator role, you should be able to add them yourself.
 </details>
 
 ## Billing and usage
-
-Topping up, low-balance alerts, reading usage, and gRPC drawdown timing.
 
 <details>
 
@@ -119,8 +113,6 @@ Also, usage data refreshes every \~4 hours, so you can expect a lag between actu
 </details>
 
 ## Invoicing and payments
-
-Invoice cycles, accepted payment methods, and how to cancel.
 
 <details>
 

@@ -8,8 +8,6 @@ description: >-
 
 ## Performance and reliability
 
-How fast and reliable Triton's RPC service is, and what happens during congestion, traffic spikes, or rate-limit hits.
-
 <details>
 
 <summary>How reliable are Triton's RPC services?</summary>
@@ -75,8 +73,6 @@ Yes. Shared infrastructure handles backend workloads (scripts, trading bots, ind
 </details>
 
 ## Configuration and access
-
-Tokens, endpoints, allowed origins, regions, and the capabilities Triton supports across shared and dedicated infrastructure.
 
 <details>
 
@@ -153,8 +149,6 @@ The recommended pattern is to call the Jito block engine directly for sends, and
 </details>
 
 ## Troubleshooting
-
-Common issues with WebSocket connections, latency measurement, and gRPC connection monitoring.
 
 <details>
 

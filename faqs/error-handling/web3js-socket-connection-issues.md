@@ -6,8 +6,6 @@ description: >-
 
 # Web3JS socket/connection issues
 
-Why high-throughput Solana web3.js apps in NodeJS hit ECONNREFUSED, ECONNRESET, fetch failed, and how to fix it with connection pooling.
-
 If you are running high-throughput applications using [`@solana/web3.js`](https://www.npmjs.com/package/@solana/web3.js) in a NodeJS environment, you may encounter persistent socket or connection errors, especially under heavy asynchronous load. This guide explains the root cause of these issues and provides several effective solutions.
 
 ## Common errors
@@ -116,7 +114,7 @@ The [Bun](https://bun.sh/) runtime is a modern alternative to NodeJS. Based on o
 
 ### 3. Using the new version of `@solana/web3.js`
 
-Anza Labs is developing a new and improved [version of the library](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library) which, as of this writing, is in technical preview. It uses the [`undici`](https://www.npmjs.com/package/undici) library and the errors are less frequent in it. If encountered, with the configuration mentioned in [section 1](web3js-socket-connection-issues.md#1-limit-connections-with-a-global-agent-recommended) they should be resolved. Do note that the library is not compatible with the current version, meaning that it'll be a ground up rewrite of your codebase.
+Anza Labs is developing a new and improved [version of the library](https://github.com/solana-labs/solana-web3.js/tree/master/packages/library) which, as of this writing, is in technical preview. It uses the [`undici`](https://www.npmjs.com/package/undici) library and the errors are less frequent in it. If encountered, with the configuration mentioned in [section 1](#1-limit-connections-with-a-global-agent-recommended) they should be resolved. Do note that the library is not compatible with the current version, meaning that it'll be a ground up rewrite of your codebase.
 
 ### 4. A note on other libraries
 

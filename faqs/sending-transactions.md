@@ -1,12 +1,10 @@
 ---
 description: >-
-  Why Solana transactions fail to land, the advantage of staked-validator
-  submission, and whether processed transactions can drop.
+  Questions about transaction landing, staked validators, and
+  processed-vs-confirmed transaction lifecycle on Solana.
 ---
 
 # Sending transactions
-
-Questions about transaction landing, staked validators, and processed-vs-confirmed transaction lifecycle on Solana.
 
 <details>
 
@@ -26,7 +24,7 @@ Staked validators have access to a much larger, reserved connection pool for sen
 
 <details>
 
-<summary>Can a `processed` transaction on Solana still be dropped?</summary>
+<summary>Can a <code>processed</code> transaction on Solana still be dropped?</summary>
 
 Yes. A transaction is only final once it reaches `confirmed` or `finalized` commitment. Slots containing `processed` transactions can still be dropped during minority forks or network congestion.
 

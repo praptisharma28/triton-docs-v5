@@ -1,14 +1,11 @@
 ---
-description: >-
-  A checklist to confirm your environment can keep up with Solana throughput
-  when Dragon's Mouth gRPC streams disconnect.
+description: Confirm your environment can keep up with Solana throughput.
 ---
 
-# Streams disconnecting
+# Streaming setup checklist
 
 If you’ve started experiencing Dragon’s Mouth gRPC disconnects recently, this page is for you. Solana’s average daily TPS has almost doubled since December, and the full-chain feed can now spike to \~1.3-1.8 Gbps.
 
-Use this checklist to confirm that your environment can keep up with the current Solana throughput.\
 If some answers are “no”, that’s ok, we just want you to get the full picture before contacting Triton support.
 
 ***

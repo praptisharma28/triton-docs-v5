@@ -1,12 +1,8 @@
 ---
-description: >-
-  Common Solana JSON-RPC error codes and Web3.js issues like NodeJS port
-  exhaustion, with fixes.
+description: Common Solana JSON-RPC error codes with fixes.
 ---
 
 # Common Solana errors
-
-Standard list of common JSON-RPC error codes you may experience, plus uncommon Web3JS errors we have previously helped customers resolve.
 
 ## Common Solana JSON-RPC codes
 

@@ -1,12 +1,10 @@
 ---
 description: >-
-  Triton's Sui gRPC and JSON-RPC endpoints, the free test endpoint, archival
-  history, Walrus storage, and Seal.
+  Common questions about running on Sui: endpoints, gRPC, archival history,
+  Walrus, and Seal.
 ---
 
 # General
-
-Common questions about running on Sui with Triton: networks, endpoints, gRPC, archival history, Walrus, and Seal.
 
 ## Networks and access
 
