@@ -17,7 +17,6 @@
   * [Fumarole persistent streams](real-time-streaming/fumarole-persistent-streams.md)
   * [Best practices](real-time-streaming/streaming-data/best-practices.md)
 * [Historical data](historical-data.md)
-  * [Superbank](historical-data/superbank.md)
   * [Quickstart](historical-data/quickstart.md)
   * [Best practices](historical-data/best-practices.md)
 * [Sending transactions](sending-transactions.md)
