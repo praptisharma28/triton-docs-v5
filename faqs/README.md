@@ -124,7 +124,7 @@ Questions about Triton's services beyond Solana RPC.
 <summary>Do you support Pyth price feeds and Hermes?</summary>
 
 {% hint style="warning" %}
-Triton's Pyth and Hermes endpoints are being deprecated. The Pyth DAO is deprecating Pyth Core on **31 July 2026**, and from that date Triton can no longer serve Pyth or Hermes data through your endpoint.
+Triton's Pyth and Hermes endpoints are being deprecated. The Pyth DAO is deprecating Pyth Core on **31 July 2026**. Triton's Pyth and Hermes endpoints stop serving one day earlier, on **30 July 2026**.
 {% endhint %}
 
 Move to consuming Pyth price data directly from Pyth:
