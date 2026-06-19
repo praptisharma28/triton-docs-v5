@@ -16,7 +16,7 @@ What is Yellowstone and which subscriptions include streaming access?
 
 <summary>What is Project Yellowstone?</summary>
 
-Triton's suite of high-performance streaming, indexing, and archival tools for Solana: Dragon's Mouth, Whirligig, Fumarole, Cloudbreak, Old Faithful, Jet, and Shield. See [What is Project Yellowstone?](./) for the full breakdown.
+Triton's suite of high-performance streaming, indexing, and archival tools for Solana: Dragon's Mouth, Whirligig, Fumarole, Cloudbreak, Old Faithful, Jet, and Shield. See [What is Project Yellowstone?](readme) for the full breakdown.
 
 </details>
 
@@ -33,6 +33,14 @@ You don't need to install anything. All Geyser streaming products (Dragon's Mout
 <summary>Is Geyser streaming available with all subscriptions?</summary>
 
 Yes. All subscriptions include Geyser streaming by default, with no setup required. It's available as soon as your subscription is active.
+
+</details>
+
+<details>
+
+<summary>Do you support devnet?</summary>
+
+Yes. Triton offers devnet and testnet endpoints alongside mainnet, with Geyser gRPC and WebSocket streaming available on them. Contact support from your [customer dashboard](https://customers.triton.one) to set up a devnet endpoint.
 
 </details>
 
@@ -54,7 +62,7 @@ For dedicated nodes, there's no set limit. However, opening too many subscriptio
 
 <summary>What is Cloudbreak, and how does it improve latency?</summary>
 
-Cloudbreak is Triton's account indexing engine that delivers `getProgramAccounts`, `getTokenAccountsByOwner`, and `getTokenAccountsByDelegate` up to **20x faster** by serving them from tailored PostgreSQL indexes instead of full account scans. Indexes are built automatically from your query traffic. Available on every Triton plan at standard RPC rates -- no premium for indexed reads. See [Cloudbreak](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/cloudbreak-indexed-accounts).
+Cloudbreak is Triton's account indexing engine that delivers `getProgramAccounts`, `getTokenAccountsByOwner`, and `getTokenAccountsByDelegate` **99%+ faster** by serving them from tailored PostgreSQL indexes instead of full account scans. Indexes are built automatically from your query traffic. Available on every Triton plan at standard RPC rates -- no premium for indexed reads. See [Cloudbreak](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/cloudbreak-indexed-accounts).
 
 </details>
 

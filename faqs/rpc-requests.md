@@ -4,7 +4,7 @@ description: >-
   monitoring
 ---
 
-# RPC polling
+# RPC requests
 
 ## Performance and reliability
 
@@ -27,8 +27,8 @@ If any node falls behind, requests are routed to a shared backup pool while the 
 It's a big topic, but at a high level, we do it through:
 
 * **Anycast:** routes traffic from anywhere to the nearest server
-* HTTP/3 xxx
-* **Custom shred network....**
+* **HTTP/3:** RPC over QUIC — fewer connection round-trips and no head-of-line blocking, which especially helps clients connecting from outside our data centres.
+* **Custom shred network:** our staked validators forward shreds straight to the RPC nodes, so they receive new block data among the first in Solana's fanout instead of last, where unstaked nodes normally sit.
 * **Custom indexes:** Cloudbreak optimises `getProgramAccounts` (gPA) calls to improve query performance.
 
 </details>
@@ -62,7 +62,7 @@ This doesn't affect transaction submission, as it's routed through a specialised
 
 <summary>What happens if I hit my rate limit?</summary>
 
-If you've received `HTTP 429` error, pause requests for 10 seconds to clear the limit. We strongly recommend implementing a backoff-and-retry mechanism. See [Handle 429 rate-limit errors](error-handling/handle-429-rate-limit-errors) for the pattern, or the [Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs-v5/get-started/rate-and-connection-limits) page for the budgets and headers.
+If you've received `HTTP 429` error, pause requests for 10 seconds to clear the limit. We strongly recommend implementing a backoff-and-retry mechanism. See Handle 429 rate-limit errors for the pattern, or the [Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs-v5/get-started/rate-and-connection-limits) page for the budgets and headers.
 
 </details>
 
@@ -80,11 +80,19 @@ Tokens, endpoints, allowed origins, regions, and the capabilities Triton support
 
 <details>
 
+<summary>Do you support devnet?</summary>
+
+Yes. Triton runs Solana mainnet, testnet, and devnet, with full compatibility with the standard JSON-RPC and WebSocket APIs across all three. Contact support from your [customer dashboard](https://customers.triton.one) to add a devnet endpoint.
+
+</details>
+
+<details>
+
 <summary>How do I monitor my RPC usage?</summary>
 
 Customers with dedicated nodes get a Grafana dashboard with real-time metrics: request volume, latency, error rates, and bandwidth usage.
 
-For shared (pay-as-you-go) usage, you can view xx and xx \[specify] in Billing V3 tab of your customer dashboard\[hyperlink]
+For shared (pay-as-you-go) usage, open the **v3 Billing** tab in your [customer dashboard](https://customers.triton.one) to see total requests and GB used (the two dimensions you're billed on), plus a per-service breakdown.
 
 </details>
 
@@ -152,7 +160,7 @@ Common issues with WebSocket connections, latency measurement, and gRPC connecti
 
 <summary>I have an issue with my Web3.js socket connection. How can I fix it?</summary>
 
-If you're hitting persistent socket or connection errors with `@solana/web3.js` (`fetch failed`, `Connect Timeout Error`, `ECONNREFUSED`, `ECONNRESET`, `other side closed`), see [Web3.js socket and connection issues](error-handling/web3js-socket-connection-issues). It covers the root causes and the standard fixes.
+If you're hitting persistent socket or connection errors with `@solana/web3.js` (`fetch failed`, `Connect Timeout Error`, `ECONNREFUSED`, `ECONNRESET`, `other side closed`), see Web3.js socket and connection issues. It covers the root causes and the standard fixes.
 
 </details>
 
@@ -173,7 +181,6 @@ Instead, record a timestamp immediately after receiving a transaction response f
 To detect delays, examine the `slot` field included in all gRPC messages. The most precise method is to compare this slot value with a secondary source, such as another subscription or a `getSlot` call in your production environment. For additional validation, you may also cross-reference with an alternative RPC provider. Dedicated users can select the "Tracking Tip" folder in their Grafana Dashboard. The slot latency reflected here shows how much your node's slot latency differs from the rest of the network. As the node processes data from the network downstream, it sends this information through Geyser.
 
 If you suspect your Geyser stream is experiencing a drastically different latency, check whether your receiving server is not providing back pressure to the RPC node due to bandwidth constraints.
-
 
 </details>
 
