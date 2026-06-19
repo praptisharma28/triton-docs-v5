@@ -38,7 +38,7 @@ Dedicated nodes are set up with our team, not self-serve. Start at [contact sale
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-rocket">:rocket:</i> <strong>Quickstart</strong></td><td>How to scope, provision, and connect a dedicated node.</td><td></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Get the most out of a dedicated streaming node.</td><td></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-rocket">:rocket:</i> <strong>Quickstart</strong></td><td>How to scope, provision, and connect a dedicated node.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/dedicated-nodes/quickstart">Quickstart</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Get the most out of a dedicated streaming node.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/dedicated-nodes/best-practices">Best practices</a></td></tr></tbody></table>
 
 ***
 
