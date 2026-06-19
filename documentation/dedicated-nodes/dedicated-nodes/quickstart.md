@@ -12,7 +12,7 @@ Reach out through [contact sales](https://triton.one/contact). There is a short 
 
 ## Step 2. Scope your node
 
-A discovery call to understand your streaming volume, your regions, and the job the cluster will run (gRPC streaming, DAS, Photon, or indexing). We agree the specs, region, and number of nodes before anything is deployed.
+A discovery call to understand your streaming volume, your regions, and the job the cluster will run (gRPC streaming, DAS, or indexing). We agree the specs, region, and number of nodes before anything is deployed.
 
 ## Step 3. Provisioning
 

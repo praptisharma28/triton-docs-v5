@@ -94,8 +94,6 @@ Light Protocol program is excluded from all our streams and is also unavailable 
 | ------------------------------- | --------------------------------------------- |
 | Light Protocol / ZK Compression | `compr6CUsB5m2jS4Y3831ztGSTnDpnKJTKS95d64XVq` |
 
-The recommended replacement is the Triton-hosted Photon service, which lets you query individual compressed accounts, token balances, validity proofs, and transaction signatures directly.
-
 ## Pricing
 
 All streaming services are billed at `$0.08 / GB` of bandwidth, and you only pay for the data sent. See streaming best practices for filtering, guides, and other ways to reduce it.

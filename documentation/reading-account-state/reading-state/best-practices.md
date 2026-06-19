@@ -61,7 +61,7 @@ How to read Solana account, program, and token state quickly and reliably. For r
 ## Avoid removed and excluded methods
 
 * **Audit out the methods removed in Solana v2.0** and use their successors (for example `getStakeActivation` → `getAccountInfo`; confirmed-block / confirmed-transaction calls → `getBlock` / `getTransaction`). Removed methods no longer function.
-* **Don't read Light Protocol / ZK Compression accounts via `getProgramAccounts`** (they are excluded); consume them through the Photon indexer instead.
+* **Don't read Light Protocol / ZK Compression accounts via `getProgramAccounts`** (they are excluded).
 
 ***
 

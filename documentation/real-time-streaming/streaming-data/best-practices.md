@@ -62,7 +62,7 @@ How to run real-time Solana streams reliably and at low latency.
 * **Vixen:** open multiple subscriptions to stream different programs in parallel, connect to the closest region (USA/EU/AP), keep the SDK on the latest version to avoid parser errors, and share one Dragon's Mouth stream across pipelines.
 * **Keep gRPC streams alive with periodic pings** behind idle-closing proxies (the server replies `pong` every 15 seconds).
 * **Authenticate with the `x-token` metadata header**, not a token in the URL (token-in-URL returns `403` on gRPC).
-* **Don't read ZK Compression / Light Protocol accounts over gRPC** (excluded; \~10 MB blobs, gigabits/sec). Consume them through the Photon indexer.
+* **Don't read ZK Compression / Light Protocol accounts over gRPC** (excluded; \~10 MB blobs, gigabits/sec).
 * **Run streaming subscribers on a dedicated node**, not the shared service.
 
 ***

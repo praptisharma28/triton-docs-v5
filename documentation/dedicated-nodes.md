@@ -14,7 +14,7 @@ Triton's shared infrastructure is the opposite trade: multi-tenant, globally dis
 
 ## What dedicated nodes are for
 
-Dedicated nodes are provisioned for **gRPC streaming** and other **single-purpose clusters** (for example a dedicated DAS, Photon, or custom-indexing cluster). Each cluster runs one job; mixed-purpose nodes are not offered.
+Dedicated nodes are provisioned for **gRPC streaming** and other **single-purpose clusters** (for example a dedicated DAS or custom-indexing cluster). Each cluster runs one job; mixed-purpose nodes are not offered.
 
 This is the hybrid model most teams run: dedicated nodes carry the heavy backend workloads, streaming and indexing, while JSON-RPC reads (`getAccountInfo`, `getProgramAccounts`, `getTransaction`, and the rest) run on Triton's shared, globally distributed infrastructure. If you already run a dedicated node for JSON-RPC, it keeps working.
 
@@ -28,7 +28,7 @@ It is also a cost decision. On shared you pay for what you use; a dedicated node
 
 ## What you can configure
 
-* The job the cluster runs (gRPC streaming, DAS, Photon, indexing).
+* The job the cluster runs (gRPC streaming, DAS, indexing).
 * The hardware tier.
 * The region. Dedicated nodes are available in Europe, North America, Asia, and the Pacific.
 

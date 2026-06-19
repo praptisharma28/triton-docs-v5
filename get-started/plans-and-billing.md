@@ -72,7 +72,7 @@ On shared infrastructure, you pay as you go at the following rates:
 
 {% tabs %}
 {% tab title="Solana" %}
-<table><thead><tr><th width="322.87109375">Service</th><th>Rate</th></tr></thead><tbody><tr><td>Dragon's Mouth gRPC, Fumarole, Whirligig, WebSockets, other streaming</td><td>$0.08 / GB bandwidth</td></tr><tr><td>Standard RPC, unary gRPC, indexed accounts, ledger queries (plus gTFA)</td><td>$10 / million calls + $0.08 / GB</td></tr><tr><td>Streaming services, Titan Prime API</td><td>$0.08 / GB bandwidth</td></tr><tr><td>Metaplex, Photon APIs</td><td>$50 / million calls + $0.08 / GB</td></tr><tr><td>Metis API</td><td>$80 / million calls + $0.08 / GB</td></tr></tbody></table>
+<table><thead><tr><th width="322.87109375">Service</th><th>Rate</th></tr></thead><tbody><tr><td>Dragon's Mouth gRPC, Fumarole, Whirligig, WebSockets, other streaming</td><td>$0.08 / GB bandwidth</td></tr><tr><td>Standard RPC, unary gRPC, indexed accounts, ledger queries (plus gTFA)</td><td>$10 / million calls + $0.08 / GB</td></tr><tr><td>Streaming services, Titan Prime API</td><td>$0.08 / GB bandwidth</td></tr><tr><td>Metaplex DAS API</td><td>$50 / million calls + $0.08 / GB</td></tr><tr><td>Metis API</td><td>$80 / million calls + $0.08 / GB</td></tr></tbody></table>
 {% endtab %}
 
 {% tab title="Sui" %}

@@ -47,7 +47,7 @@ It is normal to combine them. Common patterns:
 
 ## Compressed accounts
 
-Light Protocol (ZK Compression) accounts are not served by `getProgramAccounts` or the streams. Read them with the Triton-hosted Photon service, which queries individual compressed accounts, token balances, validity proofs, and transaction signatures directly.
+Light Protocol (ZK Compression) accounts are not served by `getProgramAccounts` or the streams.
 
 ## Pricing
 

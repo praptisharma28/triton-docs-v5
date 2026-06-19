@@ -669,7 +669,7 @@ while let Some(msg) = stream.next().await {
 
 ## Excluded programs
 
-Light Protocol / ZK Compression (`compr6CUsB5m2jS4Y3831ztGSTnDpnKJTKS95d64XVq`) is excluded from all Dragon's Mouth gRPC streams and from `getProgramAccounts`. Each update produces a \~10MB blob, several gigabits per second of data, which is impractical to include in standard streams. To consume ZK Compression data, use the [Photon indexer](https://github.com/helius-labs/photon), which most users want for the processed end result rather than the raw account blobs.
+Light Protocol / ZK Compression (`compr6CUsB5m2jS4Y3831ztGSTnDpnKJTKS95d64XVq`) is excluded from all Dragon's Mouth gRPC streams and from `getProgramAccounts`. Each update produces a \~10MB blob, several gigabits per second of data, which is impractical to include in standard streams.
 
 ***
 
