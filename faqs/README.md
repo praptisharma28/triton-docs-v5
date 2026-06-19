@@ -6,7 +6,7 @@ description: >-
 
 # General
 
-Common questions about Triton, our products, plans, payments, and how to start using our services.
+Common questions about Triton, our products, plans, payments, and how to start.
 
 ## About Triton
 
@@ -16,11 +16,7 @@ What Triton is, what we build, and how Project Yellowstone fits into the stack.
 
 <summary>What is Triton One?</summary>
 
-Triton is a high-performance infrastructure provider running RPC nodes, private validators, and data streaming systems across Solana, Sui, Monad, and other networks.
-
-It delivers reliable, fast, and feature-rich blockchain infrastructure trusted by developers, validators, and traders that can't afford downtime.
-
-Triton powers everything from real-time trading and market-making to large-scale data indexing and validator operations.
+Triton runs RPC nodes, private validators, and data-streaming infrastructure across Solana, Sui, Monad, and other networks, for teams running real-time trading and market-making, large-scale indexing, and validator operations.
 
 </details>
 
@@ -28,40 +24,34 @@ Triton powers everything from real-time trading and market-making to large-scale
 
 <summary>What is Project Yellowstone?</summary>
 
-Project Yellowstone is Triton's suite of high-performance tools and open-source frameworks designed to enhance RPC and data infrastructure for the Solana ecosystem.
+Project Yellowstone is Triton's suite of open-source Solana data tools, each named after a geyser at Yellowstone National Park. Together they cover real-time streaming, historical ledger access, indexed reads, and transaction sending.
 
-It addresses critical infrastructure challenges: real-time data streaming, historical ledger access, ultra-low latency queries, and custom indexing.
-
-Key components:
-
-| Tool           | Description                                                                                                                                            |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Dragon's Mouth | Core gRPC streaming engine for Solana. Delivers raw real-time data directly from the validator with ultra-low latency using Protobuf.                  |
-| Whirligig      | WebSocket counterpart to Dragon's Mouth -- built for front-end or browser-based apps needing live account and transaction feeds.                       |
-| Fumarole       | Persistent streaming layer with automatic redundancy and 4-day caching. Ensures no data loss even if the connection drops.                             |
-| Cloudbreak     | Custom indexing engine that accelerates heavy gPA queries by up to 20x, cutting latency for large programs.                                            |
-| Old Faithful   | Full-ledger archival service providing access to Solana's complete historical transaction data -- ideal for analytics, re-indexing, and backtesting.   |
-| Jet            | A transaction submission software that lets you add Stake Weight to your transactions to route them through a priority lane during network congestion. |
-| Shield         | Anti-MEV protection layer integrated with Jet. Allows configurable allow- and block-lists to prevent sandwiching and other frontrunning behaviours.    |
+| Tool           | What it is                                                                                                                                                                                                                  |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Dragon's Mouth | gRPC streaming from the validator's Geyser plugin: subscribe to account, transaction, slot, and block updates in real time over Protobuf. Built for backends.                                                              |
+| Whirligig      | A faster, more reliable drop-in for the standard Solana node WebSocket (account, program, and signature subscriptions), for front-end and browser apps.                                                                    |
+| Fumarole       | A reliable streaming layer over Dragon's Mouth with roughly 4-day retention and failover, so a dropped client can reconnect and replay missed data with no gaps.                                                           |
+| Cloudbreak     | The RPC 2.0 Accounts module: a purpose-built index that serves `getProgramAccounts` and SPL token queries up to 20x faster for programs with millions of accounts, through the standard JSON-RPC methods.                  |
+| Old Faithful   | An open-source, public archive of Solana's full ledger from genesis, built with the Solana Foundation and served through decentralised storage. Triton routes historical `getBlock` and `getTransaction` calls to it automatically. |
+| Superbank      | The RPC 2.0 historical module: it ingests the full ledger into ClickHouse and serves it as spec-compliant JSON-RPC (`getTransaction`, `getSignaturesForAddress`, plus the `getTransactionsForAddress` extension). The successor to Old Faithful as the serving layer. |
+| Jet            | Triton's direct-to-TPU transaction-sending engine: it forwards transactions straight to validator TPUs over QUIC, with stake-weighted routing (SWQoS) built in. Open source.                                               |
+| Shield         | MEV-protection policies: attach an on-chain allow- or block-list of validators to a transaction so it is only forwarded to validators you trust. Works through standard `sendTransaction` or the Jet engine.               |
 
 </details>
 
 <details>
 
-<summary>What are other products outside of Project Yellowstone?</summary>
+<summary>What other products does Triton run outside Project Yellowstone?</summary>
 
-Beyond the famous Project Yellowstone, Triton operates additional infrastructure and integrations across multiple networks:
-
-| Service             | Description                                                                         |
-| ------------------- | ----------------------------------------------------------------------------------- |
-| Sui & Monad         | RPC infrastructure for Mainnet and Testnet.                                         |
-| Eclipse & PythNet   | RPC infrastructure for Mainnet.                                                     |
-| Photon              | Indexer for ZK compression.                                                         |
-| Metaplex DAS API    | Optimised API for fast access to fungible and non-fungible asset data on Solana.    |
-| Pyth Hermes         | Real-time price feed for financial market data.                                     |
-| Jito                | Dedicated Jito deployments for bundle simulation and MEV-related infrastructure.    |
-| Titan Swap API      | Swap API for various trading and protocol needs.                                    |
-| SWQoS | Stake-weighted routing, applied by default on every Triton endpoint at no extra cost, so transactions from staked senders are prioritised. |
+| Product           | What it is                                                                                              |
+| ----------------- | ------------------------------------------------------------------------------------------------------- |
+| Sui & Monad       | Full RPC nodes for Sui and Monad, on mainnet and testnet.                                                |
+| Eclipse & PythNet | RPC nodes for Eclipse and PythNet mainnet.                                                               |
+| Photon            | Indexer for ZK-compressed accounts (Light Protocol): query compressed accounts, token balances, and validity proofs. |
+| Metaplex DAS API  | The Metaplex Digital Asset Standard API: read NFTs, compressed NFTs, and SPL / Token-2022 tokens through one API. |
+| Pyth Hermes       | A hosted Pyth Hermes endpoint for streaming real-time Pyth price updates.                                |
+| Jito              | Jito-enabled RPC: submit and simulate atomic transaction bundles.                                        |
+| Titan Swap API    | A swap API serving real-time streaming quotes and routes over WebSocket, from the Argos meta-aggregator. |
 
 </details>
 
@@ -81,7 +71,7 @@ You can self-onboard at [customers.triton.one](https://customers.triton.one/user
 
 <summary>How can I decide which service fits my traffic needs best?</summary>
 
-Our docs cover comparisons for streaming, reading state, and sending transactions, so you can match the service to your traffic shape. If you want more tailored guidance, [contact sales](https://triton.one/contact). If you already have an account, contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).
+Our docs cover comparisons for streaming, reading state, and sending transactions, so you can match the service to your traffic shape. For tailored guidance, [contact sales](https://triton.one/contact). If you already have an account, contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).
 
 </details>
 
@@ -97,11 +87,7 @@ Open your [customer dashboard](https://customers.triton.one), scroll to the **Us
 
 <summary>Do you require long-term contracts?</summary>
 
-On pay-as-you-go, there's no commitment beyond your $125 prepaid deposit, which is valid for one year of usage.
-
-```
-For invoiced customers, standard billing is month-to-month. To cancel, give one calendar month's notice.
-```
+On pay-as-you-go, there is no commitment beyond your $125 prepaid deposit, which is valid for one year of usage. For invoiced customers, standard billing is month-to-month; to cancel, give one calendar month's notice.
 
 </details>
 
@@ -109,11 +95,7 @@ For invoiced customers, standard billing is month-to-month. To cancel, give one 
 
 <summary>Can I change my plan later?</summary>
 
-On Triton's shared infrastructure, there are no plan tiers. Every customer gets the same features, services, and flexible limits regardless of subscription size. So there's nothing to "upgrade" between.
-
-```
-For pay-as-you-go, you can top up your balance at any time. For invoiced customers, we'll adjust your plan based on actual usage at any point.
-```
+On Triton's shared infrastructure there are no plan tiers: every customer gets the same features, services, and flexible limits regardless of size, so there is nothing to upgrade between. On pay-as-you-go you can top up your balance at any time; for invoiced customers, we adjust the plan based on actual usage.
 
 </details>
 
@@ -121,11 +103,7 @@ For pay-as-you-go, you can top up your balance at any time. For invoiced custome
 
 <summary>Does Triton offer a free trial to test its services?</summary>
 
-We don't run a separate free trial. The $125 pay-as-you-go deposit serves the same purpose: you get a year of testing and running on production infrastructure at standard rates. Sign up at [customers.triton.one](https://customers.triton.one/users/sign-up).
-
-```
-Trials aren't available on dedicated nodes because the infrastructure runs on custom bare-metal servers with significant upfront cost and multi-month vendor commitments. If you want to evaluate Triton on shared first before moving to dedicated, that path is open by default.
-```
+We do not run a separate free trial. The $125 pay-as-you-go deposit serves the same purpose: a year of testing and running on production infrastructure at standard rates. Sign up at [customers.triton.one](https://customers.triton.one/users/sign-up). Trials are not available on dedicated nodes, which run on custom bare-metal servers with significant upfront cost and multi-month vendor commitments; to evaluate Triton first, start on shared infrastructure and move to dedicated later.
 
 </details>
 
@@ -133,7 +111,7 @@ Trials aren't available on dedicated nodes because the infrastructure runs on cu
 
 <summary>Can I run custom software on Triton's nodes?</summary>
 
-No. We offer managed services, so no one outside the Triton team has access to the infrastructure, and we don't provide SSH access. If you have a dedicated node, we can set up supported add-ons on request.
+No. We run managed services, so no one outside the Triton team has access to the infrastructure and we do not provide SSH access. On a dedicated node, we can set up supported add-ons on request.
 
 </details>
 
@@ -145,9 +123,7 @@ Questions about Triton's services beyond Solana RPC.
 
 <summary>What Pyth oracle products do you offer?</summary>
 
-We provide infrastructure for PythNet RPC and Hermes for streaming price updates. We don't offer benchmarks. For publishers, we offer dedicated RPC to publish onto PythNet and Validators to bolster the Pyth Network.
-
-We work closely with Douro Labs (Pyth Team) to ensure a smooth onboarding and service experience.
+We provide PythNet RPC and Hermes for streaming price updates. We do not offer benchmarks. For publishers, we offer dedicated RPC to publish onto PythNet and validators to support the Pyth Network. We work closely with Douro Labs, the Pyth team, to ensure smooth onboarding.
 
 </details>
 
@@ -155,13 +131,13 @@ We work closely with Douro Labs (Pyth Team) to ensure a smooth onboarding and se
 
 <summary>How can I access Pyth Hermes?</summary>
 
-To access Hermes, you need to point your endpoint to access Hermes and Pythnet. Make sure your path looks like:
+Point your endpoint at Hermes and PythNet. The path should look like:
 
 ```
 https://<endpoint>.mainnet.pythnet.rpcpool.com/<secret token>/hermes/v2/<rest of the call>
 ```
 
-The most common mistake is omitting the token, `v2`, or `hermes` parts of the path.
+The most common mistake is omitting the token, `v2`, or `hermes` from the path.
 
 </details>
 
@@ -169,11 +145,7 @@ The most common mistake is omitting the token, `v2`, or `hermes` parts of the pa
 
 <summary>Does Triton have a validator?</summary>
 
-Yes. You can stake directly with our Private Trusted Validator and earn weekly USDC rewards. The minimum delegation is 2,500 SOL.
-
-```
-This is built for people or teams with larger delegations who want steady income to cover operating expenses, with white-glove setup for custodians and stake pools.
-```
+Yes. You can stake directly with our Private Trusted Validator and earn weekly USDC rewards; the minimum delegation is 2,500 SOL. It is built for teams with larger delegations who want steady income to cover operating expenses, with white-glove setup for custodians and stake pools.
 
 </details>
 
