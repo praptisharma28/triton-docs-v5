@@ -104,7 +104,7 @@ See [replay from a slot](dragon-s-mouth-grpc.md#replay-from-a-slot).
 
 A single gRPC connection can carry many subscriptions. Add multiple named entries to any of the filter maps (`accounts`, `transactions`, `slots`, `blocks`, `blocksMeta`, `entry`) and they all stream over the same connection. Each match is tagged with the filter name(s) that produced it, so you can route updates downstream without splitting connections.
 
-The canonical multiplex example is the [Multiple programs Accounts subscription](dragon-s-mouth-grpc.md#accounts) -- two named owner filters under `accounts`, one connection. The same pattern works across stream types: subscribe to accounts AND transactions AND slots in one request.
+The canonical multiplex example is the [Multiple programs Accounts subscription](dragon-s-mouth-grpc.md#accounts), two named owner filters under `accounts`, one connection. The same pattern works across stream types: subscribe to accounts AND transactions AND slots in one request.
 
 ### Filter configuration
 
@@ -192,7 +192,7 @@ The examples below use gRPC JSON for the request body and TypeScript for the cli
 
 {% tabs %}
 {% tab title="By pubkey" %}
-Subscribe to one or more specific accounts. The label `wsol/usdc` is yours -- it comes back on each match for routing.
+Subscribe to one or more specific accounts. The label `wsol/usdc` is yours, it comes back on each match for routing.
 
 {% tabs %}
 {% tab title="gRPC" %}
@@ -554,7 +554,7 @@ Full deep-dive: [Compressed filters for Yellowstone gRPC](https://blog.triton.on
 
 ### Transactions
 
-If you want the **earliest possible signal** on a transaction, we expose Deshred transactions -- a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the validator executes them.
+If you want the **earliest possible signal** on a transaction, we expose Deshred transactions, a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the validator executes them.
 
 {% tabs %}
 {% tab title="All non-vote, non-failed" %}
@@ -743,7 +743,7 @@ let request = SubscribeRequest {
 {% endtab %}
 {% endtabs %}
 
-Each update carries a `SlotStatus` enum -- see [intra-slot updates](dragon-s-mouth-grpc.md#intra-slot-updates) for the full lifecycle.
+Each update carries a `SlotStatus` enum, see [intra-slot updates](dragon-s-mouth-grpc.md#intra-slot-updates) for the full lifecycle.
 
 ### Blocks
 
@@ -873,7 +873,7 @@ let request = SubscribeRequest {
 
 ## Modifying and unsubscribing
 
-The subscribe stream is bi-directional. Send a new `SubscribeRequest` at any time to update filters -- it fully replaces the previous subscription, so your client must keep a local copy of the full config it wants.
+The subscribe stream is bi-directional. Send a new `SubscribeRequest` at any time to update filters, it fully replaces the previous subscription, so your client must keep a local copy of the full config it wants.
 
 To unsubscribe from everything but keep the connection open:
 
@@ -1133,7 +1133,7 @@ console.log(info.firstAvailable);
 * Replay only covers the server's retained replay window.
 * If `from_slot` is older than the earliest available, the request fails. Retry with a newer slot.
 * Replay uses the same filters and commitment level as the live subscription.
-* Replay starts at a slot boundary -- you may receive duplicate updates from your last-processed slot, so dedupe.
+* Replay starts at a slot boundary, you may receive duplicate updates from your last-processed slot, so dedupe.
 
 {% hint style="info" %}
 For teams self-hosting a Yellowstone gRPC server, replay must be enabled by setting `replay_stored_slots` to a value greater than `0`.
@@ -1185,7 +1185,7 @@ enum SlotStatus {
 | Status                      | What it means                                                                                                                                                      |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `SLOT_FIRST_SHRED_RECEIVED` | The RPC node has received the first shred of this slot. Not yet replayed. Occurs in the [retransmit stage](https://docs.anza.xyz/validator/tvu#retransmit-stage).  |
-| `SLOT_CREATED_BANK`         | A bank for this slot has been created on the node. Banks are isolated execution contexts -- one per slot, forming a fork graph through parent-child relationships. |
+| `SLOT_CREATED_BANK`         | A bank for this slot has been created on the node. Banks are isolated execution contexts, one per slot, forming a fork graph through parent-child relationships. |
 | `SLOT_COMPLETED`            | All shreds for this slot received. Not necessarily replayed yet.                                                                                                   |
 | `SLOT_DEAD`                 | The slot was rejected (invalid signature, bad PoH, wrong entry count). It's discarded by the network. Can happen at any point, even after `SLOT_COMPLETED`.        |
 

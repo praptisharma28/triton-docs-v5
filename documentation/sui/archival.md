@@ -28,7 +28,7 @@ layout:
 
 Full nodes on Sui enforce limited data retention for performance and scalability reasons. Once a full node prunes older data, it is no longer available through the standard gRPC or JSON-RPC endpoints.
 
-The **Archival Storage and Service** solves this by providing long-term, consistent access to the full historical record of the Sui blockchain -- including old transactions, checkpoints, and object states from genesis. It is the historical backbone for indexers, analytics platforms, exchanges, and any application that needs to query data older than what a full node retains.
+The **Archival Storage and Service** solves this by providing long-term, consistent access to the full historical record of the Sui blockchain, including old transactions, checkpoints, and object states from genesis. It is the historical backbone for indexers, analytics platforms, exchanges, and any application that needs to query data older than what a full node retains.
 
 The Archival Service exposes the same `LedgerService` gRPC interface, so if you are already using the standard gRPC API, switching to the archival endpoint for historical lookups requires no client changes beyond the endpoint URL.
 
@@ -78,7 +78,7 @@ Both your endpoint and token can be found in your [client panel](https://custome
 
 ### Authentication
 
-All archival endpoints require the `X-Token` header on every request -- the same token used for your standard gRPC endpoint.
+All archival endpoints require the `X-Token` header on every request, the same token used for your standard gRPC endpoint.
 
 Example with `grpcurl`:
 
@@ -95,16 +95,16 @@ grpcurl \
 
 The Archival Service stores and serves the complete history of the Sui mainnet, including:
 
-* **Transactions** -- full transaction data from genesis
-* **Checkpoints** -- complete checkpoint records
-* **Object states** -- historical object snapshots at past checkpoints
-* **Effects and events** -- full transaction effects and emitted events
+* **Transactions**: full transaction data from genesis
+* **Checkpoints**: complete checkpoint records
+* **Object states**: historical object snapshots at past checkpoints
+* **Effects and events**: full transaction effects and emitted events
 
 ***
 
 ### Using the archival service
 
-The Archival Service uses the standard Sui gRPC `LedgerService` interface. You interact with it the same way as a regular gRPC full node -- the only difference is the endpoint URL.
+The Archival Service uses the standard Sui gRPC `LedgerService` interface. You interact with it the same way as a regular gRPC full node, the only difference is the endpoint URL.
 
 #### List available services
 

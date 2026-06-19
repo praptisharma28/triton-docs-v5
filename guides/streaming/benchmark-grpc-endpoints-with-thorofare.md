@@ -12,15 +12,15 @@ For the long-form rationale, see the [How to benchmark Solana RPC endpoints](htt
 
 ## What Thorofare measures
 
-* **HTTPS RPC latency and throughput** -- request/response round-trip across the methods your app actually calls.
-* **Yellowstone gRPC subscribe throughput and lag** -- account, transaction, slot, block updates. Measures how far behind real time the stream falls under load.
-* **Per-percentile metrics** -- p50, p95, p99 latency. Means hide the tail; tails are what hurt your users.
+* **HTTPS RPC latency and throughput**: request/response round-trip across the methods your app actually calls.
+* **Yellowstone gRPC subscribe throughput and lag**: account, transaction, slot, block updates. Measures how far behind real time the stream falls under load.
+* **Per-percentile metrics**: p50, p95, p99 latency. Means hide the tail; tails are what hurt your users.
 
 ## When to run it
 
-* Choosing between RPC providers -- give every provider the same Thorofare profile and compare apples to apples.
-* Validating a region change -- did moving from `nyc` to `ams` actually reduce p99?
-* Diagnosing degraded performance -- is the regression in our infrastructure or your client code?
+* Choosing between RPC providers: give every provider the same Thorofare profile and compare apples to apples.
+* Validating a region change: did moving from `nyc` to `ams` actually reduce p99?
+* Diagnosing degraded performance: is the regression in our infrastructure or your client code?
 
 ## Run a benchmark
 
@@ -29,7 +29,7 @@ Thorofare lives in the Triton GitHub. Clone, build, and point it at any RPC or g
 The full setup, profile examples, and metric interpretation are in the [Thorofare blog post](https://blog.triton.one/how-to-benchmark-solana-rpc-endpoints/).
 
 {% hint style="info" %}
-Thorofare runs on your machine. Run it from a backend close to where your real production traffic originates -- benchmarking from a different region distorts every result.
+Thorofare runs on your machine. Run it from a backend close to where your real production traffic originates, benchmarking from a different region distorts every result.
 {% endhint %}
 
 ## Common pitfalls

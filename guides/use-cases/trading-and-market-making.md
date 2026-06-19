@@ -14,7 +14,7 @@ By the end you'll have a working setup that covers the full path from signal to 
 
 ## Products used in this guide
 
-Five Triton products work together in this stack. Each card below opens the full product docs -- useful when you want to tune defaults, see every option, or troubleshoot something specific to that product.
+Five Triton products work together in this stack. Each card below opens the full product docs, useful when you want to tune defaults, see every option, or troubleshoot something specific to that product.
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth</strong></td><td>Subscribe to DEX pool account updates and transactions in real time.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc</a></td></tr><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred</strong></td><td>Receive transactions \~20 ms before standard gRPC at p90 for earliest signal.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions</a></td></tr><tr><td><i class="fa-arrow-trend-up">:arrow-trend-up:</i> <strong>Priority Fee API</strong></td><td>Get a percentile-based fee estimate before building your transaction.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api</a></td></tr><tr><td><i class="fa-paper-plane">:paper-plane:</i> <strong>Jet</strong></td><td>Send transactions directly to the current leader with built-in SWQoS.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/jet-sender">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/jet-sender</a></td></tr><tr><td><i class="fa-shield-halved">:shield-halved:</i> <strong>Shield</strong></td><td>(Optional) Block specific validators from processing your transactions.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection</a></td></tr></tbody></table>
 
@@ -296,7 +296,7 @@ An account update prints something like:
 Pool state updated: 58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2
 ```
 
-This is the pool's public key encoded in base58 -- the standard human-readable format for Solana addresses. The raw pool state (reserves, fees, prices) is in `data.account.account.data` as raw bytes. To use it in your trading logic, decode it against the program's account layout -- for example, the Raydium SDK or the program's Anchor IDL.
+This is the pool's public key encoded in base58, the standard human-readable format for Solana addresses. The raw pool state (reserves, fees, prices) is in `data.account.account.data` as raw bytes. To use it in your trading logic, decode it against the program's account layout, for example, the Raydium SDK or the program's Anchor IDL.
 
 A transaction update prints:
 
@@ -322,12 +322,12 @@ console.log(JSON.stringify(decoded, null, 2));
 
 ## Step 2: Get the earliest signal with Deshred
 
-Deshred reconstructs transactions from shreds before execution, delivering them approximately 20 ms ahead of standard Dragon's Mouth gRPC at p90 (p50 is \~6.3 ms). It uses a separate RPC method -- `SubscribeDeshred` -- on the same endpoint and token as Dragon's Mouth.
+Deshred reconstructs transactions from shreds before execution, delivering them approximately 20 ms ahead of standard Dragon's Mouth gRPC at p90 (p50 is \~6.3 ms). It uses a separate RPC method, `SubscribeDeshred`: on the same endpoint and token as Dragon's Mouth.
 
 Important limitations to understand before using Deshred:
 
-* **No execution metadata** -- you receive intent only. There are no logs, balance changes, status, or compute unit data.
-* **No finality guarantee** -- the transaction may fail, get dropped, or land on a dead fork. Always confirm with your Dragon's Mouth `processed` stream.
+* **No execution metadata**: you receive intent only. There are no logs, balance changes, status, or compute unit data.
+* **No finality guarantee**: the transaction may fail, get dropped, or land on a dead fork. Always confirm with your Dragon's Mouth `processed` stream.
 * **Requires Agave 4.0+** on the validator (available on Triton's paid beta).
 
 {% tabs %}
@@ -488,9 +488,9 @@ asyncio.run(stream_deshred())
 Deshred tx (pre-execution): 5Vk5mYDpFq3vQtXm8ZkRj2PnCwBsHeLfY6gNuoA1T9Kd... slot: 307152834
 ```
 
-The signature is base58-encoded. The transaction data in `data.deshredTransaction.transaction` contains the instructions and account keys -- you can see exactly which pools and wallets are involved, and in which direction. What you **cannot** see: whether it will succeed, what the balance changes will be, or any logs.
+The signature is base58-encoded. The transaction data in `data.deshredTransaction.transaction` contains the instructions and account keys, you can see exactly which pools and wallets are involved, and in which direction. What you **cannot** see: whether it will succeed, what the balance changes will be, or any logs.
 
-Use this signal to detect incoming order flow and react -- for example, detecting a large swap into a pool you're quoting. Always cross-reference with your Dragon's Mouth stream to confirm the transaction actually executed.
+Use this signal to detect incoming order flow and react, for example, detecting a large swap into a pool you're quoting. Always cross-reference with your Dragon's Mouth stream to confirm the transaction actually executed.
 
 ## Step 3: Estimate a competitive priority fee
 
@@ -616,7 +616,7 @@ async def get_priority_fee(
 Priority fee (90th pct): 45000 micro-lamports/CU
 ```
 
-The fee is in micro-lamports per compute unit. A typical Raydium swap uses roughly 200,000-400,000 compute units, so 45,000 micro-lamports/CU × 300,000 CU ÷ 1,000,000,000 = \~0.0135 lamports total priority fee -- a fraction of a cent at current prices.
+The fee is in micro-lamports per compute unit. A typical Raydium swap uses roughly 200,000-400,000 compute units, so 45,000 micro-lamports/CU × 300,000 CU ÷ 1,000,000,000 = \~0.0135 lamports total priority fee, a fraction of a cent at current prices.
 
 You can layer your own strategy on top of this (for example, adding a fixed buffer during high-volatility periods), or pass it directly to `setComputeUnitPrice` in Step 4:
 
@@ -626,7 +626,7 @@ ComputeBudgetProgram.setComputeUnitPrice({ microLamports: fee })
 
 ## Step 4: Send your transaction via Jet
 
-Jet is Triton's transaction relay engine. When you send through your Triton endpoint, Jet automatically routes to the current leader over QUIC, handles connection caching, leader schedule tracking, and retry fanout. SWQoS is included -- no extra configuration needed.
+Jet is Triton's transaction relay engine. When you send through your Triton endpoint, Jet automatically routes to the current leader over QUIC, handles connection caching, leader schedule tracking, and retry fanout. SWQoS is included, no extra configuration needed.
 
 {% tabs %}
 {% tab title="send-jet.ts" %}
@@ -716,7 +716,7 @@ def send_with_jet(serialized_tx: bytes, endpoint: str, token: str) -> str:
 {% endtabs %}
 
 {% hint style="warning" %}
-Set `maxRetries: 0` to disable server-side retries, then implement your own retry logic (re-fetch a recent blockhash and re-sign every few seconds). There is a known issue with the Agave `sendTx` library where server-side retry queues overflow under congestion -- client-managed retries are more reliable and give your strategy direct control.
+Set `maxRetries: 0` to disable server-side retries, then implement your own retry logic (re-fetch a recent blockhash and re-sign every few seconds). There is a known issue with the Agave `sendTx` library where server-side retry queues overflow under congestion, client-managed retries are more reliable and give your strategy direct control.
 {% endhint %}
 
 **Verify it works:** the signature should appear on-chain within 1-3 slots under normal conditions. Check at solscan.io or via `getSignatureStatuses`.
@@ -727,7 +727,7 @@ Set `maxRetries: 0` to disable server-side retries, then implement your own retr
 Sent: 5Vk5mYDpFq3vQtXm8ZkRj2PnCwBsHeLfY6gNuoA1T9KdEpRsuW3HqXjc...
 ```
 
-This is the transaction signature -- base58-encoded, 88 characters. To confirm it landed and check for errors:
+This is the transaction signature, base58-encoded, 88 characters. To confirm it landed and check for errors:
 
 ```typescript
 const statuses = await connection.getSignatureStatuses([signature]);
@@ -845,12 +845,12 @@ tradingLoop().catch(console.error);
 
 ## Prefer a faster path to market?
 
-If you'd rather go live without building your own routing and quoting logic, Triton's Metis and Titan APIs cover real-time routing across 20+ DEXes and RFQ providers, with DART live on-chain re-optimisation and quote streaming over WebSockets -- all out of the box.
+If you'd rather go live without building your own routing and quoting logic, Triton's Metis and Titan APIs cover real-time routing across 20+ DEXes and RFQ providers, with DART live on-chain re-optimisation and quote streaming over WebSockets, all out of the box.
 
 Two paths for two types of teams:
 
-* **This guide** -- build your own signal and execution stack. Full control, lowest latency, more engineering work.
-* **Metis / Titan** -- plug in pre-built liquidity routing and quoting. Fastest time to market, less custom code.
+* **This guide**: build your own signal and execution stack. Full control, lowest latency, more engineering work.
+* **Metis / Titan**: plug in pre-built liquidity routing and quoting. Fastest time to market, less custom code.
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-code-branch">:code-branch:</i> <strong>Metis swap API</strong></td><td>Swap routing across 20+ DEXes with exact-out and platform-fee support built in.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/metis-swap-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/metis-swap-api</a></td></tr><tr><td><i class="fa-route">:route:</i> <strong>Titan swap API</strong></td><td>Streaming quotes and routes via DART live re-optimisation or the Prime API for high-volume desks.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/titan-swap-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/titan-swap-api</a></td></tr></tbody></table>
 
@@ -860,7 +860,7 @@ Two paths for two types of teams:
 
 <summary>Do I need all four products?</summary>
 
-Dragon's Mouth and Jet cover the minimum -- real-time data in, transactions out. Add Deshred if your strategy depends on acting before the network processes a transaction. Priority Fee API prevents you from overbidding during quiet periods.
+Dragon's Mouth and Jet cover the minimum, real-time data in, transactions out. Add Deshred if your strategy depends on acting before the network processes a transaction. Priority Fee API prevents you from overbidding during quiet periods.
 
 </details>
 
@@ -876,7 +876,7 @@ Start at 7500 (75th percentile) and monitor landing rate. Increase to 9000+ duri
 
 <summary>Should I configure retries when sending?</summary>
 
-Set `maxRetries: 0` to disable server-side retries, then implement your own retry logic in your application code -- re-fetch a recent blockhash and re-sign every few seconds. There is a known issue with the Agave `sendTx` library where server-side retry queues overflow under congestion, making client-managed retries more reliable.
+Set `maxRetries: 0` to disable server-side retries, then implement your own retry logic in your application code, re-fetch a recent blockhash and re-sign every few seconds. There is a known issue with the Agave `sendTx` library where server-side retry queues overflow under congestion, making client-managed retries more reliable.
 
 </details>
 
@@ -884,7 +884,7 @@ Set `maxRetries: 0` to disable server-side retries, then implement your own retr
 
 <summary>Can I use this with Orca or other DEXes?</summary>
 
-Yes -- replace the Raydium AMM program address with the program address of any DEX.
+Yes, replace the Raydium AMM program address with the program address of any DEX.
 
 Orca Whirlpools: `whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc`
 

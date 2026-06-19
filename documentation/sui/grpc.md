@@ -26,7 +26,7 @@ layout:
 
 ### Overview
 
-The Sui gRPC API is a fast, type-safe, and efficient interface for interacting with the Sui blockchain. It replaces the deprecated JSON-RPC protocol and is now generally available. gRPC uses [Protocol Buffers](https://protobuf.dev/overview/) for compact, high-performance data serialisation, and supports both standard request-response calls and real-time server-side streaming -- no polling required.
+The Sui gRPC API is a fast, type-safe, and efficient interface for interacting with the Sui blockchain. It replaces the deprecated JSON-RPC protocol and is now generally available. gRPC uses [Protocol Buffers](https://protobuf.dev/overview/) for compact, high-performance data serialisation, and supports both standard request-response calls and real-time server-side streaming, no polling required.
 
 > **Note:** JSON-RPC is deprecated and will be deactivated on 31 July 2026. Migrating to gRPC is strongly recommended for all production integrations.
 
@@ -37,7 +37,7 @@ gRPC is the best choice when you need:
 * **High-performance, low-latency** point lookups for transactions, objects, and checkpoints
 * **Real-time streaming** subscriptions (replaces deprecated WebSocket support)
 * **Strongly typed clients** generated from `.proto` definitions in TypeScript, Go, Rust, and other languages
-* **Scalable backend systems** -- indexers, exchanges, bots, and dashboards
+* **Scalable backend systems**: indexers, exchanges, bots, and dashboards
 
 For frontends, developer tooling, or flexible filtered historical queries, consider GraphQL RPC as an alternative.
 
@@ -237,7 +237,7 @@ Errors follow the [gRPC richer error model](https://grpc.io/docs/guides/error/#r
 ### Resources
 
 * [Sui gRPC Reference (official)](https://docs.sui.io/references/fullnode-protocol)
-* [Proto definitions -- sui-apis on GitHub](https://github.com/MystenLabs/sui-apis/tree/main/proto)
+* [Proto definitions, sui-apis on GitHub](https://github.com/MystenLabs/sui-apis/tree/main/proto)
 * [Official: What is gRPC?](https://docs.sui.io/develop/accessing-data/grpc/what-is-grpc)
 * [Official: Querying Data with gRPC](https://docs.sui.io/develop/accessing-data/grpc/using-grpc)
 * [grpcurl tool](https://github.com/fullstorydev/grpcurl)

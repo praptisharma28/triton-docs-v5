@@ -136,7 +136,7 @@ No. You can whitelist as many domains as you need from your customer dashboard.
 
 <summary>Can Triton provide historical data?</summary>
 
-Yes, shared infrastructure includes access to the complete ledger through Superbank pipeline. Dedicated node users can get archival nodes setup that store complete Solana history (e.g., past blocks, transactions). This requires additional storage (multi-TB scale) and is priced separately -- reach out for a custom quote.
+Yes, shared infrastructure includes access to the complete ledger through Superbank pipeline. Dedicated node users can get archival nodes setup that store complete Solana history (e.g., past blocks, transactions). This requires additional storage (multi-TB scale) and is priced separately, reach out for a custom quote.
 
 </details>
 

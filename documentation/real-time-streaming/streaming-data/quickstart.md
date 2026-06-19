@@ -854,7 +854,7 @@ Block #3: slot=100000002, txs=842, hash=Cy8wPmQ3vTzN2rB4sLf...
 {% endtab %}
 
 {% tab title="Deshred" %}
-One line per pre-execution transaction, with slot, signature, and vote flag. These transactions have not yet been executed by the validator -- they may still fail or land on a dead fork. For status, logs, balance changes, or compute units, run a normal Dragon's Mouth `transactions` subscription alongside:
+One line per pre-execution transaction, with slot, signature, and vote flag. These transactions have not yet been executed by the validator, they may still fail or land on a dead fork. For status, logs, balance changes, or compute units, run a normal Dragon's Mouth `transactions` subscription alongside:
 
 ```
 slot=275123456 sig=5j7s4Hk3...QmZ9xT vote=false

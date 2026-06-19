@@ -8,14 +8,14 @@ description: >-
 
 A step-by-step process to diagnose and fix issues with your Triton One RPC.
 
-## Reality check -- ensure your setup is correct and as expected
+## Reality check, ensure your setup is correct and as expected
 
 * Verify that you're using the correct RPC endpoint, headers, and authorization token.
 * Double-check if your request format, parameters, and input data are correct.
 * Ensure your code compiles without any errors and warnings with side effects.
 * Review your code for possible logical bugs not caught by the compiler.
 
-## Troubleshooting -- determine the cause of your errors
+## Troubleshooting, determine the cause of your errors
 
 First, determine if the error is Solana-wide or specific to Triton by attempting the same method against the Solana public RPC `https://api.mainnet-beta.solana.com`.
 
@@ -29,7 +29,7 @@ If you fail to resolve your issue on Solana's public RPC, it's time to troublesh
 
 If you fail to resolve your issue despite the steps above, it's time to call in the big guns!
 
-## Reach out -- seek help from the Triton One support team
+## Reach out, seek help from the Triton One support team
 
 Prepare the following information:
 

@@ -8,14 +8,14 @@ description: >-
 
 What HTTP 429 means on Triton, why you hit it, and how to back off and retry without losing requests.
 
-When your traffic exceeds the per-IP rate budget on a Triton endpoint, the server returns `HTTP 429 Too Many Requests`. The request didn't reach the validator -- you can safely retry it once the window resets.
+When your traffic exceeds the per-IP rate budget on a Triton endpoint, the server returns `HTTP 429 Too Many Requests`. The request didn't reach the validator, you can safely retry it once the window resets.
 
 ## The 10-second window
 
 Triton's shared infrastructure enforces two budgets on every IP, both reset every 10 seconds:
 
-* **Total RPS** -- the budget across every method.
-* **Per-method RPS** -- a separate budget for each individual RPC method (most often hit on `getProgramAccounts`, `sendTransaction`, or `getBlock`).
+* **Total RPS**: the budget across every method.
+* **Per-method RPS**: a separate budget for each individual RPC method (most often hit on `getProgramAccounts`, `sendTransaction`, or `getBlock`).
 
 A 429 means at least one of those budgets was exceeded. See [Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs-v5/get-started/rate-and-connection-limits) for the exact defaults and how to read your endpoint's live limits.
 
@@ -36,8 +36,8 @@ Every JSON-RPC response carries `X-Ratelimit-*` headers. Watch them in your clie
 When you do hit a 429, the right pattern is:
 
 1. **Pause for at least 10 seconds** so the window can reset.
-2. **Retry the same request** -- it didn't reach the validator, so resending is safe.
-3. **Use exponential backoff** if the retry also 429s -- double the wait each attempt up to a cap (e.g. 30 seconds).
+2. **Retry the same request**: it didn't reach the validator, so resending is safe.
+3. **Use exponential backoff** if the retry also 429s, double the wait each attempt up to a cap (e.g. 30 seconds).
 4. **Reset the backoff** once a request succeeds.
 
 ### TypeScript example
@@ -64,7 +64,7 @@ async function rpcWithBackoff(url: string, body: unknown, maxAttempts = 5) {
 
 ## Reduce 429s before they happen
 
-* **Batch reads** -- `getMultipleAccounts` instead of N parallel `getAccountInfo` calls
+* **Batch reads**: `getMultipleAccounts` instead of N parallel `getAccountInfo` calls
 * **Cache hot reads** at your application layer
 * **Move heavy reads** (program scans, signature crawls) to your backend
 * **Lower your concurrency** until the per-method headers stop ticking near zero

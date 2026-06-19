@@ -180,7 +180,7 @@ A deshred update is a `SubscribeUpdateDeshred` containing a single transaction r
 The `loaded_writable_addresses` and `loaded_readonly_addresses` fields contain addresses resolved from Address Lookup Tables (ALTs), so deshred filters match both static account keys and dynamically loaded addresses.
 
 {% hint style="warning" %}
-**No execution context.** Deshred only carries the raw transaction. No status, logs, inner instructions, balance changes, compute units, or `TransactionStatusMeta`. There's also no confirmation or finality guarantee -- a transaction may fail, land on a dead fork, or never confirm.
+**No execution context.** Deshred only carries the raw transaction. No status, logs, inner instructions, balance changes, compute units, or `TransactionStatusMeta`. There's also no confirmation or finality guarantee, a transaction may fail, land on a dead fork, or never confirm.
 
 If your pipeline needs status, logs, or balance deltas, run a parallel Dragon's Mouth `transactions` subscription and join on `signature`.
 {% endhint %}
