@@ -26,16 +26,16 @@ We power everything from real-time trading and market-making to large-scale data
 
 Project Yellowstone is Triton's suite of open-source Solana data tools, each named after a geyser at Yellowstone National Park. Together, they cover real-time streaming, historical ledger access, indexed reads, and transaction sending.
 
-| Tool                       | What it is                                                                                                                                                                                       |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Dragon's Mouth gRPC        | gRPC streaming from the validator's Geyser plugin: subscribe to account, transaction, slot, and block updates in real time over Protobuf.                                                        |
-| Whirligig WebSockets       | A faster, more reliable drop-in for the standard Solana WebSocket (plus the `transactionSubscribe` extension), for frontends.                                                                         |
-| Fumarole gRPC              | Persistent multiplex streams that stay complete through any disconnect, with a server-side cursor and \~4-day auto-backfill.                                                                     |
-| Cloudbreak indexes         | An accounts indexing module that serves program and token account queries 99%+ faster through the standard JSON-RPC methods.                                                                     |
-| Old Faithful archive       | The only public archive of Solana's complete ledger from genesis, stored as verifiable CAR files.                                                                                                |
-| Superbank ledger pipeline  | An end-to-end historical stack in Rust that ingests the full Solana ledger, stores it in ClickHouse, and serves it as spec-compliant JSON-RPC (plus the `getTransactionsForAddress` extension).  |
-| Jet sender                 | Direct-to-TPU transaction-sending engine, with stake-weighted QoS, Shield MEV protection, leader-aware QUIC routing, and per-request retries built in.                                           |
-| Shield protection policies | On-chain allow- and block-lists of validators for safe and compliant transaction routing. Works through standard `sendTransaction` and is natively integrated with the Jet engine.                   |
+| Tool                       | What it is                                                                                                                                                                                      |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Dragon's Mouth gRPC        | gRPC streaming from the validator's Geyser plugin: subscribe to account, transaction, slot, and block updates in real time over Protobuf.                                                       |
+| Whirligig WebSockets       | A faster, more reliable drop-in for the standard Solana WebSocket (plus the `transactionSubscribe` extension), for frontends.                                                                   |
+| Fumarole gRPC              | Persistent multiplex streams that stay complete through any disconnect, with a server-side cursor and \~4-day auto-backfill.                                                                    |
+| Cloudbreak indexes         | An accounts indexing module that serves program and token account queries 99%+ faster through the standard JSON-RPC methods.                                                                    |
+| Old Faithful archive       | The only public archive of Solana's complete ledger from genesis, stored as verifiable CAR files.                                                                                               |
+| Superbank ledger pipeline  | An end-to-end historical stack in Rust that ingests the full Solana ledger, stores it in ClickHouse, and serves it as spec-compliant JSON-RPC (plus the `getTransactionsForAddress` extension). |
+| Jet sender                 | Direct-to-TPU transaction-sending engine, with stake-weighted QoS, Shield MEV protection, leader-aware QUIC routing, and per-request retries built in.                                          |
+| Shield protection policies | On-chain allow- and block-lists of validators for safe and compliant transaction routing. Works through standard `sendTransaction` and is natively integrated with the Jet engine.              |
 
 </details>
 
@@ -43,12 +43,12 @@ Project Yellowstone is Triton's suite of open-source Solana data tools, each nam
 
 <summary>What other products does Triton run outside Project Yellowstone?</summary>
 
-| Product          | What it is                                                                                                     |
-| ---------------- | -------------------------------------------------------------------------------------------------------------- |
-| Sui & Monad      | Full RPC nodes and validators for Sui and Monad, across mainnet and testnet.                                   |
+| Product          | What it is                                                                                                      |
+| ---------------- | --------------------------------------------------------------------------------------------------------------- |
+| Sui & Monad      | Full RPC nodes and validators for Sui and Monad, across mainnet and testnet.                                    |
 | Metaplex DAS API | Digital Asset Standard (DAS) API: query NFTs, compressed NFTs, and fungible tokens through one indexed request. |
-| Jito             | Jito-enabled RPC: simulate atomic transaction bundles.                                                         |
-| Titan Swap API   | A swap API serving real-time streaming quotes and routes over WebSocket, from the Argos meta-aggregator.       |
+| Jito             | Jito-enabled RPC: simulate atomic transaction bundles.                                                          |
+| Titan Swap API   | A swap API serving real-time streaming quotes and routes over WebSocket, from the Argos meta-aggregator.        |
 
 </details>
 
@@ -58,7 +58,7 @@ Project Yellowstone is Triton's suite of open-source Solana data tools, each nam
 
 Yes. You can stake directly with our Private Trusted Validator and earn weekly USDC rewards. It's built for teams with larger delegations (2,500 SOL+) who want a steady weekly income in stablecoins, which keeps compliance and accounting simple.
 
-We also offer white-label setups for DAOs, custodians, and stake pools that want their own validator without the operational overhead.
+We also offer white-label setups for DAOs, custodians, stake pools, and other institutions that want their own validator without the operational overhead.
 
 </details>
 
