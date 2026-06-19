@@ -121,23 +121,18 @@ Questions about Triton's services beyond Solana RPC.
 
 <details>
 
-<summary>What Pyth oracle products do you offer?</summary>
+<summary>Do you support Pyth price feeds and Hermes?</summary>
 
-We provide PythNet RPC and Hermes for streaming price updates. We do not offer benchmarks. For publishers, we offer dedicated RPC to publish onto PythNet and validators to support the Pyth Network. We work closely with Douro Labs, the Pyth team, to ensure smooth onboarding.
+{% hint style="warning" %}
+Triton's Pyth and Hermes endpoints are being deprecated. The Pyth DAO is deprecating Pyth Core on **31 July 2026**, and from that date Triton can no longer serve Pyth or Hermes data through your endpoint.
+{% endhint %}
 
-</details>
+Move to consuming Pyth price data directly from Pyth:
 
-<details>
+* Price feeds: [pyth.network/price-feeds](https://www.pyth.network/price-feeds)
+* Hermes migration guide: [docs.pyth.network](https://docs.pyth.network/price-feeds/core/upgrade/preparing/solana)
 
-<summary>How can I access Pyth Hermes?</summary>
-
-Point your endpoint at Hermes and PythNet. The path should look like:
-
-```
-https://<endpoint>.mainnet.pythnet.rpcpool.com/<secret token>/hermes/v2/<rest of the call>
-```
-
-The most common mistake is omitting the token, `v2`, or `hermes` from the path.
+Your existing endpoint keeps working until then. Questions about the change? Reply to your Triton notification, or use the chat widget in your [customer dashboard](https://customers.triton.one).
 
 </details>
 
