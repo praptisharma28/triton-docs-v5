@@ -22,7 +22,7 @@ layout:
 
 # Historical data
 
-Triton serves the complete Solana ledger as historical data through **Superbank**, its historical-data backend. Superbank ingests the full ledger into ClickHouse and serves it as spec-compliant Solana JSON-RPC. It is the historical module of RPC 2.0 and the successor to Old Faithful, and it is open source under AGPL at [github.com/solana-rpc/superbank](https://github.com/solana-rpc/superbank).
+Triton serves the complete Solana ledger as historical data through **Superbank**, its historical-data backend. Superbank is an open-source Rust workspace that ingests the full ledger, stores it in ClickHouse, and serves it as spec-compliant Solana JSON-RPC. It is the historical module of RPC 2.0 and the successor to Old Faithful, open source under AGPL at [github.com/solana-rpc/superbank](https://github.com/solana-rpc/superbank).
 
 Because Superbank answers the standard Solana JSON-RPC methods, existing clients work unchanged. On a Triton endpoint where it is enabled, the historical methods you already call are served from Superbank automatically, with nothing to route or configure on your side.
 
