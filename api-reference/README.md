@@ -21,9 +21,37 @@ layout:
 
 # Reading account state
 
-Read the current on-chain state of accounts. These methods return native SOL balances, raw and parsed account data, SPL token balances and token holders, program-owned accounts, the largest accounts, rent-exemption minimums, and stake and vote accounts.
+Read the current on-chain state of Solana accounts at any commitment level.
 
-Use this section to fetch the latest value of an account or token holding at a chosen commitment level, to load many accounts in one call, and to scan every account owned by a program. The Metaplex DAS API methods read NFT and compressed-asset state.
+These return an account's data directly, whether you want a single account, many in one call, just the SOL balance, or every account a program owns:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `getAccountInfo` | The state and metadata of one account, or null if it doesn't exist. |
+| `getMultipleAccounts` | The same, for many addresses in one call, in request order. |
+| `getBalance` | The lamport (SOL) balance of an address. |
+| `getProgramAccounts` | Every account a program owns, with optional data or size filters. |
+
+These cover SPL token balances, holders, and supply:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `getTokenAccountBalance` | The balance of a single SPL token account. |
+| `getTokenAccountsByOwner` | The token accounts a wallet owns. |
+| `getTokenAccountsByDelegate` | The token accounts a given delegate can act on. |
+| `getTokenSupply` | A mint's total supply. |
+| `getTokenLargestAccounts` | The 20 largest holders of a mint. |
+
+These read cluster-wide and validator state rather than one account you name:
+
+| Method | What it returns |
+| ------ | --------------- |
+| `getLargestAccounts` | The 20 largest accounts by SOL balance. |
+| `getMinimumBalanceForRentExemption` | The lamports an account of a given size needs to be rent-exempt. |
+| `getStakeMinimumDelegation` | The cluster's minimum stake delegation. |
+| `getVoteAccounts` | Current and delinquent vote accounts. |
+
+For NFTs, compressed assets, and token metadata, use the [Metaplex DAS API](solana/readme/das-api/README.md).
 
 ***
 
