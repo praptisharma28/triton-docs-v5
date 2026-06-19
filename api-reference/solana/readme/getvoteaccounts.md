@@ -138,7 +138,7 @@ Keep delinquent vote accounts even if their activated stake is zero.
 
 **`delinquentSlotDistance`** · u64 · default `128`
 
-Number of slots a validator may trail the selected slot before the RPC node classifies it as delinquent. **Note:** ecosystem tools usually leave this unset to preserve consistent behavior.
+Number of slots a validator may trail the selected slot before the RPC node classifies it as delinquent. **Note:** ecosystem tools usually leave this unset to preserve consistent behaviour.
 
 ## Response
 

@@ -2,7 +2,7 @@
 description: Query coin balances, metadata, and supply for an address.
 ---
 
-# Coin Query API
+# Coin query API
 
 Read coin and token information owned by an address: the balance per coin type, the total balance, the individual coin objects, coin metadata, and total supply.
 

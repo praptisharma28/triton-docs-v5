@@ -2,7 +2,7 @@
 description: Read staking, validators, the committee, and the reference gas price.
 ---
 
-# Governance Read API
+# Governance read API
 
 Read staking and validator state: delegated stakes, the validator set and their APYs, the current committee, the latest system state, and the reference gas price.
 

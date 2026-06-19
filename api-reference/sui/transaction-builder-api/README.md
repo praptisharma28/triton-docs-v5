@@ -4,7 +4,7 @@ description: >-
   applications should build transactions with the Sui SDK instead.
 ---
 
-# Transaction Builder API
+# Transaction builder API
 
 Server-side builders that return an unsigned transaction for common operations: transfers, coin splits and merges, staking, Move calls, and publishing.
 

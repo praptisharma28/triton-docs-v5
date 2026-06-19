@@ -183,7 +183,7 @@ Data slicing is only available for `base58`, `base64`, `base64+zstd`, and `binar
 Accepted for compatibility.
 
 {% hint style="info" %}
-Unlike [getProgramAccounts](https://solana.com/docs/rpc/http/getprogramaccounts), `programNotification` messages already include `context`. `withContext`, `minContextSlot`, and `sortResults` are accepted for compatibility, but PubSub subscriptions do not currently change behavior based on those fields.
+Unlike [getProgramAccounts](https://solana.com/docs/rpc/http/getprogramaccounts), `programNotification` messages already include `context`. `withContext`, `minContextSlot`, and `sortResults` are accepted for compatibility, but PubSub subscriptions do not currently change behaviour based on those fields.
 {% endhint %}
 
 ## Response

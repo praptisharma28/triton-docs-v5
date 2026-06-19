@@ -32,8 +32,8 @@ Authenticate with the `X-Token` header, or the token in the URL path, the same w
 
 * **Read API**: objects, transactions, events, checkpoints, protocol state.
 * **Write API**: execute, dry-run, and developer-inspect transaction blocks.
-* **Coin Query API**: balances, metadata, and supply.
-* **Governance Read API**: staking, validators, committee, reference gas price.
+* **Coin query API**: balances, metadata, and supply.
+* **Governance read API**: staking, validators, committee, reference gas price.
 * **Extended API**: owned objects, dynamic fields, event/transaction queries, name service, subscriptions.
-* **Move Utils**: normalized Move modules, functions, and structs.
-* **Transaction Builder API**: the `unsafe_*` server-side transaction builders.
+* **Move utils**: normalized Move modules, functions, and structs.
+* **Transaction builder API**: the `unsafe_*` server-side transaction builders.

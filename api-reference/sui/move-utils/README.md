@@ -2,7 +2,7 @@
 description: Inspect normalized Move modules, functions, and structs.
 ---
 
-# Move Utils
+# Move utils
 
 Inspect Move packages: normalized modules, functions, and structs, and the argument types of a function.
 
