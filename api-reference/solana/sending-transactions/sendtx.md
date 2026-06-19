@@ -13,3 +13,10 @@ Reliable transaction delivery on Solana is a client-side strategy. These practic
 * **Set a tight compute-unit budget and a competitive priority fee.**
 
 For the method itself, see [sendTransaction](sendtransaction.md). For percentile-based priority-fee estimates, see [getRecentPrioritizationFees](getrecentprioritizationfees.md).
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)

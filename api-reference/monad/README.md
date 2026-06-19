@@ -24,3 +24,10 @@ Find your exact endpoint in the [customer dashboard](https://customers.triton.on
 * **Monad extensions**: `eth_sendRawTransactionSync`, `admin_ethCallStatistics`, and the `txpool_*` methods.
 
 For the canonical Monad reference and any chain-specific differences, see the [official Monad JSON-RPC reference](https://docs.monad.xyz/reference/json-rpc/).
+
+***
+
+<i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
+<i class="fa-briefcase">:briefcase:</i> Sales questions? [Contact us](https://triton.one/contact)\
+<i class="fa-sparkles">:sparkles:</i> AI agent? Read [llms.txt](https://docs.triton.one/llms.txt)\
+<i class="fa-rss">:rss:</i> Follow updates: [Blog](https://blog.triton.one) · [X](https://x.com/triton_one) · [YouTube](https://www.youtube.com/@triton_one_ltd) · [Telegram](https://t.me/tritonone) · [GitHub](https://github.com/rpcpool)
