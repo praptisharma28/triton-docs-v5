@@ -9,9 +9,9 @@ How to query historical and archival Solana data: old transactions, blocks, and 
 ## Let Triton route history for you
 
 * **Use Triton's endpoints rather than running your own archive.** Every Solana endpoint can query the full history back to the genesis block.
-* **Just make the normal call** (`getTransaction`, `getBlock`). Recent data (the last several epochs) is served from the low-latency backends; older data is automatically forwarded to the long-term archive (Hydrant and Old Faithful). You do not route it yourself.
+* **Just make the normal call** (`getTransaction`, `getBlock`). Recent data (the last several epochs) is served from the low-latency backends; older data is automatically forwarded to the long-term archive (Superbank and Old Faithful). You do not route it yourself.
 * **Expect deeper queries to be slower.** Only very old data traverses the archival ledger systems.
-* **Budget for archive pricing on very old data:** Hydrant is the final step for the oldest lookups, at $10.00 per million queries ($10.00/month minimum if used), across `getTransaction`, `getBlock`, `getSignaturesForAddress`, `getTransactionsForAddress`.
+* **Budget for archive pricing on very old data:** Superbank is the final step for the oldest lookups, at $10.00 per million queries ($10.00/month minimum if used), across `getTransaction`, `getBlock`, `getSignaturesForAddress`, `getTransactionsForAddress`.
 
 ## Pull address history in one call
 
