@@ -1,12 +1,10 @@
 ---
 description: >-
-  Triton RPC and gRPC reliability, rate limits, endpoint configuration,
-  geographic routing, and latency troubleshooting.
+  Questions about Triton's RPC services, latency, rate limits, scripts and
+  monitoring
 ---
 
-# RPC requests
-
-Questions about Triton's RPC services, latency, rate limits, scripts and monitoring.
+# RPC polling
 
 ## Performance and reliability
 
@@ -16,20 +14,21 @@ How fast and reliable Triton's RPC service is, and what happens during congestio
 
 <summary>How reliable are Triton's RPC services?</summary>
 
-Our infrastructure delivers 99.9% uptime, backed by multiple servers per region and automated health checks. This ensures that nodes stay synced and serve accurate, up-to-date ledger data. If any node falls behind, requests are routed to a shared backup pool while the issue is resolved. Our infrastructure is monitored 24/7, and we're known for fast and responsive support.
+Our infrastructure delivers 99.9% uptime, backed by multiple servers per region and automated health checks. This ensures that nodes stay synced and serve accurate, on-tip data.
 
-As Stephen Hess, founder of Metaplex, put it: "We use Triton RPCs every day at Metaplex. They're fast, reliable, and built by one of the most competent teams I've worked with in Solana or across tech."
+If any node falls behind, requests are routed to a shared backup pool while the issue is resolved. Our infrastructure is monitored 24/7, and we're known for fast and responsive support.
 
 </details>
 
 <details>
 
-<summary>How does Triton ensure minimal latency with RPC and gRPC?</summary>
+<summary>How does Triton ensure minimal latency with RPC?</summary>
 
 It's a big topic, but at a high level, we do it through:
 
-* **GeoDNS:** Routes traffic to the nearest server in shared pools.
-* **Geyser integration:** Streams intra-slot updates via Dragon's Mouth, unlike end-of-slot updates in traditional RPC.
+* **Anycast:** routes traffic from anywhere to the nearest server
+* HTTP/3 xxx
+* **Custom shred network....**
 * **Custom indexes:** Cloudbreak optimises `getProgramAccounts` (gPA) calls to improve query performance.
 
 </details>
@@ -41,17 +40,21 @@ It's a big topic, but at a high level, we do it through:
 We mitigate congestion with:
 
 * **Staked nodes:** Prioritise transaction delivery to the block producer.
-* **Load balancing:** Distribute traffic across our 100+ nodes.
-* **Rate limiting:** Prevent abuse and ensure fair access.
+* **Load balancing:** Distribute traffic across 1000+ nodes.
+* **Per-IP rate limiting:** Prevent abuse and ensure fair access.
 * **Redundancy:** Automatic failover systems to maintain uptime during outages.
 
 </details>
 
 <details>
 
-<summary>What happens if my gRPC/RPC node receives excessive traffic? Will it affect transaction sending?</summary>
+<summary>What happens if my RPC node receives excessive traffic? Will it affect transaction sending?</summary>
 
-If traffic exceeds your node's capacity, it may lag behind the network's latest state, resulting in older data being served. In such cases, requests will be rerouted to our backup pool, which supports upgrades and traffic spikes but introduces additional latency. This could slow transaction submission. If reliance on the backup pool becomes frequent, we will contact you to discuss scaling your deployment.
+If traffic exceeds your node's capacity, it may lag behind the network's latest state, resulting in older data being served.
+
+In such cases, requests will be rerouted to our backup pool, which supports upgrades and traffic spikes but introduces additional latency. If reliance on the backup pool becomes frequent, we will contact you to discuss scaling your deployment.
+
+This doesn't affect transaction submission, as it's routed through a specialised Jet sending engine that isn't "noised" by reads.
 
 </details>
 
@@ -59,7 +62,7 @@ If traffic exceeds your node's capacity, it may lag behind the network's latest 
 
 <summary>What happens if I hit my rate limit?</summary>
 
-Your application will receive `HTTP 429` errors. When this happens, pause requests for 10 seconds to clear the limit. We strongly recommend implementing a backoff-and-retry mechanism. See [Handle 429 rate-limit errors](error-handling/handle-429-rate-limit-errors.md) for the pattern, or the [Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs-v5/get-started/rate-and-connection-limits) page for the budgets and headers.
+If you've received `HTTP 429` error, pause requests for 10 seconds to clear the limit. We strongly recommend implementing a backoff-and-retry mechanism. See [Handle 429 rate-limit errors](error-handling/handle-429-rate-limit-errors) for the pattern, or the [Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs-v5/get-started/rate-and-connection-limits) page for the budgets and headers.
 
 </details>
 
@@ -67,7 +70,7 @@ Your application will receive `HTTP 429` errors. When this happens, pause reques
 
 <summary>Can I run scripts on the shared service?</summary>
 
-Yes. Shared infrastructure handles backend workloads (scripts, trading bots, indexers) and is sized to absorb traffic spikes. If you expect sustained heavy load (heavy subscriptions, full-chain streams, custom Geyser configurations), a dedicated node is usually the right choice.
+Yes. Shared infrastructure handles backend workloads (scripts, trading bots, indexers) and is sized to absorb traffic spikes. If you expect sustained heavy load (heavy subscriptions, full-chain streams, custom Geyser configurations), a dedicated node might be a better fit.
 
 </details>
 
@@ -81,7 +84,7 @@ Tokens, endpoints, allowed origins, regions, and the capabilities Triton support
 
 Customers with dedicated nodes get a Grafana dashboard with real-time metrics: request volume, latency, error rates, and bandwidth usage.
 
-For shared (pay-as-you-go) usage, see [Where can I see my usage?](customer-dashboard.md).
+For shared (pay-as-you-go) usage, you can view xx and xx \[specify] in Billing V3 tab of your customer dashboard\[hyperlink]
 
 </details>
 
@@ -89,7 +92,9 @@ For shared (pay-as-you-go) usage, see [Where can I see my usage?](customer-dashb
 
 <summary>Can I create new tokens or endpoints myself?</summary>
 
-Accounts with standard permissions can't create tokens or endpoints directly. Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one) to provision them. If you need self-service, ask support to upgrade you to the operator role -- once enabled, you can add tokens and endpoints from the dashboard yourself.
+Accounts with standard permissions can't create tokens or endpoints directly. Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one) to provision them.
+
+If you need self-service, ask support to upgrade you to the operator role; once enabled, you can add tokens and endpoints from the dashboard yourself.
 
 </details>
 
@@ -107,7 +112,7 @@ Don't remove it. If you do and leave the allowed origins list empty, the endpoin
 
 <summary>Can I choose the geographic location of my RPC nodes?</summary>
 
-Yes, dedicated node users can select primary regions (US, EU, or Asia Pacific) or request multi-region setups for redundancy and lower latency based on their user base.
+Yes, dedicated node users can select primary regions (US, EU, or Asia Pacific) or request multi-region setups for redundancy and lower latency.
 
 </details>
 
@@ -115,15 +120,15 @@ Yes, dedicated node users can select primary regions (US, EU, or Asia Pacific) o
 
 <summary>Are shared RPC subscriptions restricted to a single domain?</summary>
 
-No. You can whitelist as many domains as you need. See [How can I add domains to the allowed origins?](customer-dashboard.md) for the steps.
+No. You can whitelist as many domains as you need from your customer dashboard.
 
 </details>
 
 <details>
 
-<summary>Can Triton provide historical blockchain data?</summary>
+<summary>Can Triton provide historical data?</summary>
 
-Yes, dedicated node users can opt into archival nodes that store full Solana blockchain history (e.g., past blocks, transactions). This requires additional storage (multi-TB scale) and is priced separately -- reach out for a custom quote.
+Yes, shared infrastructure includes access to the complete ledger through Superbank pipeline. Dedicated node users can get archival nodes setup that store complete Solana history (e.g., past blocks, transactions). This requires additional storage (multi-TB scale) and is priced separately -- reach out for a custom quote.
 
 </details>
 
@@ -131,9 +136,11 @@ Yes, dedicated node users can opt into archival nodes that store full Solana blo
 
 <summary>Can I use Jito sendBundle and bundle simulation with Triton RPCs?</summary>
 
-Bundle simulation is available to everyone -- see Jito bundles for the full reference.
+Bundle simulation is available to everyone—see [Jito bundles](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/jito-bundles) for the full reference.
 
-`sendBundle` itself isn't routed through our infrastructure. Routing bundle sends through Triton would add an extra hop in front of the Jito block engine, which adds latency and works against the reason you're using bundles in the first place. The recommended pattern is to call the Jito block engine directly for sends, and use Triton for everything else (reads, streams, simulation).
+`sendBundle` itself isn't routed through our infrastructure. Routing bundles through Triton would add an extra hop in front of the Jito block engine, which adds latency and runs counter to the reason you're using bundles in the first place.
+
+The recommended pattern is to call the Jito block engine directly for sends, and use Triton for everything else (reads, streams, simulation).
 
 </details>
 
@@ -145,7 +152,7 @@ Common issues with WebSocket connections, latency measurement, and gRPC connecti
 
 <summary>I have an issue with my Web3.js socket connection. How can I fix it?</summary>
 
-If you're hitting persistent socket or connection errors with `@solana/web3.js` (`fetch failed`, `Connect Timeout Error`, `ECONNREFUSED`, `ECONNRESET`, `other side closed`), see Web3.js socket and connection issues. It covers the root causes and the standard fixes.
+If you're hitting persistent socket or connection errors with `@solana/web3.js` (`fetch failed`, `Connect Timeout Error`, `ECONNREFUSED`, `ECONNRESET`, `other side closed`), see [Web3.js socket and connection issues](error-handling/web3js-socket-connection-issues). It covers the root causes and the standard fixes.
 
 </details>
 
@@ -166,6 +173,7 @@ Instead, record a timestamp immediately after receiving a transaction response f
 To detect delays, examine the `slot` field included in all gRPC messages. The most precise method is to compare this slot value with a secondary source, such as another subscription or a `getSlot` call in your production environment. For additional validation, you may also cross-reference with an alternative RPC provider. Dedicated users can select the "Tracking Tip" folder in their Grafana Dashboard. The slot latency reflected here shows how much your node's slot latency differs from the rest of the network. As the node processes data from the network downstream, it sends this information through Geyser.
 
 If you suspect your Geyser stream is experiencing a drastically different latency, check whether your receiving server is not providing back pressure to the RPC node due to bandwidth constraints.
+
 
 </details>
 
