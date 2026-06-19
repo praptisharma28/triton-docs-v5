@@ -1,5 +1,5 @@
 ---
-description: Subscribe over WebSockets to live account, program, log, signature, and slot updates.
+description: Subscribe over WebSockets to live account, program, log, signature, slot, and block updates.
 layout:
   width: default
   title:
@@ -37,12 +37,12 @@ These follow transactions and the logs they emit:
 | `signatureSubscribe` | Status notifications for a transaction signature. |
 | `transactionSubscribe` | Transaction notifications (a Triton extension). |
 
-These track the validator's slot and root progress:
+These track the validator's slot and block progress:
 
 | Method | What it does |
 | ------ | ------------ |
 | `slotSubscribe` | Notifications when the validator processes a new slot. |
-| `rootSubscribe` | Notifications when the validator sets a new root. |
+| `blockSubscribe` | Notifications with the full block at each new slot. |
 
 Each has a matching unsubscribe method that cancels it by id (`accountUnsubscribe`, `programUnsubscribe`, and so on).
 

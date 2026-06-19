@@ -1,5 +1,5 @@
 ---
-description: Cancel a rootSubscribe websocket subscription.
+description: Cancel a blockSubscribe websocket subscription.
 layout:
   width: default
   title:
@@ -20,7 +20,7 @@ layout:
     visible: true
 ---
 
-# rootUnsubscribe
+# blockUnsubscribe
 
 ## Request
 
@@ -30,7 +30,7 @@ layout:
 {
   "jsonrpc": "2.0",
   "id": 1,
-  "method": "rootUnsubscribe",
+  "method": "blockUnsubscribe",
   "params": [0]
 }
 ```
@@ -41,7 +41,7 @@ layout:
 
 **`subscription id`** · integer · required
 
-Subscription id returned by `rootSubscribe`.
+Subscription id returned by `blockSubscribe`.
 
 ## Response
 
@@ -59,7 +59,7 @@ Returns `true` if the subscription was removed. Returns an error if the subscrip
 
 ***
 
-_Adapted from the_ [_Solana `rootUnsubscribe` reference_](https://solana.com/docs/rpc/websocket/rootunsubscribe)_, maintained by the Solana Foundation._
+_Adapted from the_ [_Solana `blockUnsubscribe` reference_](https://solana.com/docs/rpc/websocket/blockunsubscribe)_, maintained by the Solana Foundation._
 
 ***
 
