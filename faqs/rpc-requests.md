@@ -72,6 +72,14 @@ Yes. Shared infrastructure handles backend workloads (scripts, trading bots, ind
 
 </details>
 
+<details>
+
+<summary>How do I check my current rate limits?</summary>
+
+Every endpoint exposes its live limits at `/ratelimits`. Run `curl https://<your-endpoint>/<your-token>/ratelimits`. Each JSON-RPC response also carries `X-Ratelimit-*` headers (limit, remaining, reset, plus the per-method pair), so you can back off before you hit a 429. See [Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs-v5/rate-and-connection-limits).
+
+</details>
+
 ## Configuration and access
 
 <details>
@@ -145,6 +153,14 @@ Bundle simulation is available to everyone—see [Jito bundles](https://kate-6.g
 `sendBundle` itself isn't routed through our infrastructure. Routing bundles through Triton would add an extra hop in front of the Jito block engine, which adds latency and runs counter to the reason you're using bundles in the first place.
 
 The recommended pattern is to call the Jito block engine directly for sends, and use Triton for everything else (reads, streams, simulation).
+
+</details>
+
+<details>
+
+<summary>Can I optimise for a specific region?</summary>
+
+By default we use BGP Anycast to route every request to the nearest city automatically, requiring zero client-side setup. To pin your traffic to a specific region, contact support and we’ll set it up.
 
 </details>
 

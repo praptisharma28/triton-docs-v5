@@ -71,6 +71,14 @@ Yes. If you have an operator role, you should be able to add them yourself.
 
 </details>
 
+<details>
+
+<summary>Should I whitelist a domain or an IP?</summary>
+
+We don’t whitelist IPs. **Backends** (servers, scripts, bots, gRPC) use a secret token: in the URL path for JSON-RPC and WebSocket, or in an `x-token` header for gRPC. **Browser frontends** can’t hide a token in client code, so whitelist your domain via the endpoint’s allowed-origins list instead. Mobile and native apps have no browser origin to whitelist, so they use a token too; route calls through your own backend so it isn’t shipped in the app. See [Auth and security](https://kate-6.gitbook.io/triton-one-docs-v5/authentication).
+
+</details>
+
 ## Billing and usage
 
 <details>
@@ -163,6 +171,14 @@ For pay-as-you-go customers, you can just stop using the service. Your prepaid b
 ```
 For invoiced customers, give one calendar month's notice through the support channel in your [customer dashboard](https://customers.triton.one).
 ```
+
+</details>
+
+<details>
+
+<summary>Do you offer refunds?</summary>
+
+Under our Terms of Service we don’t issue refunds. On pay-as-you-go your prepaid balance stays valid for one year and you can keep using it; invoiced customers can cancel with one calendar month’s notice.
 
 </details>
 

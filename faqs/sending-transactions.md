@@ -30,6 +30,14 @@ Yes. A transaction is only final once it reaches `confirmed` or `finalized` comm
 
 </details>
 
+<details>
+
+<summary>Do I need to set up stake-weighted QoS (SWQoS)?</summary>
+
+No. SWQoS routing applies by default to standard `sendTransaction` and `/sendtx` calls on your existing Solana mainnet endpoint, so there’s nothing to configure client-side.
+
+</details>
+
 ***
 
 <i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\

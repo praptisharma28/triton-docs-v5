@@ -94,6 +94,14 @@ Full guide: [Verify your gRPC endpoint](https://kate-6.gitbook.io/triton-one-doc
 
 </details>
 
+<details>
+
+<summary>How do I get the earliest possible view of transactions?</summary>
+
+Use Deshred. It streams transactions reconstructed from shreds before execution, so you see them earlier than a regular gRPC transaction stream. Built for latency-sensitive work like trading and arbitrage. See [Deshred transactions](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions).
+
+</details>
+
 ## Troubleshooting
 
 <details>
