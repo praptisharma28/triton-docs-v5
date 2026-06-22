@@ -6,7 +6,7 @@ description: >-
 
 # Customer dashboard
 
-If you already know what you want to do and just need the steps, the [**Customer dashboard tour**](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/platform-overview) walks you through the most common actions.
+If you already know what you want to do and just need the steps, the [**Customer dashboard tour**](https://kate-6.gitbook.io/triton-one-docs-v5/platform-overview) walks you through the most common actions.
 
 ## Signing in and getting help
 
