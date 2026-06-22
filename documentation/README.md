@@ -1,23 +1,5 @@
 ---
 description: Triton's Solana stack and the builder paths to get started.
-layout:
-  width: default
-  title:
-    visible: true
-  description:
-    visible: true
-  tableOfContents:
-    visible: true
-  outline:
-    visible: true
-  pagination:
-    visible: false
-  metadata:
-    visible: true
-  tags:
-    visible: true
-  actions:
-    visible: true
 ---
 
 # Overview
@@ -49,7 +31,7 @@ Every endpoint reaches the full product stack below. Solana's read layer has spl
 {% endtab %}
 
 {% tab title="Sending txs" %}
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-paper-plane">:paper-plane:</i> <strong>Jet sender</strong></td><td>TPU client with stake-weighted QoS and direct-to-leader routing over QUIC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/jet-sender">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/jet-sender</a></td></tr><tr><td><i class="fa-arrow-trend-up">:arrow-trend-up:</i> <strong>Priority Fees API</strong></td><td>Per-program priority-fee estimates tuned to land under congestion.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api</a></td></tr><tr><td><i class="fa-code-branch">:code-branch:</i> <strong>Metis</strong></td><td>Self-hosted Jupiter swap API, no staked JUP required.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/metis-swap-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/metis-swap-api</a></td></tr><tr><td><i class="fa-route">:route:</i> <strong>Titan Prime</strong></td><td>Streaming swap quotes and routes that re-optimise live as the market moves.</td><td></td></tr><tr><td><i class="fa-box">:box:</i> <strong>Jito Bundles</strong></td><td>Submit and simulate Jito bundles on every Triton plan.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/jito-bundles">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/jito-bundles</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-paper-plane">:paper-plane:</i> <strong>Jet sender</strong></td><td>TPU client with stake-weighted QoS and direct-to-leader routing over QUIC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/jet-sender">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/jet-sender</a></td></tr><tr><td><i class="fa-arrow-trend-up">:arrow-trend-up:</i> <strong>Priority Fees API</strong></td><td>Per-program priority-fee estimates tuned to land under congestion.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api</a></td></tr><tr><td><i class="fa-code-branch">:code-branch:</i> <strong>Metis</strong></td><td>Self-hosted Jupiter swap API, no staked JUP required.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/metis-swap-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/metis-swap-api</a></td></tr><tr><td><i class="fa-route">:route:</i> <strong>Titan Prime</strong></td><td>Streaming swap quotes and routes that re-optimise live as the market moves.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/titan-swap-api">Titan Prime</a></td></tr><tr><td><i class="fa-box">:box:</i> <strong>Jito Bundles</strong></td><td>Submit and simulate Jito bundles on every Triton plan.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/jito-bundles">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/jito-bundles</a></td></tr></tbody></table>
 {% endtab %}
 {% endtabs %}
 
