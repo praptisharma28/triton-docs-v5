@@ -59,7 +59,7 @@ Each streamed quote carries the route information you need to execute:
 
 ## Pricing
 
-Streaming is billed at $0.05 per GB.
+Streaming is billed at $0.08 per GB.
 
 ## Availability
 
