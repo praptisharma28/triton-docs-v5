@@ -52,7 +52,7 @@ The response format matches the standard Solana RPC method, but `prioritizationF
 This is an enhanced method, so it may not be in standard SDKs. The [example repository](https://github.com/rpcpool/solana-prioritization-fees-api/) has utility functions to drop into a JavaScript or TypeScript codebase.
 
 {% hint style="info" %}
-Running your own nodes or another RPC service? Triton publishes the patches that enable percentile fees, so you can adopt the same behaviour.
+Running your own nodes or another RPC service? Triton publishes the patches that enable percentile fees, so you can adopt the same behaviour: the [`v1.17.23-getrpf` branch](https://github.com/rpcpool/solana-public/tree/v1.17.23-getrpf) of `rpcpool/solana-public`, plus Agave [issue #3332](https://github.com/anza-xyz/agave/issues/3332) and [PR #217](https://github.com/anza-xyz/agave/pull/217).
 {% endhint %}
 
 ***
