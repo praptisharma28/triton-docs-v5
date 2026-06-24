@@ -4,7 +4,11 @@ description: Run a branded Solana validator or stake for USDC pay-outs on Triton
 
 # Validator services
 
-White-label and private trusted validator services for institutional staking on Solana.
+Triton runs Solana validator infrastructure for two needs: running a validator under your own brand, or staking SOL for USDC pay-outs without operating anything.
+
+## Services
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>White-label validators</strong></td><td>Triton runs a Solana validator under your brand and your keys; you keep your delegators. Sales-led (KYC and contract).</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/validator-services/white-label-validators">White-label validators</a></td></tr><tr><td><strong>SOL staking (USDC pay-outs)</strong></td><td>Delegate SOL to a Triton validator and receive rewards weekly in USDC. 2,500 SOL minimum.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/validator-services/sol-staking-usdc-pay-outs">SOL staking (USDC pay-outs)</a></td></tr></tbody></table>
 
 ***
 
