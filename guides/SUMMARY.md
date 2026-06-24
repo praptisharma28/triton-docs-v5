@@ -13,6 +13,7 @@
 * [Streaming](streaming.md)
   * [Start streaming with Yellowstone gRPC](streaming/stream-solana-with-grpc.md)
   * [How to use Vixen + gRPC](streaming/how-to-use-vixen-grpc.md)
+  * [Generate parsers with Codama](streaming/generate-parsers-with-codama.md)
   * [Fumarole cluster failover](streaming/fumarole-cluster-failover.md)
   * [Benchmark gRPC endpoints with Thorofare](streaming/benchmark-grpc-endpoints-with-thorofare.md)
 
