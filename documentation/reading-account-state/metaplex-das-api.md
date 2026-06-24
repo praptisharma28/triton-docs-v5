@@ -1,7 +1,5 @@
 ---
-description: >-
-  We contribute to the Metaplex Digital Asset Standard API for querying Solana
-  NFTs, tokens, and compressed assets.
+description: Query Solana NFTs, compressed NFTs, and fungible tokens through the Metaplex Digital Asset Standard API.
 layout:
   width: default
   title:
@@ -24,32 +22,51 @@ layout:
 
 # Metaplex DAS API
 
-We actively contribute to the development of the Metaplex Digital Assets Standard API (DAS) that is used to interact with Solana NFTs, SPL (Solana Program Library) Tokens and Token-2022 (Token Extension Program), ensuring also production-ready indexing and caching layer.
+The Digital Asset Standard (DAS) API is the Metaplex read API for Solana assets: regular NFTs, compressed NFTs, and fungible tokens (SPL and Token-2022). Triton co-develops DAS and serves it with server-side decompression and a caching layer, so a compressed NFT and its metadata come back in a single call.
 
-DAS API provides a fast and scalable way to query digital assets on the Solana blockchain, including Fungible Tokens, Regular and Compressed NFTs. The decompression of NFTs and data caching is done server-side, providing a convenient way to access Digital Assets data and metadata. It is available via all our shared and dedicated endpoints, fully integrated with our RPC Pool infrastructure.
+DAS is enabled by default on every Triton shared and dedicated Solana endpoint. Calls to the DAS methods route automatically, with no separate setup.
 
-DAS API offers a comprehensive set of features for querying digital assets, including:
+## Use DAS when
 
-* a complete history of blocks and transactions,
-* quick access to account data and past account balances,
-* Merkle proofs for compressed assets,
-* a consistent, easy-to-use interface.
+You want assets by owner, creator, authority, or group; Merkle proofs for compressed NFTs; or a fungible token's balance and mint metadata, without running `getProgramAccounts` scans or decompressing cNFTs yourself.
 
-## How to use
+## Methods
 
-The DAS API is enabled by default on all our shared and dedicated endpoints. You can use any of our Solana mainnet RPC endpoints with the DAS API methods, and your queries will be routed automatically.
+Every method's parameters and example request and response are in the [DAS API reference](https://kate-6.gitbook.io/triton-one-docs-v5/api-reference/solana/reading-account-state/das-api). Grouped by what they do:
 
-Available methods are listed and documented in the [API Methods](https://docs.triton.one/digital-assets-api/metaplex-digital-assets-api) section.
+* **Read assets:** `getAsset`, `getAssets`, `getAssetBatch`, `getAssetProof`, `getAssetProofBatch`
+* **List assets:** `getAssetsByOwner`, `getAssetsByAuthority`, `getAssetsByCreator`, `getAssetsByGroup`, `searchAssets`
+* **Tokens, editions, and history:** `getTokenAccounts`, `getTokenLargestAccounts`, `getNftEditions`, `getSignaturesForAsset`
 
-The DAS API is billed on a per-request basis ($50 per million requests). To see detailed billing information, check the Billable Items Chart in your account panel at the customers.triton.one.
+`getAssetsByGroup` is temporarily disabled for performance work.
 
-[Ratelimits](https://docs.triton.one/rpc-pool/ratelimits) as per your standard RPC Pool will apply.
+## Example: fetch an asset
 
-## Further reading
+`getAsset` returns one asset by ID. The example uses the USDC mint, so the response carries fungible `token_info` (supply, decimals, token program):
 
-To learn more about account state compression and Digital Assets, see [developers.metaplex.com/das-api](https://developers.metaplex.com/das-api).
+```bash
+curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "getAsset",
+    "params": { "id": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" }
+  }'
+```
 
-Client and examples: [https://github.com/metaplex-foundation/digital-asset-standard-api](https://github.com/metaplex-foundation/digital-asset-standard-api/tree/main/clients/js#examples)
+## Pricing
+
+DAS is billed per request at `$50 / million`. See the Billable Items chart in your [customer dashboard](https://customers.triton.one).
+
+## Clients and SDKs
+
+Metaplex publishes a JavaScript DAS client with examples: [digital-asset-standard-api](https://github.com/metaplex-foundation/digital-asset-standard-api/tree/main/clients/js#examples). For the protocol and asset model, see [developers.metaplex.com/das-api](https://developers.metaplex.com/das-api).
+
+## What's next
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>DAS API reference</strong></td><td>Parameters and example request and response for every DAS method.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/api-reference/solana/reading-account-state/das-api">DAS API reference</a></td></tr><tr><td><strong>Reading account state best practices</strong></td><td>When to reach for DAS versus raw account reads, and how to keep queries cheap.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/best-practices">Reading account state best practices</a></td></tr></tbody></table>
 
 ***
 
