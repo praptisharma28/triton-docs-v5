@@ -38,6 +38,22 @@ No. SWQoS routing applies by default to standard `sendTransaction` and `/sendtx`
 
 </details>
 
+<details>
+
+<summary>Is there a minimum priority fee?</summary>
+
+No. Solana's default `getRecentPrioritizationFees` returns the recent minimum, which is often zero, so use Triton's `percentile` parameter to set a fee that is competitive during congestion. See [Priority Fees API](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api).
+
+</details>
+
+<details>
+
+<summary>Do you support sponsored transactions or gas sponsorship?</summary>
+
+No. For transaction sending, Triton offers SWQoS delivery, [Yellowstone Shield](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection) validator policies, and priority-fee tooling.
+
+</details>
+
 ***
 
 <i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\

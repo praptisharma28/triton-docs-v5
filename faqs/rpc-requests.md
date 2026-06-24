@@ -146,6 +146,14 @@ Yes, shared infrastructure includes access to the complete ledger through Superb
 
 <details>
 
+<summary>What is Jetstreamer?</summary>
+
+Jetstreamer is the tool for bulk-backfilling large ranges of Solana history from the Old Faithful archive, with filtering and pluggable storage backends.
+
+</details>
+
+<details>
+
 <summary>Can I use Jito sendBundle and bundle simulation with Triton RPCs?</summary>
 
 Bundle simulation is available to everyone—see [Jito bundles](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/jito-bundles) for the full reference.
