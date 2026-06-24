@@ -75,7 +75,7 @@ Result would be `true` in case of such subscription was active and removed. In c
 
 ### accountSubscribe
 
-This method is fully compatiable with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana\\\\\_client/nonblocking/pubsub\\\\\_client/struct.PubsubClient.html#method.account\\\\\_subscribe](https://docs.rs/solana-client/latest/solana/_client/nonblocking/pubsub/_client/struct.PubsubClient.html#method.account\\\\_subscribe)
+This method is fully compatible with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.account_subscribe](https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.account_subscribe)
 
 ```json
 {
@@ -128,7 +128,7 @@ See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
 
 ### blockSubscribe
 
-Fully compatiable with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana\\\\\_client/nonblocking/pubsub\\\\\_client/struct.PubsubClient.html#method.block\\\\\_subscribe](https://docs.rs/solana-client/latest/solana/_client/nonblocking/pubsub/_client/struct.PubsubClient.html#method.block\\\\_subscribe)
+Fully compatible with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.block_subscribe](https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.block_subscribe)
 
 ```json
 {
@@ -182,7 +182,7 @@ See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
 
 ### logsSubscribe
 
-Fully compatiable with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana\\\\\_client/nonblocking/pubsub\\\\\_client/struct.PubsubClient.html#method.logs\\\\\_subscribe](https://docs.rs/solana-client/latest/solana/_client/nonblocking/pubsub/_client/struct.PubsubClient.html#method.logs\\\\_subscribe)
+Fully compatible with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.logs_subscribe](https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.logs_subscribe)
 
 ```json
 {
@@ -268,7 +268,7 @@ See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
 
 ### programSubscribe
 
-Fully compatiable with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana\\\\\_client/nonblocking/pubsub\\\\\_client/struct.PubsubClient.html#method.program\\\\\_subscribe](https://docs.rs/solana-client/latest/solana/_client/nonblocking/pubsub/_client/struct.PubsubClient.html#method.program\\\\_subscribe)
+Fully compatible with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.program_subscribe](https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.program_subscribe)
 
 ```json
 {
@@ -323,7 +323,7 @@ See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
 
 ### signatureSubscribe
 
-Fully compatiable with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana\\\\\_client/nonblocking/pubsub\\\\\_client/struct.PubsubClient.html#method.signature\\\\\_subscribe](https://docs.rs/solana-client/latest/solana/_client/nonblocking/pubsub/_client/struct.PubsubClient.html#method.signature\\\\_subscribe)
+Fully compatible with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.signature_subscribe](https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.signature_subscribe)
 
 ```json
 {
@@ -366,7 +366,7 @@ See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
 
 ### slotSubscribe
 
-Fully compatiable with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana\\\\\_client/nonblocking/pubsub\\\\\_client/struct.PubsubClient.html#method.slot\\\\\_subscribe](https://docs.rs/solana-client/latest/solana/_client/nonblocking/pubsub/_client/struct.PubsubClient.html#method.slot\\\\_subscribe)
+Fully compatible with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.slot_subscribe](https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.slot_subscribe)
 
 ```json
 {
@@ -660,6 +660,10 @@ stream data example:
 ### transactionUnsubscribe
 
 See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
+
+## What's next
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr><tr><td><strong>Streaming best practices</strong></td><td>Provisioning, filtering, reconnect, and commitment guidance across the streaming services.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/best-practices">Streaming best practices</a></td></tr></tbody></table>
 
 ***
 
