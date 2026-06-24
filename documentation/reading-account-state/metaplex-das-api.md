@@ -56,10 +56,6 @@ curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> \
   }'
 ```
 
-## Pricing
-
-DAS is billed per request at `$50 / million`. See the Billable Items chart in your [customer dashboard](https://customers.triton.one).
-
 ## Clients and SDKs
 
 Metaplex publishes a JavaScript DAS client with examples: [digital-asset-standard-api](https://github.com/metaplex-foundation/digital-asset-standard-api/tree/main/clients/js#examples). For the protocol and asset model, see [developers.metaplex.com/das-api](https://developers.metaplex.com/das-api).
