@@ -3,7 +3,6 @@
 ## Solana
 
 * [Overview](README.md)
-* [Overview (proposed rewrite)](overview-proposed.md)
 * [Reading account state](reading-account-state.md)
   * [Quickstart](reading-account-state/reading-state/quickstart.md)
   * [Account-sync](reading-account-state/account-sync.md)

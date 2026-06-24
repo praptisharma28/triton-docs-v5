@@ -1,33 +1,33 @@
 ---
-description: Triton's Solana stack and the builder paths to get started.
+description: Triton's Solana infrastructure stack and product overview.
 ---
 
 # Overview
 
 Triton has built on Solana since the testnet, as one of the network's original validators. Today we run premium, globally distributed bare-metal infrastructure for many of the ecosystem's most demanding teams across DeFi, trading, and institutions.
 
-Alongside running infrastructure, we author much of the core Solana tooling the ecosystem depends on. Our best-known work:
+Alongside running infrastructure, we author core public tooling the ecosystem depends on. Our best-known work:
 
-* **RPC 2.0:** a ground-up rebuild of Solana's read layer for faster, cheaper, more expressive queries ([more context](https://blog.triton.one/announcing-rpc-2-0-with-solana-foundation-rethinking-solanas-read-layer-from-the-ground-up/))
-* **Yellowstone gRPC (Dragon's Mouth):** the Geyser-based streaming interface that became the Solana streaming standard
-* **Old Faithful:** the only complete, verified, public Solana archive, queryable back to genesis
-* **Metaplex DAS API:** core contributions to the ecosystem's standard read API for tokens and NFTs
+* **RPC 2.0:** a ground-up rebuild of Solana's read layer for faster, cheaper, more expressive account and ledger queries
+* **Yellowstone gRPC (Dragon's Mouth):** Geyser-based gRPC streaming for account, transaction, slot, and block updates, now the de facto Solana streaming standard
+* **Old Faithful:** the only complete, verified, public Solana archive, stored as content-addressable CAR files and queryable back to genesis
+* **Metaplex DAS API:** we co-develop the Digital Asset Standard, the ecosystem's read API for NFTs, cNFTs, and tokens, and serve it with server-side decompression so a compressed NFT and its metadata come back in one call
 
 ## Triton stack
 
-We run Solana infrastructure three ways: shared endpoints, dedicated nodes, and validator services.
+We offer a complete Solana stack for any use case: shared infrastructure, dedicated nodes, and validator and staking services.
 
-### Shared
+### Shared infrastructure
 
-Every endpoint reaches the full product stack below. Solana's read layer has split into purpose-built components, so geographic distribution and per-component scaling are what drive both low latency and spike absorption. For most workloads, this is the right answer.
+Every shared cluster endpoint gives you the full product stack below, with flexible connection and rate limits. We have split Solana's read layer into purpose-built, independent components that scale automatically and absorb spikes with no tuning on your side. Combined with global distribution and instant auto-failover, shared is the right answer for most workloads.
 
 {% tabs %}
 {% tab title="Reading state" %}
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-database">:database:</i> <strong>Cloudbreak</strong></td><td>Indexed account reads for every app. Accounts module of RPC 2.0.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/cloudbreak-indexed-accounts">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/cloudbreak-indexed-accounts</a></td></tr><tr><td><i class="fa-image">:image:</i> <strong>DAS API</strong></td><td>Read NFTs, cNFTs, and tokens via the Metaplex Digital Asset Standard.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/metaplex-das-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/metaplex-das-api</a></td></tr><tr><td><i class="fa-arrows-rotate">:arrows-rotate:</i> <strong>Account Sync</strong></td><td>A live account-state mirror that replaces polling with a one-line SDK swap.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/account-sync">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/account-sync</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-server">:server:</i> <strong>Standard RPC</strong></td><td>Every standard Solana JSON-RPC method, served from premium bare-metal nodes.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/api-reference/solana">https://kate-6.gitbook.io/triton-one-docs-v5/api-reference/solana</a></td></tr><tr><td><i class="fa-database">:database:</i> <strong>Cloudbreak</strong></td><td>Indexed account reads: account and token queries up to 99% faster with tailored dynamic indexes.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/cloudbreak-indexed-accounts">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/cloudbreak-indexed-accounts</a></td></tr><tr><td><i class="fa-image">:image:</i> <strong>DAS API</strong></td><td>One API for NFTs, cNFTs, and tokens via the Metaplex Digital Asset Standard.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/metaplex-das-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/metaplex-das-api</a></td></tr><tr><td><i class="fa-arrows-rotate">:arrows-rotate:</i> <strong>Account Sync</strong></td><td>One-line SDK swap that serves account reads from a local cache kept fresh by a live stream. Streaming-grade speed, billed on bandwidth only.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/account-sync">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/account-sync</a></td></tr></tbody></table>
 {% endtab %}
 
 {% tab title="Streaming" %}
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Geyser-fed gRPC streaming. Sub-slot account, transaction, and block subscriptions.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc</a></td></tr><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Transactions rebuilt from shreds pre-execution. The earliest on-chain signal.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig</strong></td><td>A gRPC-powered Solana WebSocket layer for standard WebSocket clients.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/whirligig-websockets">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/whirligig-websockets</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole</strong></td><td>Persistent gRPC streams with a 4-day buffer and resume on disconnect.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/fumarole-persistent-streams">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/fumarole-persistent-streams</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Geyser-fed gRPC streaming: sub-slot account, transaction, and block subscriptions, up to 400 ms faster than RPC polling.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc</a></td></tr><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution feed from raw shreds: about 20 ms ahead of confirmed transactions at p75, before execution context.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig</strong></td><td>A gRPC-backed Solana WebSocket layer for frontends, with transactionSubscribe support and high connection limits.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/whirligig-websockets">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/whirligig-websockets</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole</strong></td><td>Persistent gRPC streams: a 4-day buffer, auto-resume on disconnect, and an at-least-once delivery guarantee.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/fumarole-persistent-streams">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/fumarole-persistent-streams</a></td></tr></tbody></table>
 {% endtab %}
 
 {% tab title="Sending txs" %}
@@ -35,17 +35,19 @@ Every endpoint reaches the full product stack below. Solana's read layer has spl
 {% endtab %}
 {% endtabs %}
 
-### Dedicated
+### Dedicated nodes
 
-A private Solana endpoint with isolated capacity, custom limits, and your choice of regions, Yellowstone gRPC included. It fits a single high-throughput workload that needs full bandwidth, flat streaming costs, and the lowest latency when colocated. gRPC streaming nodes are the most common dedicated setup. See [dedicated nodes](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/dedicated-nodes).
+A single-purpose Solana node with isolated capacity, no noisy neighbours, no rate limits, and your choice of regions for easy colocation. It fits high-throughput workloads that need full bandwidth, dedicated compute, flat streaming costs, and the lowest, steadiest backend latency.
+
+gRPC streaming nodes are the most common dedicated setup. For other custom setups like indexing or history, we also offer managed solutions: [contact us](https://triton.one/contact). See [dedicated nodes](/documentation/solana/dedicated-nodes).
 
 ### Validator and staking
 
-We operate Solana validators and offer two paths for institutional staking. Run a white-label validator under your own brand, which makes sense for treasuries and funds with large stake. Or delegate to our private trusted validator (from 2,500 SOL) and receive block rewards, MEV, and payouts weekly in USDC. For the full picture, read the [guide to white-label validators](https://blog.triton.one/comprehensive-guide-to-white-label-validators-on-solana/), or see [validator services](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/validator-services).
+For treasuries, institutions, and custodians, we run white-label validators under your brand, with full key separation and no operational overhead. For smaller stake, you can delegate to our private trusted validator (from 2,500 SOL) and receive your staking rewards, block rewards, and Jito MEV paid weekly in USDC. See [validator services](/documentation/solana/validator-services).
 
 ## Common builds
 
-Not sure which products you need? Pick the builder path that matches your app. Each guide walks the full stack for that build, end to end.
+Not sure which products you need? Pick the full-setup quickstart that matches what you are building.
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-arrow-trend-up">:arrow-trend-up:</i> <strong>Trading and market making</strong></td><td>Real-time DEX data, earliest signal, priority fees, and reliable transaction landing.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/readme/trading-and-market-making">https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/readme/trading-and-market-making</a></td></tr><tr><td><i class="fa-wallet">:wallet:</i> <strong>Wallet or consumer app</strong></td><td>Balances, history, NFT portfolio, and live updates for wallets and consumer apps.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/readme/wallet-or-consumer-app">https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/readme/wallet-or-consumer-app</a></td></tr></tbody></table>
 
