@@ -15,6 +15,7 @@
   * [How to use Vixen + gRPC](streaming/how-to-use-vixen-grpc.md)
   * [Generate parsers with Codama](streaming/generate-parsers-with-codama.md)
   * [Fumarole cluster failover](streaming/fumarole-cluster-failover.md)
+  * [How to migrate from Dragon's Mouth to Fumarole](streaming/migrate-from-dragons-mouth-to-fumarole.md)
   * [Benchmark gRPC endpoints with Thorofare](streaming/benchmark-grpc-endpoints-with-thorofare.md)
 * [Transaction sending](sending-transactions.md)
   * [Yellowstone Jet TPU client](sending-transactions/yellowstone-jet-tpu-client.md)
