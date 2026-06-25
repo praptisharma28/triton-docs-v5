@@ -15,7 +15,7 @@ How to run real-time Solana streams reliably and at low latency.
 
 ## Provision the subscriber
 
-* **Provision at least 5 Gbps** for large or full-chain subscriptions. The full feed can spike to \~1.3 to 1.8 Gbps, and cloud instances are often capped at 1 Gbps by default.
+* **Provision 5 Gbps minimum for large subscriptions, 10 Gbps for full-chain** (accounts plus transactions). The full feed can spike to \~1.3 to 1.8 Gbps, and cloud instances are often capped at \~1 Gbps by default.
 * **Keep round-trip latency to the endpoint at 50 ms or less.**
 * **Enable Zstd compression** and **set the HTTP/2 adaptive window to true.** Without compression it is hard to stay on the tip during spikes.
 * **Don't run subscribers on serverless / Lambdas** (they leave many open connections and degrade service) and **don't use vanilla NodeJS** (too slow; use Rust, Golang, or the special NodeJS/TypeScript client).
