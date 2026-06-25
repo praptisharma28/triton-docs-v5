@@ -62,7 +62,7 @@ console.log(await conn.getSlot());
 ```
 {% endtab %}
 
-{% tab title="python" %}
+{% tab title="Python" %}
 ```python
 import requests
 
@@ -74,7 +74,7 @@ print(r.json()['result'])
 ```
 {% endtab %}
 
-{% tab title="rust" %}
+{% tab title="Rust" %}
 ```rust
 use solana_client::rpc_client::RpcClient;
 
