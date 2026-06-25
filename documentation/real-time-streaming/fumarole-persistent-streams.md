@@ -54,12 +54,6 @@ Fumarole is a gRPC service. You manage a **persistent subscriber** (a consumer g
 | `DownloadBlock` / `DownloadBlockDataShard` | Replay a specific block, in parallel shards. |
 | `GetChainTip` / `GetSlotRange` / `Version` | Inspect the stream's current tip, available slot range, and version. |
 
-## How to get started
-
-1. Use your existing mainnet subscription token, no separate access request needed.
-2. Read our launch post and get started with the Fume CLI: [https://blog.triton.one/introducing-yellowstone-fumarole](https://blog.triton.one/introducing-yellowstone-fumarole)
-3. Build your integration with Fumarole via the Rust or Typescript SDKs: [https://github.com/rpcpool/yellowstone-fumarole](https://github.com/rpcpool/yellowstone-fumarole)
-
 ## Regional endpoints
 
 Fumarole runs as **independent regional clusters**. We currently operate:
@@ -108,6 +102,119 @@ This pattern is fully customer-managed:
 * Triton does not synchronise subscriber state, track last-seen slots, or orchestrate failover between clusters.
 
 If you need this level of redundancy, plan your slot bookkeeping and failover logic accordingly. For the full step-by-step detection, failover, and failback procedure, follow the [Fumarole cluster failover guide](https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/streaming/fumarole-cluster-failover).
+
+## How to get started
+
+Fumarole works with your existing mainnet subscription token, no separate access request needed.
+
+**1. Pick a regional endpoint.** Connect directly to the cluster closest to your backend (see [Regional endpoints](#regional-endpoints) above): `ams.rpcpool.com` (EU) or `nyc.rpcpool.com` (US). Persistent subscribers are stateful per cluster, so avoid the shared `*.mainnet.rpcpool.com` endpoints.
+
+**2. Authenticate with your token.** Pass your existing mainnet token as the `x-token`. No separate access request.
+
+**3. Install a client.** The Fume CLI is the quickest way to try Fumarole and to create a persistent subscriber; the Rust and TypeScript SDKs are how you build.
+
+{% tabs %}
+{% tab title="Fume CLI" %}
+```bash
+cargo install yellowstone-fumarole-cli
+```
+{% endtab %}
+
+{% tab title="Rust" %}
+```toml
+[dependencies]
+yellowstone-fumarole-client = "0.5"
+```
+{% endtab %}
+
+{% tab title="TypeScript" %}
+```bash
+npm install @triton-one/yellowstone-fumarole
+```
+{% endtab %}
+{% endtabs %}
+
+**4. Create a persistent subscriber, then stream from it.** The subscriber tracks your position server-side, so reconnecting with the same name resumes where you left off.
+
+{% tabs %}
+{% tab title="Rust" %}
+```rust
+use yellowstone_fumarole_client::{FumaroleClient, config::FumaroleConfig};
+use yellowstone_grpc_proto::geyser::{SubscribeRequest, SubscribeRequestFilterTransactions};
+use std::collections::HashMap;
+use tokio_stream::StreamExt;
+
+#[tokio::main]
+async fn main() {
+    let config = FumaroleConfig {
+        endpoint: "https://ams.rpcpool.com".to_string(),
+        x_token: Some("<your-token>".to_string()),
+        ..Default::default()
+    };
+
+    let mut client = FumaroleClient::connect(config).await.expect("connect");
+
+    let request = SubscribeRequest {
+        transactions: HashMap::from([(
+            "f1".to_owned(),
+            SubscribeRequestFilterTransactions::default(),
+        )]),
+        ..Default::default()
+    };
+
+    // "my-subscriber" is a persistent subscriber you created (e.g. with the Fume CLI).
+    let subscription = client.subscribe("my-subscriber".to_string(), request).await.expect("subscribe");
+    let (_, source) = subscription.split();
+    let mut source = source.like_dragonsmouth();
+
+    while let Some(update) = source.next().await {
+        println!("{:?}", update.expect("event"));
+    }
+}
+```
+{% endtab %}
+
+{% tab title="TypeScript" %}
+```typescript
+import {
+  FumaroleClient,
+  SubscribeRequest,
+  CommitmentLevel,
+} from "@triton-one/yellowstone-fumarole";
+
+const client = await FumaroleClient.connect({
+  endpoint: "https://ams.rpcpool.com",
+  xToken: "<your-token>",
+  maxDecodingMessageSizeBytes: 100 * 1024 * 1024,
+});
+
+// Create the persistent subscriber once; reuse the name to resume.
+const subscriberName = "my-subscriber";
+await client.createPersistentSubscriber(subscriberName);
+
+const request: SubscribeRequest = {
+  commitment: CommitmentLevel.PROCESSED,
+  accounts: {},
+  transactions: { f1: { accountInclude: [], accountExclude: [], accountRequired: [] } },
+  slots: {},
+  transactionsStatus: {},
+  blocks: {},
+  blocksMeta: {},
+  entry: {},
+  accountsDataSlice: [],
+};
+
+const { source } = await client.dragonsmouthSubscribeWithConfig(subscriberName, request, {
+  concurrentDownloadLimit: 1,
+  commitInterval: 5000,
+});
+
+await source.forEach((update) => console.log(update));
+```
+{% endtab %}
+{% endtabs %}
+
+For the full Fume CLI walkthrough, read the [launch post](https://blog.triton.one/introducing-yellowstone-fumarole); for the complete API, see the [Rust and TypeScript SDKs](https://github.com/rpcpool/yellowstone-fumarole).
 
 ## Migrating from Dragon's Mouth
 
