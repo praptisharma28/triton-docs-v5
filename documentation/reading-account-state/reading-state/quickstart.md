@@ -165,7 +165,7 @@ Then check:
 1. **You got a `result`, not an `error`.** A JSON-RPC error has an `error` object with a `code`. The common ones are in the FAQs below.
 2. **The account exists.** `getAccountInfo` returns `null` when the address holds no account. The USDC mint above always returns data.
 
-### Expected first response
+### Expected response
 
 The USDC mint, decoded with `jsonParsed`. Over curl this is the `result.value`; through Account Sync, `getParsedAccountInfo(...).value` returns the same object. Live values like `supply` and `lamports` will differ when you run it.
 

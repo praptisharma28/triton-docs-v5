@@ -78,6 +78,12 @@ curl -X POST 'https://your-endpoint.mainnet.rpcpool.com/your-token/sendtx?encodi
 {% endtab %}
 {% endtabs %}
 
+**Expected response.** With `response=signature`, the body is the transaction signature as plain text, not JSON:
+
+```
+5j7s4Hk3vQmPq8nLZ9xTe8oP...
+```
+
 Query parameters: `encoding` (`base58` or `base64`, for text bodies; default `base58`), `response=signature` (return the signature on success), and `max_retries` (override the retry count). To route only through validators you trust, add the `solana-forwardingpolicies` header with your [Yellowstone Shield](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection) policy addresses.
 
 {% hint style="info" %}
@@ -97,6 +103,21 @@ curl https://your-endpoint.mainnet.rpcpool.com/your-token -s -X POST \
     "method": "getSignatureStatuses",
     "params": [["YOUR_SIGNATURE"], { "searchTransactionHistory": true }]
   }'
+```
+
+**Expected response.**
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "context": { "slot": 275123456 },
+    "value": [
+      { "slot": 275123456, "confirmations": null, "err": null, "confirmationStatus": "finalized" }
+    ]
+  },
+  "id": 1
+}
 ```
 
 A `confirmationStatus` of `confirmed` or `finalized` means it landed.

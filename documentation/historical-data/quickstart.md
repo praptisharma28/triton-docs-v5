@@ -29,6 +29,25 @@ curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
   }'
 ```
 
+**Expected response.** An array of signature objects, newest first:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": [
+    {
+      "signature": "5wHu1qwD4kLpXnR7e8oP...",
+      "slot": 250000123,
+      "blockTime": 1700000000,
+      "confirmationStatus": "finalized",
+      "err": null,
+      "memo": null
+    }
+  ],
+  "id": 1
+}
+```
+
 Each result carries the `signature`, `slot`, `blockTime`, and `err`. Take a `signature` from the response for the next step.
 
 ## Step 2. Fetch one transaction
@@ -46,6 +65,21 @@ curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
   }'
 ```
 
+**Expected response.** The full transaction, decoded. Trimmed:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "slot": 250000123,
+    "blockTime": 1700000000,
+    "meta": { "err": null, "fee": 5000, "preBalances": [ ... ], "postBalances": [ ... ] },
+    "transaction": { "message": { ... }, "signatures": [ "5wHu1qwD4kLpXnR7e8oP..." ] }
+  },
+  "id": 1
+}
+```
+
 This is the standard two-step pattern: one call to discover signatures, then one `getTransaction` per signature. For a busy address, that becomes an N+1 round-trip flow.
 
 ## Step 3. Get the whole history in one call
@@ -61,6 +95,27 @@ curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
     "method": "getTransactionsForAddress",
     "params": ["AddressBase58", { "transactionDetails": "full", "sortOrder": "desc", "limit": 5 }]
   }'
+```
+
+**Expected response.** A `data` array of transactions plus a `paginationToken`, all in one response:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "data": [
+      {
+        "slot": 250000001,
+        "transactionIndex": 12,
+        "blockTime": 1700000000,
+        "transaction": { ... },
+        "meta": { ... }
+      }
+    ],
+    "paginationToken": "250000001:12"
+  },
+  "id": 1
+}
 ```
 
 Filters apply server-side and pagination uses a single cursor. For example, only successful transactions within a slot range:

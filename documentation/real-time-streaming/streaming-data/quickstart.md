@@ -4,16 +4,13 @@ description: Open your first Triton stream and see live Solana data in minutes.
 
 # Quickstart
 
-Test all Triton streaming solutions in 5 minutes. For the streaming overview and product comparison, see the overview page.
-
 ## Step 0. Prerequisites
 
 All five streaming services we'll be testing use Triton endpoints with token-based authentication. Before starting, here's what you need:
 
 * An active Triton subscription
-* Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/) (how to get them)
-* A backend environment in TypeScript, Rust, Go, or Python
-* You've picked a service to try
+* Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/)
+* An environment in TypeScript, Rust, Go, or Python
 
 The five streaming services covered:
 
@@ -768,7 +765,7 @@ Then walk through this checklist:
 
 1. **Confirm the stream is open.** Your first matching event should arrive within 1-2 slots (\~800 ms). For Whirligig, you'll see a subscription-ID confirmation first: `{ "jsonrpc": "2.0", "result": 42, "id": 1 }`. For gRPC services, the client logs an active connection on `connect()` and events start arriving immediately.
 2. **Watch matching events flow.** If nothing arrives after 5 seconds, your filter is probably too narrow.
-3. Keep alive ??? did we include it in code?
+3. **Keep long-lived connections alive.** Whirligig closes idle WebSocket connections after about 60 seconds, so send a `ping` periodically; gRPC clients handle keepalive automatically.
 4. **Widen the filter to test, then tighten back.** Subscribe to all transactions or all writes for a busy program (e.g. SPL Token) to confirm data is reaching you. Once you see traffic, narrow the filter to what your app actually needs.
 
 ### Expected first message
@@ -894,7 +891,7 @@ Networks drop. Production clients should implement reconnect-and-resubscribe log
 
 <summary>Events feel slower than expected</summary>
 
-Three things to check. First, your commitment level: `processed` is fastest, `confirmed` and `finalized` add latency. Second, geographic distance: connect from a backend close to our streaming clusters. Third, your processing speed: if your event handler can't keep up, the server-side queue backs up and you fall behind.
+Three things to check. First, your commitment level: `processed` is fastest, `confirmed` and `finalized` add latency. Second, geographic distance: run your client close to our streaming clusters. Third, your processing speed: if your event handler can't keep up, the server-side queue backs up and you fall behind.
 
 </details>
 
