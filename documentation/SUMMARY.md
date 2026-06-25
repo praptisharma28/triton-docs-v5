@@ -35,8 +35,6 @@
     * [Node identity protection](validator-services/white-label-validators/node-identity-protection.md)
   * [SOL staking (USDC pay-outs)](validator-services/sol-staking-usdc-pay-outs.md)
 * [Dedicated nodes](dedicated-nodes.md)
-  * [Quickstart](dedicated-nodes/dedicated-nodes/quickstart.md)
-  * [Best practices](dedicated-nodes/dedicated-nodes/best-practices.md)
 
 ## Sui
 
