@@ -638,6 +638,19 @@ A query with no matching index yet still returns correct results, it just runs s
 * **Repeated queries are cached.** Triton runs Cloudbreak with response caching on. For each query shape (program, filters, encoding, data slice, and commitment), the serialised response is kept, and the next time you run that query only the accounts that changed since the last response are read and re-encoded. Frequent polling of the same query stays cheap.
 * **Large results stream back in full.** A response is sent as the index reads it, so a large `getProgramAccounts` result starts arriving right away and comes back complete rather than timing out or hitting a response-size limit.
 
+### Benchmarks
+
+For `getProgramAccounts`, Cloudbreak serves indexed reads over 99% faster and 7x cheaper than a standard Agave node, with latency that scales to the size of the result rather than the program. Measured end-to-end within a single datacentre (`getProgramAccounts`, base64):
+
+| Response size | Agave avg | Cloudbreak avg | Agave p90 | Cloudbreak p90 |
+| ------------- | --------- | -------------- | --------- | -------------- |
+| 1-10 KB       | 1,725 ms  | 4 ms           | 2,478 ms  | 5 ms           |
+| 10-100 KB     | 2,725 ms  | 7 ms           | 4,699 ms  | 11 ms          |
+| 100 KB-1 MB   | 3,971 ms  | 8 ms           | 4,693 ms  | 13 ms          |
+| 1-10 MB       | 3,693 ms  | 47 ms          | 4,708 ms  | 25 ms          |
+
+Full benchmarks and methodology: [Inside Cloudbreak](https://blog.triton.one/inside-cloudbreak-indexing-architecture-for-performant-account-reads).
+
 ### Error reference
 
 | Code     | Name                                     | Meaning                                                                                                                             |

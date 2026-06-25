@@ -42,7 +42,7 @@ Every method's parameters and example request and response are in the [DAS API r
 
 ## Example: fetch an asset
 
-`getAsset` returns one asset by ID. The example uses the USDC mint, so the response carries fungible `token_info` (supply, decimals, token program):
+`getAsset` returns one asset by ID. The example uses a Mad Lads NFT, so the response carries the asset's metadata, owner, royalty, and collection:
 
 ```bash
 curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> \
@@ -52,7 +52,7 @@ curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> \
     "jsonrpc": "2.0",
     "id": 1,
     "method": "getAsset",
-    "params": { "id": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v" }
+    "params": { "id": "F9Lw3ki3hJ7PF9HQXsBzoY8GyE6sPoEZZdXJBsTTD2rk" }
   }'
 ```
 
@@ -66,7 +66,7 @@ Metaplex publishes a JavaScript DAS client with examples: [digital-asset-standar
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>DAS API reference</strong></td><td>Parameters and example request and response for every DAS method.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/api-reference/solana/reading-account-state/das-api">DAS API reference</a></td></tr><tr><td><strong>Reading account state best practices</strong></td><td>When to reach for DAS versus raw account reads, and how to keep queries cheap.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/best-practices">Reading account state best practices</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>DAS API reference</strong></td><td>Parameters and example request and response for every DAS method.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/api-reference/solana/reading-account-state/das-api">DAS API reference</a></td></tr><tr><td><strong>Best practices for reading account state</strong></td><td>When to reach for DAS versus raw account reads, and how to keep queries cheap.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/best-practices">Best practices for reading account state</a></td></tr></tbody></table>
 
 ***
 
