@@ -1,5 +1,5 @@
 ---
-description: How to send Solana transactions on Triton, and how to choose between standard sendTransaction, the Jet TPU client, and the fee, MEV, and swap tools.
+description: Triton's transaction-sending tools and swap APIs.
 layout:
   pagination:
     visible: false
@@ -21,9 +21,9 @@ Triton covers each of these while keeping standard Solana behaviour where you wa
 
 ## Pick your send path
 
-Most transactions go through a Triton endpoint, which applies SWQoS and forwards your transaction to the leader's TPU via Jet sender, Triton's transaction engine. You can submit two ways, with a third path for full client-side control.
+Most transactions go through a Triton endpoint, where **Jet sender**, Triton's production sending engine, applies SWQoS, tracks the leader schedule, and forwards your transaction to the leader's TPU. Jet runs on isolated infrastructure that does not compete with your RPC reads. You can submit two ways, with a third path (the self-hosted Jet TPU client) for full client-side control.
 
-|                       |   `sendTransaction`   |             `/sendtx`             |      Jet TPU client      |
+|                       |   `sendTransaction`   |             `/sendtx`             | Jet TPU client (self-hosted) |
 | --------------------- | :-------------------: | :-------------------------------: | :----------------------: |
 | Interface             |    Solana JSON-RPC    |             HTTP POST             |       Rust library       |
 | Reaches the TPU via   | your endpoint (server-side) |       your endpoint (server-side)       |   your client (direct)   |
@@ -36,12 +36,13 @@ Most transactions go through a Triton endpoint, which applies SWQoS and forwards
 * **`/sendtx`** is a direct HTTP submission endpoint on your Triton endpoint. It takes the same delivery path as `sendTransaction`, but skips the JSON-RPC envelope, so there is no JSON parsing, no CORS preflight, and a smaller payload. Lower latency, and no RPC client library needed. The [quickstart](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/quickstart) walks through it.
 * **Jet TPU client** is for full client-side control: your own machine sends straight to validator TPUs over QUIC, with per-transaction callbacks, custom routing, and Shield enforcement in your code. It is the sending logic from Jet sender, Triton's production engine, as a standalone library.
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-paper-plane">:paper-plane:</i> <strong>Jet TPU client</strong></td><td>Self-hosted Rust library: send straight to validator TPUs over QUIC, with per-transaction callbacks and custom routing.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/jet-sender">Jet TPU client</a></td></tr><tr><td><i class="fa-shield">:shield:</i> <strong>Shield MEV protection</strong></td><td>Allowlist or blocklist validators with an on-chain policy attached at send time.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection">Shield MEV protection</a></td></tr><tr><td><i class="fa-arrow-trend-up">:arrow-trend-up:</i> <strong>Priority fees API</strong></td><td>Percentile-based priority fee estimates tuned to land under congestion.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api">Priority fees API</a></td></tr></tbody></table>
+## Fees
 
-## Fees and protection
+Triton extends `getRecentPrioritizationFees` with a `percentile` parameter, so you can price a fee against the real market rate instead of the minimum. See [Priority fees API](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api).
 
-* **Priority fees API.** Triton extends `getRecentPrioritizationFees` with a `percentile` parameter, so you can price a fee against the real market rate instead of the minimum. See [Priority fees API](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api).
-* **Shield MEV protection.** Create an on-chain allowlist or blocklist of validators and attach it when you send, so your transaction only goes to validators you trust. Apply it through Triton RPC (SWQoS) or the Jet TPU client. See [Shield MEV protection](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection).
+## Protection
+
+Create an on-chain allowlist or blocklist of validators and attach it when you send, so your transaction only goes to validators you trust. Apply it through Triton RPC (SWQoS) or the Jet TPU client. See [Shield MEV protection](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection).
 
 ## Trading APIs
 
