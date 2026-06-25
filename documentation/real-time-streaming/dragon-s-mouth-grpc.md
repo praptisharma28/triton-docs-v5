@@ -1189,21 +1189,11 @@ flowchart LR
 
 ## Clients and SDKs
 
-Sample clients in multiple languages live in the [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples) directory. Match your client to the current proto version.
+We provide SDKs in Rust, TypeScript, Go, and Python. Sample clients for each live in the [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples) directory; match your client to the current proto version.
 
-### Prebuilt test binary
+### Quick endpoint test
 
-For a quick test without building anything, the `yellowstone-grpc` project ships a prebuilt `client-ubuntu` binary for Ubuntu 22.04 and 24.04. Download it from the [Releases](https://github.com/rpcpool/yellowstone-grpc/releases) page.
-
-```shell
-# all accounts and slots
-./client-ubuntu-22.04 --endpoint https://<your-endpoint>.mainnet.rpcpool.com --x-token <your-token> subscribe --accounts --slots
-
-# a specific program, e.g. Raydium AMM v4
-./client-ubuntu-22.04 --endpoint https://<your-endpoint>.mainnet.rpcpool.com --x-token <your-token> subscribe --accounts --slots --accounts-owner 675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8
-```
-
-Add `--stats` to print subscription stats: total accounts and slots streamed, plus bandwidth used.
+Before wiring up an SDK, you can sanity-check an endpoint with Triton's prebuilt `client-ubuntu` test binary, no code required. See [Is it the endpoint or your code?](https://kate-6.gitbook.io/triton-one-docs-v5/faqs/solana/error-handling/verify-your-grpc-endpoint).
 
 {% tabs %}
 {% tab title="Rust" %}
@@ -1380,6 +1370,33 @@ Run `make` to regenerate. Full source: [yellowstone-grpc/examples/golang](https:
 {% hint style="info" %}
 The Go example may lag the latest stable proto version. For production-ready code, the Rust client is the reference implementation.
 {% endhint %}
+{% endtab %}
+
+{% tab title="Python" %}
+The repo's [yellowstone-grpc/examples/python](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/python) directory ships `helloworld_geyser.py`. It sends the `x-token` as call metadata over TLS, then calls a unary method:
+
+```python
+import grpc
+import geyser_pb2, geyser_pb2_grpc
+
+class TritonAuth(grpc.AuthMetadataPlugin):
+    def __init__(self, x_token):
+        self.x_token = x_token
+
+    def __call__(self, context, callback):
+        # metadata is a 1-tuple; the trailing comma is required
+        callback((("x-token", self.x_token),), None)
+
+ssl_creds = grpc.ssl_channel_credentials()
+call_creds = grpc.metadata_call_credentials(TritonAuth("<your-token>"))
+creds = grpc.composite_channel_credentials(ssl_creds, call_creds)
+
+with grpc.secure_channel("<your-endpoint>.mainnet.rpcpool.com:443", creds) as channel:
+    stub = geyser_pb2_grpc.GeyserStub(channel)
+    print(stub.GetSlot(geyser_pb2.GetSlotRequest()))
+```
+
+Install `grpcio`, `grpcio-tools`, and `protobuf`, and generate `geyser_pb2` from the proto files first.
 {% endtab %}
 {% endtabs %}
 
