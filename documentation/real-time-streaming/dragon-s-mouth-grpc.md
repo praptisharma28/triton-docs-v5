@@ -12,12 +12,11 @@ Dragon's Mouth is Triton's Geyser-fed gRPC interface for streaming Solana data. 
 
 It's the fastest live data path available for `processed` events and the recommended choice for any backend service where latency matters.
 
-* **Trading and MEV.** Lowest-latency reads of pool state, oracles, AMM accounts, and price-impacting transactions
-* **Real-time UIs (backend).** Live balances, transaction feeds, and account state for backends that proxy to wallets and explorers
-* **Application middle layer.** Stream directly to your app's middle layer on a cloud provider and update your backend database with the lowest possible latency
-* **Compliance and analytics.** Watch specific addresses or programs, route updates downstream
+* **Trading, MEV, market making, and bots.** Lowest-latency reads of pool state, oracles, AMM accounts, and price-impacting transactions.
+* **DeFi backends.** Live pool, order-book, and account state for services that react to the chain in real time.
+* **Real-time UIs (backend).** Live balances, transaction feeds, and account state for backends that proxy to wallets and explorers.
 
-For browser clients that can't communicate with gRPC, use Whirligig WebSockets instead.
+**What not to use it for.** Browsers and frontends cannot speak gRPC: use [Whirligig WebSockets](whirligig-websockets) instead. And if your pipeline cannot miss a block (indexing, analytics, compliance), use [Fumarole](fumarole-persistent-streams), which guarantees at-least-once delivery and resumes after a disconnect: Dragon's Mouth is a live stream with no server-side replay buffer.
 
 ## Features and benefits
 
