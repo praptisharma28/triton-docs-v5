@@ -34,7 +34,7 @@ Yes. A transaction is only final once it reaches `confirmed` or `finalized` comm
 
 <summary>What's the difference between <code>sendtx</code> and <code>sendTransaction</code>?</summary>
 
-Both route through the same open-source [Yellowstone Jet](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/jet-sender) engine with SWQoS on by default, so the difference is the request format, not the delivery. `sendTransaction` is the standard JSON-RPC method: the server parses a JSON-RPC envelope before submitting. `/sendtx` is a direct HTTP endpoint: you POST the raw transaction bytes (or a base58/base64 string), which skips the envelope, the server-side JSON parsing, and the browser CORS preflight, and runs over HTTP/3 and QUIC.
+Both route through our specialised transaction-sending Jet engine with SWQoS on by default, so the difference is entirely in the request format. `sendTransaction` is the standard JSON-RPC method, which requires the server to parse a JSON-RPC envelope before submitting it. `/sendtx` is a direct HTTP endpoint: you POST the raw transaction bytes (or a base58/base64 string), which skips the envelope, the server-side JSON parsing, and the browser CORS preflight, for lower latency. The one tradeoff is that `/sendtx` always submits without a preflight simulation, so it does not support `skipPreflight: false`.
 
 </details>
 
