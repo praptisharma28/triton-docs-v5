@@ -20,7 +20,7 @@ How to run real-time Solana streams reliably and at low latency.
 * **Keep round-trip latency to the endpoint at 50 ms or less.**
 * **Enable Zstd compression** and **set the HTTP/2 adaptive window to true.** Without compression it is hard to stay on the tip during spikes.
 * **Run subscribers on a persistent server (VPS or bare metal), not serverless functions** like Lambda or Cloud Functions. They recycle every few minutes, and each cold start and reconnect handshake lets the chain move on, so you drop messages and miss confirmations.
-* **On Node, use Triton's [`@triton-one/yellowstone-grpc`](https://www.npmjs.com/package/@triton-one/yellowstone-grpc) SDK (v5+), not the default `@grpc/grpc-js`.** Pure-JavaScript deserialisation blocks Node's single thread and triggers HTTP/2 backpressure, so you fall behind on heavy streams. The Triton SDK moves the gRPC engine into Rust via NAPI (their NaaE approach) for roughly 400% more throughput, as a drop-in replacement. Rust and Go clients are also good choices.
+* **Update your `@triton-one/yellowstone-grpc` client to v5+ for high-volume streams.** We added NAPI-as-an-Engine (NaaE), which moves the gRPC engine into Rust for \~400% more throughput than the previous pure-JavaScript version. It's a drop-in replacement.
 * **Benchmark with the `client-ubuntu` tool before going live:** a ping every 10 seconds at 60 to 80 Mbps means you can hold the tip without disconnects.
 * **Treat frequent disconnects as a client-side problem** (weak or under-provisioned setup), not a server fault.
 
@@ -28,21 +28,21 @@ How to run real-time Solana streams reliably and at low latency.
 
 Solana throughput keeps climbing, so a full-chain feed pushes more data every month. When your client cannot keep up, data backs up in buffers, you drift from the tip, and the server drops the connection. Most drift is client-side, and is usually caused by one of these:
 
-* **The flow-control window is smaller than your bandwidth-delay product (BDP).** gRPC runs on HTTP/2, which only lets the server send a window's worth of data before it waits for an acknowledgement. The volume you need in flight is the BDP, `bandwidth × RTT` (2 Gbps at 10 ms RTT is about 2.38 MiB). A window below the BDP leaves bandwidth idle. Let the client and server negotiate it with adaptive window sizing; there is no reason to turn it off:
+* **The flow-control window is smaller than your bandwidth-delay product (BDP).** gRPC runs on HTTP/2, which only lets the server send a window's worth of data before it waits for an acknowledgement. The volume you need in flight is the BDP, `bandwidth × RTT` (2 Gbps at 10 ms RTT is \~2.38 MiB). A window below the BDP leaves bandwidth idle. Let the client and server negotiate it with adaptive window sizing; there is no reason to turn it off:
 
   ```rust
   GeyserGrpcBuilder::from_shared("https://your-endpoint")
       .http2_adaptive_window_size(true)
   ```
 
-* **Large feeds run uncompressed.** Uncompressed full-chain traffic needs a larger BDP and is more sensitive to loss and jitter. Enable Zstd above about 8 ms RTT, and almost always above 30 ms:
+* **Large feeds run uncompressed.** Uncompressed full-chain traffic needs a larger BDP and is more sensitive to loss and jitter. Enable Zstd above \~8 ms RTT, and almost always above 30 ms:
 
   ```rust
   GeyserGrpcBuilder::from_shared("https://your-endpoint")
       .accept_compressed(Some(CompressionEncoding::Zstd))
   ```
 
-* **You are too far from the endpoint.** Distance is the biggest driver of RTT. `yellowstone-grpc` caps the HTTP/2 window at 14.6 MiB, which puts the ceiling for full-chain streaming near 14.6 MiB / 2 Gbps, about 60 ms, so target under 50 ms. Measure yours with `ping <endpoint>` and run close to a Solana cluster:
+* **You are too far from the endpoint.** Distance is the biggest driver of RTT. `yellowstone-grpc` caps the HTTP/2 window at 14.6 MiB, which puts the ceiling for full-chain streaming near 14.6 MiB / 2 Gbps, \~60 ms, so target under 50 ms. Measure yours with `ping <endpoint>` and run close to a Solana cluster:
 
   | Scenario | Typical distance | Expected RTT |
   | --- | --- | --- |
