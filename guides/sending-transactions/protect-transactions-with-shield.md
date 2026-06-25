@@ -92,6 +92,8 @@ The rest of this guide covers the TPU client route.
 
 The quickest start is a community policy. For example, to block known MEV sandwichers with the Sandwiched.me list (DROPS):
 
+{% tabs %}
+{% tab title="Rust" %}
 ```rust
 use solana_pubkey::Pubkey;
 use std::str::FromStr;
@@ -100,6 +102,8 @@ use std::str::FromStr;
 let shield_policy = Pubkey::from_str("xMTozeQTEX2MR9KUon8vjg17U5Q9459RSASE3wy5eNB")
     .expect("valid pubkey");
 ```
+{% endtab %}
+{% endtabs %}
 
 Browse more at [validators.app/yellowstone-shield](https://www.validators.app/yellowstone-shield).
 
@@ -246,6 +250,8 @@ How the pieces fit together:
 
 This complete example sends a SOL transfer only when the current leader passes your Shield policy. Fill in your own endpoints and x-token.
 
+{% tabs %}
+{% tab title="Rust" %}
 ```rust
 use {
     solana_client::nonblocking::rpc_client::RpcClient,
@@ -369,6 +375,8 @@ async fn main() -> anyhow::Result<()> {
     Ok(())
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 What the key pieces do:
 
@@ -405,6 +413,8 @@ When you call `send_txn_with_shield_policies`, the client tracks the current slo
 
 The blocklist check, from the `yellowstone-jet` source:
 
+{% tabs %}
+{% tab title="Rust" %}
 ```rust
 impl Blocklist for ShieldBlockList<'_> {
     fn is_blocked(&self, peer_address: &Pubkey) -> bool {
@@ -417,6 +427,8 @@ impl Blocklist for ShieldBlockList<'_> {
     }
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 This means:
 
@@ -425,6 +437,8 @@ This means:
 
 The `PolicyStore` syncs policies continuously, so `snapshot()` is a fast, lock-free read:
 
+{% tabs %}
+{% tab title="Rust" %}
 ```rust
 let policy_store = PolicyStore::build().config(config).run().await?;
 
@@ -436,6 +450,8 @@ match snapshot.is_allowed(&[policy_pda], &validator_pubkey) {
     Err(e) => println!("Policy check failed: {:?}", e),
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 ## Handling blocked leaders
 
@@ -443,19 +459,27 @@ When a leader is blocked, the transaction is dropped, not queued. You have a few
 
 **Retry with fanout** sends to the next few leaders instead:
 
+{% tabs %}
+{% tab title="Rust" %}
 ```rust
 if sender.send_txn_with_shield_policies(sig, txn.clone(), shield).await.is_err() {
     // Current leader blocked, try the next 2 leaders.
     sender.send_txn_fanout_with_blocklist(sig, txn, 3, Some(shield)).await?;
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 **Wait for the next slot** and try the new leader:
 
+{% tabs %}
+{% tab title="Rust" %}
 ```rust
 tokio::time::sleep(std::time::Duration::from_millis(400)).await;
 sender.send_txn_with_shield_policies(sig, txn, shield).await?;
 ```
+{% endtab %}
+{% endtabs %}
 
 **Fail open** by setting `default_return_value: true`, so the transaction is sent even if every leader in the next few slots is blocked.
 
@@ -463,6 +487,8 @@ sender.send_txn_with_shield_policies(sig, txn, shield).await?;
 
 **Apply multiple policies.** The transaction is sent only if the leader passes all of them:
 
+{% tabs %}
+{% tab title="Rust" %}
 ```rust
 let policies = vec![
     Pubkey::from_str("xMTozeQTEX2MR9KUon8vjg17U5Q9459RSASE3wy5eNB")?, // DROPS
@@ -477,9 +503,13 @@ let shield_blocklist = ShieldBlockList {
 
 sender.send_txn_with_shield_policies(signature, txn, shield_blocklist).await?;
 ```
+{% endtab %}
+{% endtabs %}
 
 **Broadcast to specific validators,** bypassing the leader schedule:
 
+{% tabs %}
+{% tab title="Rust" %}
 ```rust
 let target_validators = vec![
     Pubkey::from_str("ValidatorA...")?,
@@ -488,6 +518,8 @@ let target_validators = vec![
 
 sender.send_txn_many_dest(signature, bincoded_txn, &target_validators).await?;
 ```
+{% endtab %}
+{% endtabs %}
 
 ## Resources
 

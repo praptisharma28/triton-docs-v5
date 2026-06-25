@@ -74,6 +74,8 @@ The example is a small CLI that sends lamports to any Solana address, reading it
 
 In `src/main.rs`, start with the imports:
 
+{% tabs %}
+{% tab title="Rust" %}
 ```rust
 use {
     clap::Parser,
@@ -96,9 +98,13 @@ use {
     },
 };
 ```
+{% endtab %}
+{% endtabs %}
 
 Define the CLI arguments:
 
+{% tabs %}
+{% tab title="Rust" %}
 ```rust
 #[derive(clap::Parser, Debug)]
 struct Args {
@@ -125,11 +131,15 @@ struct Args {
     recipient: Option<String>,
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 ## Write the send function
 
 Build the transfer, sign it, bincode-serialize it, and hand it to the sender. The signature you pass to `send_txn` is what the callback uses to report the outcome:
 
+{% tabs %}
+{% tab title="Rust" %}
 ```rust
 async fn send_lamports(
     mut tpu_sender: YellowstoneTpuSender,
@@ -170,11 +180,15 @@ async fn send_lamports(
     signature
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 ## Wire up main
 
 Parse the arguments, load the optional `.env` file, resolve the endpoints and identity, then build the sender. Passing a callback channel to `create_yellowstone_tpu_sender_with_callback` lets you track each transaction's outcome:
 
+{% tabs %}
+{% tab title="Rust" %}
 ```rust
 #[tokio::main]
 async fn main() {
@@ -296,6 +310,8 @@ async fn main() {
     .expect("writeln");
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 ## Run it
 

@@ -27,6 +27,8 @@ x-token: <your-token>
 response_compression: zstd
 ```
 
+{% tabs %}
+{% tab title="Rust" %}
 ```rust
 use yellowstone_fumarole_client::FumaroleClient;
 use yellowstone_fumarole_client::config::FumaroleConfig;
@@ -35,16 +37,22 @@ let config: FumaroleConfig =
     serde_yaml::from_reader(std::fs::File::open("config.yaml")?)?;
 let mut client = FumaroleClient::connect(config).await.expect("connect");
 ```
+{% endtab %}
+{% endtabs %}
 
 ## Fastest path: the Dragon's Mouth adapter
 
 For the smallest change, `dragonsmouth_subscribe` mimics the Dragon's Mouth API, so your existing `SubscribeRequest` and receive loop keep working, now against a named persistent subscriber:
 
+{% tabs %}
+{% tab title="Rust" %}
 ```rust
 let session = client.dragonsmouth_subscribe(subscriber_name, request).await?;
 let DragonsmouthAdapterSession { sink: _, mut source, mut fumarole_handle } = session;
 // consume `source` exactly like a Dragon's Mouth stream
 ```
+{% endtab %}
+{% endtabs %}
 
 {% hint style="warning" %}
 The Dragon's Mouth adapter is **deprecated**. Use it to get running quickly, then move to the native API below.
@@ -54,6 +62,8 @@ The Dragon's Mouth adapter is **deprecated**. Use it to get running quickly, the
 
 The native API streams from a named persistent subscriber and lets you process in slot order. Use `slot_sequential()` for slot-ordered work:
 
+{% tabs %}
+{% tab title="Rust" %}
 ```rust
 use futures::StreamExt;
 use yellowstone_fumarole_client::stream::FumaroleEvent;
@@ -69,6 +79,8 @@ while let Some(item) = slot_stream.next().await {
     }
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 For block-oriented processing, use `stream.block_stream()` and match `FumaroleBlockStreamEvent::Block` and `::SlotStatus` instead.
 
@@ -76,6 +88,8 @@ For block-oriented processing, use `stream.block_stream()` and match `FumaroleBl
 
 For heavy or high-latency workloads, open parallel data-plane connections and enable Zstd. Set `response_compression: zstd` in the config (above), then pass a subscribe config:
 
+{% tabs %}
+{% tab title="Rust" %}
 ```rust
 let subscribe_config = FumaroleSubscribeConfig {
     num_data_plane_tcp_connections: NonZeroU8::new(4).unwrap(), // up to 4
@@ -85,11 +99,15 @@ let subscription = client
     .subscribe_with_config(subscriber_name, request, subscribe_config)
     .await?;
 ```
+{% endtab %}
+{% endtabs %}
 
 ## Control when progress commits
 
 The subscriber auto-commits its position by default. For at-least-once processing, set `auto_commit: false` and commit only after your slot work succeeds:
 
+{% tabs %}
+{% tab title="Rust" %}
 ```rust
 let subscribe_config = FumaroleSubscribeConfig { auto_commit: false, ..Default::default() };
 // ...
@@ -97,6 +115,8 @@ FumaroleEvent::SlotEnded(slot) => {
     slot_stream.commit(); // commit after processing this slot succeeds
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 ## What's next
 

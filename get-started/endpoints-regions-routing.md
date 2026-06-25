@@ -48,7 +48,7 @@ You can find your endpoints and secret tokens in the customer dashboard. Each ch
 
 | Chain  | Networks                 |
 | ------ | ------------------------ |
-| Solana | Mainnet, Testnet, Devnet |
+| Solana | Mainnet, Devnet |
 | Sui    | Mainnet, Testnet         |
 | Monad  | Mainnet, Testnet         |
 
