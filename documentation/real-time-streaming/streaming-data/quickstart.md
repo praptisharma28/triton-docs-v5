@@ -861,56 +861,6 @@ slot=275123457 sig=8aRf6dGj...XwE5pN vote=false
 {% endtab %}
 {% endtabs %}
 
-## FAQs
-
-<details>
-
-<summary>My stream connects but no events are flowing</summary>
-
-The most common cause is a filter that's too narrow. Try widening it (subscribe to all transactions or all token-program account writes) to confirm data is reaching you, then tighten back to what you actually need. Also check your commitment level: `processed` shows everything as soon as the validator sees it, while `confirmed` and `finalized` add buffering.
-
-</details>
-
-<details>
-
-<summary>I'm getting 401 or 403 errors</summary>
-
-Verify your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one). For Whirligig, the token is part of the URL: `wss://<endpoint>.mainnet.rpcpool.com/<token>/whirligig`. For gRPC services, the token is passed as the `x-token` metadata header, not in the URL. If you've recently configured allowed origins, double-check your origin matches what's whitelisted.
-
-</details>
-
-<details>
-
-<summary>My stream keeps disconnecting</summary>
-
-Networks drop. Production clients should implement reconnect-and-resubscribe logic with exponential backoff. For Dragon's Mouth, you can resume from your last-seen slot using the `from_slot` field on `SubscribeRequest`. For Fumarole, reconnect with the same persistent-subscriber name and the cursor server-side picks up where you left off.
-
-</details>
-
-<details>
-
-<summary>Events feel slower than expected</summary>
-
-Three things to check. First, your commitment level: `processed` is fastest, `confirmed` and `finalized` add latency. Second, geographic distance: run your client close to our streaming clusters. Third, your processing speed: if your event handler can't keep up, the server-side queue backs up and you fall behind.
-
-</details>
-
-<details>
-
-<summary>Memory grows over time</summary>
-
-Your handler is processing events slower than they arrive. Filter more aggressively to reduce volume, parallelise your handler across workers, or move heavy processing to a background queue and keep the stream loop minimal.
-
-</details>
-
-<details>
-
-<summary>Do I need to send keepalive pings?</summary>
-
-Sometimes. Some cloud providers (e.g. Cloudflare) close idle streams. If you see disconnections after periods of low traffic, send a periodic ping. Dragon's Mouth gRPC accepts a `ping` field on the subscribe request; Whirligig accepts `{"jsonrpc":"2.0","method":"ping"}`. The server returns `pong` every 15 seconds you can use to confirm liveness.
-
-</details>
-
 ## What's next
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions">Deshred transactions</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/whirligig-websockets">Whirligig WebSockets</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 4 days of stored data and built-in cursor resume.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/fumarole-persistent-streams">Fumarole reliable streams</a></td></tr></tbody></table>

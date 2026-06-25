@@ -193,24 +193,6 @@ The USDC mint, decoded with `jsonParsed`. Over curl this is the `result.value`; 
 }
 ```
 
-## FAQs
-
-<details>
-
-<summary>I'm getting 401 or 403 errors</summary>
-
-Check your endpoint URL and secret token in the [customer dashboard](https://customers.triton.one). For a backend calling JSON-RPC, the token is part of the URL path: `https://<your-endpoint>.mainnet.rpcpool.com/<your-token>`. For a frontend, confirm your configured allowed origin matches where you're sending the request from.
-
-</details>
-
-<details>
-
-<summary>Which should I use?</summary>
-
-Use **standard Agave RPC polling** for infrequent or one-off reads. Use **Account Sync** when your app reads the same accounts repeatedly and needs fresh data at the lowest latency and cost. Responses on supported methods are identical, so you can drop Account Sync in instead of web3.js with no code rewrite.
-
-</details>
-
 ## What's next
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-rotate">:rotate:</i> <strong>Account Sync</strong></td><td>The web3.js-compatible SDK that keeps account reads fresh from a live stream.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/account-sync">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/account-sync</a></td></tr><tr><td><i class="fa-bolt">:bolt:</i> <strong>Cloudbreak custom indexes</strong></td><td>Fast account and token queries from tailored dynamic indexes.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/cloudbreak-indexed-accounts">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/cloudbreak-indexed-accounts</a></td></tr><tr><td><i class="fa-gem">:gem:</i> <strong>Metaplex DAS API</strong></td><td>Query NFTs, tokens, and compressed assets via the Metaplex Digital Asset Standard interface.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/metaplex-das-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/metaplex-das-api</a></td></tr><tr><td><i class="fa-radio">:radio:</i> <strong>Real-time streaming</strong></td><td>Subscribe to account and transaction changes as they happen on chain.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming</a></td></tr></tbody></table>

@@ -18,7 +18,7 @@ Sign up at [customers.triton.one](https://customers.triton.one/users/sign-up), v
 {% step %}
 ### Set up an endpoint
 
-Open the dashboard, click **Create endpoint**, and pick **Solana mainnet** (or devnet for testing). The portal returns two things you'll use everywhere:
+Your endpoints are already provisioned. In the dashboard, select **Solana mainnet** (or devnet for testing) and click the endpoint name to copy the two things you'll use everywhere:
 
 * **Endpoint URL**: `<your-endpoint>.mainnet.rpcpool.com`
 * **Secret token**: a long random string
@@ -34,31 +34,19 @@ Call `getSlot` to confirm the endpoint is live. Pick your stack:
 {% tabs %}
 {% tab title="curl" %}
 ```bash
-curl https://<endpoint>.mainnet.rpcpool.com/<token> \
+curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"getSlot"}'
 ```
 {% endtab %}
 
-{% tab title="Solana Kit" %}
+{% tab title="TypeScript" %}
 ```javascript
 import { createSolanaRpc } from "@solana/kit";
 
-const rpc = createSolanaRpc("https://<endpoint>.mainnet.rpcpool.com/<token>");
+const rpc = createSolanaRpc("https://<your-endpoint>.mainnet.rpcpool.com/<your-token>");
 const slot = await rpc.getSlot().send();
 console.log(slot);
-```
-{% endtab %}
-
-{% tab title="web3.js" %}
-```javascript
-import { Connection } from '@solana/web3.js';
-
-const conn = new Connection(
-  'https://<endpoint>.mainnet.rpcpool.com/<token>',
-  'confirmed'
-);
-console.log(await conn.getSlot());
 ```
 {% endtab %}
 
@@ -67,7 +55,7 @@ console.log(await conn.getSlot());
 import requests
 
 r = requests.post(
-    'https://<endpoint>.mainnet.rpcpool.com/<token>',
+    'https://<your-endpoint>.mainnet.rpcpool.com/<your-token>',
     json={'jsonrpc': '2.0', 'id': 1, 'method': 'getSlot'},
 )
 print(r.json()['result'])
@@ -79,14 +67,22 @@ print(r.json()['result'])
 use solana_client::rpc_client::RpcClient;
 
 let client = RpcClient::new(
-    "https://<endpoint>.mainnet.rpcpool.com/<token>".to_string(),
+    "https://<your-endpoint>.mainnet.rpcpool.com/<your-token>".to_string(),
 );
 println!("{}", client.get_slot()?);
 ```
 {% endtab %}
 {% endtabs %}
 
-If you got back something like `{ "jsonrpc": "2.0", "result": 311340987, "id": 1 }`, you're connected. If you hit a 401, 429, timeout, or gRPC 403, see the Error handling guide for the full debug flow.
+### Expected response
+
+A current slot number means you're connected:
+
+```json
+{ "jsonrpc": "2.0", "result": 311340987, "id": 1 }
+```
+
+Hitting a 401, 429, timeout, or gRPC 403? See the Error handling guide for the full debug flow.
 {% endstep %}
 {% endstepper %}
 
@@ -119,7 +115,7 @@ Each product is purpose-built for one job. Pick what you need.
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-server">:server:</i> <strong>Dedicated gRPC node</strong></td><td>Private node with isolated CPU and unlimited concurrent gRPC connections. For latency-sensitive or heavy streaming workloads.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/dedicated-nodes">Dedicated gRPC node</a></td></tr><tr><td><i class="fa-landmark">:landmark:</i> <strong>White-label validator</strong></td><td>Branded validator with full key separation, zero ops overhead, and high availability.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/validator-services/white-label-validators">White-label validator</a></td></tr></tbody></table>
 {% endtab %}
 
-{% tab title="By use case (I" %}
+{% tab title="By use case (I know what I'm building)" %}
 Pick the kind of app you're building. Each card jumps to the matching setup guide.
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-coins">:coins:</i> <strong>Trading or market making</strong></td><td>Live prices, sub-slot tx landing, anti-MEV. Stack: Dragon's Mouth, Jet, Priority Fees, Shield.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/use-cases/trading-and-market-making">Trading or market making</a></td></tr><tr><td><i class="fa-code-merge">:code-merge:</i> <strong>DeFi protocols (Lending, DEXs)</strong></td><td>Pool state, swap activity, tx landing, historical fills. Stack: Dragon's Mouth, Jet, Superbank, Titan.</td><td></td></tr><tr><td><i class="fa-mobile-screen">:mobile-screen:</i> <strong>Wallet or consumer app</strong></td><td>Balances, history, NFT portfolio, live updates. Stack: Standard RPC, DAS API, Whirligig.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/use-cases/building-a-wallet">Wallet or consumer app</a></td></tr><tr><td><i class="fa-palette">:palette:</i> <strong>NFT marketplace</strong></td><td>Mints, metadata, collection feeds, sale events. Stack: DAS API, Whirligig.</td><td></td></tr><tr><td><i class="fa-chart-column">:chart-column:</i> <strong>Indexer or analytics</strong></td><td>Custom indexes, historical backfill, parsed transactions. Stack: Cloudbreak, Superbank, Old Faithful, Fumarole.</td><td></td></tr><tr><td><i class="fa-gamepad">:gamepad:</i> <strong>Gaming</strong></td><td>On-chain item state, real-time updates, fast reads. Stack: Standard RPC, DAS API, Dragon's Mouth, Whirligig.</td><td></td></tr><tr><td><i class="fa-robot">:robot:</i> <strong>AI agent or LLM app</strong></td><td>MCP access, llms.txt context, autonomous setup. Stack: MCP, llms.txt, Standard RPC, DAS API.</td><td></td></tr></tbody></table>

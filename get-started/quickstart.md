@@ -43,59 +43,53 @@ The example below calls `getSlot` on Solana mainnet. Paste in your endpoint, sec
 {% tabs %}
 {% tab title="curl" %}
 ```bash
-curl https://<endpoint>.mainnet.rpcpool.com/<token> \
+curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","id":1,"method":"getSlot"}'
 ```
 {% endtab %}
 
-{% tab title="Solana Kit" %}
+{% tab title="TypeScript" %}
 ```javascript
 import { createSolanaRpc } from "@solana/kit";
 
-const rpc = createSolanaRpc("https://<endpoint>.mainnet.rpcpool.com/<token>");
+const rpc = createSolanaRpc("https://<your-endpoint>.mainnet.rpcpool.com/<your-token>");
 const slot = await rpc.getSlot().send();
 console.log(slot);
 ```
 {% endtab %}
 
-{% tab title="web3.js" %}
-```javascript
-import { Connection } from '@solana/web3.js';
-
-const conn = new Connection(
-  'https://<endpoint>.mainnet.rpcpool.com/<token>',
-  'confirmed'
-);
-console.log(await conn.getSlot());
-```
-{% endtab %}
-
-{% tab title="python" %}
+{% tab title="Python" %}
 ```python
 import requests
 
 r = requests.post(
-    'https://<endpoint>.mainnet.rpcpool.com/<token>',
+    'https://<your-endpoint>.mainnet.rpcpool.com/<your-token>',
     json={'jsonrpc': '2.0', 'id': 1, 'method': 'getSlot'},
 )
 print(r.json()['result'])
 ```
 {% endtab %}
 
-{% tab title="rust" %}
+{% tab title="Rust" %}
 ```rust
 use solana_client::rpc_client::RpcClient;
 
 let client = RpcClient::new(
-    "https://<endpoint>.mainnet.rpcpool.com/<token>".to_string(),
+    "https://<your-endpoint>.mainnet.rpcpool.com/<your-token>".to_string(),
 );
 println!("{}", client.get_slot()?);
 ```
 {% endtab %}
 {% endtabs %}
 
-If you got back something like `{ "jsonrpc": "2.0", "result": 311340987, "id": 1 }`, you're connected.
+### Expected response
+
+A current slot number means you're connected:
+
+```json
+{ "jsonrpc": "2.0", "result": 311340987, "id": 1 }
+```
 {% endstep %}
 {% endstepper %}
 
