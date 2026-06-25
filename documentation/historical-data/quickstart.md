@@ -201,7 +201,7 @@ Pass the `paginationToken` from the response in the next request to keep scannin
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-database">:database:</i> <strong>Historical data</strong></td><td>The full method list, how Superbank works, and the getTransactionsForAddress reference.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/historical-data">Historical data</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Query history efficiently at scale.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/historical-data/best-practices">Best practices</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-database">:database:</i> <strong>Historical data</strong></td><td>The full method list, how Superbank works, and the getTransactionsForAddress reference.</td><td><a href="..">Historical data</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Query history efficiently at scale.</td><td><a href="best-practices">Best practices</a></td></tr></tbody></table>
 
 ***
 
