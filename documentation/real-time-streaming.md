@@ -6,10 +6,6 @@ description: >-
 
 # Real-time streaming
 
-Triton offers multiple streaming services on Solana. This page covers what streaming is, what each service does, and how to pick the right one for your build.
-
-## What is streaming?
-
 Solana produces a new block every \~400 ms. If you poll RPC every 200 ms, your data is at best 200 ms stale by the time you see it, and you'll easily hit rate limits hammering the same endpoint.
 
 Streaming inverts the model: you open one connection, say what you need (specific accounts, programs, or transactions), and the node pushes you matching events the instant they happen.

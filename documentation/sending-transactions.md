@@ -7,10 +7,6 @@ layout:
 
 # Sending transactions
 
-Triton gives you several ways to send Solana transactions and get them to land. This page covers how sending works, what each option does, and how to pick the right one.
-
-## How sending works
-
 You build and sign a transaction, then submit it so a validator includes it in a block. Landing reliably under load comes down to a few things:
 
 * **Delivery.** Reaching the current leader quickly, with stake-weighted quality of service (SWQoS) so your transaction is prioritised.

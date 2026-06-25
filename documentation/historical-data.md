@@ -42,6 +42,19 @@ The complete ledger from genesis: every block, transaction, and entry. Most Supe
 
 Superbank makes historical queries faster and cheaper. Benchmarked against public RPC at p50, it is 5x faster on `getSignaturesForAddress`, 38x on `getSignatureStatuses`, and 3.3x on `getTransaction`. Every historical query is priced the same, `$0.08 / GB` plus `$10 / million`, no matter how deep into history it reaches.
 
+### Superbank extensions
+
+Every method takes the standard Solana parameters. Two add an optional slot hint that skips the signature-to-slot lookup:
+
+| Method | Extension | Behaviour |
+| --- | --- | --- |
+| `getTransaction` | `slot` (optional `u64`) | Queries that exact slot directly. The response is `null` if the signature isn't present in that slot. |
+| `getSignaturesForAddress` | `beforeSlot` / `untilSlot` (optional `u64`) | Exclusive whole-slot bounds (`slot < beforeSlot`, `slot > untilSlot`), not signature-position cursors. `beforeSlot` can't be combined with `before`; `untilSlot` can't be combined with `until`. |
+
+A `before` or `until` signature that Superbank can't find returns JSON-RPC error `-32020` (`Transaction <signature> not found`).
+
+`getTransactionsForAddress` is documented below; it also accepts `beforeSlot`/`untilSlot` as aliases for `filters.slot.lt`/`filters.slot.gt`.
+
 ## How it works
 
 You query Superbank with the standard Solana JSON-RPC methods. Behind that, it ingests the full ledger into ClickHouse (a columnar database) and translates each request into SQL tuned to how the data is sorted. A head cache keeps the newest slots in memory, so recent reads return in under 1 ms.
@@ -132,6 +145,8 @@ Comparison object example:
 }
 ```
 
+`beforeSlot` and `untilSlot` are accepted as aliases for `filters.slot.lt` and `filters.slot.gt`. An alias can't be combined with a same-side slot filter (`lt`/`lte` for `beforeSlot`, `gt`/`gte` for `untilSlot`).
+
 ### Token account filtering
 
 `tokenAccounts` controls whether token-account activity owned by the requested address is included.
@@ -142,7 +157,7 @@ Comparison object example:
 | all            | Also include transactions involving token accounts owned by the address.  |
 | balanceChanged | Include owned token-account transactions only when token balance changed. |
 
-Token-owner activity is derived from transaction pre/post token balance metadata.
+Token-owner activity is derived from transaction pre/post token balance metadata, so these filters require the token-owner activity table to be populated.
 
 ### Response
 

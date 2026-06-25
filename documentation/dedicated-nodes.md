@@ -10,8 +10,6 @@ A dedicated node is single-tenant Triton infrastructure: a bare-metal server, or
 
 Triton's shared infrastructure is the opposite trade: multi-tenant, globally distributed, and billed per usage. Shared suits front-ends, dashboards, and most production reads. Dedicated suits streaming, indexing, and latency-sensitive backends that want isolation, maximum throughput, and the lowest, steadiest latency.
 
-## What dedicated nodes are for
-
 Dedicated nodes are provisioned for **gRPC streaming** and other **single-purpose clusters** (for example a dedicated DAS or custom-indexing cluster). Each cluster runs one job; mixed-purpose nodes are not offered.
 
 This is the hybrid model most teams run: dedicated nodes carry the heavy backend workloads, streaming and indexing, while JSON-RPC reads (`getAccountInfo`, `getProgramAccounts`, `getTransaction`, and the rest) run on Triton's shared, globally distributed infrastructure.
