@@ -16,6 +16,9 @@
   * [Generate parsers with Codama](streaming/generate-parsers-with-codama.md)
   * [Fumarole cluster failover](streaming/fumarole-cluster-failover.md)
   * [Benchmark gRPC endpoints with Thorofare](streaming/benchmark-grpc-endpoints-with-thorofare.md)
+* [Transaction sending](sending-transactions.md)
+  * [Yellowstone Jet TPU client](sending-transactions/yellowstone-jet-tpu-client.md)
+  * [Protect transactions from MEV with Shield](sending-transactions/protect-transactions-with-shield.md)
 
 ## Sui
 
