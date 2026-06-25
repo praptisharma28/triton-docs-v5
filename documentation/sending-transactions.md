@@ -21,7 +21,7 @@ Triton covers each of these while keeping standard Solana behaviour where you wa
 
 ## Pick your send path
 
-Most transactions go through a Triton endpoint, which applies SWQoS and forwards your transaction to the leader's TPU via Yellowstone Jet, Triton's transaction engine. You can submit two ways, with a third path for full client-side control.
+Most transactions go through a Triton endpoint, which applies SWQoS and forwards your transaction to the leader's TPU via Jet sender, Triton's transaction engine. You can submit two ways, with a third path for full client-side control.
 
 |                       |   `sendTransaction`   |             `/sendtx`             |      Jet TPU client      |
 | --------------------- | :-------------------: | :-------------------------------: | :----------------------: |
@@ -34,7 +34,7 @@ Most transactions go through a Triton endpoint, which applies SWQoS and forwards
 
 * **`sendTransaction`** is the standard Solana JSON-RPC method. SWQoS is applied and your transaction is delivered to the leader for you.
 * **`/sendtx`** is a direct HTTP submission endpoint on your Triton endpoint. It takes the same delivery path as `sendTransaction`, but skips the JSON-RPC envelope, so there is no JSON parsing, no CORS preflight, and a smaller payload. Lower latency, and no RPC client library needed. The [quickstart](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/quickstart) walks through it.
-* **Jet TPU client** is for full client-side control: your own machine sends straight to validator TPUs over QUIC, with per-transaction callbacks, custom routing, and Shield enforcement in your code. It is the sending logic from Yellowstone Jet, Triton's production engine, as a standalone library.
+* **Jet TPU client** is for full client-side control: your own machine sends straight to validator TPUs over QUIC, with per-transaction callbacks, custom routing, and Shield enforcement in your code. It is the sending logic from Jet sender, Triton's production engine, as a standalone library.
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-paper-plane">:paper-plane:</i> <strong>Jet TPU client</strong></td><td>Self-hosted Rust library: send straight to validator TPUs over QUIC, with per-transaction callbacks and custom routing.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/jet-sender">Jet TPU client</a></td></tr><tr><td><i class="fa-shield">:shield:</i> <strong>Shield MEV protection</strong></td><td>Allowlist or blocklist validators with an on-chain policy attached at send time.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection">Shield MEV protection</a></td></tr><tr><td><i class="fa-arrow-trend-up">:arrow-trend-up:</i> <strong>Priority fees API</strong></td><td>Percentile-based priority fee estimates tuned to land under congestion.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api">Priority fees API</a></td></tr></tbody></table>
 

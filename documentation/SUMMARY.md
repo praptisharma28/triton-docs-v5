@@ -21,7 +21,7 @@
   * [Best practices](historical-data/best-practices.md)
 * [Sending transactions](sending-transactions.md)
   * [Quickstart](sending-transactions/sending-transactions/quickstart.md)
-  * [Jet sender](sending-transactions/jet-sender.md)
+  * [Jet TPU client](sending-transactions/jet-sender.md)
   * [Shield MEV protection](sending-transactions/shield-mev-protection.md)
   * [Priority fees API](sending-transactions/priority-fees-api.md)
   * [Best practices](sending-transactions/sending-transactions/best-practices.md)
