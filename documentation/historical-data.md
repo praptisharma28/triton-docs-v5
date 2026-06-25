@@ -43,29 +43,22 @@ The complete ledger from genesis: every block, transaction, and entry. Historica
 
 The remaining historical methods are being migrated over from Old Faithful. Responses are spec-compliant, so no client changes are needed when a method moves to Superbank.
 
+Superbank makes historical queries faster and cheaper. Benchmarked against public RPC at p50, it is 5x faster on `getSignaturesForAddress`, 38x on `getSignatureStatuses`, and 3.3x on `getTransaction`. Every historical query is priced the same, `$0.08 / GB` plus `$10 / million`, no matter how deep into history it reaches.
+
 ## How it works
 
-Superbank runs as three independent layers, ingest, storage, and query. Each scales on its own, and the data can be partitioned and sharded across servers when a single node is not enough.
+You query Superbank with the standard Solana JSON-RPC methods. Behind that, it ingests the full ledger into ClickHouse (a columnar database) and translates each request into SQL tuned to how the data is sorted. A head cache keeps the newest slots in memory, so recent reads return in under 1 ms.
 
-### Ingest
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3'},'flowchart':{'nodeSpacing':22,'rankSpacing':30,'curve':'linear'}}}%%
+flowchart LR
+    ledger["Full Solana ledger"] --> ingest["Ingest"]
+    ingest --> ch["ClickHouse<br/>columnar store"]
+    ch --> q["JSON-RPC query layer<br/>+ head cache (under 1 ms)"]
+    q --> you["Your standard<br/>JSON-RPC calls"]
+```
 
-The ingestor decodes blocks and transactions into rows and writes them to ClickHouse with no filtering or transformation, so writes stay at maximum throughput. It is source-agnostic, with built-in support for Dragon's Mouth gRPC, BigTable, JSON-RPC, and Anza's Jetstreamer, so you can backfill from an existing archive and then switch to a live stream without rewriting the pipeline. Triton backfills the ledger with Jetstreamer, then stays at chain tip with a Dragon's Mouth gRPC stream at `confirmed` commitment.
-
-### Storage
-
-Reading history is an analytics workload: scan many rows, return a few columns, reach deep into the ledger, and let the server sort and filter. Superbank stores the data in ClickHouse, a columnar database, and leans on that for performance:
-
-* **Columnar storage**, so a query reads only the columns it asks for and skips the rest.
-* **Insert-time materialised views.** Each write to the `transactions` table also produces derived, pre-sorted copies, sorted the way each method reaches the data: by signature for `getSignatureStatuses`, by address for `getSignaturesForAddress`, and by token owner for `getTransactionsForAddress`.
-* **Per-column compression** (Delta + ZSTD for sequential values like slot, ZSTD for large repetitive blobs).
-* **Tiered storage** as data ages, from NVMe for recent epochs to HDD for older epochs to S3 for deep history, with no schema change.
-* A **bloom filter on signature** lets a lookup skip chunks that cannot contain a given signature, and an optional `gsfa_hot` partitioning spreads reads for very high-traffic addresses such as the USDC mint.
-
-Base tables `blocks_metadata` and `transactions` are keyed by slot, and views are read newest-first. The full table schemas are at [github.com/solana-rpc/superbank/tree/main/ddl](https://github.com/solana-rpc/superbank/tree/main/ddl).
-
-### Query
-
-The query layer is a standard Solana JSON-RPC server plus the `getTransactionsForAddress` extension. Each request is translated into SQL tuned to the tables' physical sort order. A **head cache** subscribes to an upstream gRPC stream and holds the newest slots in memory, returning the latest data in under 1 ms and making `processed` commitment available for historical methods. Repeat reads come from a query cache (`getTransaction` results carry a longer TTL because finalised transactions never change), and `getSlot` is answered from an in-memory slot synchroniser. Every response carries headers showing which backend served it (ClickHouse, the head cache, or both) and how much work it did (rows read, rows returned, bytes processed).
+The full architecture (storage layout, materialised views, tiered storage) matters mostly if you self-host. See [Self-hosting](#self-hosting) below.
 
 ## getTransactionsForAddress
 
@@ -265,6 +258,8 @@ Superbank is open source under AGPL, so you can run, audit, and extend it yourse
 * Walkthrough: [Index Solana history with Superbank](https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/how-tos/index-solana-history-with-superbank)
 
 Prefer not to operate it? Triton runs Superbank as a managed, globally distributed service. [Get an endpoint](https://customers.triton.one/onboarding).
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-sitemap">:sitemap:</i> <strong>Architecture breakdown</strong></td><td>How Superbank ingests, stores, and serves the full ledger.</td><td><a href="https://blog.triton.one/inside-superbank-architecture-breakdown">Inside Superbank</a></td></tr><tr><td><i class="fa-rocket">:rocket:</i> <strong>Self-hosting walkthrough</strong></td><td>Index Solana history with Superbank, from backfill to live tip.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/how-tos/index-solana-history-with-superbank">Index Solana history with Superbank</a></td></tr></tbody></table>
 
 ***
 
