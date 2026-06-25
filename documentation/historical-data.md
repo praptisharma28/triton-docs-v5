@@ -35,8 +35,8 @@ The complete ledger from genesis: every block, transaction, and entry. Most Supe
 | Methods | Features |
 | --- | --- |
 | `getBlock`, `getBlocks`, `getBlocksWithLimit`, `getBlockTime`, `getFirstAvailableBlock`, `getInflationReward`, `getSignatureStatuses` | Standard Solana JSON-RPC |
-| `getTransaction`, `getSignaturesForAddress` | Triton's optional slot hint that lets you skip the database lookup (and get the response faster) when you already know the slot |
-| `getTransactionsForAddress` | Triton's extension: a complete address history in one call (ATAs included) with server-side filters and pagination cursor |
+| `getTransaction`, `getSignaturesForAddress` | Triton's optional slot hint that lets you skip the database lookup and get the response faster when you already know the slot (`slot` on `getTransaction`; `beforeSlot`/`untilSlot` on `getSignaturesForAddress`) |
+| `getTransactionsForAddress` | Triton's extension: a complete address history in one call (ATAs included) with server-side filters (by status, slot, block time, and token accounts) and a pagination cursor |
 
 `getTransactionsForAddress` is documented below. Responses are spec-compliant, so no client changes are needed when a method moves to Superbank from Old Faithful.
 
