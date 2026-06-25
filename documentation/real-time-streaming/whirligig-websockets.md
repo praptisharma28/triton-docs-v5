@@ -1,82 +1,63 @@
 ---
-description: An enhanced Solana WebSocket API backed by a Dragon's Mouth gRPC stream.
+description: An enhanced Solana WebSocket API for browsers and existing WS clients, backed by a Dragon's Mouth gRPC stream.
 ---
 
 # Whirligig WebSockets
 
-The Whirligig WebSocket Proxy is a Rust-based proxy between a Dragon's Mouth gRPC server and a WebSocket client. It allows the client to send requests to a WebSocket connection rather than through the gRPC protocol. This can be used when WebSocket connections are preferred, such as in a web3 application.
+Whirligig is a Rust-based proxy between a Dragon's Mouth gRPC server and a WebSocket client. It speaks the standard Solana WebSocket API, so a browser or any existing WebSocket client can subscribe over `wss://` instead of gRPC. At `processed` commitment, Whirligig also delivers intra-slot updates: account updates arrive up to 400 ms faster than native Solana WebSocket subscriptions.
 
-At the 'processed' commitment level most traders use, Whirligig will also provide intra-slot updates. Account updates will arrive up to 400ms faster than previous WebSocket subscriptions.
+**Use Whirligig when** you want Solana WebSocket subscriptions in a browser or an existing WS client. **Use Dragon's Mouth gRPC instead** for backend services that want the lowest latency and richest server-side filtering.
 
-## WebSocket API
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-bolt">:bolt:</i> <strong>transactionSubscribe</strong></td><td>A full-transaction subscription the native Solana WS API does not have, with account include, exclude, and required filters.</td><td></td></tr><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Intra-slot updates</strong></td><td>At processed commitment, account updates arrive up to 400 ms faster than native Solana WebSockets.</td><td></td></tr><tr><td><i class="fa-plug">:plug:</i> <strong>Drop-in Solana WS API</strong></td><td>Aims for full compatibility with the standard Solana WebSocket API, so existing WS clients work unchanged.</td><td></td></tr><tr><td><i class="fa-radio">:radio:</i> <strong>Backed by Dragon's Mouth</strong></td><td>Translates a Dragon's Mouth gRPC stream into WebSocket messages, so a browser gets gRPC-grade data.</td><td></td></tr></tbody></table>
 
-Whirligig aims for full compatibility with the Solana WebSocket API ([https://docs.solana.com/api/websocket](https://docs.solana.com/api/websocket)). Please be aware of one extended subscription we introduced: `transactionSubscribe`. This subscription may not be compatible with other providers.
+## Methods
 
-To use Whirligig, append `/whirligig` to your RPC endpoint. Using web3.js, you can pass in a custom WS endpoint like this: `new web3.Connection('rpc_endpoint', { wsEndpoint: 'ws_endpoint' })`.
+Whirligig aims for full compatibility with the [Solana WebSocket API](https://solana.com/docs/rpc/websocket), with one added subscription, `transactionSubscribe`, that the native API does not have. Each subscribe method returns a subscription `id` and has a matching unsubscribe (see [Unsubscribe](#unsubscribe)).
 
-NOTE: Some client software might require another trailing slash like `/whirligig/`.
+| Method | Subscribe to | Notes |
+| --- | --- | --- |
+| `accountSubscribe` | An account's data, on change | Solana-compatible |
+| `blockSubscribe` | New blocks | Solana-compatible |
+| `logsSubscribe` | Transaction logs mentioning an address | Solana-compatible |
+| `programSubscribe` | Accounts owned by a program, on change | Solana-compatible |
+| `signatureSubscribe` | A signature's confirmation status | Solana-compatible |
+| `slotSubscribe` | Each new slot | Solana-compatible |
+| `transactionSubscribe` | Full transactions matching a filter | Whirligig extension, not in the native Solana WS API |
 
-NOTE: Connections inactive for over 60 seconds get closed. To keep a connection alive, you need to ping the server `{"jsonrpc":"2.0","method":"ping"}`
+## Connect
 
-### Whirligig CLI Client
+Append `/whirligig` to your RPC endpoint:
 
-You can check Whirligig CLI Client on GitHub: [https://github.com/rpcpool/yellowstone-whirligig-client](https://github.com/rpcpool/yellowstone-whirligig-client)
-
-### Commitment Levels
-
-The Whirligig WebSocket API supports all three commitment levels (processed, confirmed, finalized).
-
-You can, however, also manage commitment levels in your app in the same way as you would in Dragon's Mouth gRPC. Each subscribe method implements a corresponding unsubscribe method which takes the subscription id provided by the subscribe method.
-
-[https://docs.solana.com/cluster/commitments](https://docs.solana.com/cluster/commitments)
-
-"**Processed**": The highest slot of the heaviest fork processed by the node. Ledger state at this slot is not derived from a confirmed or finalized block, but if multiple forks are present, is from the fork the validator believes is most likely to finalize.
-
-"**Confirmed**": The highest slot that has been voted on by supermajority of the cluster, ie. is confirmed. Confirmation incorporates votes from gossip and replay. It does not count votes on descendants of a block, only direct votes on that block, and upholds "optimistic confirmation" guarantees in release 1.3 and onwards.
-
-"**Finalized**": The highest slot having reached max vote lockout, as recognized by a supermajority of the cluster.
-
-### Endpoint
-
-The WebSocket endpoint allows you to stream data from the server to the client in real-time. The default endpoint for the WebSocket is `wss://<your endpoint>.rpcpool.com/<token>/whirligig`.
-
-### Unsubscribe
-
-Every subscription request on success return `id` of subscription, like:
-
-```json
-{
-  "jsonrpc": "2.0",
-  "result": 42,
-  "id": 1
-}
+```
+wss://<your-endpoint>.rpcpool.com/<your-token>/whirligig
 ```
 
-This subscription `id` can be used to unsubscribe from the stream:
+With web3.js, pass it as a custom WebSocket endpoint:
 
-```json
-{
-  "id": 1,
-  "jsonrpc": "2.0",
-  "method": "slotUnsubscribe",
-  "params": [42]
-}
+```js
+new web3.Connection("<rpc-endpoint>", { wsEndpoint: "<ws-endpoint>" });
 ```
 
-Result would be `true` in case of such subscription was active and removed. In case if subscription doesn't exists, result would be `false`.
+{% hint style="info" %}
+Some clients need a trailing slash (`/whirligig/`). Connections idle for over 60 seconds are closed, so keep them alive by sending `{"jsonrpc":"2.0","method":"ping"}`.
+{% endhint %}
 
-```json
-{
-  "jsonrpc": "2.0",
-  "result": true,
-  "id": 1
-}
-```
+### Commitment levels
+
+Whirligig supports all three commitment levels, set per subscription in the `config` argument, the same way as Dragon's Mouth gRPC:
+
+* **`processed`**: the highest slot of the heaviest fork the node has processed. Not yet confirmed or finalized; if forks are present, it is the fork most likely to finalize.
+* **`confirmed`**: the highest slot voted on by a supermajority of the cluster.
+* **`finalized`**: the highest slot that has reached maximum lockout, recognized as finalized by a supermajority.
+
+## Subscribe
+
+Each subscribe request returns a subscription `id` you later pass to its unsubscribe method.
 
 ### accountSubscribe
 
-This method is fully compatible with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.account_subscribe](https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.account_subscribe)
-
+{% tabs %}
+{% tab title="Request" %}
 ```json
 {
   "jsonrpc": "2.0",
@@ -92,9 +73,9 @@ This method is fully compatible with Solana WebSocket API. API details: [https:/
 }
 
 ```
+{% endtab %}
 
-`base58` stream data example:
-
+{% tab title="Response" %}
 ```json
 {
   "jsonrpc": "2.0",
@@ -121,15 +102,13 @@ This method is fully compatible with Solana WebSocket API. API details: [https:/
   }
 }
 ```
-
-### accountUnsubscribe
-
-See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
+{% endtab %}
+{% endtabs %}
 
 ### blockSubscribe
 
-Fully compatible with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.block_subscribe](https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.block_subscribe)
-
+{% tabs %}
+{% tab title="Request" %}
 ```json
 {
   "jsonrpc": "2.0",
@@ -146,9 +125,9 @@ Fully compatible with Solana WebSocket API. API details: [https://docs.rs/solana
   ]
 }
 ```
+{% endtab %}
 
-stream data example:
-
+{% tab title="Response" %}
 ```json
 {
   "jsonrpc": "2.0",
@@ -175,15 +154,13 @@ stream data example:
   }
 }
 ```
-
-### blockUnsubscribe
-
-See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
+{% endtab %}
+{% endtabs %}
 
 ### logsSubscribe
 
-Fully compatible with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.logs_subscribe](https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.logs_subscribe)
-
+{% tabs %}
+{% tab title="Request" %}
 ```json
 {
   "id": 1,
@@ -199,9 +176,9 @@ Fully compatible with Solana WebSocket API. API details: [https://docs.rs/solana
   ]
 }
 ```
+{% endtab %}
 
-stream data example:
-
+{% tab title="Response" %}
 ```json
 {
   "jsonrpc": "2.0",
@@ -261,15 +238,13 @@ stream data example:
   }
 }
 ```
-
-### logsUnsubscribe
-
-See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
+{% endtab %}
+{% endtabs %}
 
 ### programSubscribe
 
-Fully compatible with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.program_subscribe](https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.program_subscribe)
-
+{% tabs %}
+{% tab title="Request" %}
 ```json
 {
   "id": 1,
@@ -284,9 +259,9 @@ Fully compatible with Solana WebSocket API. API details: [https://docs.rs/solana
   ]
 }
 ```
+{% endtab %}
 
-stream data example:
-
+{% tab title="Response" %}
 ```json
 {
   "jsonrpc": "2.0",
@@ -316,15 +291,13 @@ stream data example:
   }
 }
 ```
-
-### programUnsubscribe
-
-See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
+{% endtab %}
+{% endtabs %}
 
 ### signatureSubscribe
 
-Fully compatible with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.signature_subscribe](https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.signature_subscribe)
-
+{% tabs %}
+{% tab title="Request" %}
 ```json
 {
   "jsonrpc": "2.0",
@@ -338,9 +311,9 @@ Fully compatible with Solana WebSocket API. API details: [https://docs.rs/solana
   ]
 }
 ```
+{% endtab %}
 
-stream data example:
-
+{% tab title="Response" %}
 ```json
 {
   "jsonrpc": "2.0",
@@ -359,15 +332,13 @@ stream data example:
   }
 }
 ```
-
-### signatureUnsubscribe
-
-See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
+{% endtab %}
+{% endtabs %}
 
 ### slotSubscribe
 
-Fully compatible with Solana WebSocket API. API details: [https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.slot_subscribe](https://docs.rs/solana-client/latest/solana_client/nonblocking/pubsub_client/struct.PubsubClient.html#method.slot_subscribe)
-
+{% tabs %}
+{% tab title="Request" %}
 ```json
 {
   "jsonrpc": "2.0",
@@ -375,9 +346,9 @@ Fully compatible with Solana WebSocket API. API details: [https://docs.rs/solana
   "method": "slotSubscribe"
 }
 ```
+{% endtab %}
 
-stream data example:
-
+{% tab title="Response" %}
 ```json
 {
   "jsonrpc": "2.0",
@@ -392,17 +363,15 @@ stream data example:
   }
 }
 ```
-
-### slotUnsubscribe
-
-See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
+{% endtab %}
+{% endtabs %}
 
 ### transactionSubscribe
 
-**Solana WebSocket API doesn't support this kind of subscription.**
+Not in the native Solana WebSocket API. Takes a `filter` (all fields optional) and a `config` ([`RpcBlockSubscribeConfig`](https://docs.rs/solana-client/latest/solana_client/rpc_config/struct.RpcBlockSubscribeConfig.html)).
 
-Method can accept two arguments, first is `filter` and second `config`. In `filter` all fields are optional. `config` argument equal to [RpcBlockSubscribeConfig](https://docs.rs/solana-client/latest/solana_client/rpc_config/struct.RpcBlockSubscribeConfig.html).
-
+{% tabs %}
+{% tab title="Request" %}
 ```json
 {
   "jsonrpc": "2.0",
@@ -429,9 +398,9 @@ Method can accept two arguments, first is `filter` and second `config`. In `filt
   ]
 }
 ```
+{% endtab %}
 
-stream data example:
-
+{% tab title="Response" %}
 ```json
 {
   "jsonrpc": "2.0",
@@ -656,14 +625,36 @@ stream data example:
   }
 }
 ```
+{% endtab %}
+{% endtabs %}
 
-### transactionUnsubscribe
+## Unsubscribe
 
-See [#Unsubscribe](whirligig-websockets.md#unsubscribe).
+Every subscribe request returns the subscription `id` on success:
+
+```json
+{ "jsonrpc": "2.0", "result": 42, "id": 1 }
+```
+
+Pass that `id` to the matching unsubscribe method (`accountUnsubscribe`, `slotUnsubscribe`, and so on):
+
+```json
+{ "id": 1, "jsonrpc": "2.0", "method": "slotUnsubscribe", "params": [42] }
+```
+
+The result is `true` if the subscription was active and removed, `false` if it did not exist:
+
+```json
+{ "jsonrpc": "2.0", "result": true, "id": 1 }
+```
+
+## Client
+
+A reference CLI client is on GitHub: [yellowstone-whirligig-client](https://github.com/rpcpool/yellowstone-whirligig-client).
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr><tr><td><strong>Streaming best practices</strong></td><td>Provisioning, filtering, reconnect, and commitment guidance across the streaming services.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/best-practices">Streaming best practices</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Streaming best practices</strong></td><td>Filtering, reconnect, and commitment guidance across the streaming services.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/best-practices">Streaming best practices</a></td></tr></tbody></table>
 
 ***
 
