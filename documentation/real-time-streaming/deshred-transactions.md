@@ -14,9 +14,28 @@ This is the earliest usable on-chain signal Triton exposes. It's designed for la
 
 Unlike the standard `Subscribe` transaction stream, deshred updates are emitted **before** Replay. You receive the decoded transaction earlier, but without execution context.
 
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3'},'flowchart':{'nodeSpacing':24,'rankSpacing':36,'curve':'linear'}}}%%
+flowchart LR
+    s["Shreds"] --> d["Deshred:<br/>reconstruct from shreds"]
+    s --> e["Validator:<br/>execute + replay"]
+    d --> i["Transaction intent<br/>(pre-execution, ~20 ms earlier)"]
+    e --> t["Standard transactions<br/>(full execution context)"]
+```
+
 ## Features and benefits
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-eye">:eye:</i> <strong>Earliest signal</strong></td><td>Pre-execution stream from raw shreds. ~20ms ahead at p75 vs confirmed transactions.</td><td></td></tr><tr><td><i class="fa-code-fork">:code-fork:</i> <strong>Same gRPC service</strong></td><td>Drops into your existing Dragon's Mouth pipeline. Separate method, same client.</td><td></td></tr><tr><td><i class="fa-tags">:tags:</i> <strong>Resolved ALT addresses</strong></td><td>Includes writable and readonly addresses resolved from Address Lookup Tables.</td><td></td></tr></tbody></table>
+
+## Use cases
+
+Deshred is for strategies that act on the earliest possible signal, before execution:
+
+* **HFT and arbitrage** that react to transaction intent the moment entries form from shreds.
+* **MEV and market making** that need the earliest view of price-impacting transactions.
+* **Copy-trading and liquidations** that follow specific accounts as soon as they act.
+
+**What not to use it for.** If you need execution results (status, balance changes, logs) or any confirmation guarantee, use the [Dragon's Mouth](dragon-s-mouth-grpc) `transactions` stream instead, or run it in parallel and join on `signature`. Deshred is intent-only and pre-execution: a transaction may fail, land on a dead fork, or never confirm.
 
 ## Filter configuration
 
@@ -24,9 +43,9 @@ Unlike the standard `Subscribe` transaction stream, deshred updates are emitted 
 
 | Parameter          | Type       | Required | Description                                                                      |
 | ------------------ | ---------- | -------- | -------------------------------------------------------------------------------- |
-| `vote`             | `bool`     | —        | Include or exclude vote transactions. `false` excludes votes.                    |
-| `account_include`  | `string[]` | —        | Accounts mentioned anywhere in the transaction (including loaded ALT addresses). |
-| `account_exclude`  | `string[]` | —        | Exclude transactions mentioning any of these accounts.                           |
+| `vote`             | `bool`     | No       | Include or exclude vote transactions. `false` excludes votes.                    |
+| `account_include`  | `string[]` | No       | Accounts mentioned anywhere in the transaction (including loaded ALT addresses). |
+| `account_exclude`  | `string[]` | No       | Exclude transactions mentioning any of these accounts.                           |
 | `account_required` | `string[]` | Yes      | Accounts that MUST all be mentioned (every one of them).                         |
 
 ## Subscribe and consume
@@ -179,11 +198,19 @@ A deshred update is a `SubscribeUpdateDeshred` containing a single transaction r
 
 The `loaded_writable_addresses` and `loaded_readonly_addresses` fields contain addresses resolved from Address Lookup Tables (ALTs), so deshred filters match both static account keys and dynamically loaded addresses.
 
-{% hint style="warning" %}
-**No execution context.** Deshred only carries the raw transaction. No status, logs, inner instructions, balance changes, compute units, or `TransactionStatusMeta`. There's also no confirmation or finality guarantee, a transaction may fail, land on a dead fork, or never confirm.
+## Limitations
+
+Deshred carries the raw transaction only, captured before execution, so what it returns differs from the standard `transactions` stream:
+
+| What you get | Standard transactions (Dragon's Mouth) | Deshred |
+| --- | --- | --- |
+| Timing | After execution and replay | Pre-execution, from shreds (~20 ms earlier at p75) |
+| Transaction | Full transaction | Full transaction |
+| ALT addresses | Resolved | Resolved (writable and readonly) |
+| Execution context | Full: status, balance changes, inner instructions, logs, compute units | None: intent only |
+| Confirmation or finality | Yes | None: a transaction may fail, fork off, or never confirm |
 
 If your pipeline needs status, logs, or balance deltas, run a parallel Dragon's Mouth `transactions` subscription and join on `signature`.
-{% endhint %}
 
 For a deeper overview of architecture and tradeoffs, see [Deshred transactions: the fastest path to Solana data](https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/).
 
