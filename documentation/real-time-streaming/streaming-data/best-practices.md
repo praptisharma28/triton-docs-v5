@@ -18,7 +18,8 @@ How to run real-time Solana streams reliably and at low latency.
 * **Provision 5 Gbps minimum for large subscriptions, 10 Gbps for full-chain** (accounts plus transactions). The full feed can spike to \~1.3 to 1.8 Gbps, and cloud instances are often capped at \~1 Gbps by default.
 * **Keep round-trip latency to the endpoint at 50 ms or less.**
 * **Enable Zstd compression** and **set the HTTP/2 adaptive window to true.** Without compression it is hard to stay on the tip during spikes.
-* **Don't run subscribers on serverless / Lambdas** (they leave many open connections and degrade service) and **don't use vanilla NodeJS** (too slow; use Rust, Golang, or the special NodeJS/TypeScript client).
+* **Run subscribers on a persistent server (VPS or bare metal), never on serverless functions** like Lambda, Google Cloud Functions, or Azure Functions. Serverless environments recycle every few minutes (15 on Lambda), and each restart pays a cold start (hundreds of milliseconds to seconds) plus the 3 to 4 round-trip gRPC handshake (TCP, TLS, HTTP/2, then the subscribe). The chain keeps moving during every reconnect, so you drop messages and miss transaction confirmations. A long-lived stream needs one connection held open permanently.
+* **Don't use vanilla NodeJS** (too slow; use Rust, Golang, or the special NodeJS/TypeScript client).
 * **Benchmark with the `client-ubuntu` tool before going live:** a ping every 10 seconds at 60 to 80 Mbps means you can hold the tip without disconnects.
 * **Treat frequent disconnects as a client-side problem** (weak or under-provisioned setup), not a server fault.
 
