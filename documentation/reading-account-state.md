@@ -30,24 +30,24 @@ Every account-read method is served by one of these. Standard RPC covers the met
 | **Account Sync** (served from RAM via SDK) | `getAccountInfo`, `getMultipleAccountsInfo`, `getParsedAccountInfo`, `getMultipleParsedAccounts` (and `*AndContext` variants) |
 | **DAS API** (Metaplex JSON-RPC extension) | `getAsset`, `getAssets`, `getAssetProof`, `getAssetsByOwner`, `getAssetsByAuthority`, `getAssetsByCreator`, `getAssetsByGroup`, `searchAssets`, `getTokenAccounts`, `getNftEditions`, `getSignaturesForAsset` |
 
-The single and multiple account reads (`getAccountInfo`, `getMultipleAccounts`) are served by the standard node, indexed by Cloudbreak by default, and can also come from the Account Sync cache: same methods, different access path.
+The single and multiple account reads (`getAccountInfo`, `getMultipleAccounts`) route through Cloudbreak by default, but you can also use Account Sync (the `@triton-one/triton-sdk` SDK) to resolve them from your local cache, faster and cheaper.
 
 ## Use cases
 
 * **Reading many program accounts at scale** (DEX, lending, indexers): Cloudbreak serves indexed `getProgramAccounts` and token queries 500x+ faster on repeated filter shapes.
-* **Tracking a set of accounts live** (any frontend or backend with a large polling codebase): Account Sync keeps your existing read code, backs it with a streaming subscription via the SDK, and serves from local RAM for lower latency and cost.
+* **Tracking a set of accounts live** (any frontend or backend with a large polling codebase): Account Sync keeps your existing code, stores it locally in RAM, backed by a stream, and serves your reads from there for lower latency and cost.
 * **Wallets and NFT apps**: the DAS API for assets and metadata, Cloudbreak or Account Sync for balances.
-* **Low-latency trading and market making**: for the lowest latency, stream with gRPC ([Dragon's Mouth](real-time-streaming/dragon-s-mouth-grpc.md)). When you need account reads in a web3.js-shaped client, Account Sync cuts read latency significantly versus polling.
+* **Low-latency trading and market making**: for the lowest latency, stream with gRPC ([Dragon's Mouth](real-time-streaming/dragon-s-mouth-grpc.md)). When you need account reads in a web3.js-shaped client, Account Sync cuts read latency significantly compared to polling.
 
 ## Limitations and exclusions
 
-* **Excluded methods.** `getLargestAccounts` is not served on shared endpoints. `getTokenLargestAccounts` does not accept JSON-RPC batch requests; send one per request.
-* **Light Protocol (ZK Compression) accounts** are not served by `getProgramAccounts` or the streams.
+* **Excluded methods.** `getLargestAccounts` is not served on shared endpoints. `getTokenLargestAccounts` does not accept JSON-RPC batch requests.
+* **Light Protocol (ZK Compression) accounts** are not served by `getProgramAccounts` or the Yellowstone streams.
 * **Commitment.** Cloudbreak ingests from a gRPC stream at `confirmed` commitment, so `processed` is not served on the methods routed through Cloudbreak.
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Query account state via JSON-RPC and set up Account Sync in under 2 minutes.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/quickstart">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/quickstart</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>How to reach the lowest latency, maximum performance, and minimum cost on your state reads.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/best-practices">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/best-practices</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Query account state via JSON-RPC and set up Account Sync in under 2 minutes.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/quickstart">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/quickstart</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>How to reach the lowest latency, maximum performance, and minimum cost on your account state reads.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/best-practices">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/best-practices</a></td></tr></tbody></table>
 
 ***
 
