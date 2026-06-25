@@ -10,9 +10,9 @@ The Yellowstone Jet TPU client is a standalone Rust crate that sends transaction
 
 Writing a TPU client from scratch means handling every Agave release, managing QUIC connections, tracking the leader schedule, and caching connections without lock contention. This crate does all of that, and exposes the hooks a default client leaves out.
 
-{% hint style="info" %}
-Crate: [`yellowstone-jet-tpu-client`](https://crates.io/crates/yellowstone-jet-tpu-client) · API docs: [docs.rs](https://docs.rs/yellowstone-jet-tpu-client) · Source: [github.com/rpcpool/yellowstone-jet](https://github.com/rpcpool/yellowstone-jet)
-{% endhint %}
+* Crate: [`yellowstone-jet-tpu-client`](https://crates.io/crates/yellowstone-jet-tpu-client)
+* API docs: [docs.rs](https://docs.rs/yellowstone-jet-tpu-client)
+* Source: [github.com/rpcpool/yellowstone-jet](https://github.com/rpcpool/yellowstone-jet)
 
 ## When to use it
 

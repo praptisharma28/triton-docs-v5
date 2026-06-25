@@ -10,9 +10,9 @@ Solana's leader schedule is deterministic, so you often know exactly which valid
 
 [Yellowstone Shield](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection) addresses this with on-chain allowlists and blocklists for validators. Combined with the [Yellowstone Jet TPU client](https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/sending-transactions/yellowstone-jet-tpu-client), your application connects directly to validator TPUs, checks the current leader against your Shield policies, and only sends to validators you allow. The result is RPC-independent transaction routing where you decide which validators are allowed to see your transactions.
 
-{% hint style="info" %}
-Shield program: [github.com/rpcpool/yellowstone-shield](https://github.com/rpcpool/yellowstone-shield) · Policy store crate: [`yellowstone-shield-store`](https://crates.io/crates/yellowstone-shield-store) · Policy explorer: [validators.app/yellowstone-shield](https://www.validators.app/yellowstone-shield)
-{% endhint %}
+* Shield program: [github.com/rpcpool/yellowstone-shield](https://github.com/rpcpool/yellowstone-shield)
+* Policy store crate: [`yellowstone-shield-store`](https://crates.io/crates/yellowstone-shield-store)
+* Policy explorer: [validators.app/yellowstone-shield](https://www.validators.app/yellowstone-shield)
 
 ## How validator-level MEV happens
 
