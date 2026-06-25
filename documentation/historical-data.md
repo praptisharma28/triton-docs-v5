@@ -32,11 +32,11 @@ New here? The [Quickstart](https://kate-6.gitbook.io/triton-one-docs-v5/document
 
 The complete ledger from genesis: every block, transaction, and entry. Most Superbank methods match standard Solana JSON-RPC exactly; a few add an optional parameter or extend it.
 
-| Methods | Compatibility |
+| Methods | Features |
 | --- | --- |
-| `getBlock`, `getBlocks`, `getBlocksWithLimit`, `getBlockTime`, `getFirstAvailableBlock`, `getInflationReward`, `getSignatureStatuses` | Standard Solana JSON-RPC, drop-in |
-| `getTransaction`, `getSignaturesForAddress` | Standard, plus an optional slot hint that skips the database lookup when you already know the slot |
-| `getTransactionsForAddress` | Triton extension: an address's full history in one call, with server-side filters and a single pagination cursor |
+| `getBlock`, `getBlocks`, `getBlocksWithLimit`, `getBlockTime`, `getFirstAvailableBlock`, `getInflationReward`, `getSignatureStatuses` | Standard Solana JSON-RPC |
+| `getTransaction`, `getSignaturesForAddress` | We've added an optional slot hint that skips the database lookup when you already know the slot |
+| `getTransactionsForAddress` | Triton's extension: a complete address history in one call (ATAs included) with server-side filters and pagination cursor |
 
 `getTransactionsForAddress` is documented below. Responses are spec-compliant, so no client changes are needed when a method moves to Superbank from Old Faithful.
 
