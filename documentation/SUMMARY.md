@@ -5,7 +5,7 @@
 * [Overview](README.md)
 * [Reading account state](reading-account-state.md)
   * [Quickstart](reading-account-state/reading-state/quickstart.md)
-  * [Account-sync](reading-account-state/account-sync.md)
+  * [Account Sync](reading-account-state/account-sync.md)
   * [Cloudbreak custom indexes](reading-account-state/cloudbreak-indexed-accounts.md)
   * [Metaplex DAS API](reading-account-state/metaplex-das-api.md)
   * [Best practices](reading-account-state/reading-state/best-practices.md)
