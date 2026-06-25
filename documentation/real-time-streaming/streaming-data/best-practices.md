@@ -12,20 +12,21 @@ How to run real-time Solana streams reliably and at low latency.
 * **For a browser or frontend, use Whirligig WebSockets.** It gives the same intra-slot advantage over a browser-compatible WebSocket; gRPC is not supported in browsers.
 * **For "never miss an event" workloads (accounting, analytics, indexing, compliance, archival, or confirmed-data apps like wallets), use Fumarole** instead of raw gRPC. Dragon's Mouth prioritises latency over completeness; Fumarole adds persistence, redundancy, and replay.
 * **For pre-parsed, program-specific data, use Program Data Streams (Vixen)** rather than building your own parsing.
+* **For the earliest possible signal (arbitrage, market making, liquidations, HFT), use Deshred.** It reconstructs transactions from shreds before execution, so it has no confirmation guarantee; pair it with the normal `transactions` stream if you need finality.
 
 ## Provision the subscriber
 
 * **Provision 5 Gbps minimum for large subscriptions, 10 Gbps for full-chain** (accounts plus transactions). The full feed can spike to \~1.3 to 1.8 Gbps, and cloud instances are often capped at \~1 Gbps by default.
 * **Keep round-trip latency to the endpoint at 50 ms or less.**
 * **Enable Zstd compression** and **set the HTTP/2 adaptive window to true.** Without compression it is hard to stay on the tip during spikes.
-* **Run subscribers on a persistent server (VPS or bare metal), never on serverless functions** like Lambda, Google Cloud Functions, or Azure Functions. Serverless environments recycle every few minutes (15 on Lambda), and each restart pays a cold start (hundreds of milliseconds to seconds) plus the 3 to 4 round-trip gRPC handshake (TCP, TLS, HTTP/2, then the subscribe). The chain keeps moving during every reconnect, so you drop messages and miss transaction confirmations. A long-lived stream needs one connection held open permanently.
-* **Don't use vanilla NodeJS** (too slow; use Rust, Golang, or the special NodeJS/TypeScript client).
+* **Run subscribers on a persistent server (VPS or bare metal), not serverless functions** like Lambda or Cloud Functions. They recycle every few minutes, and each cold start and reconnect handshake lets the chain move on, so you drop messages and miss confirmations.
+* **Don't expect a pure-JavaScript client to keep up with high-volume streams.** Use Rust or Go for full-chain, or Triton's official [`@triton-one/yellowstone-grpc`](https://www.npmjs.com/package/@triton-one/yellowstone-grpc) client for TypeScript.
 * **Benchmark with the `client-ubuntu` tool before going live:** a ping every 10 seconds at 60 to 80 Mbps means you can hold the tip without disconnects.
 * **Treat frequent disconnects as a client-side problem** (weak or under-provisioned setup), not a server fault.
 
 ## Stay on the tip during high load
 
-Solana throughput keeps climbing, so a full-chain feed pushes more data every month. When your client cannot keep up, data backs up in buffers, you drift from the tip, and the server drops the connection. Most drift is client-side, and usually one of these:
+Solana throughput keeps climbing, so a full-chain feed pushes more data every month. When your client cannot keep up, data backs up in buffers, you drift from the tip, and the server drops the connection. Most drift is client-side, and is usually caused by one of these:
 
 * **The flow-control window is smaller than your bandwidth-delay product (BDP).** gRPC runs on HTTP/2, which only lets the server send a window's worth of data before it waits for an acknowledgement. The volume you need in flight is the BDP, `bandwidth × RTT` (2 Gbps at 10 ms RTT is about 2.38 MiB). A window below the BDP leaves bandwidth idle. Let the client and server negotiate it with adaptive window sizing; there is no reason to turn it off:
 
@@ -82,31 +83,6 @@ Verify with the `client-ubuntu` test client, using the exact flags and filters y
 * **Deduplicate replayed updates** (replay starts at a slot boundary, so the boundary slot may repeat).
 * **Check the earliest replayable slot first** via `SubscribeReplayInfo` (`first_available`); if `from_slot` is too old the request fails, so fall back to a fresh live subscription or your own backfill path.
 * **Use the Rust client's built-in auto-reconnect (v13.1.0+)** for transparent reconnect, replay, and dedup. It is off by default.
-
-## Use deshred only for the earliest signal
-
-* **Deshred delivers transactions reconstructed from shreds before execution**, the earliest usable signal for arbitrage, market making, copy trading, liquidations, and HFT.
-* **Don't rely on it for execution results or finality.** It has no confirmation guarantee (a transaction may fail, fork, or never confirm); pair it with the normal `transactions` stream if you need those. `SubscribeDeshred` is a separate RPC.
-
-## Fumarole reliability and failover
-
-* **Use Fumarole for persistence and high availability:** it stores up to 4 days of state, lets you disconnect and resume from your last position, and merges multiple downstream nodes so a node restart does not interrupt your stream.
-* **Connect Fumarole to a regional endpoint** (for example `ams.rpcpool.com`), not the shared `*.mainnet.rpcpool.com`. Persistent subscribers are stateful per cluster and do not replicate across regions, so GeoDNS on a shared endpoint can route you where your subscriber does not exist. Pick the region closest to your backend.
-* **Implement cross-region failover client-side** by recreating the persistent subscriber from the last slot observed on the failing cluster. Triton does not synchronise subscriber state or orchestrate failover. Do the prep (durable last-consumed-slot tracking, idempotent processing, outage detection) during normal operation, and start the secondary at `last_slot + 1`. See the Fumarole cluster failover guide for the full procedure.
-* **Shard a high-volume stream across multiple readers with consumer groups** instead of over-subscribing a single connection.
-
-## Operate streaming nodes for reliability
-
-* **Run Geyser on a dedicated node, separate from RPC.** Sharing risks RPC load putting the node behind, which makes Geyser fall behind and miss updates. For complete reliability, run two dedicated nodes (failover plus maintenance and version upgrades).
-
-## Whirligig, Vixen, and auth specifics
-
-* **Whirligig:** append `/whirligig` to your endpoint (some clients need a trailing slash), use the extended (non-standard) `transactionSubscribe` for filtered transaction streams, unsubscribe with the `id` returned by each subscribe, and ping to keep the connection alive (inactive over 60 seconds is closed).
-* **Vixen:** open multiple subscriptions to stream different programs in parallel, connect to the closest region (USA/EU/AP), keep the SDK on the latest version to avoid parser errors, and share one Dragon's Mouth stream across pipelines.
-* **Keep gRPC streams alive with periodic pings** behind idle-closing proxies (the server replies `pong` every 15 seconds).
-* **Authenticate with the `x-token` metadata header**, not a token in the URL (token-in-URL returns `403` on gRPC).
-* **Don't read ZK Compression / Light Protocol accounts over gRPC** (excluded; \~10 MB blobs, gigabits/sec).
-* **Run streaming subscribers on a dedicated node**, not the shared service.
 
 ***
 
