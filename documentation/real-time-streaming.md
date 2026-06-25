@@ -12,33 +12,22 @@ Triton offers multiple streaming services on Solana. This page covers what strea
 
 Solana produces a new block every \~400 ms. If you poll RPC every 200 ms, your data is at best 200 ms stale by the time you see it, and you'll easily hit rate limits hammering the same endpoint.
 
-Streaming inverts the model: you open one connection, say what you need (specific accounts, programs, transaction patterns), and the node pushes you matching events the instant they happen.
+Streaming inverts the model: you open one connection, say what you need (specific accounts, programs, or transactions), and the node pushes you matching events the instant they happen.
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
-sequenceDiagram
-    participant Client
-    participant RPC
-    Note over Client,RPC: Polling: ask repeatedly
-    Client->>RPC: getAccountInfo
-    RPC-->>Client: response (~200 ms stale)
-    Client->>RPC: getAccountInfo
-    RPC-->>Client: response (~200 ms stale)
-    Client->>RPC: getAccountInfo
-    RPC-->>Client: HTTP 429
-```
-
-```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','noteBkgColor':'#FFC845','noteTextColor':'#171717','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#492D60','labelBoxBkgColor':'#7A4BA0','labelTextColor':'#F7F7F7','edgeLabelBackground':'transparent'}}}%%
-sequenceDiagram
-    participant Client
-    participant RPC
-    Note over Client,RPC: Streaming: subscribe once
-    Client->>RPC: subscribe (filters)
-    RPC-->>Client: event (intra-slot)
-    RPC-->>Client: event (intra-slot)
-    RPC-->>Client: event (intra-slot)
-    RPC-->>Client: event (intra-slot)
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3'},'flowchart':{'nodeSpacing':24,'rankSpacing':32,'curve':'linear'}}}%%
+flowchart LR
+    subgraph poll["Polling: ask repeatedly"]
+        direction TB
+        pc["Client"] -->|"getAccountInfo"| pr["RPC"]
+        pr -->|"~200 ms stale"| pc
+        pr -->|"HTTP 429 under load"| pc
+    end
+    subgraph stream["Streaming: subscribe once"]
+        direction TB
+        sc["Client"] -->|"subscribe + filters"| sr["Node"]
+        sr -->|"events, intra-slot"| sc
+    end
 ```
 
 You get sub-slot latency, structured Protobuf payloads, and lower costs, also significantly cheaper than the equivalent polling traffic, as it only incurs bandwidth cost.
