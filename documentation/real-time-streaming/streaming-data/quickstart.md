@@ -624,7 +624,7 @@ Verbatim source: [yellowstone-faithful-client/examples/stream\_blocks.rs](https:
 {% tab title="Deshred" %}
 **What we're doing:** subscribe to the `SubscribeDeshred` gRPC stream, filter out vote transactions, and log every transaction signature with its slot.
 
-Deshred delivers transactions reconstructed from shreds _**before**_ the validator executes them, so you see intent earlier than with any other stream.
+Deshred delivers transactions reconstructed from shreds _**before**_ the node executes them, so you see intent earlier than with any other stream.
 
 {% tabs %}
 {% tab title="TypeScript" %}

@@ -1,14 +1,14 @@
 ---
-description: Stream Solana transactions reconstructed from shreds before the validator executes them.
+description: Stream Solana transactions reconstructed from shreds before the node executes them.
 ---
 
 # Deshred transactions
 
-Pre-execution transaction stream reconstructed from shreds, before the validator executes them. The earliest usable on-chain signal exposed by Yellowstone gRPC.
+Pre-execution transaction stream reconstructed from shreds, before the node executes them. The earliest usable on-chain signal exposed by Yellowstone gRPC.
 
 ## What is Deshred
 
-Deshred is a separate gRPC method (`SubscribeDeshred`) on the same yellowstone-grpc service as Dragon's Mouth. It delivers transactions reconstructed from shreds **before** the validator executes them.
+Deshred is a separate gRPC method (`SubscribeDeshred`) on the same yellowstone-grpc service as Dragon's Mouth. It delivers transactions reconstructed from shreds **before** the node executes them.
 
 This is the earliest usable on-chain signal Triton exposes. It's designed for latency-sensitive systems that care about transaction intent as early as possible: arbitrage, market making, copy trading, liquidations, HFT.
 
@@ -18,14 +18,14 @@ Unlike the standard `Subscribe` transaction stream, deshred updates are emitted 
 %%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3'},'flowchart':{'nodeSpacing':24,'rankSpacing':36,'curve':'linear'}}}%%
 flowchart LR
     s["Shreds"] --> d["Deshred:<br/>reconstruct from shreds"]
-    s --> e["Validator:<br/>execute + replay"]
+    s --> e["Node:<br/>execute + replay"]
     d --> i["Transaction intent<br/>(pre-execution, ~20 ms earlier)"]
     e --> t["Standard transactions<br/>(full execution context)"]
 ```
 
 ## Features and benefits
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-eye">:eye:</i> <strong>Earliest signal</strong></td><td>Pre-execution stream from raw shreds. ~20ms ahead at p75 vs confirmed transactions.</td><td></td></tr><tr><td><i class="fa-code-fork">:code-fork:</i> <strong>Same gRPC service</strong></td><td>Drops into your existing Dragon's Mouth pipeline. Separate method, same client.</td><td></td></tr><tr><td><i class="fa-tags">:tags:</i> <strong>Resolved ALT addresses</strong></td><td>Includes writable and readonly addresses resolved from Address Lookup Tables.</td><td></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-eye">:eye:</i> <strong>Earliest signal</strong></td><td>Pre-execution stream from raw shreds. ~20ms ahead at p75 vs confirmed transactions.</td><td></td></tr><tr><td><i class="fa-code-fork">:code-fork:</i> <strong>Same gRPC interface</strong></td><td>Drops into your existing Dragon's Mouth pipeline. Separate method, same client.</td><td></td></tr><tr><td><i class="fa-tags">:tags:</i> <strong>Resolved ALT addresses</strong></td><td>Includes writable and readonly addresses resolved from Address Lookup Tables.</td><td></td></tr></tbody></table>
 
 ## Use cases
 

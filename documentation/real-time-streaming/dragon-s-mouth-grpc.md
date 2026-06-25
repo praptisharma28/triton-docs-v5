@@ -544,7 +544,7 @@ Full deep-dive: [Compressed filters for Yellowstone gRPC](https://blog.triton.on
 
 ### Transactions
 
-Use the `transactions` subscription to receive executed transactions at your chosen commitment level; `processed` delivers them as soon as the validator processes them, while `confirmed` and `finalized` add latency. If you want the **earliest possible signal**, before execution, use [Deshred transactions](deshred-transactions.md), a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the validator executes them.
+Use the `transactions` subscription to receive executed transactions at your chosen commitment level; `processed` delivers them as soon as the node processes them, while `confirmed` and `finalized` add latency. If you want the **earliest possible signal**, before execution, use [Deshred transactions](deshred-transactions.md), a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the node executes them.
 
 {% tabs %}
 {% tab title="All non-vote, non-failed" %}
