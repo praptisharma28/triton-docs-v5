@@ -29,9 +29,15 @@ Triton is a long-standing trusted validator that participates in Solana governan
 
 ## Onboarding
 
-Because this is a private arrangement, it starts with an agreement between you and Triton. After that:
+Because this is a private arrangement, it starts with an agreement between you and Triton.
 
 {% stepper %}
+{% step %}
+### Contact us
+
+[Contact us](https://triton.one/contact) to start the arrangement. We'll walk through the details on an onboarding call.
+{% endstep %}
+
 {% step %}
 ### Delegate to the Private Validator
 
@@ -44,8 +50,6 @@ Point your delegation at Triton's private validator.
 Give us the public key where you want your USDC rewards sent each week.
 {% endstep %}
 {% endstepper %}
-
-[Sign up](https://customers.triton.one/) and we'll reach out to walk through the details on an onboarding call.
 
 ***
 
