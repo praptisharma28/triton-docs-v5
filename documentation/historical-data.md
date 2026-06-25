@@ -30,15 +30,15 @@ New here? The [Quickstart](https://kate-6.gitbook.io/triton-one-docs-v5/document
 
 ## What Superbank serves
 
-The complete ledger from genesis: every block, transaction, and entry. On a Triton endpoint, the historical read methods route to Superbank; account-state and live methods are served by other backends.
+The complete ledger from genesis: every block, transaction, and entry. Most Superbank methods match standard Solana JSON-RPC exactly; a few add an optional parameter or extend it.
 
-| Methods | Routed to |
+| Methods | Compatibility |
 | --- | --- |
-| `getTransaction`, `getBlock`, `getBlocks`, `getBlocksWithLimit`, `getBlockTime`, `getFirstAvailableBlock`, `getSignaturesForAddress`, `getSignatureStatuses`, `getInflationReward`, `getTransactionsForAddress` | **Superbank** (historical ledger) |
-| `getAccountInfo`, `getMultipleAccounts`, `getProgramAccounts`, token-account and balance reads | **Cloudbreak**, see [Reading account state](reading-account-state.md) |
-| Live subscriptions and the current chain tip | **Streaming services**, see [Real-time streaming](real-time-streaming.md) |
+| `getBlock`, `getBlocks`, `getBlocksWithLimit`, `getBlockTime`, `getFirstAvailableBlock`, `getInflationReward`, `getSignatureStatuses` | Standard Solana JSON-RPC, drop-in |
+| `getTransaction`, `getSignaturesForAddress` | Standard, plus an optional slot hint that skips the database lookup when you already know the slot |
+| `getTransactionsForAddress` | Triton extension: an address's full history in one call, with server-side filters and a single pagination cursor |
 
-`getTransactionsForAddress` is a Superbank extension, documented below. Responses are spec-compliant, so no client changes are needed when a method moves to Superbank from Old Faithful.
+`getTransactionsForAddress` is documented below. Responses are spec-compliant, so no client changes are needed when a method moves to Superbank from Old Faithful.
 
 Superbank makes historical queries faster and cheaper. Benchmarked against public RPC at p50, it is 5x faster on `getSignaturesForAddress`, 38x on `getSignatureStatuses`, and 3.3x on `getTransaction`. Every historical query is priced the same, `$0.08 / GB` plus `$10 / million`, no matter how deep into history it reaches.
 

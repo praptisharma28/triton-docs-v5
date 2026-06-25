@@ -51,7 +51,7 @@ import { Connection, PublicKey } from "@solana/web3.js";
 const connection = new Connection(
   "https://<your-endpoint>.rpcpool.com/<your-token>",
   {
-    wsEndpoint: "wss://<your-endpoint>.rpcpool.com/<your-token>/whirligig",
+    wsEndpoint: "wss://<your-endpoint>.rpcpool.com/<your-token>",
     commitment: "processed",
   }
 );
@@ -83,7 +83,7 @@ use std::str::FromStr;
 
 #[tokio::main]
 async fn main() {
-    let client = PubsubClient::new("wss://<your-endpoint>.rpcpool.com/<your-token>/whirligig")
+    let client = PubsubClient::new("wss://<your-endpoint>.rpcpool.com/<your-token>")
         .await
         .expect("connect");
 
@@ -115,7 +115,7 @@ async fn main() {
 Required for `transactionSubscribe`, which returns full transaction data in a single call and is not available in `@solana/web3.js`.
 
 ```javascript
-const ws = new WebSocket("wss://<your-endpoint>.rpcpool.com/<your-token>/whirligig");
+const ws = new WebSocket("wss://<your-endpoint>.rpcpool.com/<your-token>");
 
 ws.addEventListener("open", () => {
   // Keep alive: Whirligig closes idle connections after 60 s
@@ -142,7 +142,7 @@ ws.addEventListener("message", ({ data }) => {
 {% endtabs %}
 
 {% hint style="info" %}
-Some clients need a trailing slash (`/whirligig/`). Connections idle for over 60 seconds are closed, so keep them alive by sending `{"jsonrpc":"2.0","method":"ping"}`.
+Connections idle for over 60 seconds are closed, so keep them alive by sending `{"jsonrpc":"2.0","method":"ping"}`.
 {% endhint %}
 
 ### Commitment levels
