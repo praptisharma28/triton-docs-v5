@@ -12,8 +12,7 @@ Both methods run on your Triton endpoint with token-based auth. Before starting,
 
 * An active Triton subscription
 * Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/)
-* A backend in TypeScript, Rust, or Python (Account Sync is a TypeScript SDK)
-* You've picked a method to try
+* A backend or frontend in any language. The standard reads are plain JSON-RPC (the examples use TypeScript, Rust, and curl); Account Sync is a TypeScript SDK that runs in Node or the browser.
 
 The two ways to read covered here:
 

@@ -19,7 +19,7 @@ Read Solana's complete on-chain history on Triton. Historical methods are served
 `getSignaturesForAddress` returns the transaction signatures that touch an address, newest first.
 
 ```bash
-curl https://your-endpoint.mainnet.rpcpool.com/your-token -s -X POST \
+curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -36,7 +36,7 @@ Each result carries the `signature`, `slot`, `blockTime`, and `err`. Take a `sig
 `getTransaction` returns the full, decoded transaction for a single signature.
 
 ```bash
-curl https://your-endpoint.mainnet.rpcpool.com/your-token -s -X POST \
+curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -53,7 +53,7 @@ This is the standard two-step pattern: one call to discover signatures, then one
 `getTransactionsForAddress` is Superbank's extension that collapses Steps 1 and 2 into a single request. Ask for full transactions and it returns them directly, with no per-signature follow-up.
 
 ```bash
-curl https://your-endpoint.mainnet.rpcpool.com/your-token -s -X POST \
+curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -66,7 +66,7 @@ curl https://your-endpoint.mainnet.rpcpool.com/your-token -s -X POST \
 Filters apply server-side and pagination uses a single cursor. For example, only successful transactions within a slot range:
 
 ```bash
-curl https://your-endpoint.mainnet.rpcpool.com/your-token -s -X POST \
+curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
