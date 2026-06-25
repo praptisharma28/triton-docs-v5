@@ -6,13 +6,11 @@ description: An enhanced Solana WebSocket API for browsers and existing WS clien
 
 Whirligig is a Rust-based proxy between a Dragon's Mouth gRPC server and a WebSocket client. It speaks the standard Solana WebSocket API, so a browser or any existing WebSocket client can subscribe over `wss://` instead of gRPC. At `processed` commitment, Whirligig also delivers intra-slot updates: account updates arrive up to 400 ms faster than native Solana WebSocket subscriptions.
 
-**Use Whirligig when** you want Solana WebSocket subscriptions in a browser or an existing WS client. **Use Dragon's Mouth gRPC instead** for backend services that want the lowest latency and richest server-side filtering.
-
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-bolt">:bolt:</i> <strong>transactionSubscribe</strong></td><td>A full-transaction subscription the native Solana WS API does not have, with account include, exclude, and required filters.</td><td></td></tr><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Intra-slot updates</strong></td><td>At processed commitment, account updates arrive up to 400 ms faster than native Solana WebSockets.</td><td></td></tr><tr><td><i class="fa-plug">:plug:</i> <strong>Drop-in Solana WS API</strong></td><td>Aims for full compatibility with the standard Solana WebSocket API, so existing WS clients work unchanged.</td><td></td></tr><tr><td><i class="fa-radio">:radio:</i> <strong>Backed by Dragon's Mouth</strong></td><td>Translates a Dragon's Mouth gRPC stream into WebSocket messages, so a browser gets gRPC-grade data.</td><td></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-bolt">:bolt:</i> <strong>transactionSubscribe</strong></td><td>A full-transaction subscription the native Solana WS API does not have, with account include, exclude, and required filters.</td><td></td></tr><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Intra-slot updates</strong></td><td>At processed commitment, account updates arrive up to 400 ms faster than native Solana WebSockets.</td><td></td></tr><tr><td><i class="fa-plug">:plug:</i> <strong>Drop-in Solana WS API</strong></td><td>Full parity with the standard Solana WebSocket API, so existing WS clients work unchanged.</td><td></td></tr><tr><td><i class="fa-radio">:radio:</i> <strong>Backed by Dragon's Mouth</strong></td><td>Translates a Dragon's Mouth gRPC stream into WebSocket messages, so a browser gets gRPC-grade data.</td><td></td></tr></tbody></table>
 
 ## Methods
 
-Whirligig aims for full compatibility with the [Solana WebSocket API](https://solana.com/docs/rpc/websocket), with one added subscription, `transactionSubscribe`, that the native API does not have. Each subscribe method returns a subscription `id` and has a matching unsubscribe (see [Unsubscribe](#unsubscribe)).
+Whirligig has full parity with the [Solana WebSocket API](https://solana.com/docs/rpc/websocket): it serves the standard `solana-pubsub` endpoint, plus one added subscription, `transactionSubscribe`, that the native API does not have. Each subscribe method returns a subscription `id` and has a matching unsubscribe (see [Unsubscribe](#unsubscribe)). The methods with request and response examples below are the most common; the rest follow the standard Solana WebSocket spec.
 
 | Method | Subscribe to | Notes |
 | --- | --- | --- |
@@ -22,6 +20,9 @@ Whirligig aims for full compatibility with the [Solana WebSocket API](https://so
 | `programSubscribe` | Accounts owned by a program, on change | Solana-compatible |
 | `signatureSubscribe` | A signature's confirmation status | Solana-compatible |
 | `slotSubscribe` | Each new slot | Solana-compatible |
+| `rootSubscribe` | Each new root (the highest finalized slot) | Solana-compatible |
+| `voteSubscribe` | Votes as they are observed in gossip | Solana-compatible (unstable Solana method) |
+| `slotsUpdatesSubscribe` | Detailed slot-status updates | Solana-compatible (unstable Solana method) |
 | `transactionSubscribe` | Full transactions matching a filter | Whirligig extension, not in the native Solana WS API |
 
 ## Connect

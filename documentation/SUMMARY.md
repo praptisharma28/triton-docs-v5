@@ -31,7 +31,6 @@
     * [Jito bundles](sending-transactions/3rd-party-apis/jito-bundles.md)
 * [Validator services](validator-services.md)
   * [White-label validators](validator-services/white-label-validators.md)
-  * [SOL staking (USDC pay-outs)](validator-services/sol-staking-usdc-pay-outs.md)
     * [Vote account setup](validator-services/white-label-validators/vote-account-setup.md)
     * [Node identity protection](validator-services/white-label-validators/node-identity-protection.md)
   * [SOL staking (USDC pay-outs)](validator-services/sol-staking-usdc-pay-outs.md)
