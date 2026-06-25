@@ -20,7 +20,7 @@ How to run real-time Solana streams reliably and at low latency.
 * **Keep round-trip latency to the endpoint at 50 ms or less.**
 * **Enable Zstd compression** and **set the HTTP/2 adaptive window to true.** Without compression it is hard to stay on the tip during spikes.
 * **Run subscribers on a persistent server (VPS or bare metal), not serverless functions** like Lambda or Cloud Functions. They recycle every few minutes, and each cold start and reconnect handshake lets the chain move on, so you drop messages and miss confirmations.
-* **Update your `@triton-one/yellowstone-grpc` client to v5+ for high-volume streams.** We added NAPI-as-an-Engine (NaaE), which moves the gRPC engine into Rust for \~400% more throughput than the previous pure-JavaScript version. It's a drop-in replacement.
+* **Update your `@triton-one/yellowstone-grpc` client to v5+ for high-volume streams.** We added NAPI-as-an-Engine (NaaE), which moves the gRPC engine into Rust for \~400% more throughput than the previous pure-JavaScript version. It's a drop-in replacement. [Learn more](https://blog.triton.one/grpc-js-alternative-napi-rust/).
 * **Benchmark with the `client-ubuntu` tool before going live:** a ping every 10 seconds at 60 to 80 Mbps means you can hold the tip without disconnects.
 * **Treat frequent disconnects as a client-side problem** (weak or under-provisioned setup), not a server fault.
 
