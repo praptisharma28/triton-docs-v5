@@ -24,6 +24,8 @@ layout:
 
 # Overview
 
+Monad is a high-performance, EVM-compatible Layer 1. Triton runs Monad RPC endpoints for early builders, with the standard Ethereum JSON-RPC and WebSocket APIs, so your existing EVM tooling works unchanged.
+
 ## Block explorers
 
 * Mainnet: [https://monadvision.com](https://monadvision.com)
