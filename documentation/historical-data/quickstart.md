@@ -9,12 +9,12 @@ layout:
 
 Read Solana's complete on-chain history on Triton. Historical methods are served from Superbank automatically, as spec-compliant Solana JSON-RPC, so the calls you already know work unchanged. This reads an address's history two ways: the standard `getSignaturesForAddress` then `getTransaction` pattern, and the `getTransactionsForAddress` extension that returns it in a single call.
 
-## Step 0. Prerequisites
+## 0. Prerequisites
 
 * A Triton Solana endpoint and token with historical data enabled, from your [customer dashboard](https://customers.triton.one).
 * `curl`, or any Solana JSON-RPC client.
 
-## Step 1. List an address's signatures
+## 1. List an address's signatures
 
 `getSignaturesForAddress` returns the transaction signatures that touch an address, newest first.
 
@@ -50,7 +50,7 @@ curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
 
 Each result carries the `signature`, `slot`, `blockTime`, and `err`. Take a `signature` from the response for the next step.
 
-## Step 2. Fetch one transaction
+## 2. Fetch one transaction
 
 `getTransaction` returns the full, decoded transaction for a single signature.
 
@@ -82,7 +82,7 @@ curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
 
 This is the standard two-step pattern: one call to discover signatures, then one `getTransaction` per signature. For a busy address, that becomes an N+1 round-trip flow.
 
-## Step 3. Get the whole history in one call
+## 3. Get the whole history in one call
 
 `getTransactionsForAddress` is Superbank's extension that collapses Steps 1 and 2 into a single request. Ask for full transactions and it returns them directly, with no per-signature follow-up.
 

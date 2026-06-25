@@ -9,13 +9,13 @@ In this quickstart we read account state two ways, on the same task:
 1. **Standard Agave polling.** You call an RPC node and it answers over the network, one request per read.
 2. **Account Sync (`@triton-one/triton-sdk`).** Keeps a local copy of the accounts you track in RAM and resolves reads against it, with no network round-trip. By default it auto-subscribes to each account the first time your code reads it, so the accounts you poll get streamed automatically (you can also pre-seed them with `initialAccounts`). It serves `getAccountInfo`, `getMultipleAccountsInfo`, `getParsedAccountInfo`, and `getMultipleParsedAccounts`, and it's a drop-in for web3.js with no code rewrite.
 
-## Step 0. Prerequisites
+## 0. Prerequisites
 
 * An active Triton subscription
 * Your endpoint URL and secret token (for backends) from the [customer dashboard](https://customers.triton.one/)
 * An environment in TypeScript, Rust, or curl
 
-## Step 1. Install
+## 1. Install
 
 {% tabs %}
 {% tab title="Standard RPC" %}
@@ -52,7 +52,7 @@ npx tsc --init
 {% endtab %}
 {% endtabs %}
 
-## Step 2. Connect and read
+## 2. Connect and read
 
 **What we're doing:** read a single account, the USDC mint, and decode it with `jsonParsed`.
 
@@ -138,7 +138,7 @@ await connection.close();
 {% endtab %}
 {% endtabs %}
 
-## Step 3. Verify your read
+## 3. Verify your read
 
 Run your code:
 

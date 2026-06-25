@@ -7,14 +7,14 @@ layout:
 
 # Quickstart
 
-Send a Solana transaction with **`/sendtx`**, the direct HTTP submission endpoint on every Triton endpoint. It applies SWQoS and forwards your transaction to the leader, same as `sendTransaction`, but skips the JSON-RPC envelope: no JSON parsing, no CORS preflight, a smaller payload, and no RPC client library. For all the send options and how they compare, see [Sending transactions](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions).
+Send a Solana transaction with **`/sendtx`**, the direct HTTP submission endpoint on every Triton endpoint. Both `/sendtx` and `sendTransaction` route through Yellowstone Jet, Triton's sending engine, with SWQoS on by default; `/sendtx` just skips the JSON-RPC envelope: no JSON parsing, no CORS preflight, a smaller payload, and no RPC client library. For all the send options and how they compare, see [Sending transactions](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions).
 
-## Step 0. Prerequisites
+## 0. Prerequisites
 
 * A Triton Solana endpoint and token, from your [customer dashboard](https://customers.triton.one).
 * A funded keypair and a way to build and sign a transaction (`@solana/web3.js`, `@solana/kit`, or your SDK of choice).
 
-## Step 1. Build and sign a transaction
+## 1. Build and sign a transaction
 
 Build and sign as usual, then serialise it to raw bytes. The signature is deterministic, so you can read it from the signed transaction before you send.
 
@@ -22,9 +22,10 @@ Build and sign as usual, then serialise it to raw bytes. The signature is determ
 import {
   Connection, Keypair, PublicKey, SystemProgram, Transaction,
 } from "@solana/web3.js";
+import bs58 from "bs58";
 
 const connection = new Connection("https://your-endpoint.mainnet.rpcpool.com/your-token", "confirmed");
-const payer = Keypair.fromSecretKey(/* your secret key bytes */);
+const payer = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.SECRET_KEY!))); // 64-byte secret key
 
 const tx = new Transaction().add(
   SystemProgram.transfer({
@@ -38,10 +39,10 @@ tx.feePayer = payer.publicKey;
 tx.sign(payer);
 
 const wire = tx.serialize();           // raw bytes
-const signature = tx.signatures[0].signature; // derive the signature locally
+const signature = bs58.encode(tx.signature!); // base58 signature, known before you send
 ```
 
-## Step 2. Submit with /sendtx
+## 2. Submit with /sendtx
 
 POST the serialised transaction. Pass `response=signature` to get the signature back in the response body.
 
@@ -78,19 +79,21 @@ curl -X POST 'https://your-endpoint.mainnet.rpcpool.com/your-token/sendtx?encodi
 {% endtab %}
 {% endtabs %}
 
-**Expected response.** With `response=signature`, the body is the transaction signature as plain text, not JSON:
+### Expected response
+
+With `response=signature`, the body is the transaction signature as plain text, not JSON:
 
 ```
 5j7s4Hk3vQmPq8nLZ9xTe8oP...
 ```
 
-Query parameters: `encoding` (`base58` or `base64`, for text bodies; default `base58`), `response=signature` (return the signature on success), and `max_retries` (override the retry count). To route only through validators you trust, add the `solana-forwardingpolicies` header with your [Yellowstone Shield](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection) policy addresses.
+Query parameters: `encoding` (`base58` or `base64`, for text bodies; default `base58`), `response=signature` (return the signature on success), and `max_retries` (override the retry count). To route only through validators you trust, add the `Solana-ForwardingPolicies` header with your [Yellowstone Shield](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection) policy addresses.
 
 {% hint style="info" %}
 Prefer the standard JSON-RPC interface, or need options like `skipPreflight`? `sendTransaction` works on the same endpoint. See [Best practices](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/best-practices).
 {% endhint %}
 
-## Step 3. Verify
+## 3. Verify
 
 With `response=signature`, the POST returns the signature. Confirm it landed:
 
@@ -105,7 +108,7 @@ curl https://your-endpoint.mainnet.rpcpool.com/your-token -s -X POST \
   }'
 ```
 
-**Expected response.**
+### Expected response
 
 ```json
 {
@@ -113,7 +116,7 @@ curl https://your-endpoint.mainnet.rpcpool.com/your-token -s -X POST \
   "result": {
     "context": { "slot": 275123456 },
     "value": [
-      { "slot": 275123456, "confirmations": null, "err": null, "confirmationStatus": "finalized" }
+      { "slot": 275123456, "confirmations": 12, "err": null, "confirmationStatus": "confirmed" }
     ]
   },
   "id": 1

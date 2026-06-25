@@ -4,24 +4,24 @@ description: Open your first Triton stream and see live Solana data in minutes.
 
 # Quickstart
 
-## Step 0. Prerequisites
+## 0. Prerequisites
 
-All five streaming services we'll be testing use Triton endpoints with token-based authentication. Before starting, here's what you need:
+All streaming services we'll be testing use Triton endpoints with token-based authentication. Before starting, here's what you need:
 
 * An active Triton subscription
 * Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/)
 * An environment in TypeScript, Rust, Go, or Python
 
-The five streaming services covered:
+The streaming services covered:
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/whirligig-websockets">Whirligig WebSockets</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 96h of stored data and built-in cursor resume.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/fumarole-persistent-streams">Fumarole reliable streams</a></td></tr><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions">Deshred transactions</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/whirligig-websockets">Whirligig WebSockets</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 4 days of stored data and built-in cursor resume.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/fumarole-persistent-streams">Fumarole reliable streams</a></td></tr><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions">Deshred transactions</a></td></tr></tbody></table>
 
-## Step 1. Install
+## 1. Install
 
 Set up a fresh project for the service you want to try.
 
 {% tabs %}
-{% tab title="Dragon" %}
+{% tab title="Dragon's Mouth" %}
 {% tabs %}
 {% tab title="TypeScript" %}
 ```bash
@@ -36,11 +36,11 @@ npx tsc --init
 {% tab title="Rust" %}
 ```toml
 [dependencies]
-yellowstone-grpc-client = "1.13"
-yellowstone-grpc-proto = "1.13"
+yellowstone-grpc-client = "13"
+yellowstone-grpc-proto = "12"
 tokio = { version = "1", features = ["full"] }
 futures = "0.3"
-tonic = { version = "0.12", features = ["tls"] }
+tonic = { version = "0.14", features = ["tls"] }
 ```
 {% endtab %}
 
@@ -70,7 +70,7 @@ npx tsc --init
 ```
 {% endtab %}
 
-{% tab title="Rust (Cargo.toml)" %}
+{% tab title="Rust" %}
 ```toml
 [dependencies]
 solana-client = "2"
@@ -102,8 +102,8 @@ npx tsc --init
 {% tab title="Rust" %}
 ```toml
 [dependencies]
-yellowstone-fumarole-client = "0.5"
-yellowstone-grpc-proto = "1.13"
+yellowstone-fumarole-client = "0.6"
+yellowstone-grpc-proto = "12"
 tokio = { version = "1", features = ["full"] }
 futures = "0.3"
 ```
@@ -146,12 +146,12 @@ npx tsc --init
 {% tab title="Rust" %}
 ```toml
 [dependencies]
-yellowstone-grpc-client = "1.13"
-yellowstone-grpc-proto = "1.13"
+yellowstone-grpc-client = "13"
+yellowstone-grpc-proto = "12"
 solana-signature = "2"
 tokio = { version = "1", features = ["full"] }
 futures = "0.3"
-tonic = { version = "0.12", features = ["tls"] }
+tonic = { version = "0.14", features = ["tls"] }
 anyhow = "1"
 ```
 {% endtab %}
@@ -159,11 +159,11 @@ anyhow = "1"
 {% endtab %}
 {% endtabs %}
 
-## Step 2. Connect and subscribe
+## 2. Connect and subscribe
 
 {% tabs %}
-{% tab title="Dragon" %}
-**What we're doing:** subscribe to all writes on a specific account (the wSOL/USDC OpenBook market) and log each Protobuf-decoded update.
+{% tab title="Dragon's Mouth" %}
+**What we're doing:** subscribe to all writes on a specific account (the USDC mint) and log each Protobuf-decoded update.
 
 First, initialise the client and connect:
 
@@ -228,8 +228,8 @@ stream.on("data", (data) => {
 const request: SubscribeRequest = {
   slots: { slots: {} },
   accounts: {
-    "wsol/usdc": {
-      account: ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"],
+    "usdc": {
+      account: ["EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"],
       owner: [],
       filters: [],
     },
@@ -272,9 +272,9 @@ use {
 
 let mut accounts = HashMap::new();
 accounts.insert(
-    "wsol/usdc".to_string(),
+    "usdc".to_string(),
     SubscribeRequestFilterAccounts {
-        account: vec!["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6".to_string()],
+        account: vec!["EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v".to_string()],
         owner: vec![],
         filters: vec![],
         ..Default::default()
@@ -303,7 +303,7 @@ while let Some(message) = stream.next().await {
 ```shell
 ./grpcurl \
   -proto geyser.proto \
-  -d '{"slots": { "slots": {} }, "accounts": { "wsol/usdc": { "account": ["8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}}' \
+  -d '{"slots": { "slots": {} }, "accounts": { "usdc": { "account": ["EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}}' \
   -H "x-token: <token>" \
   api.rpcpool.com:443 \
   geyser.Geyser/Subscribe
@@ -737,7 +737,7 @@ async fn main() -> anyhow::Result<()> {
 {% endtab %}
 {% endtabs %}
 
-## Step 3. Verify your stream
+## 3. Verify your stream
 
 Run your code:
 
@@ -771,12 +771,12 @@ Then walk through this checklist:
 ### Expected first message
 
 {% tabs %}
-{% tab title="Dragon" %}
+{% tab title="Dragon's Mouth" %}
 A Protobuf-decoded `SubscribeUpdate`. Each message has the matching filter labels and a payload type (`account`, `transaction`, `slot`, `block`, `blockMeta`, or `entry`). Account-update example:
 
 ```
 data {
-  filters: [ 'wsol/usdc' ],
+  filters: [ 'usdc' ],
   account: {
     account: {
       pubkey: <Buffer ...>,
@@ -913,7 +913,7 @@ Sometimes. Some cloud providers (e.g. Cloudflare) close idle streams. If you see
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions">Deshred transactions</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/whirligig-websockets">Whirligig WebSockets</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 96h of stored data and built-in cursor resume.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/fumarole-persistent-streams">Fumarole reliable streams</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions">Deshred transactions</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/whirligig-websockets">Whirligig WebSockets</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 4 days of stored data and built-in cursor resume.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/fumarole-persistent-streams">Fumarole reliable streams</a></td></tr></tbody></table>
 
 ***
 

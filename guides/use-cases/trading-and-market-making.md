@@ -43,7 +43,7 @@ npm install @triton-one/yellowstone-grpc bs58 @solana/web3.js
 ```
 {% endtab %}
 
-{% tab title="Rust (Cargo.toml)" %}
+{% tab title="Rust" %}
 ```toml
 [dependencies]
 yellowstone-grpc-client = "2"
@@ -76,7 +76,7 @@ pip install grpcio grpcio-tools base58 solana httpx
 Dragon's Mouth delivers account and transaction updates as the node processes them, at processed commitment. For a trading bot you'll subscribe to the pool accounts and transactions of the DEX programs you're trading on.
 
 {% tabs %}
-{% tab title="stream-dex.ts" %}
+{% tab title="TypeScript" %}
 ```typescript
 
   CommitmentLevel,
@@ -156,7 +156,7 @@ streamDexData().catch(console.error);
 ```
 {% endtab %}
 
-{% tab title="stream_dex.rs" %}
+{% tab title="Rust" %}
 ```rust
 use std::collections::HashMap;
 use futures::StreamExt;
@@ -225,7 +225,7 @@ async fn main() -> anyhow::Result<()> {
 ```
 {% endtab %}
 
-{% tab title="stream_dex.py" %}
+{% tab title="Python" %}
 ```python
 
 from grpc import aio
@@ -331,7 +331,7 @@ Important limitations to understand before using Deshred:
 * **Requires Agave 4.0+** on the validator (available on Triton's paid beta).
 
 {% tabs %}
-{% tab title="stream-deshred.ts" %}
+{% tab title="TypeScript" %}
 ```typescript
 
   SubscribeRequestFilterDeshredTransactions,
@@ -382,7 +382,7 @@ streamDeshred().catch(console.error);
 ```
 {% endtab %}
 
-{% tab title="stream_deshred.rs" %}
+{% tab title="Rust" %}
 ```rust
 use std::collections::HashMap;
 use futures::StreamExt;
@@ -433,7 +433,7 @@ async fn main() -> anyhow::Result<()> {
 ```
 {% endtab %}
 
-{% tab title="stream_deshred.py" %}
+{% tab title="Python" %}
 ```python
 
 from grpc import aio
@@ -497,7 +497,7 @@ Use this signal to detect incoming order flow and react, for example, detecting 
 Before building your transaction, call Triton's Priority Fee API to get a fee at your target percentile. This avoids both underbidding (transaction doesn't land) and overbidding (unnecessary cost).
 
 {% tabs %}
-{% tab title="priority-fee.ts" %}
+{% tab title="TypeScript" %}
 ```typescript
 async function getPriorityFee(
   endpoint: string,
@@ -529,7 +529,7 @@ console.log("Priority fee (90th pct):", fee, "micro-lamports/CU");
 ```
 {% endtab %}
 
-{% tab title="priority_fee.rs" %}
+{% tab title="Rust" %}
 ```rust
 use reqwest::Client;
 use serde::Deserialize;
@@ -576,7 +576,7 @@ async fn get_priority_fee(
 ```
 {% endtab %}
 
-{% tab title="priority_fee.py" %}
+{% tab title="Python" %}
 ```python
 
 async def get_priority_fee(
@@ -629,7 +629,7 @@ ComputeBudgetProgram.setComputeUnitPrice({ microLamports: fee })
 Jet is Triton's transaction relay engine. When you send through your Triton endpoint, Jet automatically routes to the current leader over QUIC, handles connection caching, leader schedule tracking, and retry fanout. SWQoS is included, no extra configuration needed.
 
 {% tabs %}
-{% tab title="send-jet.ts" %}
+{% tab title="TypeScript" %}
 ```typescript
 
   Connection,
@@ -668,7 +668,7 @@ function addPriorityFee(tx: Transaction, microLamportsPerCU: number): void {
 ```
 {% endtab %}
 
-{% tab title="send_jet.rs" %}
+{% tab title="Rust" %}
 ```rust
 use solana_client::rpc_client::RpcClient;
 use solana_client::rpc_config::RpcSendTransactionConfig;
@@ -697,7 +697,7 @@ fn send_with_jet(
 ```
 {% endtab %}
 
-{% tab title="send_jet.py" %}
+{% tab title="Python" %}
 ```python
 from solana.rpc.api import Client
 from solana.rpc.types import TxOpts
