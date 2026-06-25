@@ -52,7 +52,8 @@ flowchart LR
     ledger["Full Solana ledger"] --> ingest["Ingest"]
     ingest --> ch["ClickHouse<br/>columnar store"]
     ch --> q["JSON-RPC query layer<br/>+ head cache (under 1 ms)"]
-    q --> you["Your standard<br/>JSON-RPC calls"]
+    q --> you["Your application"]
+    style you fill:#D6EAF8,stroke:#259DD0,color:#0B4F6C
 ```
 
 The full architecture (storage layout, materialised views, tiered storage) matters mostly if you self-host. See [Self-hosting](#self-hosting) below.
