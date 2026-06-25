@@ -37,7 +37,7 @@ Whirligig has full parity with the [Solana WebSocket API](https://solana.com/doc
 
 ## Connect
 
-On Triton's shared infrastructure, your existing WebSocket connections already route through Whirligig by default: nothing to change. Otherwise, append `/whirligig` to your endpoint and connect:
+On Triton's shared infrastructure, your existing WebSocket connections already route through Whirligig by default, with nothing to change, and run over HTTP/3 and QUIC for lower-latency browser and mobile connections. Otherwise, append `/whirligig` to your endpoint and connect:
 
 ```
 wss://<your-endpoint>.rpcpool.com/<your-token>/whirligig
