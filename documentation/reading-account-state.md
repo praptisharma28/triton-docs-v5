@@ -17,9 +17,11 @@ Standard Agave nodes make some of these reads slow or expensive as you scale:
 
 Triton's account-read stack targets each of these, so you read state fast and cost-efficiently while keeping the standard Solana JSON-RPC response shape: your client code needs no changes.
 
+## Pick your read path
+
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-server">:server:</i> <strong>Standard RPC</strong></td><td>Every standard Solana JSON-RPC account method is supported. Most route through specialized pipelines for faster, cheaper responses, while the rest rely on standard Agave nodes.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/api-reference/solana">https://kate-6.gitbook.io/triton-one-docs-v5/api-reference/solana</a></td></tr><tr><td><i class="fa-database">:database:</i> <strong>Cloudbreak</strong></td><td>Tailored indexes built from your live traffic for 99% faster account and token reads. Your requests are indexed and routed through Cloudbreak automatically, with nothing for you to set up.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/cloudbreak-indexed-accounts">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/cloudbreak-indexed-accounts</a></td></tr><tr><td><i class="fa-arrows-rotate">:arrows-rotate:</i> <strong>Account Sync</strong></td><td>Account reads served from a local cache kept fresh by a live gRPC or WS stream. Streaming-grade speed and bandwidth-only billing for your existing polling code.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/account-sync">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/account-sync</a></td></tr><tr><td><i class="fa-image">:image:</i> <strong>DAS API</strong></td><td>One API to fetch ownership, metadata, and balances for NFTs, cNFTs, and tokens, via the Metaplex Digital Asset Standard, an extension of JSON-RPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/metaplex-das-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/metaplex-das-api</a></td></tr></tbody></table>
 
-## Methods by service
+### Methods by service
 
 Every account-read method is served by one of these. Standard RPC covers the methods the node answers directly; the rest route through a specialized service.
 
@@ -39,7 +41,7 @@ The single and multiple account reads (`getAccountInfo`, `getMultipleAccounts`) 
 * **Wallets and NFT apps**: the DAS API for assets and metadata, Cloudbreak or Account Sync for balances.
 * **Low-latency trading and market making**: for the lowest latency, stream with gRPC ([Dragon's Mouth](real-time-streaming/dragon-s-mouth-grpc.md)). When you need account reads in a web3.js-shaped client, Account Sync cuts read latency significantly compared to polling.
 
-## Limitations and exclusions
+## Limitations
 
 * **Excluded methods.** `getLargestAccounts` is not served on shared endpoints. `getTokenLargestAccounts` does not accept JSON-RPC batch requests.
 * **Light Protocol (ZK Compression) accounts** are not served by `getProgramAccounts` or the Yellowstone streams.
