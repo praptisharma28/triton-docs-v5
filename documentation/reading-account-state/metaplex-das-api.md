@@ -28,11 +28,11 @@ Over two years we've delivered major open-source enhancements to DAS: ingestion 
 
 ## Features
 
-* **Assets by owner, creator, authority, or group**, plus full-text search across assets.
-* **Single and batch asset reads** with metadata, royalties, and collection in one call.
-* **Merkle proofs for compressed NFTs**, with server-side decompression: a cNFT and its metadata come back in a single call.
-* **Fungible token balances and mint metadata** for SPL and Token-2022.
-* **A consistent JSON-RPC interface.**
+* **Transaction history of any compressed asset.**
+* **Current token holders and balances.**
+* **Search and filtering by owner, creator, authority, or collection.**
+* **Data across regular and programmable NFTs, compressed NFTs, MPL Core, fungible tokens, and Metaplex agent tokens.**
+* **Merkle proofs for compressed assets**, with server-side decompression: an asset and its metadata return in a single call.
 
 ## How to use
 

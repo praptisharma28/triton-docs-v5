@@ -349,8 +349,6 @@ Combine multiple programs in one filter, or use separate filters for different r
 
 Both programs in one filter:
 
-{% tabs %}
-{% tab title="gRPC" %}
 ```json
 {
   "slots": { "slots": {} },
@@ -368,13 +366,9 @@ Both programs in one filter:
   "accounts_data_slice": []
 }
 ```
-{% endtab %}
-{% endtabs %}
 
 Separate filters with different tags:
 
-{% tabs %}
-{% tab title="gRPC" %}
 ```json
 {
   "slots": { "slots": {} },
@@ -388,8 +382,6 @@ Separate filters with different tags:
   "accounts_data_slice": []
 }
 ```
-{% endtab %}
-{% endtabs %}
 {% endtab %}
 
 {% tab title="Advanced filters + data slice" %}
@@ -509,15 +501,14 @@ For subscriptions tracking thousands of accounts, the explicit pubkey list domin
 |        1,000,000 |           \~4 MiB |              \~44 MB |
 |        2,000,000 |           \~8 MiB |              \~84 MB |
 
-Inserts and removes on the filter are O(1), so account-set mutations skip a full filter rebuild.
+Inserts and removes on the filter are O(1), so account-set mutations skip a full filter rebuild. And because it uses SipHash-2-4, a TypeScript client and a Rust client emit identical filter bytes for the same pubkey set, so one tracked set works across languages and Rust compiler versions.
 
 **Tradeoffs:**
 
 * **False positives** stay under 1%. Your client should keep an exact tracked set and drop incoming updates whose pubkey isn't in it. A `HashSet` check is the standard pattern; the probabilistic part lives only on the wire.
 * **One-time build cost.** A 2M-account filter takes \~390 ms on a release build. Every subsequent insert, remove, and resend is cheap.
-* **Cross-language compatibility.** SipHash-2-4 produces identical filter bytes across languages and Rust compiler versions, so a TypeScript client and a Rust client emit the same filter for the same pubkey set.
 
-Rust API today; TypeScript is coming. Build a `CompressedAccountFilterSet` and attach it to your `SubscribeRequest`:
+Available in the Rust and TypeScript clients (TypeScript from `@triton-one/yellowstone-grpc` v5.0.9). The Rust API builds a `CompressedAccountFilterSet` and attaches it to your `SubscribeRequest`:
 
 ```rust
 use yellowstone_grpc_proto::cuckoo::CompressedAccountFilterSet;
@@ -553,7 +544,7 @@ Full deep-dive: [Compressed filters for Yellowstone gRPC](https://blog.triton.on
 
 ### Transactions
 
-If you want the **earliest possible signal** on a transaction, we expose Deshred transactions, a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the validator executes them.
+Use the `transactions` subscription to receive executed transactions at your chosen commitment level; `processed` delivers them as soon as the validator processes them, while `confirmed` and `finalized` add latency. If you want the **earliest possible signal**, before execution, use [Deshred transactions](deshred-transactions.md), a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the validator executes them.
 
 {% tabs %}
 {% tab title="All non-vote, non-failed" %}
