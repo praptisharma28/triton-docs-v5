@@ -37,17 +37,113 @@ Whirligig has full parity with the [Solana WebSocket API](https://solana.com/doc
 
 ## Connect
 
-Append `/whirligig` to your RPC endpoint:
+On Triton's shared infrastructure, your existing WebSocket connections already route through Whirligig by default: nothing to change. Otherwise, append `/whirligig` to your endpoint and connect:
 
 ```
 wss://<your-endpoint>.rpcpool.com/<your-token>/whirligig
 ```
 
-With web3.js, pass it as a custom WebSocket endpoint:
+All standard Solana WebSocket subscriptions then work as-is, with no library changes. The examples below subscribe to an account; the raw-WebSocket tab also shows `transactionSubscribe`, which is not available through `@solana/web3.js`.
 
-```js
-new web3.Connection("<rpc-endpoint>", { wsEndpoint: "<ws-endpoint>" });
+{% tabs %}
+{% tab title="JavaScript (web3.js)" %}
+Point `@solana/web3.js` at the Whirligig `wsEndpoint`; everything else stays the same.
+
+```javascript
+import { Connection, PublicKey } from "@solana/web3.js";
+
+const connection = new Connection(
+  "https://<your-endpoint>.rpcpool.com/<your-token>",
+  {
+    wsEndpoint: "wss://<your-endpoint>.rpcpool.com/<your-token>/whirligig",
+    commitment: "processed",
+  }
+);
+
+const subscriptionId = connection.onAccountChange(
+  new PublicKey("<account-pubkey>"),
+  (accountInfo, context) => {
+    console.log("slot:", context.slot, "lamports:", accountInfo.lamports);
+  },
+  "processed"
+);
+
+// When done:
+// await connection.removeAccountChangeListener(subscriptionId);
 ```
+{% endtab %}
+
+{% tab title="Rust" %}
+Uses the standard [`solana-pubsub-client`](https://docs.rs/solana-pubsub-client) crate, the same client Agave ships with.
+
+```rust
+use futures::StreamExt;
+use solana_account_decoder_client_types::UiAccountEncoding;
+use solana_commitment_config::CommitmentConfig;
+use solana_pubkey::Pubkey;
+use solana_pubsub_client::nonblocking::pubsub_client::PubsubClient;
+use solana_rpc_client_types::config::RpcAccountInfoConfig;
+use std::str::FromStr;
+
+#[tokio::main]
+async fn main() {
+    let client = PubsubClient::new("wss://<your-endpoint>.rpcpool.com/<your-token>/whirligig")
+        .await
+        .expect("connect");
+
+    let pubkey = Pubkey::from_str("<account-pubkey>").expect("valid pubkey");
+    let config = RpcAccountInfoConfig {
+        encoding: Some(UiAccountEncoding::JsonParsed),
+        commitment: Some(CommitmentConfig::processed()),
+        data_slice: None,
+        min_context_slot: None,
+    };
+
+    let (mut stream, unsubscribe) = client
+        .account_subscribe(&pubkey, Some(config))
+        .await
+        .expect("subscribe");
+
+    while let Some(update) = stream.next().await {
+        println!("{}", serde_json::to_string(&update).unwrap());
+    }
+
+    drop(stream);
+    drop(unsubscribe);
+    client.shutdown().await.expect("shutdown");
+}
+```
+{% endtab %}
+
+{% tab title="JavaScript (raw WebSocket)" %}
+Required for `transactionSubscribe`, which returns full transaction data in a single call and is not available in `@solana/web3.js`.
+
+```javascript
+const ws = new WebSocket("wss://<your-endpoint>.rpcpool.com/<your-token>/whirligig");
+
+ws.addEventListener("open", () => {
+  // Keep alive: Whirligig closes idle connections after 60 s
+  setInterval(() => ws.send(JSON.stringify({ jsonrpc: "2.0", method: "ping" })), 30_000);
+
+  ws.send(JSON.stringify({
+    jsonrpc: "2.0", id: 1,
+    method: "transactionSubscribe",
+    params: [
+      { vote: false, failed: false },
+      { commitment: "confirmed", encoding: "jsonParsed", transactionDetails: "full" },
+    ],
+  }));
+});
+
+ws.addEventListener("message", ({ data }) => {
+  const msg = JSON.parse(data);
+  if (msg.method === "transactionNotification") {
+    console.log("tx:", msg.params.result.signature);
+  }
+});
+```
+{% endtab %}
+{% endtabs %}
 
 {% hint style="info" %}
 Some clients need a trailing slash (`/whirligig/`). Connections idle for over 60 seconds are closed, so keep them alive by sending `{"jsonrpc":"2.0","method":"ping"}`.
@@ -379,7 +475,7 @@ Each subscribe request returns a subscription `id` you later pass to its unsubsc
 
 ### transactionSubscribe
 
-Not in the native Solana WebSocket API. Takes a `filter` (all fields optional) and a `config` ([`RpcBlockSubscribeConfig`](https://docs.rs/solana-client/latest/solana_client/rpc_config/struct.RpcBlockSubscribeConfig.html)).
+Not in the native Solana WebSocket API. One subscription returns the full transaction, including metadata, log messages, token balances, and compute units, replacing the native `signatureSubscribe` + `getTransaction` loop and its two billed calls per transaction. Takes a `filter` (all fields optional) and a `config` ([`RpcBlockSubscribeConfig`](https://docs.rs/solana-client/latest/solana_client/rpc_config/struct.RpcBlockSubscribeConfig.html)).
 
 {% tabs %}
 {% tab title="Request" %}
