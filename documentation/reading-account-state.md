@@ -7,7 +7,7 @@ layout:
 
 # Reading account state
 
-Solana accounts hold the current state of everything: a wallet, each token balance, a DEX market, an order, and the program code. Every account is owned by a program (an executable account) that can change its data. The standard way to read that state is Solana JSON-RPC polling, supported by every Triton endpoint.
+Solana keeps all of its state in accounts: a wallet, each token balance, a DEX market, a resting order, the program code itself. Every account is owned by a program, and that owner is the only thing that can change its data. The standard way to read the current state is Solana JSON-RPC polling, supported by every Triton endpoint.
 
 Standard Agave nodes make some of these reads slow or expensive as you scale:
 
