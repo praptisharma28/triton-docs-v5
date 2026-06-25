@@ -22,25 +22,45 @@ layout:
 
 # Fumarole persistent streams
 
-{% hint style="info" %}
-Fumarole is currently in **available by default on all mainnet subscriptions**. For questions or feedback, please reach out through your Triton CS channel.
-{% endhint %}
+Fumarole is a persistent gRPC streaming layer purpose-built for indexers, analytics, compliance, and any pipeline where missing a block is not an option. On top of Dragon's Mouth it adds server-side cursor tracking with 4 days of rolling retention, multi-node aggregation with automatic failover, and an at-least-once delivery guarantee, so you can disconnect and resume exactly where you left off and backfill anything you missed.
 
-Fumarole is our new streaming system to allow you to be able to reliably stream accounts and transactions.
-
-#### Fumarole provides
+## Fumarole provides
 
 * **High availability**: by collecting data from multiple downstream Solana nodes and merging them into a single stream, your stream does not get interrupted if a node restarts or is upgraded.
-* Persistence: Fumarole stores up to 4 days of historical state and lets you reconnect your stream if your clients go down. Disconnect and resume from your last position any time within that window.
+* **Persistence**: Fumarole stores up to 4 days of historical state and lets you reconnect your stream if your clients go down. Disconnect and resume from your last position any time within that window.
 * **Parallel replay download :** Fumarole can replay in parallel geyser data wherever you left off.
 
-#### How to get started
+## Use cases
+
+Fumarole fits pipelines that value completeness and reliability over raw speed:
+
+* **Indexers** that must process every block exactly once.
+* **Analytics and accounting** systems that cannot tolerate gaps in the data.
+* **Compliance and monitoring** tools that need a complete, ordered record.
+
+## What not to use Fumarole for
+
+Latency-first workloads. If you need data as fast as possible for trading or MEV and can tolerate missing the occasional slot, use [Dragon's Mouth gRPC](dragon-s-mouth-grpc) instead: it is the lowest-latency source. Fumarole trades a small amount of latency for completeness and resumability.
+
+## Methods
+
+Fumarole is a gRPC service. You manage a **persistent subscriber** (a consumer group) and stream from it:
+
+| Method | What it does |
+| --- | --- |
+| `CreateConsumerGroup` / `CreateStaticConsumerGroup` | Create a persistent subscriber that tracks your position server-side. |
+| `ListConsumerGroups` / `GetConsumerGroupInfo` / `DeleteConsumerGroup` | Manage your persistent subscribers. |
+| `Subscribe` / `SubscribeV2` / `SubscribeData` | Stream account and transaction updates from a consumer group. |
+| `DownloadBlock` / `DownloadBlockDataShard` | Replay a specific block, in parallel shards. |
+| `GetChainTip` / `GetSlotRange` / `Version` | Inspect the stream's current tip, available slot range, and version. |
+
+## How to get started
 
 1. Use your existing mainnet subscription token, no separate access request needed.
 2. Read our launch post and get started with the Fume CLI: [https://blog.triton.one/introducing-yellowstone-fumarole](https://blog.triton.one/introducing-yellowstone-fumarole)
 3. Build your integration with Fumarole via the Rust or Typescript SDKs: [https://github.com/rpcpool/yellowstone-fumarole](https://github.com/rpcpool/yellowstone-fumarole)
 
-#### Regional endpoints
+## Regional endpoints
 
 Fumarole runs as **independent regional clusters**. We currently operate:
 
@@ -89,7 +109,7 @@ This pattern is fully customer-managed:
 
 If you need this level of redundancy, plan your slot bookkeeping and failover logic accordingly. For the full step-by-step detection, failover, and failback procedure, follow the [Fumarole cluster failover guide](https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/streaming/fumarole-cluster-failover).
 
-#### Migrating from Dragon's Mouth
+## Migrating from Dragon's Mouth
 
 If you already have code built for our gRPC streams in Dragon's Mouth, integrating with Fumarole for additional reliability is easy. The code changes should be minimal as Fumarole uses the same types as Dragon's Mouth.
 
