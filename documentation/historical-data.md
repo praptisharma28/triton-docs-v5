@@ -1,5 +1,5 @@
 ---
-description: The complete Solana ledger served as spec-compliant Solana JSON-RPC by Superbank, Triton's historical-data backend.
+description: The complete Solana ledger served faster and easier by Superbank, Triton's RPC 2.0 historical-data backend.
 layout:
   width: default
   title:
@@ -24,24 +24,21 @@ layout:
 
 Triton serves the complete Solana ledger as historical data through **Superbank**, its historical-data backend. Superbank is an open-source Rust workspace that ingests the full ledger, stores it in ClickHouse, and serves it as spec-compliant Solana JSON-RPC. It is the historical module of RPC 2.0 and the successor to Old Faithful, open source under AGPL at [github.com/solana-rpc/superbank](https://github.com/solana-rpc/superbank).
 
-Because Superbank answers the standard Solana JSON-RPC methods, existing clients work unchanged. On a Triton endpoint where it is enabled, the historical methods you already call are served from Superbank automatically, with nothing to route or configure on your side.
-
-{% hint style="info" %}
-Superbank serves historical reads. For real-time data, use Dragon's Mouth (gRPC), Whirligig (WebSocket), Deshred (pre-execution), or Fumarole (persistent streams).
-{% endhint %}
+Because it answers the standard Solana JSON-RPC methods, existing clients work unchanged: the historical methods you already call are served by Superbank automatically, with nothing to set up.
 
 New here? The [Quickstart](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/historical-data/quickstart) reads an address's history with `getSignaturesForAddress`, `getTransaction`, and `getTransactionsForAddress`.
 
 ## What Superbank serves
 
-The complete ledger from genesis: every block, transaction, and entry. Historical methods currently served from Superbank:
+The complete ledger from genesis: every block, transaction, and entry. On a Triton endpoint, the historical read methods route to Superbank; account-state and live methods are served by other backends.
 
-* `getTransaction`
-* `getSignaturesForAddress`
-* `getSignatureStatuses`
-* `getTransactionsForAddress` (a Superbank extension, documented below)
+| Methods | Routed to |
+| --- | --- |
+| `getTransaction`, `getBlock`, `getBlocks`, `getBlocksWithLimit`, `getBlockTime`, `getFirstAvailableBlock`, `getSignaturesForAddress`, `getSignatureStatuses`, `getInflationReward`, `getTransactionsForAddress` | **Superbank** (historical ledger) |
+| `getAccountInfo`, `getMultipleAccounts`, `getProgramAccounts`, token-account and balance reads | **Cloudbreak**, see [Reading account state](reading-account-state.md) |
+| Live subscriptions and the current chain tip | **Streaming services**, see [Real-time streaming](real-time-streaming.md) |
 
-The remaining historical methods are being migrated over from Old Faithful. Responses are spec-compliant, so no client changes are needed when a method moves to Superbank.
+`getTransactionsForAddress` is a Superbank extension, documented below. Responses are spec-compliant, so no client changes are needed when a method moves to Superbank from Old Faithful.
 
 Superbank makes historical queries faster and cheaper. Benchmarked against public RPC at p50, it is 5x faster on `getSignaturesForAddress`, 38x on `getSignatureStatuses`, and 3.3x on `getTransaction`. Every historical query is priced the same, `$0.08 / GB` plus `$10 / million`, no matter how deep into history it reaches.
 

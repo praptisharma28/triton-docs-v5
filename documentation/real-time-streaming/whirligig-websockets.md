@@ -37,13 +37,9 @@ Whirligig has full parity with the [Solana WebSocket API](https://solana.com/doc
 
 ## Connect
 
-On Triton's shared infrastructure, your existing WebSocket connections already route through Whirligig by default, with nothing to change, and run over HTTP/3 and QUIC for lower-latency browser and mobile connections. Otherwise, append `/whirligig` to your endpoint and connect:
+On Triton's shared infrastructure, your WebSocket connections route through Whirligig by default, with nothing to change, and run over HTTP/3 for lower-latency browser and mobile connections.
 
-```
-wss://<your-endpoint>.rpcpool.com/<your-token>/whirligig
-```
-
-All standard Solana WebSocket subscriptions then work as-is, with no library changes. The examples below subscribe to an account; the raw-WebSocket tab also shows `transactionSubscribe`, which is not available through `@solana/web3.js`.
+All standard Solana WebSocket subscriptions work as-is, with no library changes. The examples below subscribe to an account; the raw-WebSocket tab also shows `transactionSubscribe`, which is not available through `@solana/web3.js`.
 
 {% tabs %}
 {% tab title="JavaScript (web3.js)" %}
