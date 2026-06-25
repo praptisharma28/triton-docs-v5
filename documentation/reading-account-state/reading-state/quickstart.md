@@ -1,29 +1,24 @@
 ---
-description: Send your first Solana account read with standard RPC or the Account Sync SDK.
+description: Send your first Solana account read with JSON-RPC.
 ---
 
 # Quickstart
 
-Read Solana account state in five minutes, two ways: the standard JSON-RPC reads, and Account Sync, a web3.js drop-in that serves reads from a live stream. For the overview and a product comparison, see the [Reading account state overview]().
+In this quickstart we read account state two ways, on the same task:
+
+1. **Standard Agave polling.** You call an RPC node and it answers over the network, one request per read.
+2. **Account Sync (`@triton-one/triton-sdk`).** Keeps a local copy of the accounts you track in RAM and resolves reads against it, with no network round-trip. By default it auto-subscribes to each account the first time your code reads it, so the accounts you poll get streamed automatically (you can also pre-seed them with `initialAccounts`). It serves `getAccountInfo`, `getMultipleAccountsInfo`, `getParsedAccountInfo`, and `getMultipleParsedAccounts`, and it's a drop-in for web3.js with no code rewrite.
 
 ## Step 0. Prerequisites
 
-Both methods run on your Triton endpoint with token-based auth. Before starting, here's what you need:
-
 * An active Triton subscription
-* Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/)
-* A backend or frontend in any language. The standard reads are plain JSON-RPC (the examples use TypeScript, Rust, and curl); Account Sync is a TypeScript SDK that runs in Node or the browser.
-
-The two ways to read covered here:
-
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-server">:server:</i> <strong>Standard RPC</strong></td><td>The standard Solana JSON-RPC reads: getAccountInfo, getMultipleAccounts, getBalance.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/api-reference/solana">Standard RPC</a></td></tr><tr><td><i class="fa-rotate">:rotate:</i> <strong>Account Sync</strong></td><td>A web3.js drop-in that serves account reads from a live stream instead of a round-trip.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/account-sync">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/account-sync</a></td></tr></tbody></table>
+* Your endpoint URL and secret token (for backends) from the [customer dashboard](https://customers.triton.one/)
+* An environment in TypeScript, Rust, or curl
 
 ## Step 1. Install
 
 {% tabs %}
 {% tab title="Standard RPC" %}
-The reads are plain JSON-RPC, so `curl` needs nothing. For a typed client:
-
 {% tabs %}
 {% tab title="TypeScript" %}
 ```bash
@@ -54,17 +49,15 @@ npm install @triton-one/triton-sdk
 npm install --save-dev typescript ts-node @types/node
 npx tsc --init
 ```
-
-The SDK re-exports web3.js types, so most apps import from this one package.
 {% endtab %}
 {% endtabs %}
 
 ## Step 2. Connect and read
 
-{% tabs %}
-{% tab title="Standard RPC" %}
 **What we're doing:** read a single account, the USDC mint, and decode it with `jsonParsed`.
 
+{% tabs %}
+{% tab title="Standard RPC" %}
 {% tabs %}
 {% tab title="TypeScript" %}
 ```typescript
@@ -118,30 +111,30 @@ For every read method and its parameters, see the [API reference](https://kate-6
 {% endtab %}
 
 {% tab title="Account Sync" %}
-**What we're doing:** swap `@solana/web3.js` for `@triton-one/triton-sdk` so `getAccountInfo` serves from a live in-memory stream instead of a fresh RPC round-trip. The code still looks like web3.js.
+Swap `@solana/web3.js` for `@triton-one/triton-sdk`. Your polling code stays the same: the same `getParsedAccountInfo` call now resolves from a local, stream-fed cache instead of a network round-trip.
 
 ```typescript
 import { Connection, PublicKey } from "@triton-one/triton-sdk";
 
-const accountId = "ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989";
+const usdcMint = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
 
 const connection = new Connection(
   "https://<your-endpoint>.mainnet.rpcpool.com/<your-token>",
   {
     accountSync: {
-      transport: "grpc", // use "ws" in the browser
-      initialAccounts: [accountId],
+      transport: "grpc",           // Node backend; use "ws" in the browser
+      initialAccounts: [usdcMint], // seed the accounts to stream and track
     },
   }
 );
 
-const account = await connection.getAccountInfo(new PublicKey(accountId));
-console.log(account);
+const account = await connection.getParsedAccountInfo(new PublicKey(usdcMint));
+console.log(account.value);
 
 await connection.close();
 ```
 
-Migrating an existing app is usually one import change plus the `accountSync` config: keep calling `getAccountInfo` and `getMultipleAccountsInfo` as before, and call `close()` when you're done.
+`transport: "grpc"` is the most efficient stream for Node backends; browsers must use `transport: "ws"`. Set `subscriptionEndpoint` only when your stream endpoint differs from your RPC endpoint; on Triton it's usually the same.
 {% endtab %}
 {% endtabs %}
 
@@ -174,15 +167,31 @@ Then check:
 
 ### Expected first response
 
-{% tabs %}
-{% tab title="Standard RPC" %}
-The USDC mint decoded with `jsonParsed`: a `result.value` with the account's `lamports`, `owner` (the SPL Token program), and a `data.parsed` object describing the mint (decimals, supply, mint and freeze authorities).
-{% endtab %}
+The USDC mint, decoded with `jsonParsed`. Over curl this is the `result.value`; through Account Sync, `getParsedAccountInfo(...).value` returns the same object. Live values like `supply` and `lamports` will differ when you run it.
 
-{% tab title="Account Sync" %}
-A standard web3.js `AccountInfo` for the tracked account (`lamports`, `owner`, `data`, `executable`, `rentEpoch`), served from the local stream-fed buffer rather than a fresh RPC call.
-{% endtab %}
-{% endtabs %}
+```json
+{
+  "data": {
+    "parsed": {
+      "info": {
+        "decimals": 6,
+        "freezeAuthority": "7dGbd2QZcCKcTndnHcTL8q7SMVXAkp688NTQYwrRCrar",
+        "isInitialized": true,
+        "mintAuthority": "BJE5MMbqXjVwjAF7oxwPYXnTXDyspzZyt4vwenNw5ruG",
+        "supply": "7957814436632629"
+      },
+      "type": "mint"
+    },
+    "program": "spl-token",
+    "space": 82
+  },
+  "executable": false,
+  "lamports": 511210011619,
+  "owner": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+  "rentEpoch": 18446744073709551615,
+  "space": 82
+}
+```
 
 ## FAQs
 
@@ -190,23 +199,7 @@ A standard web3.js `AccountInfo` for the tracked account (`lamports`, `owner`, `
 
 <summary>I'm getting 401 or 403 errors</summary>
 
-Check your endpoint URL and secret token in the [customer dashboard](https://customers.triton.one). For HTTP RPC the token is part of the URL path: `https://<your-endpoint>.mainnet.rpcpool.com/<your-token>`. If you've configured allowed origins, confirm your origin matches what's whitelisted.
-
-</details>
-
-<details>
-
-<summary>Which transport should Account Sync use?</summary>
-
-Use `transport: "grpc"` in Node backends for the most efficient stream. Browsers can only use `transport: "ws"`. Set `subscriptionEndpoint` only when your stream endpoint differs from your RPC endpoint; in most cases it's the same Triton endpoint.
-
-</details>
-
-<details>
-
-<summary>Account Sync returns null for an account I expect to exist</summary>
-
-Account Sync waits up to `missTimeoutMs` (default 5000 ms) for an untracked account's data before returning `null`, because an account you derived deterministically might not be created on-chain yet. Tune `missTimeoutMs`, or pre-subscribe with `initialAccounts` or `addAccounts` so the data is already streaming when you read.
+Check your endpoint URL and secret token in the [customer dashboard](https://customers.triton.one). For a backend calling JSON-RPC, the token is part of the URL path: `https://<your-endpoint>.mainnet.rpcpool.com/<your-token>`. For a frontend, confirm your configured allowed origin matches where you're sending the request from.
 
 </details>
 
@@ -214,13 +207,13 @@ Account Sync waits up to `missTimeoutMs` (default 5000 ms) for an untracked acco
 
 <summary>Which should I use?</summary>
 
-Use **Standard RPC** for one-off account and balance reads: it's a normal request and response, no streaming state to manage. Use **Account Sync** when your app reads the same accounts repeatedly and wants them kept fresh by a stream rather than re-fetched on every call. The API is web3.js-compatible, so most apps migrate with one import change.
+Use **standard Agave RPC polling** for infrequent or one-off reads. Use **Account Sync** when your app reads the same accounts repeatedly and needs fresh data at the lowest latency and cost. Responses on supported methods are identical, so you can drop Account Sync in instead of web3.js with no code rewrite.
 
 </details>
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-rotate">:rotate:</i> <strong>Account Sync</strong></td><td>The web3.js-compatible SDK that keeps account reads fresh from a live stream.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/account-sync">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/account-sync</a></td></tr><tr><td><i class="fa-bolt">:bolt:</i> <strong>Cloudbreak custom indexes</strong></td><td>Fast getProgramAccounts and SPL token queries from a purpose-built index.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/cloudbreak-indexed-accounts">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/cloudbreak-indexed-accounts</a></td></tr><tr><td><i class="fa-gem">:gem:</i> <strong>Metaplex DAS API</strong></td><td>Query NFTs, tokens, and compressed assets across shared and dedicated endpoints.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/metaplex-das-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/metaplex-das-api</a></td></tr><tr><td><i class="fa-radio">:radio:</i> <strong>Real-time streaming</strong></td><td>Subscribe to account and transaction changes as they happen with Dragon's Mouth.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-rotate">:rotate:</i> <strong>Account Sync</strong></td><td>The web3.js-compatible SDK that keeps account reads fresh from a live stream.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/account-sync">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/account-sync</a></td></tr><tr><td><i class="fa-bolt">:bolt:</i> <strong>Cloudbreak custom indexes</strong></td><td>Fast account and token queries from tailored dynamic indexes.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/cloudbreak-indexed-accounts">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/cloudbreak-indexed-accounts</a></td></tr><tr><td><i class="fa-gem">:gem:</i> <strong>Metaplex DAS API</strong></td><td>Query NFTs, tokens, and compressed assets via the Metaplex Digital Asset Standard interface.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/metaplex-das-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/metaplex-das-api</a></td></tr><tr><td><i class="fa-radio">:radio:</i> <strong>Real-time streaming</strong></td><td>Subscribe to account and transaction changes as they happen on chain.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming</a></td></tr></tbody></table>
 
 ***
 

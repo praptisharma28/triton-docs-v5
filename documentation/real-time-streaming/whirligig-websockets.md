@@ -4,9 +4,19 @@ description: An enhanced Solana WebSocket API for browsers and existing WS clien
 
 # Whirligig WebSockets
 
-Whirligig is a Rust-based proxy between a Dragon's Mouth gRPC server and a WebSocket client. It speaks the standard Solana WebSocket API, so a browser or any existing WebSocket client can subscribe over `wss://` instead of gRPC. At `processed` commitment, Whirligig also delivers intra-slot updates: account updates arrive up to 400 ms faster than native Solana WebSocket subscriptions.
+Whirligig is a Rust proxy between your WebSocket client and a Dragon's Mouth gRPC stream. It speaks the standard Solana WebSocket API, so a browser or any existing WebSocket client subscribes over `wss://` instead of gRPC, with no change to your code or billing. Triton was the first Solana RPC provider to replace the native pubsub path with gRPC-backed WebSocket streaming.
+
+Native Solana WebSockets run inside the RPC process, so notifications can lag or drop under load; they batch `processed` account updates to slot boundaries; they cap concurrent connections; and they have no full-transaction subscription. Whirligig serves the same API from dedicated streaming nodes, so at `processed` commitment account updates arrive intra-slot, up to 400 ms faster than native subscriptions.
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-bolt">:bolt:</i> <strong>transactionSubscribe</strong></td><td>A full-transaction subscription the native Solana WS API does not have, with account include, exclude, and required filters.</td><td></td></tr><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Intra-slot updates</strong></td><td>At processed commitment, account updates arrive up to 400 ms faster than native Solana WebSockets.</td><td></td></tr><tr><td><i class="fa-plug">:plug:</i> <strong>Drop-in Solana WS API</strong></td><td>Full parity with the standard Solana WebSocket API, so existing WS clients work unchanged.</td><td></td></tr><tr><td><i class="fa-radio">:radio:</i> <strong>Backed by Dragon's Mouth</strong></td><td>Translates a Dragon's Mouth gRPC stream into WebSocket messages, so a browser gets gRPC-grade data.</td><td></td></tr></tbody></table>
+
+## Added capabilities
+
+On top of the drop-in standard API, Whirligig adds:
+
+* **`jsonParsed` encoding.** `accountSubscribe` and `programSubscribe` return structured objects for parsable programs (SPL Token, Token-2022, Stake, Vote, Nonce, Sysvar, Address Lookup Table, BPF Loader, Config) instead of raw byte arrays, with resolved mint metadata on token accounts.
+* **Stable `blockSubscribe`.** Full block notifications with filters for commitment level, transaction detail, and reward visibility. The native method is flagged unstable.
+* **No strict subscription cap.** Triton's bare-metal streaming nodes are stress-tested under hundreds of thousands of concurrent subscriptions.
 
 ## Methods
 
