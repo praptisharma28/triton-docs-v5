@@ -16,6 +16,7 @@ How to land Solana transactions reliably, especially under congestion.
 
 * **Do not rely on the RPC node to retry.** Its legacy retry queue saturates under high traffic and causes widespread failures.
 * **Always send with `maxRetries: 0`** so the node does not use that queue.
+* **`/sendtx` handles retries differently:** unlike `sendTransaction` (where `maxRetries: 0` lets Jet fan out retries for you), `/sendtx` retries according to its `max_retries` parameter. Set it above 0 (for example `3`); leaving it at 0 can drop your landing rate.
 * **Build your own asynchronous retry logic:** re-fetch a recent blockhash and re-sign every few seconds.
 
 ## Separate simulation from sending
