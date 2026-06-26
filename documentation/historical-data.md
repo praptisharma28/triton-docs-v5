@@ -105,20 +105,14 @@ It is a custom RPC method, not part of the standard Solana JSON-RPC API, but it 
 }
 ```
 
-<details>
-
-<summary><strong>Parameters</strong></summary>
+### Parameters
 
 | Parameter | Type   | Required | Description                              |
 | --------- | ------ | -------- | ---------------------------------------- |
 | address   | string | Yes      | Base58 Solana account address to search. |
 | options   | object | No       | Query options and filters.               |
 
-</details>
-
-<details>
-
-<summary><strong>Options</strong></summary>
+### Options
 
 | Option                         | Type                                   | Default                           | Description                                  |
 | ------------------------------ | -------------------------------------- | --------------------------------- | -------------------------------------------- |
@@ -132,11 +126,7 @@ It is a custom RPC method, not part of the standard Solana JSON-RPC API, but it 
 | maxSupportedTransactionVersion | number                                 | none                              | Used when transactionDetails is full.        |
 | filters                        | object                                 | none                              | Optional filters.                            |
 
-</details>
-
-<details>
-
-<summary><strong>Filters</strong></summary>
+### Filters
 
 | Filter        | Type                          | Description                                                          |
 | ------------- | ----------------------------- | -------------------------------------------------------------------- |
@@ -156,8 +146,6 @@ Comparison object example:
 ```
 
 `beforeSlot` and `untilSlot` are accepted as aliases for `filters.slot.lt` and `filters.slot.gt`. An alias can't be combined with a same-side slot filter (`lt`/`lte` for `beforeSlot`, `gt`/`gte` for `untilSlot`).
-
-</details>
 
 ### Token account filtering
 

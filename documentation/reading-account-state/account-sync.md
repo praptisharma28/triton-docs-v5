@@ -6,8 +6,6 @@ description: A web3.js drop-in that serves Solana account reads from a live stre
 
 Poll Solana accounts faster and cheaper. The Triton SDK serves your reads from a local, stream-fed cache, with a one-line drop-in for `@solana/web3.js`.
 
-You still use a `Connection`, pass `PublicKey` values, and get web3.js account shapes back. The difference is how reads work: instead of asking RPC for account data on every `getAccountInfo`, the SDK keeps a live account stream open and serves reads from the latest state in memory.
-
 ## Install
 
 ```bash
