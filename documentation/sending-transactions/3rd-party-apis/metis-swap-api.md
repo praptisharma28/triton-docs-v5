@@ -46,7 +46,7 @@ Metis builds the ready-to-sign transaction for you.
 
 ## Pricing
 
-The self-hosted Metis swap API uses metered billing and is not rate-limited. It is $80 per million Metis queries. Because there are no rate limits, monitor your usage to avoid unexpected costs.
+The self-hosted Metis swap API uses metered billing and is not rate-limited. It is `$0.08 / GB` of bandwidth plus `$80 / million` Metis queries. Because there are no rate limits, monitor your usage to avoid unexpected costs.
 
 ## Availability
 
