@@ -787,6 +787,10 @@ try {
 }
 ```
 
+## Pricing
+
+Account Sync is billed on bandwidth only, `$0.08 / GB` of streamed data, with no per-call charge.
+
 ***
 
 <i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\

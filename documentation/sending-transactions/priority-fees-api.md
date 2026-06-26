@@ -55,6 +55,10 @@ This is an enhanced method, so it may not be in standard SDKs. The [example repo
 Running your own nodes or another RPC service? Triton publishes the patches that enable percentile fees, so you can adopt the same behaviour: the [`v1.17.23-getrpf` branch](https://github.com/rpcpool/solana-public/tree/v1.17.23-getrpf) of `rpcpool/solana-public`, plus Agave [issue #3332](https://github.com/anza-xyz/agave/issues/3332) and [PR #217](https://github.com/anza-xyz/agave/pull/217).
 {% endhint %}
 
+## Pricing
+
+The Priority fees API is billed as standard RPC: `$0.08 / GB` of bandwidth plus `$10 / million` calls.
+
 ***
 
 <i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\

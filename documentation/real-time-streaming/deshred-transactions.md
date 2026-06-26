@@ -214,6 +214,10 @@ If your pipeline needs status, logs, or balance deltas, run a parallel Dragon's 
 
 For a deeper overview of architecture and tradeoffs, see [Deshred transactions: the fastest path to Solana data](https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/).
 
+## Pricing
+
+Deshred is billed at `$0.08 / GB` of bandwidth, like every Triton streaming service.
+
 ## What's next?
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr><tr><td><i class="fa-newspaper">:newspaper:</i> <strong>Deshred blog post</strong></td><td>Architecture, tradeoffs, and how Deshred fits the Solana shred pipeline.</td><td><a href="https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/">https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/</a></td></tr></tbody></table>

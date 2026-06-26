@@ -729,6 +729,10 @@ Use Dragon's Mouth. Cloudbreak answers point-in-time queries; Dragon's Mouth str
 
 </details>
 
+## Pricing
+
+Cloudbreak-accelerated account and token reads are billed as standard RPC: `$0.08 / GB` of bandwidth plus `$10 / million` calls. The indexing itself is not charged separately.
+
 ***
 
 <i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\

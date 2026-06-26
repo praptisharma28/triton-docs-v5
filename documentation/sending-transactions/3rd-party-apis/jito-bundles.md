@@ -98,6 +98,10 @@ pub struct RpcSimulateBundleConfig {
 * [Jito searcher examples](https://github.com/jito-labs/searcher-examples)
 * [Jito documentation: low-latency transactions](https://docs.jito.wtf/lowlatencytxnsend)
 
+## Pricing
+
+Simulating bundles on Triton's Jito-enabled RPC is billed as standard RPC (`$0.08 / GB` plus `$10 / million` calls). Submitting a bundle goes directly to the Jito Block Engine and is not billed by Triton.
+
 ***
 
 <i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\

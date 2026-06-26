@@ -240,6 +240,10 @@ For more details see the Github repo:
 
 [Yellowstone-fumarole-client crates.io](https://docs.rs/yellowstone-fumarole-client/0.5.0+solana.3/yellowstone_fumarole_client/)
 
+## Pricing
+
+Fumarole is billed at `$0.08 / GB` of bandwidth. You only pay for the data sent.
+
 ***
 
 <i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\
