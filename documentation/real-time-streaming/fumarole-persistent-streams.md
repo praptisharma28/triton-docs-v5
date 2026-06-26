@@ -42,6 +42,20 @@ Fumarole fits pipelines that value completeness and reliability over raw speed:
 
 Latency-first workloads. If you need data as fast as possible for trading or MEV and can tolerate missing the occasional slot, use [Dragon's Mouth gRPC](dragon-s-mouth-grpc) instead: it is the lowest-latency source. Fumarole trades a small amount of latency for completeness and resumability.
 
+## How it works
+
+Fumarole consumes multiple Dragon's Mouth nodes, merges and deduplicates their updates into one stream, and persists your read position (a cursor) on the server side. You poll from a named persistent subscriber at your own pace; if you disconnect, reconnecting with the same name resumes from your last full slot, anywhere within the 4-day window.
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3'},'flowchart':{'nodeSpacing':22,'rankSpacing':30,'curve':'linear'}}}%%
+flowchart LR
+    n1["Dragon's Mouth node"] --> f["Fumarole<br/>merge + dedupe + cursor<br/>(4-day buffer)"]
+    n2["Dragon's Mouth node"] --> f
+    n3["Dragon's Mouth node"] --> f
+    f --> you["Your persistent<br/>subscriber"]
+    style you fill:#D6EAF8,stroke:#259DD0
+```
+
 ## Methods
 
 Fumarole is a gRPC service. You manage a **persistent subscriber** (a consumer group) and stream from it:

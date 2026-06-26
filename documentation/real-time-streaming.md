@@ -23,8 +23,8 @@ flowchart LR
         sr -->|"events, intra-slot"| sc
     end
     pr ~~~ sc
-    style poll fill:none,stroke:#956FB3
-    style stream fill:none,stroke:#956FB3
+    style poll fill:none,stroke:none
+    style stream fill:none,stroke:none
     style pc fill:#D6EAF8,stroke:#259DD0
     style sc fill:#D6EAF8,stroke:#259DD0
 ```

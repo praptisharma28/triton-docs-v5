@@ -50,6 +50,16 @@ Cloudbreak builds its index from a validator snapshot for the starting state and
 
 It verifies its data against the validator's own account hash: a lattice hash computed over every account's address, lamports, owner, executable flag, and data. When that hash matches the validator's, the indexed state is identical to on-chain state at that slot.
 
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3'},'flowchart':{'nodeSpacing':22,'rankSpacing':30,'curve':'linear'}}}%%
+flowchart LR
+    snap["Validator snapshot"] --> idx["Cloudbreak index"]
+    stream["Yellowstone gRPC<br/>account updates"] --> idx
+    idx --> q["JSON-RPC<br/>query layer"]
+    q --> you["Your application"]
+    style you fill:#D6EAF8,stroke:#259DD0
+```
+
 ### Making requests
 
 The Cloudbreak-accelerated methods are standard Solana JSON-RPC, so you call them the same way you call any other method on your RPC endpoint. There is nothing Cloudbreak-specific to install or configure on the client side, and existing Solana clients (`@solana/web3.js`, `solana-py`, and others) work without changes.
