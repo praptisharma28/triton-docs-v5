@@ -51,7 +51,7 @@ Solana-ForwardingPolicies: "<your_policy_pda>,<your_policy_pda2>"
 
 The [Jet TPU client](jet-sender.md) checks each leader against your policies inside your own process and sends only to allowed validators. Enable the `shield` feature and add `yellowstone-shield-store` (the workspace and `[patch.crates-io]` setup is on the [Jet TPU client](jet-sender.md) page).
 
-Build a `PolicyStore` that caches the on-chain policies and live-updates them over gRPC, wrap your policy addresses in a `ShieldBlockList`, then send. Here `sender` is a TPU sender created as shown on the [Jet TPU client](jet-sender.md) page.
+Build a `PolicyStore` that caches the on-chain policies and live-updates them over gRPC, wrap your policy addresses in a `ShieldBlockList`, then send. Here `sender` is a TPU sender created as shown in the [Jet TPU client crate docs](https://docs.rs/yellowstone-jet-tpu-client).
 
 ```rust
 use {
@@ -143,6 +143,10 @@ yellowstone-shield-cli identities add \
 ## How policies and ownership work
 
 Each policy is a Program Derived Address on-chain, paired with an SPL token (Token Extensions). Creating a policy mints you one token and keeps you the mint authority. Holding a token lets you manage the policy (add or remove validators); minting more lets you share management. Anyone who knows a policy's address can use it in their own transactions.
+
+## Pricing
+
+Shield adds no separate charge. On Triton RPC the `forwardingPolicies` enforcement is included on every send, so a Shield-protected `sendTransaction` is billed exactly like any other send.
 
 ## Limitations
 
