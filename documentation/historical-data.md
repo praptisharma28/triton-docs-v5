@@ -60,12 +60,9 @@ A `before` or `until` signature that Superbank can't find returns JSON-RPC error
 You query Superbank with the standard Solana JSON-RPC methods. Behind that, it ingests the full ledger into ClickHouse (a columnar database) and translates each request into SQL tuned to how the data is sorted. A head cache keeps the newest slots in memory, so recent reads return in under 1 ms.
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3'},'flowchart':{'nodeSpacing':22,'rankSpacing':30,'curve':'linear'}}}%%
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
 flowchart LR
-    ledger["Full Solana ledger"] --> ingest["Ingest"]
-    ingest --> ch["ClickHouse<br/>columnar store"]
-    ch --> q["JSON-RPC query layer<br/>+ head cache (under 1 ms)"]
-    q --> you["Your application"]
+    ledger["Full Solana ledger"] --> ingest["Ingest"] --> ch["ClickHouse<br/>columnar store"] --> q["JSON-RPC query layer<br/>+ head cache (under 1 ms)"] --> you["Your app"]
     style you fill:#D6EAF8,stroke:#259DD0
 ```
 
