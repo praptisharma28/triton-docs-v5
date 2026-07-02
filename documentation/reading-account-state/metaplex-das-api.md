@@ -34,9 +34,11 @@ Over the last two years we've delivered major open-source enhancements to DAS: i
 
 Every method's parameters and example request and response are in the [DAS API reference](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/reading-account-state/das-api). Grouped by what they do:
 
-* **Read assets:** `getAsset`, `getAssets`, `getAssetBatch`, `getAssetProof`, `getAssetProofBatch`
-* **List assets:** `getAssetsByOwner`, `getAssetsByAuthority`, `getAssetsByCreator`, `getAssetsByGroup`, `searchAssets`
-* **Tokens, editions, and history:** `getTokenAccounts`, `getTokenLargestAccounts`, `getNftEditions`, `getSignaturesForAsset`
+| Group | Methods |
+| --- | --- |
+| **Read assets** | `getAsset`, `getAssets`, `getAssetBatch`, `getAssetProof`, `getAssetProofBatch` |
+| **List assets** | `getAssetsByOwner`, `getAssetsByAuthority`, `getAssetsByCreator`, `getAssetsByGroup`, `searchAssets` |
+| **Tokens, editions, and history** | `getTokenAccounts`, `getTokenLargestAccounts`, `getNftEditions`, `getSignaturesForAsset` |
 
 `getAssetsByGroup` is temporarily disabled for performance work.
 
@@ -45,7 +47,7 @@ Every method's parameters and example request and response are in the [DAS API r
 DAS is enabled by default on every Triton endpoint. Point your DAS calls at your Triton endpoint:
 
 * **Backend:** `https://<your-endpoint>.<network>.rpcpool.com/<your-token>`, or pass your token as an `x-token` header.
-* **Frontend:** `https://<your-endpoint>.<network>.rpcpool.com/`, with your domain set as an allowed origin.
+* **Frontend:** `https://<your-endpoint>.<network>.rpcpool.com/`, with your domain set as an allowed origin in your [customer dashboard](https://customers.triton.one).
 
 ### Example request: fetch an asset
 
