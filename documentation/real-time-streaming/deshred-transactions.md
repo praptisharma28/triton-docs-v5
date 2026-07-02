@@ -4,13 +4,9 @@ description: Stream Solana transactions reconstructed from shreds before the nod
 
 # Deshred transactions
 
-Pre-execution transaction stream reconstructed from shreds, before the node executes them. The earliest usable on-chain signal exposed by Yellowstone gRPC.
-
 ## What is Deshred
 
-Deshred is a separate gRPC method (`SubscribeDeshred`) on the same yellowstone-grpc service as Dragon's Mouth. It delivers transactions reconstructed from shreds **before** the node executes them.
-
-This is the earliest usable on-chain signal Triton exposes. It's designed for latency-sensitive systems that care about transaction intent as early as possible: arbitrage, market making, copy trading, liquidations, HFT.
+Deshred is a separate gRPC method on the Yellowstone gRPC service, same as Dragon's Mouth. It delivers transactions reconstructed from shreds before the node executes them.
 
 Unlike the standard `Subscribe` transaction stream, deshred updates are emitted **before** Replay. You receive the decoded transaction earlier, but without execution context.
 
@@ -23,10 +19,6 @@ flowchart LR
     style d fill:#D6EAF8,stroke:#259DD0
 ```
 
-## Features and benefits
-
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-eye">:eye:</i> <strong>Earliest signal</strong></td><td>Pre-execution stream from raw shreds. ~20ms ahead at p75 vs confirmed transactions.</td><td></td></tr><tr><td><i class="fa-code-fork">:code-fork:</i> <strong>Same gRPC interface</strong></td><td>Drops into your existing Dragon's Mouth pipeline. Separate method, same client.</td><td></td></tr><tr><td><i class="fa-tags">:tags:</i> <strong>Resolved ALT addresses</strong></td><td>Includes writable and readonly addresses resolved from Address Lookup Tables.</td><td></td></tr></tbody></table>
-
 ## Use cases
 
 Deshred is for strategies that act on the earliest possible signal, before execution:
@@ -36,6 +28,10 @@ Deshred is for strategies that act on the earliest possible signal, before execu
 * **Copy-trading and liquidations** that follow specific accounts as soon as they act.
 
 **What not to use it for.** If you need execution results (status, balance changes, logs) or any confirmation guarantee, use the [Dragon's Mouth](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) `transactions` stream instead, or run it in parallel and join on `signature`. Deshred is intent-only and pre-execution: a transaction may fail, land on a dead fork, or never confirm.
+
+## Features and benefits
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-eye">:eye:</i> <strong>Earliest signal</strong></td><td>Pre-execution stream from raw shreds. ~20ms ahead at p75 vs confirmed transactions.</td><td></td></tr><tr><td><i class="fa-code-fork">:code-fork:</i> <strong>Same gRPC interface</strong></td><td>Drops into your existing Dragon's Mouth pipeline. Separate method, same client.</td><td></td></tr><tr><td><i class="fa-tags">:tags:</i> <strong>Resolved ALT addresses</strong></td><td>Includes writable and readonly addresses resolved from Address Lookup Tables.</td><td></td></tr></tbody></table>
 
 ## Filter configuration
 
@@ -217,11 +213,6 @@ For a deeper overview of architecture and tradeoffs, see [Deshred transactions: 
 ## Pricing
 
 Deshred is billed at `$0.08 / GB` of bandwidth, like every Triton streaming service.
-
-## Resources
-
-* Source, delivered via Dragon's Mouth gRPC: [rpcpool/yellowstone-grpc](https://github.com/rpcpool/yellowstone-grpc)
-* Proto: [yellowstone-grpc-proto](https://crates.io/crates/yellowstone-grpc-proto)
 
 ## What's next
 
