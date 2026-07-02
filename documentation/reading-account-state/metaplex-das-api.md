@@ -24,7 +24,7 @@ layout:
 
 The DAS API provides a fast and scalable way to query digital assets on Solana, including fungible tokens and regular and compressed NFTs. Decompression and data caching are done server-side, a convenient way to access digital asset data and metadata. It is available on all our shared and dedicated endpoints, fully integrated with our RPC Pool infrastructure.
 
-Over two years we've delivered major open-source enhancements to DAS: ingestion re-architected onto Yellowstone gRPC, new parsers for fungible tokens and Token-2022, and a full query rework that brings `getAsset` to ~50 ms at P90.
+Over the last two years we've delivered major open-source enhancements to DAS: ingestion re-architected onto Yellowstone gRPC, new parsers for fungible tokens and Token-2022, and a full query rework that brings `getAsset` to ~50 ms at P90.
 
 ## Features
 

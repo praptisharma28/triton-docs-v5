@@ -1,10 +1,26 @@
 ---
-description: A web3.js drop-in that serves Solana account reads from a live stream instead of polling.
+description: A web3.js drop-in that serves Solana account reads from a local, stream-fed cache instead of polling.
 ---
 
 # Account Sync
 
-Poll Solana accounts faster and cheaper. The Triton SDK serves your reads from a local, stream-fed cache, with a one-line drop-in for `@solana/web3.js`.
+Account Sync is a feature of the Triton SDK that makes your polling faster and cheaper, with next-to-no migration effort. It automatically merges your account reads into a single streaming subscription, keeps updates cached locally, and resolves your calls from RAM.
+
+## Use cases
+
+Account Sync fits any app that reads account state in a loop. It streams over both gRPC and WebSocket, so it works in Node backends, workers, and scripts as well as browser frontends:
+
+* **Wallets and portfolio UIs** reading balances and token accounts continuously.
+* **DEXs and trading dashboards** tracking pool and market state across many accounts.
+* **Games and NFT marketplaces** polling on-chain state per frame and per view.
+* **Explorers and analytics frontends** rendering decoded account data in real time.
+* **Bots and services** with rotating wallet and token watchlists.
+
+For latency-critical trading (HFT, MEV, liquidation engines), direct [Dragon's Mouth gRPC](../real-time-streaming/dragon-s-mouth-grpc.md) streaming is still the fastest path.
+
+## Features and benefits
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-list-check">:list-check:</i> <strong>Drop-in account reads</strong></td><td><code>getAccountInfo</code>, <code>getMultipleAccountsInfo</code>, and their context and parsed variants, all served from the local cache.</td><td></td></tr><tr><td><i class="fa-bolt">:bolt:</i> <strong>Streaming-grade freshness after the first read</strong></td><td>The first read fetches once over JSON-RPC and opens a stream; every read after resolves from RAM with live updates, no round-trip.</td><td></td></tr><tr><td><i class="fa-infinity">:infinity:</i> <strong>Unlimited local polling</strong></td><td>Reads hit local RAM, so you can poll as aggressively as you want (every 10 ms or less) without rate limits or per-call cost.</td><td></td></tr><tr><td><i class="fa-filter">:filter:</i> <strong>Filter your data</strong></td><td>Trim payloads with <code>dataSlice</code> and gate reads on <code>minContextSlot</code>, the same options web3.js takes.</td><td></td></tr></tbody></table>
 
 ## Install
 
@@ -12,159 +28,25 @@ Poll Solana accounts faster and cheaper. The Triton SDK serves your reads from a
 npm install @triton-one/triton-sdk
 ```
 
-The SDK exports web3.js types and helpers too, so most apps can import from one package:
+The SDK re-exports web3.js types and helpers, so most apps import from one package:
 
 ```ts
 import { Connection, PublicKey } from "@triton-one/triton-sdk";
 ```
 
-If your app already uses web3.js, the first step is usually this:
+If your app already uses web3.js, the first change is usually the import:
 
 ```diff
 - import { Connection, PublicKey } from "@solana/web3.js";
 + import { Connection, PublicKey } from "@triton-one/triton-sdk";
 ```
 
-## Connection options
+## Quickstart
 
-The SDK keeps the normal web3.js `Connection` shape and adds one extra config key: `accountSync`.
+Pick your transport: gRPC for Node backends, workers, and scripts; WebSocket for browsers (it also works in Node). Point both at your Triton endpoint: `https://` for gRPC, `wss://` for WebSocket.
 
-Use `accountSync` to choose the streaming transport, stream endpoint, account list, commitment, and cache-miss behaviour.
-
-For the short version:
-
-* Use `transport: "grpc"` in Node apps.
-* Use `transport: "ws"` in browser apps.
-* See [Pick a transport](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/account-sync) for which transport to choose.
-* See this section for every option you can pass.
-
-```ts
-const connection = new Connection(endpoint, {
-  commitment: "confirmed",
-  accountSync: {
-    transport: "grpc",
-    subscriptionEndpoint: endpoint,
-    commitment: "confirmed",
-    initialAccounts: [],
-    autoSubscribeOnMiss: true,
-    missTimeoutMs: 5_000,
-  },
-});
-```
-
-| Option                 | Default                           | Meaning                                                                                                                                       |
-| ---------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `transport`            | `"ws"` in Node, `"ws"` in browser | Stream transport. Node can use `"grpc"` or `"ws"`. Browser can only use `"ws"`.                                                               |
-| `subscriptionEndpoint` | Derived from `endpoint`           | Stream endpoint. Set it when your stream endpoint is different from your RPC endpoint. In most cases, it is the same as your Triton endpoint. |
-| `commitment`           | `"confirmed"`                     | Stream commitment: `"processed"`, `"confirmed"`, or `"finalized"`.                                                                            |
-| `initialAccounts`      | `[]`                              | Accounts to subscribe to as soon as the connection starts.                                                                                    |
-| `autoSubscribeOnMiss`  | `true`                            | If you read an account that is not tracked yet, subscribe to it and wait.                                                                     |
-| `missTimeoutMs`        | `5000`                            | How long to wait for account data before returning `null`.                                                                                    |
-
-Choose `missTimeoutMs` carefully. The timeout exists because an account might not exist yet. The SDK does not always return RPC-style `null` immediately, because many apps deterministically derive an account address and want the data as soon as that account is created in realtime.
-
-## Migrate from web3.js
-
-For many apps, migration is small:
-
-1. Install `@triton-one/triton-sdk`.
-2. Change imports from `@solana/web3.js` to `@triton-one/triton-sdk`.
-3. Add `accountSync` options to your `Connection`.
-4. Keep calling `getAccountInfo` and `getMultipleAccountsInfo` like before.
-5. Call `close()` when the connection is no longer needed.
-
-Before:
-
-```ts
-import { Connection, PublicKey } from "@solana/web3.js";
-
-const accountId = "ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989";
-const connection = new Connection("https://api.mainnet-beta.solana.com");
-const account = await connection.getAccountInfo(new PublicKey(accountId));
-```
-
-After:
-
-```ts
-import { Connection, PublicKey } from "@triton-one/triton-sdk";
-
-const accountId = "ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989";
-const connection = new Connection("https://api.rpcpool.com/YOUR_TOKEN", {
-  accountSync: {
-    transport: "grpc",
-    initialAccounts: [accountId],
-  },
-});
-
-const account = await connection.getAccountInfo(new PublicKey(accountId));
-
-await connection.close();
-```
-
-## What you get
-
-The SDK is built to work as a web3.js-compatible `Connection`.
-
-For account reads, it uses streaming account sync under the hood. For other web3.js methods, the connection still behaves like a normal web3.js connection.
-
-Streaming-backed methods:
-
-| Method                                                   | What it does                                                        |
-| -------------------------------------------------------- | ------------------------------------------------------------------- |
-| `getAccountInfo(publicKey, config?)`                     | Gets one account from the local stream-fed buffer.                  |
-| `getAccountInfoAndContext(publicKey, config?)`           | Gets one account plus a context slot.                               |
-| `getMultipleAccountsInfo(publicKeys, config?)`           | Gets many accounts from the local buffer.                           |
-| `getMultipleAccountsInfoAndContext(publicKeys, config?)` | Gets many accounts plus one context slot.                           |
-| `getParsedAccountInfo(publicKey, config?)`               | Gets one account and returns parsed data when parsing is supported. |
-| `getMultipleParsedAccounts(publicKeys, config?)`         | Gets many parsed accounts.                                          |
-
-SDK-only account stream controls:
-
-| Method                       | What it does                                      |
-| ---------------------------- | ------------------------------------------------- |
-| `addAccounts(accountIds)`    | Adds accounts to the live stream.                 |
-| `removeAccounts(accountIds)` | Stops tracking accounts.                          |
-| `setAccounts(accountIds)`    | Replaces the full tracked account list.           |
-| `close()`                    | Closes the stream and releases resources.         |
-| `getLastTransportError()`    | Returns the latest stream error, if one happened. |
-
-Account data helpers:
-
-| Helper                                               | What it does                                                                    |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `convertAccountData(data, fromEncoding, toEncoding)` | Converts account data between supported encodings.                              |
-| `encodeAccount(account, encoding, options?)`         | Encodes account info into a Solana RPC-style account shape.                     |
-| `parseJsonParsed(account, options?)`                 | Parses account data into `jsonParsed` form when supported.                      |
-| `loadAccountEncodingWasm()`                          | Loads the WASM account encoder explicitly. Most users do not need to call this. |
-
-## How reads work
-
-The SDK fills its local buffer in two ways:
-
-1. It does an initial JSON-RPC account fetch for accounts you track.
-2. It keeps a stream open and applies live account updates as they arrive.
-
-After that, `getAccountInfo` reads from the local buffer.
-
-The stream can use gRPC or WebSocket. gRPC is for Node backends, workers, and scripts. WebSocket works in Node and browsers, so browser apps can use the same SDK with WebSocket streaming. See [Pick a transport](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/account-sync) and [Connection options](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/account-sync).
-
-The package and type exports are designed for both environments. TypeScript and bundlers use the package exports to pick the browser or backend build, so browser code gets the WebSocket-only connection type and Node code gets the Node connection type with both gRPC and WebSocket options.
-
-This is why the main `endpoint` still matters. The SDK uses it for normal web3.js RPC calls and for the first account snapshot. The stream endpoint keeps the account state fresh after that.
-
-```ts
-const connection = new Connection(rpcEndpoint, {
-  accountSync: {
-    subscriptionEndpoint: streamEndpoint,
-    transport: "grpc",
-  },
-});
-```
-
-## Quick start: Node with gRPC
-
-Use gRPC in Node when you can. It is the best default for backend apps, workers, and scripts.
-
+{% tabs %}
+{% tab title="gRPC" %}
 ```ts
 import { Connection, PublicKey } from "@triton-one/triton-sdk";
 
@@ -195,10 +77,10 @@ try {
   await connection.close();
 }
 ```
+{% endtab %}
 
-## Quick start: WebSocket
-
-Use WebSocket in browsers. You can also use it in Node.
+{% tab title="WebSocket" %}
+Browsers only support WebSocket; do not use `transport: "grpc"` in browser code. Your bundler picks the browser build from the package automatically.
 
 ```ts
 import { Connection, PublicKey } from "@triton-one/triton-sdk";
@@ -224,141 +106,77 @@ try {
   await connection.close();
 }
 ```
+{% endtab %}
+{% endtabs %}
 
-Browsers only support WebSocket. Do not use `transport: "grpc"` in browser code.
+## Connection options
 
-## Browser example
-
-In browser apps, use WebSocket. Your bundler should pick the browser build from the package automatically.
+The SDK keeps the normal web3.js `Connection` shape and adds one config key, `accountSync`, for the streaming transport, stream endpoint, account list, commitment, and cache-miss behaviour.
 
 ```ts
-import { Connection, PublicKey } from "@triton-one/triton-sdk";
-
-const connection = new Connection("https://api.rpcpool.com/YOUR_TOKEN", {
+const connection = new Connection(endpoint, {
+  commitment: "confirmed",
   accountSync: {
-    transport: "ws",
-    subscriptionEndpoint: "wss://api.rpcpool.com/YOUR_TOKEN",
-    initialAccounts: [
-      "So11111111111111111111111111111111111111112",
-    ],
+    transport: "grpc",
+    subscriptionEndpoint: endpoint,
+    commitment: "confirmed",
+    initialAccounts: [],
+    autoSubscribeOnMiss: true,
+    missTimeoutMs: 5_000,
   },
 });
-
-const account = await connection.getParsedAccountInfo(
-  new PublicKey("So11111111111111111111111111111111111111112"),
-);
-
-console.log(account.value);
 ```
 
-If your app creates the connection inside a component, close it when the component is removed.
+| Option                 | Default                     | Meaning                                                                                                                                                                              |
+| ---------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `transport`            | `"ws"` in Node and browser  | Stream transport. Node can use `"grpc"` or `"ws"`; browsers can only use `"ws"`. Use `"grpc"` in Node backends, workers, and scripts; use `"ws"` in browsers or if your network blocks gRPC. |
+| `subscriptionEndpoint` | Derived from `endpoint`     | Stream endpoint. Set it when your stream endpoint differs from your RPC endpoint. In most cases it is the same Triton endpoint.                                                      |
+| `commitment`           | `"confirmed"`               | Stream commitment: `"processed"`, `"confirmed"`, or `"finalized"`.                                                                                                                  |
+| `initialAccounts`      | `[]`                        | Accounts to subscribe to as soon as the connection starts.                                                                                                                          |
+| `autoSubscribeOnMiss`  | `true`                      | If you read an account that is not tracked yet, subscribe to it and wait.                                                                                                          |
+| `missTimeoutMs`        | `5000`                      | How long to wait for account data before returning `null`.                                                                                                                         |
 
-## Endpoint format
+Choose `missTimeoutMs` carefully. The timeout exists because an account might not exist yet: the SDK does not always return RPC-style `null` immediately, because many apps deterministically derive an account address and want the data the moment that account is created in real time.
 
-Use your Triton endpoint.
+## How reads work
 
-For gRPC:
+The SDK fills its local buffer in two ways:
+
+1. It does an initial JSON-RPC account fetch for each account you track.
+2. It keeps a stream open and applies live account updates as they arrive.
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
+flowchart LR
+    dm["Dragon's Mouth<br/>gRPC stream"] --> fan["Triton fanout service"]
+    fan --> cache["Triton SDK<br/>local RAM cache"]
+    rpc["JSON-RPC<br/>first snapshot"] --> cache
+    cache --> you["Your app"]
+    style you fill:#D6EAF8,stroke:#259DD0
+```
+
+The Triton fanout service keeps one upstream Dragon's Mouth subscription and routes each account update to the SDK connections that asked for it. Your SDK seeds the cache with a JSON-RPC snapshot on the first read, then applies stream updates as they arrive, so `getAccountInfo` reads from the local buffer.
+
+This is why the main `endpoint` still matters: the SDK uses it for normal web3.js RPC calls and for the first account snapshot, then the stream endpoint keeps the state fresh.
 
 ```ts
-const endpoint = "https://api.rpcpool.com/YOUR_TOKEN";
+const connection = new Connection(rpcEndpoint, {
+  accountSync: {
+    subscriptionEndpoint: streamEndpoint,
+    transport: "grpc",
+  },
+});
 ```
 
-For WebSocket:
+The stream runs over gRPC or WebSocket. gRPC is for Node backends, workers, and scripts; WebSocket works in Node and browsers, so browser apps use the same SDK over WebSocket. TypeScript and bundlers use the package exports to pick the browser or backend build automatically.
 
-```ts
-const wsEndpoint = "wss://api.rpcpool.com/YOUR_TOKEN";
-```
+### Read options
 
-You usually do not need to write those service paths yourself. Passing the host and token path is enough. For transport choice, see [Pick a transport](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/account-sync). For the full config shape, see [Connection options](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/account-sync).
-
-## Pick a transport
-
-Use this simple rule:
-
-| App type     | Use                 |
-| ------------ | ------------------- |
-| Node backend | `transport: "grpc"` |
-| Node worker  | `transport: "grpc"` |
-| Node script  | `transport: "grpc"` |
-| Browser app  | `transport: "ws"`   |
-
-If your network blocks gRPC, use WebSocket.
-
-## Supported methods
-
-These are the main method signatures.
-
-```ts
-new Connection(
-  endpoint: string,
-  commitmentOrConfig?:
-    | Commitment
-    | NodeAccountSyncConnectionConfig
-    | BrowserAccountSyncConnectionConfig,
-);
-```
-
-```ts
-getAccountInfo(
-  publicKey: PublicKey,
-  commitmentOrConfig?: Commitment | GetAccountInfoConfig,
-): Promise<AccountInfo<Buffer> | null>;
-```
-
-```ts
-getAccountInfoAndContext(
-  publicKey: PublicKey,
-  commitmentOrConfig?: Commitment | GetAccountInfoConfig,
-): Promise<RpcResponseAndContext<AccountInfo<Buffer> | null>>;
-```
-
-```ts
-getMultipleAccountsInfo(
-  publicKeys: PublicKey[],
-  commitmentOrConfig?: Commitment | GetMultipleAccountsConfig,
-): Promise<(AccountInfo<Buffer> | null)[]>;
-```
-
-```ts
-getMultipleAccountsInfoAndContext(
-  publicKeys: PublicKey[],
-  commitmentOrConfig?: Commitment | GetMultipleAccountsConfig,
-): Promise<RpcResponseAndContext<(AccountInfo<Buffer> | null)[]>>;
-```
-
-```ts
-getParsedAccountInfo(
-  publicKey: PublicKey,
-  commitmentOrConfig?: Commitment | GetAccountInfoConfig,
-): Promise<RpcResponseAndContext<AccountInfo<Buffer | ParsedAccountData> | null>>;
-```
-
-```ts
-getMultipleParsedAccounts(
-  publicKeys: PublicKey[],
-  rawConfig?: GetMultipleAccountsConfig,
-): Promise<RpcResponseAndContext<(AccountInfo<Buffer | ParsedAccountData> | null)[]>>;
-```
-
-```ts
-addAccounts(accountIds: ReadonlyArray<string | PublicKey>): Promise<void>;
-removeAccounts(accountIds: ReadonlyArray<string | PublicKey>): Promise<void>;
-setAccounts(accountIds: ReadonlyArray<string | PublicKey>): Promise<void>;
-close(): Promise<void>;
-getLastTransportError(): Error | null;
-```
-
-In Node, the config type is `NodeAccountSyncConnectionConfig`. In browser code, the config type is `BrowserAccountSyncConnectionConfig`.
-
-## Read options
-
-The read methods accept the same style as web3.js:
+The read methods take the same argument shape as web3.js: a commitment string, or a config object.
 
 ```ts
 await connection.getAccountInfo(account, "confirmed");
 ```
-
-or:
 
 ```ts
 await connection.getAccountInfo(account, {
@@ -368,27 +186,27 @@ await connection.getAccountInfo(account, {
 });
 ```
 
-Supported read options:
-
 | Option           | Meaning                                                                   |
 | ---------------- | ------------------------------------------------------------------------- |
 | `commitment`     | Reads from the buffer for `"processed"`, `"confirmed"`, or `"finalized"`. |
 | `dataSlice`      | Returns only part of the account data.                                    |
 | `minContextSlot` | Waits for a buffered account update at or above this slot.                |
 
-Important: `minContextSlot` is checked against the SDK local buffer. If the stream does not deliver an update at or above that slot before `missTimeoutMs`, the SDK returns `null`.
+`minContextSlot` is checked against the SDK local buffer, not a node. If the stream does not deliver an update at or above that slot before `missTimeoutMs`, the read returns `null`.
 
-## Read one account
+## Sending a request
 
+Account reads keep their web3.js signatures, and every call resolves from the local buffer.
+
+{% tabs %}
+{% tab title="One account" %}
 ```ts
 import { Connection, PublicKey } from "@triton-one/triton-sdk";
 
 const connection = new Connection("https://api.rpcpool.com/YOUR_TOKEN", {
   accountSync: {
     transport: "grpc",
-    initialAccounts: [
-      "ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989",
-    ],
+    initialAccounts: ["ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989"],
   },
 });
 
@@ -402,9 +220,9 @@ if (accountInfo) {
 
 await connection.close();
 ```
+{% endtab %}
 
-## Read one account with context
-
+{% tab title="One account with context" %}
 Use this when you need to know which slot the data came from.
 
 ```ts
@@ -417,9 +235,9 @@ console.log("account:", response.value);
 ```
 
 If `response.value` is `null`, the context slot is `0`.
+{% endtab %}
 
-## Read many accounts
-
+{% tab title="Many accounts" %}
 The result order matches the input order.
 
 ```ts
@@ -436,9 +254,9 @@ for (const accountInfo of accounts) {
   }
 }
 ```
+{% endtab %}
 
-## Read many accounts with context
-
+{% tab title="Many accounts with context" %}
 ```ts
 const response = await connection.getMultipleAccountsInfoAndContext(
   [
@@ -453,9 +271,15 @@ console.log("accounts:", response.value);
 ```
 
 For multiple-account reads, the context slot is the lowest slot among the returned non-null accounts. If every account is `null`, the context slot is `0`.
+{% endtab %}
+{% endtabs %}
 
-## Read parsed accounts
+## Filter your data
 
+Shape what each read returns. These options layer onto any of the read calls above.
+
+{% tabs %}
+{% tab title="Parsed accounts" %}
 Use parsed reads when you want web3.js-style parsed account data.
 
 ```ts
@@ -482,28 +306,25 @@ const response = await connection.getMultipleParsedAccounts(
 console.log(response.value);
 ```
 
-If a program parser is not supported, the SDK falls back to raw base64 account data. This matches normal RPC behaviour.
+If a program parser is not supported, the SDK falls back to raw base64 account data, matching normal RPC behaviour.
+{% endtab %}
 
-## Use `dataSlice`
-
+{% tab title="dataSlice" %}
 Use `dataSlice` when you only need a small part of account data.
 
 ```ts
 const accountInfo = await connection.getAccountInfo(publicKey, {
   commitment: "confirmed",
-  dataSlice: {
-    offset: 8,
-    length: 32,
-  },
+  dataSlice: { offset: 8, length: 32 },
 });
 
 console.log(accountInfo?.data);
 ```
 
-`dataSlice` changes `accountInfo.data`. It does not change `accountInfo.space`. `space` is the full account data size.
+`dataSlice` changes `accountInfo.data`, not `accountInfo.space`. `space` is the full account data size.
+{% endtab %}
 
-## Use `minContextSlot`
-
+{% tab title="minContextSlot" %}
 Use `minContextSlot` when you only want data from a slot at or above a known slot.
 
 ```ts
@@ -517,30 +338,17 @@ if (accountInfo === null) {
 }
 ```
 
-This SDK does not use `minContextSlot` exactly like direct web3.js RPC. Direct RPC asks a node to serve a read at a given context. This SDK checks the latest stream update in its local buffer.
+The SDK checks `minContextSlot` against the latest stream update in its local buffer, not against a node. If the buffer does not reach that slot before `missTimeoutMs`, the read returns `null`.
+{% endtab %}
+{% endtabs %}
 
 ## Manage the tracked account set
 
-The tracked account set is the list of accounts the SDK asks the stream to send updates for.
+The tracked account set is the list of accounts the SDK asks the stream to send updates for. Start with `initialAccounts`, then change the set while your app runs. Account ids can be strings or `PublicKey` values.
 
-You can start with `initialAccounts`, then change the tracked set while your app is running.
-
-```ts
-const connection = new Connection(endpoint, {
-  accountSync: {
-    transport: "grpc",
-    initialAccounts: [
-      "ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989",
-    ],
-  },
-});
-```
-
-You can pass account ids as strings or `PublicKey` values.
-
-### Add accounts
-
-Use `addAccounts` when you want to keep the current tracked accounts and add more.
+{% tabs %}
+{% tab title="Add" %}
+Keep the current tracked accounts and add more:
 
 ```ts
 await connection.addAccounts([
@@ -550,10 +358,10 @@ await connection.addAccounts([
 ```
 
 After this call, those accounts are part of the live stream.
+{% endtab %}
 
-### Remove accounts
-
-Use `removeAccounts` when you no longer want live updates for some accounts.
+{% tab title="Remove" %}
+Stop live updates for some accounts:
 
 ```ts
 await connection.removeAccounts([
@@ -561,11 +369,11 @@ await connection.removeAccounts([
 ]);
 ```
 
-This stops tracking those accounts on the stream. It does not erase any account data already stored in the local buffer.
+This stops tracking those accounts on the stream. It does not erase account data already stored in the local buffer.
+{% endtab %}
 
-### Replace all accounts
-
-Use `setAccounts` when you want to replace the full tracked set.
+{% tab title="Replace all" %}
+Replace the full tracked set:
 
 ```ts
 await connection.setAccounts([
@@ -574,8 +382,10 @@ await connection.setAccounts([
 ```
 
 After this call, the stream tracks only the accounts in the new list.
+{% endtab %}
+{% endtabs %}
 
-### Tracked set notes
+Notes:
 
 * Duplicate accounts are normalised to one tracked account.
 * Bad public keys throw before the stream is updated.
@@ -584,7 +394,7 @@ After this call, the stream tracks only the accounts in the new list.
 
 ## Auto-subscribe on miss
 
-By default, if you call `getAccountInfo` for an account that is not already tracked, the SDK subscribes to it and waits up to `missTimeoutMs`.
+By default, if you call `getAccountInfo` for an account that is not tracked, the SDK subscribes to it and waits up to `missTimeoutMs`.
 
 ```ts
 const connection = new Connection(endpoint, {
@@ -596,7 +406,7 @@ const connection = new Connection(endpoint, {
 });
 ```
 
-If you want reads to return `null` immediately for untracked accounts, turn it off:
+To make reads return `null` immediately for untracked accounts, turn it off:
 
 ```ts
 const connection = new Connection(endpoint, {
@@ -609,41 +419,87 @@ const connection = new Connection(endpoint, {
 
 ## Close the connection
 
-Call `close()` when your script, test, or app page is done with the connection.
+Call `close()` when your script, test, or app page is done with the connection. For a long-running server, call it during shutdown.
 
 ```ts
 await connection.close();
 ```
 
-For a long-running server, call it during shutdown.
+## Supported methods and helpers
 
-## Check stream errors
+The SDK works as a web3.js-compatible `Connection`. Account reads are served from the stream-fed buffer; every other web3.js method routes to a normal RPC request.
 
-If account reads keep returning `null`, check the transport error.
-
-```ts
-const error = connection.getLastTransportError();
-
-if (error) {
-  console.error("stream error:", error.message);
-}
-```
-
-## Use normal web3.js methods
-
-The SDK connection is built to be a web3.js drop-in replacement.
+{% tabs %}
+{% tab title="Streaming-backed reads" %}
+| Method                                                   | What it does                                                        |
+| -------------------------------------------------------- | ------------------------------------------------------------------- |
+| `getAccountInfo(publicKey, config?)`                     | Gets one account from the local stream-fed buffer.                  |
+| `getAccountInfoAndContext(publicKey, config?)`           | Gets one account plus a context slot.                               |
+| `getMultipleAccountsInfo(publicKeys, config?)`           | Gets many accounts from the local buffer.                           |
+| `getMultipleAccountsInfoAndContext(publicKeys, config?)` | Gets many accounts plus one context slot.                           |
+| `getParsedAccountInfo(publicKey, config?)`               | Gets one account and returns parsed data when parsing is supported. |
+| `getMultipleParsedAccounts(publicKeys, config?)`         | Gets many parsed accounts.                                          |
 
 ```ts
-const blockHeight = await connection.getBlockHeight();
-const balance = await connection.getBalance(publicKey);
-const accountInfo = await connection.getAccountInfo(publicKey);
+getAccountInfo(
+  publicKey: PublicKey,
+  commitmentOrConfig?: Commitment | GetAccountInfoConfig,
+): Promise<AccountInfo<Buffer> | null>;
+
+getAccountInfoAndContext(
+  publicKey: PublicKey,
+  commitmentOrConfig?: Commitment | GetAccountInfoConfig,
+): Promise<RpcResponseAndContext<AccountInfo<Buffer> | null>>;
+
+getMultipleAccountsInfo(
+  publicKeys: PublicKey[],
+  commitmentOrConfig?: Commitment | GetMultipleAccountsConfig,
+): Promise<(AccountInfo<Buffer> | null)[]>;
+
+getMultipleAccountsInfoAndContext(
+  publicKeys: PublicKey[],
+  commitmentOrConfig?: Commitment | GetMultipleAccountsConfig,
+): Promise<RpcResponseAndContext<(AccountInfo<Buffer> | null)[]>>;
+
+getParsedAccountInfo(
+  publicKey: PublicKey,
+  commitmentOrConfig?: Commitment | GetAccountInfoConfig,
+): Promise<RpcResponseAndContext<AccountInfo<Buffer | ParsedAccountData> | null>>;
+
+getMultipleParsedAccounts(
+  publicKeys: PublicKey[],
+  rawConfig?: GetMultipleAccountsConfig,
+): Promise<RpcResponseAndContext<(AccountInfo<Buffer | ParsedAccountData> | null)[]>>;
+```
+{% endtab %}
+
+{% tab title="Stream controls" %}
+| Method                       | What it does                                      |
+| ---------------------------- | ------------------------------------------------- |
+| `addAccounts(accountIds)`    | Adds accounts to the live stream.                 |
+| `removeAccounts(accountIds)` | Stops tracking accounts.                          |
+| `setAccounts(accountIds)`    | Replaces the full tracked account list.           |
+| `close()`                    | Closes the stream and releases resources.         |
+| `getLastTransportError()`    | Returns the latest stream error, if one happened. |
+
+```ts
+addAccounts(accountIds: ReadonlyArray<string | PublicKey>): Promise<void>;
+removeAccounts(accountIds: ReadonlyArray<string | PublicKey>): Promise<void>;
+setAccounts(accountIds: ReadonlyArray<string | PublicKey>): Promise<void>;
+close(): Promise<void>;
+getLastTransportError(): Error | null;
 ```
 
-The account read methods above are stream-backed. Other web3.js methods use the normal RPC connection behaviour.
+In Node, the config type is `NodeAccountSyncConnectionConfig`; in browser code, it is `BrowserAccountSyncConnectionConfig`.
+{% endtab %}
 
-## Account data encoding helpers
-
-The SDK includes helpers for account data encoding.
+{% tab title="Account data helpers" %}
+| Helper                                               | What it does                                                                    |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `convertAccountData(data, fromEncoding, toEncoding)` | Converts account data between supported encodings.                              |
+| `encodeAccount(account, encoding, options?)`         | Encodes account info into a Solana RPC-style account shape.                     |
+| `parseJsonParsed(account, options?)`                 | Parses account data into `jsonParsed` form when supported.                      |
+| `loadAccountEncodingWasm()`                          | Loads the WASM account encoder explicitly. Most users do not need this.         |
 
 ```ts
 import { convertAccountData } from "@triton-one/triton-sdk";
@@ -657,21 +513,25 @@ const base58Data = await convertAccountData(
 console.log(base58Data);
 ```
 
-Supported encodings:
+Supported encodings: `binary`, `base58`, `base64`, `base64+zstd`, `jsonParsed`. Most users do not need these helpers; use them when you need raw account data in a specific Solana RPC encoding.
+{% endtab %}
+{% endtabs %}
 
-* `binary`
-* `base58`
-* `base64`
-* `base64+zstd`
-* `jsonParsed`
+## Check stream errors
 
-Most users do not need these helpers. Use them when you need raw account data in a specific Solana RPC encoding.
+If account reads keep returning `null`, the stream is the first place to look.
 
-## Why `null` happens
+```ts
+const error = connection.getLastTransportError();
 
-`getAccountInfo` can return `null`. This is normal.
+if (error) {
+  console.error("stream error:", error.message);
+}
+```
 
-Common reasons:
+### Why a read returns `null`
+
+`getAccountInfo` returning `null` is normal. Common reasons:
 
 * The account does not exist.
 * The account is not tracked and `autoSubscribeOnMiss` is `false`.
@@ -680,7 +540,7 @@ Common reasons:
 * The endpoint, token, or transport is wrong.
 * You are asking for a different commitment than the stream has delivered.
 
-Common fixes:
+Make sure the account is tracked, give the stream time to deliver, then retry:
 
 ```ts
 const connection = new Connection(endpoint, {
@@ -691,11 +551,7 @@ const connection = new Connection(endpoint, {
     missTimeoutMs: 10_000,
   },
 });
-```
 
-Then retry the read:
-
-```ts
 for (let attempt = 0; attempt < 10; attempt += 1) {
   const accountInfo = await connection.getAccountInfo(publicKey);
 
@@ -708,86 +564,60 @@ for (let attempt = 0; attempt < 10; attempt += 1) {
 }
 ```
 
-## Common mistakes
+### Common mistakes
 
-### Using gRPC in the browser
+* **Using gRPC in the browser.** Browsers cannot use `@grpc/grpc-js`. Use `transport: "ws"` in browser apps.
+* **Forgetting to close in scripts.** If a script does not exit, call `await connection.close()`.
+* **Passing a bad public key.** All account ids must be valid Solana public keys.
+* **Expecting old historical state.** The SDK stores the latest streamed state, not a historical database. For account state from a past slot, use a service built for historical reads.
 
-Browsers cannot use `@grpc/grpc-js`.
+## Migrate from web3.js
 
-Use WebSocket in browser apps:
+For many apps, migration is small:
 
+1. Install `@triton-one/triton-sdk`.
+2. Change imports from `@solana/web3.js` to `@triton-one/triton-sdk`.
+3. Add `accountSync` options to your `Connection`.
+4. Keep calling `getAccountInfo` and `getMultipleAccountsInfo` like before.
+5. Call `close()` when the connection is no longer needed.
+
+{% tabs %}
+{% tab title="Before" %}
 ```ts
-accountSync: {
-  transport: "ws",
-}
+import { Connection, PublicKey } from "@solana/web3.js";
+
+const accountId = "ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989";
+const connection = new Connection("https://api.mainnet-beta.solana.com");
+const account = await connection.getAccountInfo(new PublicKey(accountId));
 ```
+{% endtab %}
 
-### Forgetting to close in scripts
-
-If a script does not exit, close the connection:
-
-```ts
-await connection.close();
-```
-
-### Passing a bad public key
-
-All account ids must be valid Solana public keys.
-
-```ts
-const publicKey = new PublicKey("So11111111111111111111111111111111111111112");
-```
-
-### Expecting old historical state
-
-The SDK stores the latest streamed state. It is not a historical database.
-
-If you need old account state from a past slot, use a service built for historical reads.
-
-## Full example
-
+{% tab title="After" %}
 ```ts
 import { Connection, PublicKey } from "@triton-one/triton-sdk";
 
-const endpoint = "https://api.rpcpool.com/YOUR_TOKEN";
-const publicKey = new PublicKey("ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989");
-
-const connection = new Connection(endpoint, {
-  commitment: "confirmed",
+const accountId = "ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989";
+const connection = new Connection("https://api.rpcpool.com/YOUR_TOKEN", {
   accountSync: {
     transport: "grpc",
-    initialAccounts: [publicKey],
-    commitment: "confirmed",
-    autoSubscribeOnMiss: true,
-    missTimeoutMs: 5_000,
+    initialAccounts: [accountId],
   },
 });
 
-try {
-  const accountInfo = await connection.getAccountInfo(publicKey, {
-    commitment: "confirmed",
-  });
+const account = await connection.getAccountInfo(new PublicKey(accountId));
 
-  if (!accountInfo) {
-    throw new Error("account was not available");
-  }
-
-  console.log({
-    lamports: accountInfo.lamports,
-    owner: accountInfo.owner.toBase58(),
-    executable: accountInfo.executable,
-    rentEpoch: accountInfo.rentEpoch,
-    dataLength: accountInfo.data.length,
-    space: accountInfo.space,
-  });
-} finally {
-  await connection.close();
-}
+await connection.close();
 ```
+{% endtab %}
+{% endtabs %}
 
 ## Pricing
 
 Account Sync is billed on bandwidth only, `$0.08 / GB` of streamed data, with no per-call charge.
+
+## What's next
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>The streaming backbone Account Sync rides on. Go direct for the lowest-latency account and transaction data.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets, backed by gRPC. The fastest real-time data for frontends.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/whirligig-websockets">Whirligig WebSockets</a></td></tr></tbody></table>
 
 ***
 
