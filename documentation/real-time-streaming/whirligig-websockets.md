@@ -6,8 +6,6 @@ description: Faster and more reliable Solana WebSocket API for browsers, backed 
 
 Whirligig is a Rust proxy between your client and a Dragon's Mouth gRPC stream, providing 100% compatibility with the standard Solana WebSocket API, plus additional features and higher limits. Triton was the first Solana RPC provider to enhance the native pubsub path with gRPC, and it's now a wide practice across the entire ecosystem.
 
-Native Solana WebSockets run inside the RPC process, so notifications can lag or drop under load; they batch `processed` account updates to slot boundaries; they cap concurrent connections; and they have no full-transaction subscription. Whirligig serves the same API from dedicated streaming nodes, so at `processed` commitment account updates arrive intra-slot, up to 400 ms faster than native subscriptions.
-
 ## Use cases
 
 * **Browsers.** Frontends and dApps can't speak gRPC. They subscribe over `wss://` and get gRPC-backed data with no library changes.
@@ -759,7 +757,7 @@ You can find a reference CLI client on GitHub: [yellowstone-whirligig-client](ht
 
 ## Pricing
 
-Whirligig is billed at `$0.08 / GB` of bandwidth, and you only pay for data streamed.
+Whirligig is billed at `$0.08 / GB` of bandwidth, and you only pay for the data streamed.
 
 ## What's next
 
