@@ -6,10 +6,10 @@ description: Open your first Triton stream and see live Solana data in minutes.
 
 In this quickstart we'll show you how to stream live Solana data, using any of Triton's four streaming services:
 
-1. **Dragon's Mouth gRPC.** Sub-slot real-time updates for accounts, transactions, slots, and blocks over gRPC. The lowest-latency path, best for backends.
-2. **Whirligig WebSockets.** A drop-in for native Solana WebSockets, backed by gRPC. The fastest real-time data for browsers and frontends.
-3. **Fumarole reliable streams (gRPC).** A redundant streaming layer with a server-side cursor, auto-backfill on reconnect (4 days of stored data), and at-least-once delivery guarantees, for pipelines that can't miss a single event.
-4. **Deshred transactions (gRPC).** Pre-execution transactions reconstructed from raw shreds before the node's replay stage. It's the earliest intent signal for traders.
+* **Dragon's Mouth gRPC.** Sub-slot real-time updates for accounts, transactions, slots, and blocks over gRPC. The lowest-latency path, best for backends.
+* **Whirligig WebSockets.** A drop-in for native Solana WebSockets, backed by gRPC. The fastest real-time data for browsers and frontends.
+* **Fumarole reliable streams (gRPC).** A redundant streaming layer with a server-side cursor, auto-backfill on reconnect (4 days of stored data), and at-least-once delivery guarantees, for pipelines that can't miss a single event.
+* **Deshred transactions (gRPC).** Pre-execution transactions reconstructed from raw shreds before the node's replay stage. It's the earliest intent signal for traders.
 
 ## 0. Prerequisites
 
@@ -115,7 +115,7 @@ futures = "0.3"
 {% endtab %}
 
 {% tab title="Deshred" %}
-Deshred is a separate gRPC method on the same `yellowstone-grpc` service. Same install as Dragon's Mouth.
+Deshred is a separate gRPC method on the `yellowstone-grpc` service, so it follows the same install path as Dragon's Mouth.
 
 {% tabs %}
 {% tab title="TypeScript" %}
