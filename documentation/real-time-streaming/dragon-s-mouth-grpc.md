@@ -4,11 +4,9 @@ description: Triton's Geyser gRPC stream for sub-slot Solana account, transactio
 
 # Dragon's Mouth gRPC
 
-Triton's Geyser-fed gRPC streaming interface for Solana. Sub-slot account, transaction, slot, and block subscriptions. The fastest live data path available for processed events.
+Dragon's Mouth (or Yellowstone gRPC) taps the validator's Geyser plugin directly, so you get account, transaction, slot, and block updates as the validator processes them, giving you up to a 400 ms head start over a polling client.
 
-## What is Dragon's Mouth
-
-Dragon's Mouth is Triton's Geyser-fed gRPC interface for streaming Solana data. It taps the validator's Geyser plugin directly, so you get account, transaction, slot, and block updates as the validator processes them, giving you up to a 400 ms head start over a polling client.
+## Use cases
 
 It's the fastest live data path available for `processed` events and the recommended choice for any backend service where latency matters.
 
@@ -16,11 +14,14 @@ It's the fastest live data path available for `processed` events and the recomme
 * **DeFi backends.** Live pool, order-book, and account state for services that react to the chain in real time.
 * **Real-time UIs (backend).** Live balances, transaction feeds, and account state for backends that proxy to wallets and explorers.
 
-**What not to use it for.** Browsers and frontends cannot speak gRPC: use [Whirligig WebSockets](whirligig-websockets) instead. And if your pipeline cannot miss a block (indexing, analytics, compliance), use [Fumarole](fumarole-persistent-streams), which guarantees at-least-once delivery and resumes after a disconnect: Dragon's Mouth is a live stream with no server-side replay buffer.
+When not to use it:
+
+* Browsers and frontends cannot speak gRPC, so you should use [Whirligig WebSockets](whirligig-websockets) instead.
+* If your pipeline cannot miss a block (indexing, analytics, compliance), use [Fumarole](fumarole-persistent-streams), which guarantees at-least-once delivery and auto-backfills up to 4 days of data on reconnect.
 
 ## Features and benefits
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-timer">:timer:</i> <strong>Sub-slot latency</strong></td><td>Intra-slot updates arrive ~400 ms ahead of standard RPC, which only emits at slot boundaries.</td><td></td></tr><tr><td><i class="fa-filter">:filter:</i> <strong>Server-side filtering</strong></td><td>Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state, all server-side.</td><td></td></tr><tr><td><i class="fa-right-left">:right-left:</i> <strong>Bi-directional streams</strong></td><td>Modify subscriptions on the fly without reconnecting. Send a new request, server swaps your filter set.</td><td></td></tr><tr><td><i class="fa-feather">:feather:</i> <strong>Compact Protobuf payloads</strong></td><td>Binary serialisation cuts bandwidth and CPU. Cheaper to stream, faster to parse.</td><td></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-timer">:timer:</i> <strong>Sub-slot latency</strong></td><td>Intra-slot updates arrive ~400 ms ahead of standard RPC, which only emits at slot boundaries.</td><td></td></tr><tr><td><i class="fa-filter">:filter:</i> <strong>Server-side filtering</strong></td><td>Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state, all server-side.</td><td></td></tr><tr><td><i class="fa-right-left">:right-left:</i> <strong>Bi-directional streams</strong></td><td>Modify subscriptions on the fly without reconnecting. Send a new request, server swaps your filter set.</td><td></td></tr><tr><td><i class="fa-feather">:feather:</i> <strong>Compact Protobuf payloads</strong></td><td>Binary serialisation cuts bandwidth and CPU. Cheaper to stream, faster to parse.</td><td></td></tr><tr><td><i class="fa-compress">:compress:</i> <strong>Compressed account filters</strong></td><td>Track millions of accounts with a Cuckoo-filter set instead of a raw pubkey list, cutting subscription payloads ~10x.</td><td></td></tr><tr><td><i class="fa-arrows-rotate">:arrows-rotate:</i> <strong>Auto-reconnect and backfill</strong></td><td>The Rust client reconnects on disconnect, replays from your last processed slot, and deduplicates the replayed window.</td><td></td></tr></tbody></table>
 
 ## Stream types and unary operations
 
@@ -881,7 +882,7 @@ To unsubscribe from everything but keep the connection open:
 {% endtab %}
 {% endtabs %}
 
-## Pings
+## Sending pings
 
 Some cloud providers (e.g. Cloudflare) close idle streams. To avoid this, you need to keep sending pings to the server. The server responds with a `pong` message every 15 seconds.
 
@@ -1191,17 +1192,11 @@ flowchart LR
 
 We provide SDKs in Rust, TypeScript, Go, and Python. Sample clients for each live in the [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples) directory; match your client to the current proto version.
 
-### Quick endpoint test
-
-Before wiring up an SDK, you can sanity-check an endpoint with Triton's prebuilt `client-ubuntu` test binary, no code required. See [Is it the endpoint or your code?](https://kate-6.gitbook.io/triton-one-docs-v5/faqs/solana/error-handling/verify-your-grpc-endpoint).
-
 {% tabs %}
 {% tab title="Rust" %}
 The repo's [yellowstone-grpc/examples/rust](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/rust) directory ships a `client` binary that exercises every subscribe and unary method against any endpoint.
 
-```
 Subscribe to account updates:
-```
 
 ```shell
 cargo run --bin client -- \
@@ -1212,9 +1207,7 @@ cargo run --bin client -- \
   --accounts-account <Pubkey>
 ```
 
-```
 Subscribe to slots (with commitment override):
-```
 
 ```shell
 cargo run --bin client -- \
@@ -1225,9 +1218,7 @@ cargo run --bin client -- \
   --slots
 ```
 
-```
 Subscribe to non-vote, non-failed transactions touching an account:
-```
 
 ```shell
 cargo run --bin client -- \
@@ -1240,9 +1231,7 @@ cargo run --bin client -- \
   --transactions-account-include <Pubkey>
 ```
 
-```
 Subscribe to deshred transactions (Triton-only):
-```
 
 ```shell
 cargo run --bin client -- \
@@ -1253,9 +1242,7 @@ cargo run --bin client -- \
   --account-include <Pubkey>
 ```
 
-```
 Unary calls (`ping`, `get-latest-blockhash`, `get-block-height`, `get-slot`, `is-blockhash-valid`, `get-version`):
-```
 
 ```shell
 cargo run --bin client -- \
@@ -1343,9 +1330,7 @@ go run ./cmd/grpc-client/ \
   -slots
 ```
 
-```
 Non-SSL connections work too:
-```
 
 ```shell
 go run ./cmd/grpc-client/ \
@@ -1354,18 +1339,14 @@ go run ./cmd/grpc-client/ \
   -blocks
 ```
 
-```
 Updating proto files needs `protoc` plus the Go plugins:
-```
 
 ```shell
 go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.35.1
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1
 ```
 
-```
 Run `make` to regenerate. Full source: [yellowstone-grpc/examples/golang](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/golang).
-```
 
 {% hint style="info" %}
 The Go example may lag the latest stable proto version. For production-ready code, the Rust client is the reference implementation.
@@ -1400,6 +1381,10 @@ Install `grpcio`, `grpcio-tools`, and `protobuf`, and generate `geyser_pb2` from
 {% endtab %}
 {% endtabs %}
 
+{% hint style="info" %}
+If you're experiencing errors, you can sanity-check your endpoint with Triton's prebuilt `client-ubuntu` test binary, no code required. See [Is it the endpoint or your code?](https://kate-6.gitbook.io/triton-one-docs-v5/faqs/solana/error-handling/verify-your-grpc-endpoint).
+{% endhint %}
+
 ## Pricing
 
 Dragon's Mouth is billed at `$0.08 / GB` of bandwidth. You only pay for the data streamed.
@@ -1413,7 +1398,7 @@ Dragon's Mouth is billed at `$0.08 / GB` of bandwidth. You only pay for the data
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="deshred-transactions">Deshred transactions</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="whirligig-websockets">Whirligig WebSockets</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 4 days of stored data and built-in cursor resume.</td><td><a href="fumarole-persistent-streams">Fumarole reliable streams</a></td></tr><tr><td><i class="fa-compass">:compass:</i> <strong>Streaming overview</strong></td><td>Compare every Triton streaming service side by side.</td><td><a href="..">Streaming overview</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="deshred-transactions">Deshred transactions</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="whirligig-websockets">Whirligig WebSockets</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 4 days of stored data and built-in cursor resume.</td><td><a href="fumarole-persistent-streams">Fumarole reliable streams</a></td></tr><tr><td><i class="fa-compass">:compass:</i> <strong>Streaming overview</strong></td><td>Compare every Triton streaming service and choose the right fit for your workload.</td><td><a href="..">Streaming overview</a></td></tr></tbody></table>
 
 ***
 
