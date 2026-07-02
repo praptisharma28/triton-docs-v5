@@ -19,13 +19,13 @@ flowchart LR
 
 ## Use cases
 
-Deshred is for strategies that act on the earliest possible signal, before execution:
+Deshred is for strategies that act on the earliest possible signal:
 
 * **HFT and arbitrage** that react to transaction intent the moment entries form from shreds.
 * **MEV and market making** that need the earliest view of price-impacting transactions.
 * **Copy-trading and liquidations** that follow specific accounts as soon as they act.
 
-**What not to use it for.** If you need execution results (status, balance changes, logs) or any confirmation guarantee, use the [Dragon's Mouth](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) `transactions` stream instead, or run it in parallel and join on `signature`. Deshred is intent-only and pre-execution: a transaction may fail, land on a dead fork, or never confirm.
+**What not to use it for.** If you need execution results (status, balance changes, logs) or any confirmation guarantee, use the [Dragon's Mouth](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) `transactions` stream instead, or run it in parallel and join on `signature`. Deshred is intent-only: a transaction may fail, land on a dead fork, or never confirm.
 
 ## Features and benefits
 
@@ -35,18 +35,12 @@ Deshred is for strategies that act on the earliest possible signal, before execu
 
 `SubscribeDeshred` supports four filter fields, combined as logical AND:
 
-<details>
-
-<summary>Transaction filters</summary>
-
 | Parameter          | Type       | Required | Description                                                                      |
 | ------------------ | ---------- | -------- | -------------------------------------------------------------------------------- |
 | `vote`             | `bool`     | No       | Include or exclude vote transactions. `false` excludes votes.                    |
 | `account_include`  | `string[]` | No       | Accounts mentioned anywhere in the transaction (including loaded ALT addresses). |
 | `account_exclude`  | `string[]` | No       | Exclude transactions mentioning any of these accounts.                           |
 | `account_required` | `string[]` | Yes      | Accounts that MUST all be mentioned (every one of them).                         |
-
-</details>
 
 ## Subscribe and consume
 
