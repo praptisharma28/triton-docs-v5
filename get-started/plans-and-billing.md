@@ -93,7 +93,7 @@ On shared infrastructure, you pay as you go at the following rates:
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-gauge">:gauge:</i> <strong>Rate and connection limits</strong></td><td>Per-endpoint and method rate limits, plus streaming connection caps.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/rate-and-connection-limits">https://kate-6.gitbook.io/triton-one-docs-v5/rate-and-connection-limits</a></td></tr><tr><td><i class="fa-user-gear">:user-gear:</i> <strong>Customer dashboard overview</strong></td><td>Customer dashboard tour: endpoints, billing, team, and support.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/platform-overview">https://kate-6.gitbook.io/triton-one-docs-v5/platform-overview</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-gauge">:gauge:</i> <strong>Rate and connection limits</strong></td><td>Per-endpoint and method rate limits, plus streaming connection caps.</td><td><a href="https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/rate-and-connection-limits">https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/rate-and-connection-limits</a></td></tr><tr><td><i class="fa-user-gear">:user-gear:</i> <strong>Customer dashboard overview</strong></td><td>Customer dashboard tour: endpoints, billing, team, and support.</td><td><a href="https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/platform-overview">https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/platform-overview</a></td></tr></tbody></table>
 
 ***
 

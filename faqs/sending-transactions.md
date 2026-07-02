@@ -10,7 +10,7 @@ description: >-
 
 <summary>My transactions aren't landing successfully. What should I do?</summary>
 
-Triton ensures reliable transaction delivery to the network, but for optimal transaction finalisation, we recommend configuring appropriate priority fees. See our [Priority Fees API](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api) for how to set them.
+Triton ensures reliable transaction delivery to the network, but for optimal transaction finalisation, we recommend configuring appropriate priority fees. See our [Priority Fees API](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/priority-fees-api) for how to set them.
 
 </details>
 
@@ -50,7 +50,7 @@ No. SWQoS routing applies by default to standard `sendTransaction` and `/sendtx`
 
 <summary>Is there a minimum priority fee?</summary>
 
-No. Solana's default `getRecentPrioritizationFees` returns the recent minimum, which is often zero, so use Triton's `percentile` parameter to set a fee that is competitive during congestion. See [Priority Fees API](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api).
+No. Solana's default `getRecentPrioritizationFees` returns the recent minimum, which is often zero, so use Triton's `percentile` parameter to set a fee that is competitive during congestion. See [Priority Fees API](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/priority-fees-api).
 
 </details>
 
@@ -58,7 +58,7 @@ No. Solana's default `getRecentPrioritizationFees` returns the recent minimum, w
 
 <summary>Do you support sponsored transactions or gas sponsorship?</summary>
 
-No. For transaction sending, Triton offers SWQoS delivery, [Yellowstone Shield](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection) validator policies, and priority-fee tooling.
+No. For transaction sending, Triton offers SWQoS delivery, [Yellowstone Shield](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/shield-mev-protection) validator policies, and priority-fee tooling.
 
 </details>
 

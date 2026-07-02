@@ -6,7 +6,7 @@ description: >-
 
 # Customer dashboard
 
-If you already know what you want to do and just need the steps, the [**Customer dashboard tour**](https://kate-6.gitbook.io/triton-one-docs-v5/platform-overview) walks you through the most common actions.
+If you already know what you want to do and just need the steps, the [**Customer dashboard tour**](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/platform-overview) walks you through the most common actions.
 
 ## Signing in and getting help
 
@@ -75,7 +75,7 @@ Yes. If you have an operator role, you should be able to add them yourself.
 
 <summary>Should I whitelist a domain or an IP?</summary>
 
-We don’t whitelist IPs. **Backends** (servers, scripts, bots, gRPC) use a secret token: in the URL path for JSON-RPC and WebSocket, or in an `x-token` header for gRPC. **Browser frontends** can’t hide a token in client code, so whitelist your domain via the endpoint’s allowed-origins list instead. Mobile and native apps have no browser origin to whitelist, so they use a token too; route calls through your own backend so it isn’t shipped in the app. See [Auth and security](https://kate-6.gitbook.io/triton-one-docs-v5/authentication).
+We don’t whitelist IPs. **Backends** (servers, scripts, bots, gRPC) use a secret token: in the URL path for JSON-RPC and WebSocket, or in an `x-token` header for gRPC. **Browser frontends** can’t hide a token in client code, so whitelist your domain via the endpoint’s allowed-origins list instead. Mobile and native apps have no browser origin to whitelist, so they use a token too; route calls through your own backend so it isn’t shipped in the app. See [Auth and security](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/authentication).
 
 </details>
 

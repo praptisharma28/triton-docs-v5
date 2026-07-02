@@ -8,7 +8,7 @@ description: >-
 
 Solana's leader schedule is deterministic, so you often know exactly which validator will process your transaction. If that leader is a bad actor, your transaction still routes to it by default, which leaves you exposed to sandwiching, frontrunning, censorship, and slow block production.
 
-[Yellowstone Shield](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection) addresses this with on-chain allowlists and blocklists for validators. Combined with the [Yellowstone Jet TPU client](yellowstone-jet-tpu-client), your application connects directly to validator TPUs, checks the current leader against your Shield policies, and only sends to validators you allow. The result is RPC-independent transaction routing where you decide which validators are allowed to see your transactions.
+[Yellowstone Shield](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/shield-mev-protection) addresses this with on-chain allowlists and blocklists for validators. Combined with the [Yellowstone Jet TPU client](yellowstone-jet-tpu-client), your application connects directly to validator TPUs, checks the current leader against your Shield policies, and only sends to validators you allow. The result is RPC-independent transaction routing where you decide which validators are allowed to see your transactions.
 
 * Shield program: [github.com/rpcpool/yellowstone-shield](https://github.com/rpcpool/yellowstone-shield)
 * Policy store crate: [`yellowstone-shield-store`](https://crates.io/crates/yellowstone-shield-store)

@@ -40,7 +40,7 @@ DAS is enabled by default on every Triton endpoint.
 
 ### Methods
 
-Every method's parameters and example request and response are in the [DAS API reference](https://kate-6.gitbook.io/triton-one-docs-v5/api-reference/solana/reading-account-state/das-api). Grouped by what they do:
+Every method's parameters and example request and response are in the [DAS API reference](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/reading-account-state/das-api). Grouped by what they do:
 
 * **Read assets:** `getAsset`, `getAssets`, `getAssetBatch`, `getAssetProof`, `getAssetProofBatch`
 * **List assets:** `getAssetsByOwner`, `getAssetsByAuthority`, `getAssetsByCreator`, `getAssetsByGroup`, `searchAssets`
@@ -74,7 +74,7 @@ Metaplex publishes a JavaScript DAS client with examples: [digital-asset-standar
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>DAS API reference</strong></td><td>Parameters and example request and response for every DAS method.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/api-reference/solana/reading-account-state/das-api">DAS API reference</a></td></tr><tr><td><strong>Best practices for reading account state</strong></td><td>When to reach for DAS versus raw account reads, and how to keep queries cheap.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/best-practices">Best practices for reading account state</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>DAS API reference</strong></td><td>Parameters and example request and response for every DAS method.</td><td><a href="https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/reading-account-state/das-api">DAS API reference</a></td></tr><tr><td><strong>Best practices for reading account state</strong></td><td>When to reach for DAS versus raw account reads, and how to keep queries cheap.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/best-practices">Best practices for reading account state</a></td></tr></tbody></table>
 
 ***
 

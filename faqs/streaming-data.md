@@ -28,7 +28,7 @@ You don't need to install anything. All Geyser streaming products (Dragon's Mout
 
 <summary>What is the maximum number of accounts I can subscribe to using Yellowstone gRPC?</summary>
 
-For shared plans, the current limit is 200,000 subscriptions per IP. See [Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs-v5/get-started/rate-and-connection-limits) for connection caps and per-pool detail.
+For shared plans, the current limit is 200,000 subscriptions per IP. See [Rate and connection limits](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/get-started/rate-and-connection-limits) for connection caps and per-pool detail.
 
 For dedicated nodes, there's no set limit. However, opening too many subscriptions for your servers to ingest can cause backpressure from your backend, leading to poor streaming performance. Please check that your server can handle the amount of data you are subscribing to.
 
@@ -38,7 +38,7 @@ For dedicated nodes, there's no set limit. However, opening too many subscriptio
 
 <summary>What is Cloudbreak, and how does it improve latency?</summary>
 
-Cloudbreak is Triton's account indexing engine that delivers `getProgramAccounts`, `getTokenAccountsByOwner`, and `getTokenAccountsByDelegate` **99%+ faster** by serving them from tailored PostgreSQL indexes instead of full account scans. Indexes are built automatically from your query traffic. Available on every Triton plan at standard RPC rates, no premium for indexed reads. See [Cloudbreak](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/cloudbreak-indexed-accounts).
+Cloudbreak is Triton's account indexing engine that delivers `getProgramAccounts`, `getTokenAccountsByOwner`, and `getTokenAccountsByDelegate` **99%+ faster** by serving them from tailored PostgreSQL indexes instead of full account scans. Indexes are built automatically from your query traffic. Available on every Triton plan at standard RPC rates, no premium for indexed reads. See [Cloudbreak](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/cloudbreak-indexed-accounts).
 
 </details>
 
@@ -46,7 +46,7 @@ Cloudbreak is Triton's account indexing engine that delivers `getProgramAccounts
 
 <summary>What is Fumarole, and how can I get access?</summary>
 
-Fumarole is a streaming system designed for reliable, scalable streaming of account and transaction data. It aggregates data from multiple Solana nodes for high availability and persistence, with up to 4 days of retained stream history. Available on every Triton subscription, with regional endpoints (`ams.rpcpool.com` for Europe, `nyc.rpcpool.com` for the US). See [Fumarole](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/fumarole-persistent-streams).
+Fumarole is a streaming system designed for reliable, scalable streaming of account and transaction data. It aggregates data from multiple Solana nodes for high availability and persistence, with up to 4 days of retained stream history. Available on every Triton subscription, with regional endpoints (`ams.rpcpool.com` for Europe, `nyc.rpcpool.com` for the US). See [Fumarole](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/fumarole-persistent-streams).
 
 </details>
 
@@ -72,7 +72,7 @@ Yes, on both shared and dedicated infrastructure. Your existing WebSocket connec
 
 <summary>How do I connect to WebSockets?</summary>
 
-Replace `https` with `wss` in your RPC endpoint URL. For example: `wss://your-endpoint.rpcpool.com`. For backends, we recommend using gRPC instead, see [Dragon’s Mouth gRPC](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc) for the lower-latency path.
+Replace `https` with `wss` in your RPC endpoint URL. For example: `wss://your-endpoint.rpcpool.com`. For backends, we recommend using gRPC instead, see [Dragon’s Mouth gRPC](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) for the lower-latency path.
 
 </details>
 
@@ -98,7 +98,7 @@ Full guide: [Verify your gRPC endpoint](error-handling/verify-your-grpc-endpoint
 
 <summary>How do I get the earliest possible view of transactions?</summary>
 
-Use Deshred. It streams transactions reconstructed from shreds before execution, so you see them earlier than a regular gRPC transaction stream. Built for latency-sensitive work like trading and arbitrage. See [Deshred transactions](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions).
+Use Deshred. It streams transactions reconstructed from shreds before execution, so you see them earlier than a regular gRPC transaction stream. Built for latency-sensitive work like trading and arbitrage. See [Deshred transactions](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions).
 
 </details>
 

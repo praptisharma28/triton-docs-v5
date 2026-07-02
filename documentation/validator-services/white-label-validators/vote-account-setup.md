@@ -45,7 +45,7 @@ For more documentation about vote account management, we strongly encourage you 
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Node identity protection</strong></td><td>How Triton safeguards the node identity key while you keep control of your validator.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/validator-services/sol-staking-usdc-pay-outs/node-identity-protection">Node identity protection</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>Node identity protection</strong></td><td>How Triton safeguards the node identity key while you keep control of your validator.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/validator-services/sol-staking-usdc-pay-outs/node-identity-protection">Node identity protection</a></td></tr></tbody></table>
 
 ***
 

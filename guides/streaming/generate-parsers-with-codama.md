@@ -93,7 +93,7 @@ A successful build gives you a working Vixen parser for your program's account d
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>How to use Vixen + gRPC</strong></td><td>Run your parser against a live Yellowstone gRPC stream.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/streaming/how-to-use-vixen-grpc">How to use Vixen + gRPC</a></td></tr><tr><td><strong>Dragon's Mouth gRPC</strong></td><td>The gRPC stream that feeds program data into your Vixen pipeline.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>How to use Vixen + gRPC</strong></td><td>Run your parser against a live Yellowstone gRPC stream.</td><td><a href="https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/streaming/how-to-use-vixen-grpc">How to use Vixen + gRPC</a></td></tr><tr><td><strong>Dragon's Mouth gRPC</strong></td><td>The gRPC stream that feeds program data into your Vixen pipeline.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr></tbody></table>
 
 ***
 

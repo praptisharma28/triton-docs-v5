@@ -60,7 +60,7 @@ This doesn't affect transaction submission, as it's routed through a specialised
 
 <summary>What happens if I hit my rate limit?</summary>
 
-If you've received `HTTP 429` error, pause requests for 10 seconds to clear the limit. We strongly recommend implementing a backoff-and-retry mechanism. See Handle 429 rate-limit errors for the pattern, or the [Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs-v5/get-started/rate-and-connection-limits) page for the budgets and headers.
+If you've received `HTTP 429` error, pause requests for 10 seconds to clear the limit. We strongly recommend implementing a backoff-and-retry mechanism. See Handle 429 rate-limit errors for the pattern, or the [Rate and connection limits](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/get-started/rate-and-connection-limits) page for the budgets and headers.
 
 </details>
 
@@ -76,7 +76,7 @@ Yes. Shared infrastructure handles backend workloads (scripts, trading bots, ind
 
 <summary>How do I check my current rate limits?</summary>
 
-Every endpoint exposes its live limits at `/ratelimits`. Run `curl https://<your-endpoint>/<your-token>/ratelimits`. Each JSON-RPC response also carries `X-Ratelimit-*` headers (limit, remaining, reset, plus the per-method pair), so you can back off before you hit a 429. See [Rate and connection limits](https://kate-6.gitbook.io/triton-one-docs-v5/rate-and-connection-limits).
+Every endpoint exposes its live limits at `/ratelimits`. Run `curl https://<your-endpoint>/<your-token>/ratelimits`. Each JSON-RPC response also carries `X-Ratelimit-*` headers (limit, remaining, reset, plus the per-method pair), so you can back off before you hit a 429. See [Rate and connection limits](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/rate-and-connection-limits).
 
 </details>
 
@@ -156,7 +156,7 @@ Jetstreamer is the tool for bulk-backfilling large ranges of Solana history from
 
 <summary>Can I use Jito sendBundle and bundle simulation with Triton RPCs?</summary>
 
-Bundle simulation is available to everyone—see [Jito bundles](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/jito-bundles) for the full reference.
+Bundle simulation is available to everyone—see [Jito bundles](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/jito-bundles) for the full reference.
 
 `sendBundle` itself isn't routed through our infrastructure. Routing bundles through Triton would add an extra hop in front of the Jito block engine, which adds latency and runs counter to the reason you're using bundles in the first place.
 

@@ -68,7 +68,7 @@ Anycast to the nearest PoP is the right default for most workloads. To pin your 
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-lock">:lock:</i> <strong>Auth and security</strong></td><td>Authenticate requests and lock your endpoint to trusted origins.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/authentication">https://kate-6.gitbook.io/triton-one-docs-v5/authentication</a></td></tr><tr><td><i class="fa-rocket">:rocket:</i> <strong>Solana overview</strong></td><td>Explore advanced Solana tooling and start integrating it into your build.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/readme">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/readme</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-lock">:lock:</i> <strong>Auth and security</strong></td><td>Authenticate requests and lock your endpoint to trusted origins.</td><td><a href="https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/authentication">https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/authentication</a></td></tr><tr><td><i class="fa-rocket">:rocket:</i> <strong>Solana overview</strong></td><td>Explore advanced Solana tooling and start integrating it into your build.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/readme">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/readme</a></td></tr></tbody></table>
 
 ***
 

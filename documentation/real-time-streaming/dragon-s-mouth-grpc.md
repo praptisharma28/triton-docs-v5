@@ -1382,7 +1382,7 @@ Install `grpcio`, `grpcio-tools`, and `protobuf`, and generate `geyser_pb2` from
 {% endtabs %}
 
 {% hint style="info" %}
-If you're experiencing errors, you can sanity-check your endpoint with Triton's prebuilt `client-ubuntu` test binary, no code required. See [Is it the endpoint or your code?](https://kate-6.gitbook.io/triton-one-docs-v5/faqs/solana/error-handling/verify-your-grpc-endpoint).
+If you're experiencing errors, you can sanity-check your endpoint with Triton's prebuilt `client-ubuntu` test binary, no code required. See [Is it the endpoint or your code?](https://app.gitbook.com/s/VeEf321LwceAVlSk9USV/solana/error-handling/verify-your-grpc-endpoint).
 {% endhint %}
 
 ## Pricing
@@ -1398,7 +1398,7 @@ Dragon's Mouth is billed at `$0.08 / GB` of bandwidth. You only pay for the data
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="deshred-transactions">Deshred transactions</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="whirligig-websockets">Whirligig WebSockets</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 4 days of stored data and built-in cursor resume.</td><td><a href="fumarole-persistent-streams">Fumarole reliable streams</a></td></tr><tr><td><i class="fa-compass">:compass:</i> <strong>Streaming overview</strong></td><td>Compare every Triton streaming service and choose the right fit for your workload.</td><td><a href="..">Streaming overview</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions">Deshred transactions</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/whirligig-websockets">Whirligig WebSockets</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 4 days of stored data and built-in cursor resume.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/fumarole-persistent-streams">Fumarole reliable streams</a></td></tr><tr><td><i class="fa-compass">:compass:</i> <strong>Streaming overview</strong></td><td>Compare every Triton streaming service and choose the right fit for your workload.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming">Streaming overview</a></td></tr></tbody></table>
 
 ***
 
