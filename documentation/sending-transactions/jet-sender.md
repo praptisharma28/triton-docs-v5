@@ -22,6 +22,10 @@ The logic behind Jet sender is open source as the standalone `yellowstone-jet-tp
 * API docs: [docs.rs/yellowstone-jet-tpu-client](https://docs.rs/yellowstone-jet-tpu-client)
 * Engine repository: [yellowstone-jet](https://github.com/rpcpool/yellowstone-jet)
 
+## What's next
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Send a transaction with /sendtx in a few minutes.</td><td><a href="quickstart">Quickstart</a></td></tr><tr><td><i class="fa-shield-halved">:shield-halved:</i> <strong>Shield MEV protection</strong></td><td>Route only through validators you trust.</td><td><a href="shield-mev-protection">Shield MEV protection</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Land more transactions, faster.</td><td><a href="best-practices">Best practices</a></td></tr></tbody></table>
+
 ***
 
 <i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\

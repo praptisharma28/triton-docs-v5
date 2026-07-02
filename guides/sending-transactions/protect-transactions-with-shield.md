@@ -86,7 +86,7 @@ The rest of this guide covers the TPU client route.
 * A Triton RPC endpoint and a Yellowstone gRPC endpoint with an x-token. [Get an endpoint](https://customers.triton.one/onboarding).
 * The [Yellowstone Jet TPU client](yellowstone-jet-tpu-client) set up, or follow the project setup below.
 
-## Step 1: Choose or create a policy
+## Choose or create a policy
 
 ### Option A: use an existing policy
 
@@ -154,7 +154,7 @@ cargo build --release --bin yellowstone-shield-cli
 
 The policy is now live on-chain and ready to use.
 
-## Step 2: Set up the project
+## Set up the project
 
 The `yellowstone-jet-tpu-client` requires Triton's patched Solana crates. Use a Cargo workspace with `[patch.crates-io]` so every dependency, including transitive ones from `yellowstone-shield-store`, resolves to the same patched versions.
 
@@ -246,7 +246,7 @@ How the pieces fit together:
 └────────────────────────────────────────────────────────┘
 ```
 
-## Step 3: Send with Shield
+## Send with Shield
 
 This complete example sends a SOL transfer only when the current leader passes your Shield policy. Fill in your own endpoints and x-token.
 
@@ -528,6 +528,10 @@ sender.send_txn_many_dest(signature, bincoded_txn, &target_validators).await?;
 * Policy store crate: [`yellowstone-shield-store`](https://crates.io/crates/yellowstone-shield-store)
 * Policy explorer: [validators.app/yellowstone-shield](https://www.validators.app/yellowstone-shield)
 * Shield announcement: [Introducing Yellowstone Shield](https://blog.triton.one/introducing-yellowstone-shield)
+
+## What's next
+
+Pair Shield with a sender you control: the [Yellowstone Jet TPU client](yellowstone-jet-tpu-client.md) combines on-chain Shield policies with your own routing and retry logic.
 
 ***
 

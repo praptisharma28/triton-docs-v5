@@ -241,6 +241,16 @@ For more details see the Github repo:
 
 Fumarole is billed at `$0.08 / GB` of bandwidth. You only pay for the data sent.
 
+## Resources
+
+* Source: [rpcpool/yellowstone-fumarole](https://github.com/rpcpool/yellowstone-fumarole)
+* Rust client: [yellowstone-fumarole-client](https://crates.io/crates/yellowstone-fumarole-client)
+* Node / TypeScript SDK: [@triton-one/yellowstone-fumarole](https://www.npmjs.com/package/@triton-one/yellowstone-fumarole)
+
+## What's next
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Subscribe to a live stream in a few minutes.</td><td><a href="quickstart">Quickstart</a></td></tr><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>The lowest-latency live gRPC feed for accounts, transactions, slots, and blocks.</td><td><a href="dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Streaming best practices</strong></td><td>Filtering, reconnect, and commitment guidance.</td><td><a href="best-practices">Streaming best practices</a></td></tr></tbody></table>
+
 ***
 
 <i class="fa-life-ring">:life-ring:</i> Contact support by clicking the chat icon in your [customer dashboard](https://customers.triton.one)\

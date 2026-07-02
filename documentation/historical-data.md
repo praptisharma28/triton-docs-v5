@@ -265,11 +265,11 @@ Use the returned `paginationToken` in the next request to continue scanning.
 Superbank is open source under AGPL, so you can run, audit, and extend it yourself. Its source-agnostic ingest means you can backfill from BigTable or an existing archive and then switch to a live stream.
 
 * Source and schemas: [github.com/solana-rpc/superbank](https://github.com/solana-rpc/superbank)
-* Walkthrough: [Index Solana history with Superbank](/triton-one-docs-v5/guides/solana/how-tos/index-solana-history-with-superbank)
+* Walkthrough: [Index Solana history with Superbank](https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/how-tos/index-solana-history-with-superbank)
 
 Prefer not to operate it? Triton runs Superbank as a managed, globally distributed service. [Get an endpoint](https://customers.triton.one/onboarding).
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-sitemap">:sitemap:</i> <strong>Architecture breakdown</strong></td><td>How Superbank ingests, stores, and serves the full ledger.</td><td><a href="https://blog.triton.one/inside-superbank-architecture-breakdown">Inside Superbank</a></td></tr><tr><td><i class="fa-rocket">:rocket:</i> <strong>Self-hosting walkthrough</strong></td><td>Index Solana history with Superbank, from backfill to live tip.</td><td><a href="/triton-one-docs-v5/guides/solana/how-tos/index-solana-history-with-superbank">Index Solana history with Superbank</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-sitemap">:sitemap:</i> <strong>Architecture breakdown</strong></td><td>How Superbank ingests, stores, and serves the full ledger.</td><td><a href="https://blog.triton.one/inside-superbank-architecture-breakdown">Inside Superbank</a></td></tr><tr><td><i class="fa-rocket">:rocket:</i> <strong>Self-hosting walkthrough</strong></td><td>Index Solana history with Superbank, from backfill to live tip.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/how-tos/index-solana-history-with-superbank">Index Solana history with Superbank</a></td></tr></tbody></table>
 
 ## Resources
 
@@ -278,7 +278,7 @@ Prefer not to operate it? Triton runs Superbank as a managed, globally distribut
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Read an address's full history in one call, back to genesis, in under 2 minutes.</td><td><a href="/documentation/solana/historical-data/quickstart">Quickstart</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Query deep history efficiently: pagination, filters, and cost control at scale.</td><td><a href="/documentation/solana/historical-data/best-practices">Best practices</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Read an address's full history in one call, back to genesis, in under 2 minutes.</td><td><a href="quickstart">Quickstart</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Query deep history efficiently: pagination, filters, and cost control at scale.</td><td><a href="best-practices">Best practices</a></td></tr></tbody></table>
 
 ***
 
