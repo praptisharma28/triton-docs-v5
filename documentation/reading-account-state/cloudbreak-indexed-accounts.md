@@ -1,7 +1,5 @@
 ---
-description: >-
-  Fast getProgramAccounts, account lookups, and SPL token queries served from a
-  purpose-built index.
+description: Fast getProgramAccounts, account lookups, and token queries served from tailored indexes.
 layout:
   width: default
   title:
@@ -24,66 +22,12 @@ layout:
 
 # Cloudbreak custom indexes
 
-Cloudbreak serves `getProgramAccounts`, account lookups, and SPL token queries from a purpose-built index, so they stay fast even for programs with millions of accounts. On a Triton endpoint where Cloudbreak is enabled, these methods are answered by the index automatically. You call them like any other Solana RPC method; there is nothing to enable or route on your side.
+Cloudbreak serves `getProgramAccounts`, account lookups, and SPL token queries from a purpose-built index, so they stay fast even for programs with millions of accounts. Supported methods are answered by the index automatically, and there is nothing to enable or route on your side.
 
-{% hint style="info" %}
-Cloudbreak serves current account state. It does not stream updates or serve transaction history. Pair it with Dragon's Mouth when you need a live feed.
-{% endhint %}
 
-### What Cloudbreak does
+### Features and benefits
 
-Cloudbreak handles these workloads:
-
-* `getProgramAccounts` against a program with a large account set, especially with `memcmp` or `dataSize` filters you run repeatedly.
-* Account and balance lookups: `getAccountInfo`, `getMultipleAccounts`, `getBalance`.
-* SPL token queries by owner, delegate, or mint, and token balances.
-
-What to expect:
-
-* These methods read indexed state, so they return current account data quickly and handle large result sets without timing out.
-* Methods Cloudbreak does not cover (`getVoteAccounts`, transaction methods, block methods) are not accelerated; your endpoint continues to serve them as usual.
-* For a live feed of account or transaction changes, use Dragon's Mouth instead of polling these methods.
-
-### How it works
-
-Cloudbreak builds its index from a validator snapshot for the starting state and a Yellowstone gRPC stream of account updates to stay current. It tracks both `confirmed` and `finalized` commitment as the chain advances, so a query reads the same state the chain has reached at the commitment you ask for.
-
-It verifies its data against the validator's own account hash: a lattice hash computed over every account's address, lamports, owner, executable flag, and data. When that hash matches the validator's, the indexed state is identical to on-chain state at that slot.
-
-```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
-flowchart LR
-    src["Validator snapshot<br/>+ live gRPC updates"] --> state["Complete<br/>account state"]
-    src --> idx["Cloudbreak index"]
-    state --> q["JSON-RPC<br/>query layer"]
-    idx --> q
-    q --> you["Your app"]
-    you --> tracker["Query tracker"]
-    tracker --> idx
-    style you fill:#D6EAF8,stroke:#259DD0
-```
-
-### Making requests
-
-The Cloudbreak-accelerated methods are standard Solana JSON-RPC, so you call them the same way you call any other method on your RPC endpoint. There is nothing Cloudbreak-specific to install or configure on the client side, and existing Solana clients (`@solana/web3.js`, `solana-py`, and others) work without changes.
-
-Every call is an HTTP POST with `Content-Type: application/json`:
-
-```shell
-curl https://<your-rpc-endpoint> \
-  -H 'Content-Type: application/json' \
-  -d '{"jsonrpc":"2.0","id":1,"method":"getSlot","params":[]}'
-```
-
-A few things to know before your first query:
-
-* **Coverage is automatic.** The most widely used Solana programs are already indexed and served by Cloudbreak, and programs that receive enough query traffic are added over time, so common queries are fast with no setup on your side. See [How indexes get created](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/cloudbreak-indexed-accounts).
-* **Commitment levels** are `confirmed` and `finalized`. The default is `finalized`. `processed` is rejected by default with error `-32003`. See Commitment and consistency.
-* **Encodings** are `base64`, `base58`, `base64+zstd`, and `jsonParsed`. If you do not set `encoding`, the response uses the legacy `binary` format, which is a single base58 string rather than a `[data, encoding]` array. Set `encoding` to `base64` for most uses.
-
-{% hint style="warning" %}
-The default `binary` encoding and `base58` only work for account data under 128 bytes. Larger accounts return `-32602` with a message telling you to switch to `base64`. Because the default is `binary`, set `encoding` to `base64` whenever an account can exceed 128 bytes.
-{% endhint %}
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-magnifying-glass">:magnifying-glass:</i> <strong>Fast getProgramAccounts</strong></td><td>getProgramAccounts against a program with a large account set, especially with memcmp or dataSize filters you run repeatedly.</td><td></td></tr><tr><td><i class="fa-check-double">:check-double:</i> <strong>Complete Agave parity</strong></td><td>Complete parity with Agave on 8 methods for querying account state, verified against the validator's own account hash.</td><td></td></tr><tr><td><i class="fa-coins">:coins:</i> <strong>SPL token queries</strong></td><td>SPL token queries by owner, delegate, or mint, plus token balances.</td><td></td></tr><tr><td><i class="fa-bolt">:bolt:</i> <strong>Dynamic indexing on live traffic</strong></td><td>Indexes are built automatically from real query traffic: heavily requested filter shapes get their own index, with nothing to configure on your side.</td><td></td></tr></tbody></table>
 
 ### Supported methods
 
@@ -597,6 +541,53 @@ These return service and chain metadata. None take account-specific parameters.
 {% endtab %}
 {% endtabs %}
 
+### How it works
+
+Cloudbreak builds its index from a validator snapshot for the starting state and a Yellowstone gRPC stream of account updates to stay current. It tracks both `confirmed` and `finalized` commitment as the chain advances, so a query reads the same state the chain has reached at the commitment you ask for.
+
+It verifies its data against the validator's own account hash: a lattice hash computed over every account's address, lamports, owner, executable flag, and data. When that hash matches the validator's, the indexed state is identical to on-chain state at that slot.
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
+flowchart LR
+    src["Validator snapshot<br/>+ live gRPC updates"] --> state["Complete<br/>account state"]
+    src --> idx["Cloudbreak index"]
+    state --> q["JSON-RPC<br/>query layer"]
+    idx --> q
+    q --> you["Your app"]
+    you --> tracker["Query tracker"]
+    tracker --> idx
+    style you fill:#D6EAF8,stroke:#259DD0
+```
+
+### How indexes get created
+
+A `getProgramAccounts` query is fast when an index matches its filter shape. Cloudbreak creates these indexes from real traffic: it counts the query shapes it receives, and once a shape is requested often enough it builds the matching index automatically, backing off while the index catches up so this never competes with ingestion. SPL Token program queries are handled by the dedicated token methods rather than this path.
+
+A query with no matching index yet still returns correct results, it just runs slower until the index is built.
+
+### Making requests
+
+The Cloudbreak-accelerated methods are standard Solana JSON-RPC, so you call them the same way you call any other method on your RPC endpoint. There is nothing Cloudbreak-specific to install or configure on the client side, and existing Solana clients (`@solana/web3.js`, `solana-py`, and others) work without changes.
+
+Every call is an HTTP POST with `Content-Type: application/json`:
+
+```shell
+curl https://<your-rpc-endpoint> \
+  -H 'Content-Type: application/json' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"getSlot","params":[]}'
+```
+
+A few things to know before your first query:
+
+* **Coverage is automatic.** The most widely used Solana programs are already indexed and served by Cloudbreak, and programs that receive enough query traffic are added over time, so common queries are fast with no setup on your side. See [How indexes get created](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/cloudbreak-indexed-accounts).
+* **Commitment levels** are `confirmed` and `finalized`. The default is `finalized`. `processed` is rejected by default with error `-32003`. See Commitment and consistency.
+* **Encodings** are `base64`, `base58`, `base64+zstd`, and `jsonParsed`. If you do not set `encoding`, the response uses the legacy `binary` format, which is a single base58 string rather than a `[data, encoding]` array. Set `encoding` to `base64` for most uses.
+
+{% hint style="warning" %}
+The default `binary` encoding and `base58` only work for account data under 128 bytes. Larger accounts return `-32602` with a message telling you to switch to `base64`. Because the default is `binary`, set `encoding` to `base64` whenever an account can exceed 128 bytes.
+{% endhint %}
+
 ### Batch requests
 
 Send an array of request objects to run several in one round trip. The response is an array of results in the same order. Within a batch, `getProgramAccounts` and `getTokenAccountsByMint` are buffered into a complete response rather than streamed, since the array has to be assembled before it is sent.
@@ -637,12 +628,6 @@ Cloudbreak tracks two commitment levels and serves point-in-time reads against t
 Use `minContextSlot` to guarantee freshness. If you read a slot from one call and want a later query to be at least as fresh, pass that slot as `minContextSlot`. If the index has not reached it, the call fails with `-32000` rather than returning stale data.
 
 Use `withContext: true` on `getProgramAccounts` when you need to know which slot a result corresponds to. The account, token, and balance methods always include the context.
-
-### How indexes get created
-
-A `getProgramAccounts` query is fast when an index matches its filter shape. Cloudbreak creates these indexes from real traffic: it counts the query shapes it receives, and once a shape is requested often enough it builds the matching index automatically, backing off while the index catches up so this never competes with ingestion. SPL Token program queries are handled by the dedicated token methods rather than this path.
-
-A query with no matching index yet still returns correct results, it just runs slower until the index is built.
 
 ### Performance characteristics
 
@@ -734,11 +719,7 @@ Use Dragon's Mouth. Cloudbreak answers point-in-time queries; Dragon's Mouth str
 
 ## Pricing
 
-Cloudbreak-accelerated account and token reads are billed as standard RPC: `$0.08 / GB` of bandwidth plus `$10 / million` calls. The indexing itself is not charged separately.
-
-## Resources
-
-* Source: [solana-rpc/cloudbreak](https://github.com/solana-rpc/cloudbreak)
+Cloudbreak-accelerated account and token reads are billed as standard RPC: `$0.08 / GB` of bandwidth plus `$10 / million` calls. The indexing is included by default and isn't charged separately.
 
 ## What's next
 

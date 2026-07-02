@@ -37,7 +37,7 @@ Whirligig has full parity with the [Solana WebSocket API](https://solana.com/doc
 | `slotsUpdatesSubscribe` | Detailed slot-status updates | Solana-compatible (unstable Solana method) |
 | `transactionSubscribe` | Full transactions matching a filter | Whirligig extension, not in the native Solana WS API |
 
-## Connect
+## Get started
 
 On Triton's shared infrastructure, your WebSocket connections route through Whirligig by default, with nothing to change, and run over HTTP/3 for lower-latency browser and mobile connections.
 
@@ -760,11 +760,6 @@ You can find a reference CLI client on GitHub: [yellowstone-whirligig-client](ht
 ## Pricing
 
 Whirligig is billed at `$0.08 / GB` of bandwidth, and you only pay for data streamed.
-
-## Resources
-
-* Client library: [rpcpool/yellowstone-whirligig-client](https://github.com/rpcpool/yellowstone-whirligig-client)
-* Whirligig is a drop-in for native Solana WebSockets, so any [`solana-pubsub-client`](https://docs.rs/solana-pubsub-client) or web3.js WebSocket client works too.
 
 ## What's next
 
