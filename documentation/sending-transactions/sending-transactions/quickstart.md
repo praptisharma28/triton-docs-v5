@@ -7,7 +7,7 @@ layout:
 
 # Quickstart
 
-Send a Solana transaction with **`/sendtx`**, the direct HTTP submission endpoint on every Triton endpoint. Both `/sendtx` and `sendTransaction` route through Yellowstone Jet, Triton's sending engine, with SWQoS on by default; `/sendtx` just skips the JSON-RPC envelope: no JSON parsing, no CORS preflight, a smaller payload, and no RPC client library. For all the send options and how they compare, see [Sending transactions](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions).
+Send a Solana transaction with **`/sendtx`**, the direct HTTP submission endpoint on every Triton endpoint. Both `/sendtx` and `sendTransaction` route through Yellowstone Jet, Triton's sending engine, with SWQoS on by default; `/sendtx` just skips the JSON-RPC envelope: no JSON parsing, no CORS preflight, a smaller payload, and no RPC client library. For all the send options and how they compare, see [Sending transactions](../../sending-transactions.md).
 
 ## 0. Prerequisites
 
@@ -87,7 +87,7 @@ With `response=signature`, the body is the transaction signature as plain text, 
 5j7s4Hk3vQmPq8nLZ9xTe8oP...
 ```
 
-Query parameters: `encoding` (`base58` or `base64`, for text bodies; default `base58`), `response=signature` (return the signature on success), and `max_retries` (override the retry count). To route only through validators you trust, add the `Solana-ForwardingPolicies` header with your [Yellowstone Shield](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection) policy addresses.
+Query parameters: `encoding` (`base58` or `base64`, for text bodies; default `base58`), `response=signature` (return the signature on success), and `max_retries` (override the retry count). To route only through validators you trust, add the `Solana-ForwardingPolicies` header with your [Yellowstone Shield](../shield-mev-protection.md) policy addresses.
 
 {% hint style="info" %}
 Prefer the standard JSON-RPC interface, or need options like `skipPreflight`? `sendTransaction` works on the same endpoint. See [Best practices](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/best-practices).

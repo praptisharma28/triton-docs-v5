@@ -40,7 +40,7 @@ DAS is enabled by default on every Triton endpoint.
 
 ### Methods
 
-Every method's parameters and example request and response are in the [DAS API reference](/api-reference/solana/reading-account-state/das-api). Grouped by what they do:
+Every method's parameters and example request and response are in the [DAS API reference](https://kate-6.gitbook.io/triton-one-docs-v5/api-reference/solana/reading-account-state/das-api). Grouped by what they do:
 
 * **Read assets:** `getAsset`, `getAssets`, `getAssetBatch`, `getAssetProof`, `getAssetProofBatch`
 * **List assets:** `getAssetsByOwner`, `getAssetsByAuthority`, `getAssetsByCreator`, `getAssetsByGroup`, `searchAssets`

@@ -107,7 +107,7 @@ fn main() -> anyhow::Result<()> {
 {% endtab %}
 {% endtabs %}
 
-For every read method and its parameters, see the [API reference](../../../api-reference/README.md).
+For every read method and its parameters, see the [API reference](https://kate-6.gitbook.io/triton-one-docs-v5/api-reference).
 {% endtab %}
 
 {% tab title="Account Sync" %}
