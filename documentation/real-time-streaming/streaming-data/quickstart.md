@@ -8,8 +8,8 @@ In this quickstart we'll show you how to stream live Solana data, using any of T
 
 1. **Dragon's Mouth gRPC.** Sub-slot real-time updates for accounts, transactions, slots, and blocks over gRPC. The lowest-latency path, best for backends.
 2. **Whirligig WebSockets.** A drop-in for native Solana WebSockets, backed by gRPC. The fastest real-time data for browsers and frontends.
-3. **Fumarole reliable streams.** A redundant streaming layer with 4 days of stored data and cursor resume, for pipelines that can't miss a block.
-4. **Deshred transactions.** Pre-execution transactions reconstructed from raw shreds. The earliest intent signal for traders.
+3. **Fumarole reliable streams (gRPC).** A redundant streaming layer with a server-side cursor, auto-backfill on reconnect (4 days of stored data), and at-least-once delivery guarantees, for pipelines that can't miss a single event.
+4. **Deshred transactions (gRPC).** Pre-execution transactions reconstructed from raw shreds before the node's replay stage. It's the earliest intent signal for traders.
 
 ## 0. Prerequisites
 
