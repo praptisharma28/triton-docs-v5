@@ -1,13 +1,13 @@
 ---
-description: Send your first Solana account read with JSON-RPC.
+description: Read account state with JSON-RPC.
 ---
 
 # Quickstart
 
-In this quickstart we read account state two ways, on the same task:
+In this quickstart we'll show you how to poll account state in two ways:
 
-1. **Standard Agave polling.** You call an RPC node and it answers over the network, one request per read.
-2. **Account Sync (`@triton-one/triton-sdk`).** Keeps a local copy of the accounts you track in RAM and resolves reads against it, with no network round-trip. By default it auto-subscribes to each account the first time your code reads it, so the accounts you poll get streamed automatically (you can also pre-seed them with `initialAccounts`). It serves `getAccountInfo`, `getMultipleAccountsInfo`, `getParsedAccountInfo`, and `getMultipleParsedAccounts`, and it's a drop-in for web3.js with no code rewrite.
+1. **Standard Agave polling.** You call an RPC node and it answers over the network, one request per read. Works with any standard Solana SDK, like web3.js or `@solana/kit`.
+2. **Account Sync (`@triton-one/triton-sdk`)** is a drop-in for web3.js. It keeps a local copy of the accounts you track in RAM and resolves reads against it, with no network round-trip. Under the hood it auto-subscribes to each new account your code polls, so after the first request your repeated reads come back at lower latency and cost.
 
 ## 0. Prerequisites
 
@@ -167,7 +167,7 @@ Then check:
 
 ### Expected response
 
-The USDC mint, decoded with `jsonParsed`. Over curl this is the `result.value`; through Account Sync, `getParsedAccountInfo(...).value` returns the same object. Live values like `supply` and `lamports` will differ when you run it.
+In the `result.value` you'll see the USDC mint object, decoded with `jsonParsed`. Live values like `supply` and `lamports` will differ when you run it.
 
 ```json
 {
