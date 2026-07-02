@@ -22,24 +22,62 @@ For latency-critical trading (HFT, MEV, liquidation engines), direct [Dragon's M
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-list-check">:list-check:</i> <strong>Drop-in account reads</strong></td><td><code>getAccountInfo</code>, <code>getMultipleAccountsInfo</code>, and their context and parsed variants, all served from the local cache.</td><td></td></tr><tr><td><i class="fa-bolt">:bolt:</i> <strong>Streaming-grade freshness after the first read</strong></td><td>The first read fetches once over JSON-RPC and opens a stream; every read after resolves from RAM with live updates, no round-trip.</td><td></td></tr><tr><td><i class="fa-infinity">:infinity:</i> <strong>Unlimited local polling</strong></td><td>Reads hit local RAM, so you can poll as aggressively as you want (every 10 ms or less) without rate limits or per-call cost.</td><td></td></tr><tr><td><i class="fa-filter">:filter:</i> <strong>Filter your data</strong></td><td>Trim payloads with <code>dataSlice</code> and gate reads on <code>minContextSlot</code>, the same options web3.js takes.</td><td></td></tr></tbody></table>
 
-## Install
+## How it works
 
-```bash
-npm install @triton-one/triton-sdk
+The SDK fills its local buffer in two ways:
+
+1. It does an initial JSON-RPC account fetch for each account you track.
+2. It keeps a stream open and applies live account updates as they arrive.
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
+flowchart LR
+    dm["Dragon's Mouth<br/>gRPC stream"] --> fan["Triton fanout service"]
+    fan --> cache["Triton SDK<br/>local RAM cache"]
+    agave["Agave node"] --> rpc["JSON-RPC<br/>first snapshot (once)"]
+    rpc --> cache
+    cache --> you["Your app"]
+    style you fill:#D6EAF8,stroke:#259DD0
 ```
 
-The SDK re-exports web3.js types and helpers, so most apps import from one package:
+The Triton fanout service keeps one upstream Dragon's Mouth subscription and routes each account update to the SDK connections that asked for it. Your SDK seeds the cache with a JSON-RPC snapshot on the first read, then applies stream updates as they arrive, so `getAccountInfo` reads from the local buffer.
+
+This is why the main `endpoint` still matters: the SDK uses it for normal web3.js RPC calls and for the first account snapshot, then the stream endpoint keeps the state fresh.
 
 ```ts
-import { Connection, PublicKey } from "@triton-one/triton-sdk";
+const connection = new Connection(rpcEndpoint, {
+  accountSync: {
+    subscriptionEndpoint: streamEndpoint,
+    transport: "grpc",
+  },
+});
 ```
 
-If your app already uses web3.js, the first change is usually the import:
+The stream runs over gRPC or WebSocket. gRPC is for Node backends, workers, and scripts; WebSocket works in Node and browsers, so browser apps use the same SDK over WebSocket. TypeScript and bundlers use the package exports to pick the browser or backend build automatically.
 
-```diff
-- import { Connection, PublicKey } from "@solana/web3.js";
-+ import { Connection, PublicKey } from "@triton-one/triton-sdk";
+### Read options
+
+The read methods take the same argument shape as web3.js: a commitment string, or a config object.
+
+```ts
+await connection.getAccountInfo(account, "confirmed");
 ```
+
+```ts
+await connection.getAccountInfo(account, {
+  commitment: "confirmed",
+  dataSlice: { offset: 8, length: 32 },
+  minContextSlot: 123456,
+});
+```
+
+| Option           | Meaning                                                                   |
+| ---------------- | ------------------------------------------------------------------------- |
+| `commitment`     | Reads from the buffer for `"processed"`, `"confirmed"`, or `"finalized"`. |
+| `dataSlice`      | Returns only part of the account data.                                    |
+| `minContextSlot` | Waits for a buffered account update at or above this slot.                |
+
+`minContextSlot` is checked against the SDK local buffer, not a node. If the stream does not deliver an update at or above that slot before `missTimeoutMs`, the read returns `null`.
 
 ## Quickstart
 
@@ -109,7 +147,7 @@ try {
 {% endtab %}
 {% endtabs %}
 
-## Connection options
+## Connection request
 
 The SDK keeps the normal web3.js `Connection` shape and adds one config key, `accountSync`, for the streaming transport, stream endpoint, account list, commitment, and cache-miss behaviour.
 
@@ -137,63 +175,6 @@ const connection = new Connection(endpoint, {
 | `missTimeoutMs`        | `5000`                      | How long to wait for account data before returning `null`.                                                                                                                         |
 
 Choose `missTimeoutMs` carefully. The timeout exists because an account might not exist yet: the SDK does not always return RPC-style `null` immediately, because many apps deterministically derive an account address and want the data the moment that account is created in real time.
-
-## How reads work
-
-The SDK fills its local buffer in two ways:
-
-1. It does an initial JSON-RPC account fetch for each account you track.
-2. It keeps a stream open and applies live account updates as they arrive.
-
-```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
-flowchart LR
-    dm["Dragon's Mouth<br/>gRPC stream"] --> fan["Triton fanout service"]
-    fan --> cache["Triton SDK<br/>local RAM cache"]
-    agave["Agave node"] --> rpc["JSON-RPC<br/>first snapshot (once)"]
-    rpc --> cache
-    cache --> you["Your app"]
-    style you fill:#D6EAF8,stroke:#259DD0
-```
-
-The Triton fanout service keeps one upstream Dragon's Mouth subscription and routes each account update to the SDK connections that asked for it. Your SDK seeds the cache with a JSON-RPC snapshot on the first read, then applies stream updates as they arrive, so `getAccountInfo` reads from the local buffer.
-
-This is why the main `endpoint` still matters: the SDK uses it for normal web3.js RPC calls and for the first account snapshot, then the stream endpoint keeps the state fresh.
-
-```ts
-const connection = new Connection(rpcEndpoint, {
-  accountSync: {
-    subscriptionEndpoint: streamEndpoint,
-    transport: "grpc",
-  },
-});
-```
-
-The stream runs over gRPC or WebSocket. gRPC is for Node backends, workers, and scripts; WebSocket works in Node and browsers, so browser apps use the same SDK over WebSocket. TypeScript and bundlers use the package exports to pick the browser or backend build automatically.
-
-### Read options
-
-The read methods take the same argument shape as web3.js: a commitment string, or a config object.
-
-```ts
-await connection.getAccountInfo(account, "confirmed");
-```
-
-```ts
-await connection.getAccountInfo(account, {
-  commitment: "confirmed",
-  dataSlice: { offset: 8, length: 32 },
-  minContextSlot: 123456,
-});
-```
-
-| Option           | Meaning                                                                   |
-| ---------------- | ------------------------------------------------------------------------- |
-| `commitment`     | Reads from the buffer for `"processed"`, `"confirmed"`, or `"finalized"`. |
-| `dataSlice`      | Returns only part of the account data.                                    |
-| `minContextSlot` | Waits for a buffered account update at or above this slot.                |
-
-`minContextSlot` is checked against the SDK local buffer, not a node. If the stream does not deliver an update at or above that slot before `missTimeoutMs`, the read returns `null`.
 
 ## Sending a request
 
@@ -273,13 +254,7 @@ console.log("accounts:", response.value);
 
 For multiple-account reads, the context slot is the lowest slot among the returned non-null accounts. If every account is `null`, the context slot is `0`.
 {% endtab %}
-{% endtabs %}
 
-## Filter your data
-
-Shape what each read returns. These options layer onto any of the read calls above.
-
-{% tabs %}
 {% tab title="Parsed accounts" %}
 Use parsed reads when you want web3.js-style parsed account data.
 
@@ -309,7 +284,13 @@ console.log(response.value);
 
 If a program parser is not supported, the SDK falls back to raw base64 account data, matching normal RPC behaviour.
 {% endtab %}
+{% endtabs %}
 
+## Filter your data
+
+Shape what each read returns. These options layer onto any of the read calls above.
+
+{% tabs %}
 {% tab title="dataSlice" %}
 Use `dataSlice` when you only need a small part of account data.
 
@@ -441,37 +422,61 @@ The SDK works as a web3.js-compatible `Connection`. Account reads are served fro
 | `getParsedAccountInfo(publicKey, config?)`               | Gets one account and returns parsed data when parsing is supported. |
 | `getMultipleParsedAccounts(publicKeys, config?)`         | Gets many parsed accounts.                                          |
 
+{% tabs %}
+{% tab title="getAccountInfo" %}
 ```ts
 getAccountInfo(
   publicKey: PublicKey,
   commitmentOrConfig?: Commitment | GetAccountInfoConfig,
 ): Promise<AccountInfo<Buffer> | null>;
+```
+{% endtab %}
 
+{% tab title="getAccountInfoAndContext" %}
+```ts
 getAccountInfoAndContext(
   publicKey: PublicKey,
   commitmentOrConfig?: Commitment | GetAccountInfoConfig,
 ): Promise<RpcResponseAndContext<AccountInfo<Buffer> | null>>;
+```
+{% endtab %}
 
+{% tab title="getMultipleAccountsInfo" %}
+```ts
 getMultipleAccountsInfo(
   publicKeys: PublicKey[],
   commitmentOrConfig?: Commitment | GetMultipleAccountsConfig,
 ): Promise<(AccountInfo<Buffer> | null)[]>;
+```
+{% endtab %}
 
+{% tab title="getMultipleAccountsInfoAndContext" %}
+```ts
 getMultipleAccountsInfoAndContext(
   publicKeys: PublicKey[],
   commitmentOrConfig?: Commitment | GetMultipleAccountsConfig,
 ): Promise<RpcResponseAndContext<(AccountInfo<Buffer> | null)[]>>;
+```
+{% endtab %}
 
+{% tab title="getParsedAccountInfo" %}
+```ts
 getParsedAccountInfo(
   publicKey: PublicKey,
   commitmentOrConfig?: Commitment | GetAccountInfoConfig,
 ): Promise<RpcResponseAndContext<AccountInfo<Buffer | ParsedAccountData> | null>>;
+```
+{% endtab %}
 
+{% tab title="getMultipleParsedAccounts" %}
+```ts
 getMultipleParsedAccounts(
   publicKeys: PublicKey[],
   rawConfig?: GetMultipleAccountsConfig,
 ): Promise<RpcResponseAndContext<(AccountInfo<Buffer | ParsedAccountData> | null)[]>>;
 ```
+{% endtab %}
+{% endtabs %}
 {% endtab %}
 
 {% tab title="Stream controls" %}
@@ -572,7 +577,26 @@ for (let attempt = 0; attempt < 10; attempt += 1) {
 * **Passing a bad public key.** All account ids must be valid Solana public keys.
 * **Expecting old historical state.** The SDK stores the latest streamed state, not a historical database. For account state from a past slot, use a service built for historical reads.
 
-## Migrate from web3.js
+## Install the SDK
+
+```bash
+npm install @triton-one/triton-sdk
+```
+
+The SDK re-exports web3.js types and helpers, so most apps import from one package:
+
+```ts
+import { Connection, PublicKey } from "@triton-one/triton-sdk";
+```
+
+If your app already uses web3.js, the first change is usually the import:
+
+```diff
+- import { Connection, PublicKey } from "@solana/web3.js";
++ import { Connection, PublicKey } from "@triton-one/triton-sdk";
+```
+
+### Migrate from web3.js
 
 For many apps, migration is small:
 
