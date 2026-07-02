@@ -15,12 +15,12 @@ This is the earliest usable on-chain signal Triton exposes. It's designed for la
 Unlike the standard `Subscribe` transaction stream, deshred updates are emitted **before** Replay. You receive the decoded transaction earlier, but without execution context.
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
 flowchart LR
-    s["Shreds"] --> d["Deshred:<br/>reconstruct from shreds"]
-    s --> e["Node:<br/>execute + replay"]
-    d --> i["Transaction intent<br/>(pre-execution, ~20 ms earlier)"]
-    e --> t["Standard transactions<br/>(full execution context)"]
+    s["Shreds"] --> r["Reconstruct<br/>transactions"]
+    r --> e["Execute + replay"] --> g["Regular gRPC"]
+    r --> d["Deshred transactions<br/>(pre-execution, ~20 ms earlier)"]
+    style d fill:#D6EAF8,stroke:#259DD0
 ```
 
 ## Features and benefits

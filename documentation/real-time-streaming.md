@@ -10,23 +10,35 @@ Solana produces a new block every \~400 ms. If you poll RPC every 200 ms, your d
 
 Streaming inverts the model: you open one connection, say what you need (specific accounts, programs, or transactions), and the node pushes you matching events the instant they happen.
 
+**Polling — ask again and again, and the answer is already stale:**
+
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
-flowchart LR
-    subgraph poll["Polling: ask repeatedly"]
-        pc["Your app"] -->|"getAccountInfo"| pr["RPC"]
-        pr -->|"~200 ms stale"| pc
-        pr -->|"429 under load"| pc
-    end
-    subgraph stream["Streaming: subscribe once"]
-        sc["Your app"] -->|"subscribe + filters"| sr["Node"]
-        sr -->|"events, intra-slot"| sc
-    end
-    pr ~~~ sc
-    style poll fill:none,stroke:none
-    style stream fill:none,stroke:none
-    style pc fill:#D6EAF8,stroke:#259DD0
-    style sc fill:#D6EAF8,stroke:#259DD0
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#956FB3','signalTextColor':'#171717','noteBkgColor':'#F2EDF6','noteBorderColor':'#7A4BA0','noteTextColor':'#171717','labelBoxBkgColor':'#E4DBEC','labelBoxBorderColor':'#7A4BA0'}}}%%
+sequenceDiagram
+    participant C as Your app
+    participant S as RPC
+    C->>S: getAccountInfo
+    S-->>C: stale data
+    C->>S: getAccountInfo
+    S-->>C: stale data
+    C->>S: getAccountInfo
+    S-->>C: 429 under load
+```
+
+**Streaming — one subscription, then the node pushes every match:**
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','actorBkg':'#F2EDF6','actorBorder':'#7A4BA0','actorTextColor':'#171717','signalColor':'#956FB3','signalTextColor':'#171717','noteBkgColor':'#F2EDF6','noteBorderColor':'#7A4BA0','noteTextColor':'#171717','labelBoxBkgColor':'#E4DBEC','labelBoxBorderColor':'#7A4BA0'}}}%%
+sequenceDiagram
+    participant C as Your app
+    participant S as Node
+    Note over C,S: one handshake
+    C->>S: subscribe + filters
+    S-->>C: event (intra-slot)
+    S-->>C: event
+    S-->>C: event
+    S-->>C: event
+    S-->>C: event
 ```
 
 You get sub-slot latency, structured Protobuf payloads, and lower costs, also significantly cheaper than the equivalent polling traffic, as it only incurs bandwidth cost.

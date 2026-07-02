@@ -1182,7 +1182,7 @@ enum SlotStatus {
 Simplified lifecycle of a slot, time flowing left to right:
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
 flowchart LR
     SD["<b>Slot download</b><br/><br/>FIRST_SHRED → SHRED 2<br/>→ … → SHRED N<br/>→ COMPLETED"] --> RS["<b>Replay stage</b><br/><br/>BANK_CREATED → ACCOUNT_UPDATE<br/>→ TX1 → TX2 → ENTRY1<br/>→ … → BLOCK_META → PROCESSED"] --> CN["<b>Consensus</b><br/><br/>CONFIRMED → FINALIZED"]
 ```

@@ -51,9 +51,15 @@ Cloudbreak builds its index from a validator snapshot for the starting state and
 It verifies its data against the validator's own account hash: a lattice hash computed over every account's address, lamports, owner, executable flag, and data. When that hash matches the validator's, the indexed state is identical to on-chain state at that slot.
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
 flowchart LR
-    src["Validator snapshot<br/>+ live gRPC updates"] --> idx["Cloudbreak index"] --> q["JSON-RPC query layer"] --> you["Your app"]
+    src["Validator snapshot<br/>+ live gRPC updates"] --> state["Complete<br/>account state"]
+    src --> idx["Cloudbreak index"]
+    state --> q["JSON-RPC<br/>query layer"]
+    idx --> q
+    q --> you["Your app"]
+    you --> tracker["Query tracker"]
+    tracker --> idx
     style you fill:#D6EAF8,stroke:#259DD0
 ```
 
