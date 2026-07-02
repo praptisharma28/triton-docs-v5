@@ -547,7 +547,19 @@ Cloudbreak builds its index from a validator snapshot for the starting state and
 
 It verifies its data against the validator's own account hash: a lattice hash computed over every account's address, lamports, owner, executable flag, and data. When that hash matches the validator's, the indexed state is identical to on-chain state at that slot.
 
-<figure><img src="https://cdn.jsdelivr.net/gh/kshyndina/docs@dc6a991c425930860bb35dc44fdf6ebd86e8d03d/images/cloudbreak-architecture.svg" alt="Cloudbreak architecture: a validator snapshot and live gRPC updates feed the account state and Cloudbreak indexes, both of which serve the JSON-RPC query layer your app queries, while your app registers query patterns with the query tracker that builds the indexes."></figure>
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':35,'rankSpacing':55,'curve':'linear'}}}%%
+flowchart LR
+    vsnap["Validator snapshot"] --> state["Complete<br/>account state"]
+    live["Live gRPC updates"] --> state
+    live --> idx["Cloudbreak indexes"]
+    state --> q["JSON-RPC<br/>query layer"]
+    idx --> q
+    q --> you["Your app"]
+    idx <-.- tracker["Query tracker"]
+    tracker <-.- you
+    style you fill:#D6EAF8,stroke:#259DD0
+```
 
 ### How indexes get created
 
