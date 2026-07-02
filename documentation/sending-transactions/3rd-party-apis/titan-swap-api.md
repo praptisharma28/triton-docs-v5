@@ -61,10 +61,6 @@ Each streamed quote carries the route information you need to execute:
 
 Streaming is billed at $0.08 per GB.
 
-## Availability
-
-Available to all customers with an active Solana subscription, on both shared RPC pools and dedicated nodes.
-
 ## API documentation
 
 For the request and response format and the full execution flow, see the [Titan swap API docs](https://titan-exchange.gitbook.io/titan/titan-developer-docs/apis/swap-api#websocket-connections). A TypeScript SDK is available: [@titanexchange/sdk-ts](https://www.npmjs.com/package/@titanexchange/sdk-ts). Background: [Titan Prime API for Solana swaps is live on Triton](https://blog.triton.one/titan-prime-api-for-solana-swaps-is-live-on-triton/).
