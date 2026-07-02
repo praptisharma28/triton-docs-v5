@@ -46,13 +46,6 @@ Deshred is for strategies that act on the earliest possible signal, before execu
 
 ## Subscribe and consume
 
-Before you start, make sure you have:
-
-* An active Triton subscription
-* Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/) (how to get them)
-* A backend environment in TypeScript, Rust, Go, or another language with a gRPC client
-* Familiarity with gRPC and Protocol Buffers
-
 The latest protobuf files live in the [yellowstone-grpc repo](https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto). For Rust, use the [yellowstone-grpc-proto crate](https://crates.io/crates/yellowstone-grpc-proto).
 
 The example below subscribes to the `SubscribeDeshred` stream, filters out vote transactions, and logs every transaction signature with its slot.
