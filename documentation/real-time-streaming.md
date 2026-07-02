@@ -62,18 +62,9 @@ It's normal to combine more than one product in a pipeline. Common patterns:
 
 * **Trading and MEV**: Dragon's Mouth gRPC for processed data, Deshred for pre-execution tx
 * **DEX or wallet frontend**: Whirligig WebSockets
-* **Indexer, analytics, or compliance**: Fumarole for live with confirmed Faithful streams for history
+* **Indexer, analytics, or compliance**: Fumarole for reliable, persistent data with automatic backfill
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions">Deshred transactions</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/whirligig-websockets">Whirligig WebSockets</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 4 days of stored data and built-in cursor resume.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/fumarole-persistent-streams">Fumarole reliable streams</a></td></tr></tbody></table>
-
-## Use cases
-
-Streaming is the right tool when you're building:
-
-* **Trading and MEV systems** where 50 ms of staleness costs money
-* **Indexers, accounting, and analytics pipelines** that need every block processed exactly once
-* **Real-time UIs** (DEXs, wallets, explorers) with live balances and transaction feeds
-* **Anything that needs to backfill chain history** at scale
 
 ## Limitations
 
