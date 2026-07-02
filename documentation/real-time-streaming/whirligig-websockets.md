@@ -1,22 +1,24 @@
 ---
-description: An enhanced Solana WebSocket API for browsers and existing WS clients, backed by a Dragon's Mouth gRPC stream.
+description: Faster and more reliable Solana WebSocket API for browsers, backed by a gRPC stream.
 ---
 
 # Whirligig WebSockets
 
-Whirligig is a Rust proxy between your WebSocket client and a Dragon's Mouth gRPC stream. It speaks the standard Solana WebSocket API, so a browser or any existing WebSocket client subscribes over `wss://` instead of gRPC, with no change to your code or billing. Triton was the first Solana RPC provider to replace the native pubsub path with gRPC-backed WebSocket streaming.
+Whirligig is a Rust proxy between your client and a Dragon's Mouth gRPC stream, providing 100% compatibility with the standard Solana WebSocket API, plus additional features and higher limits. Triton was the first Solana RPC provider to enhance the native pubsub path with gRPC, and it's now a wide practice across the entire ecosystem.
 
 Native Solana WebSockets run inside the RPC process, so notifications can lag or drop under load; they batch `processed` account updates to slot boundaries; they cap concurrent connections; and they have no full-transaction subscription. Whirligig serves the same API from dedicated streaming nodes, so at `processed` commitment account updates arrive intra-slot, up to 400 ms faster than native subscriptions.
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-bolt">:bolt:</i> <strong>transactionSubscribe</strong></td><td>A full-transaction subscription the native Solana WS API does not have, with account include, exclude, and required filters.</td><td></td></tr><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Intra-slot updates</strong></td><td>At processed commitment, account updates arrive up to 400 ms faster than native Solana WebSockets.</td><td></td></tr><tr><td><i class="fa-plug">:plug:</i> <strong>Drop-in Solana WS API</strong></td><td>Full parity with the standard Solana WebSocket API, so existing WS clients work unchanged.</td><td></td></tr><tr><td><i class="fa-radio">:radio:</i> <strong>Backed by Dragon's Mouth</strong></td><td>Translates a Dragon's Mouth gRPC stream into WebSocket messages, so a browser gets gRPC-grade data.</td><td></td></tr></tbody></table>
+## Use cases
 
-## Added capabilities
+* **Browsers.** Frontends and dApps can't speak gRPC. They subscribe over `wss://` and get gRPC-backed data with no library changes.
+* **Mobile apps.** Connections run over HTTP/3 for lower-latency streaming on mobile networks.
+* **Backends.** If you can run a gRPC client, [Dragon's Mouth](dragon-s-mouth-grpc.md) is the lower-latency path for server-side services. Whirligig also fits backends that already run a standard Solana WebSocket client, or that want its higher limits and added subscriptions without rewriting to gRPC.
+
+## Features and benefits
 
 On top of the drop-in standard API, Whirligig adds:
 
-* **`jsonParsed` encoding.** `accountSubscribe` and `programSubscribe` return structured objects for parsable programs (SPL Token, Token-2022, Stake, Vote, Nonce, Sysvar, Address Lookup Table, BPF Loader, Config) instead of raw byte arrays, with resolved mint metadata on token accounts.
-* **Stable `blockSubscribe`.** Full block notifications with filters for commitment level, transaction detail, and reward visibility. The native method is flagged unstable.
-* **No strict subscription cap.** Triton's bare-metal streaming nodes are stress-tested under hundreds of thousands of concurrent subscriptions.
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-bolt">:bolt:</i> <strong>transactionSubscribe</strong></td><td>A full-transaction subscription the native Solana WS API does not have, with account include, exclude, and required filters.</td><td></td></tr><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Intra-slot updates</strong></td><td>At processed commitment, account updates arrive up to 400 ms faster than native Solana WebSockets.</td><td></td></tr><tr><td><i class="fa-radio">:radio:</i> <strong>Backed by Dragon's Mouth</strong></td><td>Translates a Dragon's Mouth gRPC stream into WebSocket messages, so a browser gets gRPC-grade data.</td><td></td></tr><tr><td><i class="fa-code">:code:</i> <strong>jsonParsed encoding</strong></td><td><code>accountSubscribe</code> and <code>programSubscribe</code> return structured objects for parsable programs (SPL Token, Token-2022, Stake, Vote, Nonce, Sysvar, Address Lookup Table, BPF Loader, Config) instead of raw byte arrays, with resolved mint metadata on token accounts.</td><td></td></tr><tr><td><i class="fa-cube">:cube:</i> <strong>Stable blockSubscribe</strong></td><td>Full block notifications with filters for commitment level, transaction detail, and reward visibility. The native method is flagged unstable.</td><td></td></tr><tr><td><i class="fa-network-wired">:network-wired:</i> <strong>Higher connection limits</strong></td><td>Triton's bare-metal streaming nodes are stress-tested under hundreds of thousands of concurrent subscriptions.</td><td></td></tr></tbody></table>
 
 ## Methods
 
@@ -753,11 +755,11 @@ The result is `true` if the subscription was active and removed, `false` if it d
 
 ## Client
 
-A reference CLI client is on GitHub: [yellowstone-whirligig-client](https://github.com/rpcpool/yellowstone-whirligig-client).
+You can find a reference CLI client on GitHub: [yellowstone-whirligig-client](https://github.com/rpcpool/yellowstone-whirligig-client).
 
 ## Pricing
 
-Whirligig is billed at `$0.08 / GB` of bandwidth, like every Triton streaming service. There is no separate WebSocket or connection fee.
+Whirligig is billed at `$0.08 / GB` of bandwidth, and you only pay for data streamed.
 
 ## Resources
 
