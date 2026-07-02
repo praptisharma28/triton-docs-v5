@@ -40,7 +40,7 @@ Fumarole fits pipelines that value completeness and reliability over raw speed:
 
 ## What not to use Fumarole for
 
-Latency-first workloads. If you need data as fast as possible for trading or MEV and can tolerate missing the occasional slot, use [Dragon's Mouth gRPC](dragon-s-mouth-grpc) instead: it is the lowest-latency source. Fumarole trades a small amount of latency for completeness and resumability.
+Latency-first workloads. If you need data as fast as possible for trading or MEV and can tolerate missing the occasional slot, use [Dragon's Mouth gRPC](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) instead: it is the lowest-latency source. Fumarole trades a small amount of latency for completeness and resumability.
 
 ## How it works
 

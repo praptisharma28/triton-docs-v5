@@ -35,7 +35,7 @@ For the short version:
 
 * Use `transport: "grpc"` in Node apps.
 * Use `transport: "ws"` in browser apps.
-* See [Pick a transport](account-sync.md#pick-a-transport) for which transport to choose.
+* See [Pick a transport](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/account-sync) for which transport to choose.
 * See this section for every option you can pass.
 
 ```ts
@@ -146,7 +146,7 @@ The SDK fills its local buffer in two ways:
 
 After that, `getAccountInfo` reads from the local buffer.
 
-The stream can use gRPC or WebSocket. gRPC is for Node backends, workers, and scripts. WebSocket works in Node and browsers, so browser apps can use the same SDK with WebSocket streaming. See [Pick a transport](account-sync.md#pick-a-transport) and [Connection options](account-sync.md#connection-options).
+The stream can use gRPC or WebSocket. gRPC is for Node backends, workers, and scripts. WebSocket works in Node and browsers, so browser apps can use the same SDK with WebSocket streaming. See [Pick a transport](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/account-sync) and [Connection options](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/account-sync).
 
 The package and type exports are designed for both environments. TypeScript and bundlers use the package exports to pick the browser or backend build, so browser code gets the WebSocket-only connection type and Node code gets the Node connection type with both gRPC and WebSocket options.
 
@@ -269,7 +269,7 @@ For WebSocket:
 const wsEndpoint = "wss://api.rpcpool.com/YOUR_TOKEN";
 ```
 
-You usually do not need to write those service paths yourself. Passing the host and token path is enough. For transport choice, see [Pick a transport](account-sync.md#pick-a-transport). For the full config shape, see [Connection options](account-sync.md#connection-options).
+You usually do not need to write those service paths yourself. Passing the host and token path is enough. For transport choice, see [Pick a transport](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/account-sync). For the full config shape, see [Connection options](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/account-sync).
 
 ## Pick a transport
 

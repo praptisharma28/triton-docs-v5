@@ -4,9 +4,9 @@ description: "Triton's managed transaction-sending engine: SWQoS, leader-aware Q
 
 # Jet sender
 
-Jet sender is Triton's production transaction-sending engine, and every transaction submitted through a Triton endpoint routes through it. It applies stake-weighted quality of service (SWQoS), tracks the leader schedule, caches QUIC connections to validators, and forwards your transaction straight to the current leader's TPU. It runs on isolated infrastructure that does not compete with your RPC reads, and it integrates [Yellowstone Shield](shield-mev-protection.md) and the [Priority fees API](priority-fees-api.md) out of the box.
+Jet sender is Triton's production transaction-sending engine, and every transaction submitted through a Triton endpoint routes through it. It applies stake-weighted quality of service (SWQoS), tracks the leader schedule, caches QUIC connections to validators, and forwards your transaction straight to the current leader's TPU. It runs on isolated infrastructure that does not compete with your RPC reads, and it integrates [Yellowstone Shield](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/shield-mev-protection) and the [Priority fees API](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/priority-fees-api) out of the box.
 
-There is nothing to install or run: send the way you already do, with `sendTransaction` or [`/sendtx`](sending-transactions/quickstart.md), and Jet sender handles delivery. For the full comparison of submission paths, see [Sending transactions](../sending-transactions.md).
+There is nothing to install or run: send the way you already do, with `sendTransaction` or [`/sendtx`](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/quickstart), and Jet sender handles delivery. For the full comparison of submission paths, see [Sending transactions](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions).
 
 ## Pricing
 
@@ -14,7 +14,7 @@ Jet sender is billed as standard RPC: each send or simulate call (`sendTransacti
 
 ## Self-hosting: the Jet TPU client
 
-The logic behind Jet sender is open source as the standalone `yellowstone-jet-tpu-client` Rust library, for teams that want to run it themselves for client-side control: per-transaction lifecycle callbacks, custom TPU targeting, routing around the leader schedule, sending to arbitrary peers, or enforcing [Shield](shield-mev-protection.md) policies in your own code. It is built for arbitrage bots, liquidation engines, and custom routers. It depends on Triton's patched Solana crates, pinned with a `[patch.crates-io]` block pointing at `rpcpool/solana-public` at tag `v3.0.6-triton-public`. See the [crate docs](https://docs.rs/yellowstone-jet-tpu-client) for the full quickstart and every constructor option.
+The logic behind Jet sender is open source as the standalone `yellowstone-jet-tpu-client` Rust library, for teams that want to run it themselves for client-side control: per-transaction lifecycle callbacks, custom TPU targeting, routing around the leader schedule, sending to arbitrary peers, or enforcing [Shield](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/shield-mev-protection) policies in your own code. It is built for arbitrage bots, liquidation engines, and custom routers. It depends on Triton's patched Solana crates, pinned with a `[patch.crates-io]` block pointing at `rpcpool/solana-public` at tag `v3.0.6-triton-public`. See the [crate docs](https://docs.rs/yellowstone-jet-tpu-client) for the full quickstart and every constructor option.
 
 ## Resources
 

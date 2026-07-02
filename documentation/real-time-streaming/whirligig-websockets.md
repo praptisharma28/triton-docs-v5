@@ -12,7 +12,7 @@ Native Solana WebSockets run inside the RPC process, so notifications can lag or
 
 * **Browsers.** Frontends and dApps can't speak gRPC. They subscribe over `wss://` and get gRPC-backed data with no library changes.
 * **Mobile apps.** Connections run over HTTP/3 for lower-latency streaming on mobile networks.
-* **Backends.** If you can run a gRPC client, [Dragon's Mouth](dragon-s-mouth-grpc.md) is the lower-latency path for server-side services. Whirligig also fits backends that already run a standard Solana WebSocket client.
+* **Backends.** If you can run a gRPC client, [Dragon's Mouth](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) is the lower-latency path for server-side services. Whirligig also fits backends that already run a standard Solana WebSocket client.
 
 ## Features and benefits
 

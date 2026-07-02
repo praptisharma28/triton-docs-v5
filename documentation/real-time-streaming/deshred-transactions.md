@@ -35,7 +35,7 @@ Deshred is for strategies that act on the earliest possible signal, before execu
 * **MEV and market making** that need the earliest view of price-impacting transactions.
 * **Copy-trading and liquidations** that follow specific accounts as soon as they act.
 
-**What not to use it for.** If you need execution results (status, balance changes, logs) or any confirmation guarantee, use the [Dragon's Mouth](dragon-s-mouth-grpc) `transactions` stream instead, or run it in parallel and join on `signature`. Deshred is intent-only and pre-execution: a transaction may fail, land on a dead fork, or never confirm.
+**What not to use it for.** If you need execution results (status, balance changes, logs) or any confirmation guarantee, use the [Dragon's Mouth](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) `transactions` stream instead, or run it in parallel and join on `signature`. Deshred is intent-only and pre-execution: a transaction may fail, land on a dead fork, or never confirm.
 
 ## Filter configuration
 

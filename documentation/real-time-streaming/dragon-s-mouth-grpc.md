@@ -16,8 +16,8 @@ It's the fastest live data path available for `processed` events and the recomme
 
 When not to use it:
 
-* Browsers and frontends cannot speak gRPC, so you should use [Whirligig WebSockets](whirligig-websockets) instead.
-* If your pipeline cannot miss a block (indexing, analytics, compliance), use [Fumarole](fumarole-persistent-streams), which guarantees at-least-once delivery and auto-backfills up to 4 days of data on reconnect.
+* Browsers and frontends cannot speak gRPC, so you should use [Whirligig WebSockets](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/whirligig-websockets) instead.
+* If your pipeline cannot miss a block (indexing, analytics, compliance), use [Fumarole](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/fumarole-persistent-streams), which guarantees at-least-once delivery and auto-backfills up to 4 days of data on reconnect.
 
 ## Features and benefits
 
@@ -69,7 +69,7 @@ Commitment level for buffering. Optional. Defaults to `processed`.
 | `CONFIRMED` (1) | Voted on by supermajority. Some buffering.             |
 | `FINALIZED` (2) | Max vote lockout. Most buffering.                      |
 
-For maximum performance, work at `processed` and manage commitment client-side by subscribing to [slot notifications](dragon-s-mouth-grpc.md#slots) alongside your data. The pattern:
+For maximum performance, work at `processed` and manage commitment client-side by subscribing to [slot notifications](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) alongside your data. The pattern:
 
 1. Subscribe to slot notifications alongside your data stream.
 2. Buffer incoming events by slot.
@@ -84,7 +84,7 @@ For maximum performance, work at `processed` and manage commitment client-side b
 {% tab title="ping" %}
 Sends a periodic keepalive to prevent idle-stream drops by upstream cloud providers (e.g. Cloudflare). Server replies with `pong`. Optional but recommended for long-running streams.
 
-See [pings](dragon-s-mouth-grpc.md#pings).
+See [pings](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc).
 {% endtab %}
 
 {% tab title="accountsDataSlice" %}
@@ -96,7 +96,7 @@ Example: `[{ "offset": 32, "length": 40 }]` returns 40 bytes starting at byte 32
 {% tab title="fromSlot" %}
 Replay buffered updates starting from this slot, then continue live on the same stream. Optional. Used for reconnection after short disconnections.
 
-See [replay from a slot](dragon-s-mouth-grpc.md#replay-from-a-slot).
+See [replay from a slot](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc).
 {% endtab %}
 {% endtabs %}
 
@@ -104,7 +104,7 @@ See [replay from a slot](dragon-s-mouth-grpc.md#replay-from-a-slot).
 
 A single gRPC connection can carry many subscriptions. Add multiple named entries to any of the filter maps (`accounts`, `transactions`, `slots`, `blocks`, `blocksMeta`, `entry`) and they all stream over the same connection. Each match is tagged with the filter name(s) that produced it, so you can route updates downstream without splitting connections.
 
-The canonical multiplex example is the [Multiple programs Accounts subscription](dragon-s-mouth-grpc.md#accounts), two named owner filters under `accounts`, one connection. The same pattern works across stream types: subscribe to accounts AND transactions AND slots in one request.
+The canonical multiplex example is the [Multiple programs Accounts subscription](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc), two named owner filters under `accounts`, one connection. The same pattern works across stream types: subscribe to accounts AND transactions AND slots in one request.
 
 ### Filter configuration
 
@@ -186,7 +186,7 @@ Before you start, make sure you have:
 
 The latest protobuf files live in the [yellowstone-grpc repo](https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto). For Rust, use the [yellowstone-grpc-proto crate](https://crates.io/crates/yellowstone-grpc-proto).
 
-The examples below use gRPC JSON for the request body and TypeScript for the client. Other languages use the same shape. Each example assumes you've already created and connected a `Client` (see [clients and SDKs](dragon-s-mouth-grpc.md#clients-and-sdks)).
+The examples below use gRPC JSON for the request body and TypeScript for the client. Other languages use the same shape. Each example assumes you've already created and connected a `Client` (see [clients and SDKs](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc)).
 
 ### Accounts
 
@@ -545,7 +545,7 @@ Full deep-dive: [Compressed filters for Yellowstone gRPC](https://blog.triton.on
 
 ### Transactions
 
-Use the `transactions` subscription to receive executed transactions at your chosen commitment level; `processed` delivers them as soon as the node processes them, while `confirmed` and `finalized` add latency. If you want the **earliest possible signal**, before execution, use [Deshred transactions](deshred-transactions.md), a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the node executes them.
+Use the `transactions` subscription to receive executed transactions at your chosen commitment level; `processed` delivers them as soon as the node processes them, while `confirmed` and `finalized` add latency. If you want the **earliest possible signal**, before execution, use [Deshred transactions](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions), a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the node executes them.
 
 {% tabs %}
 {% tab title="All non-vote, non-failed" %}
@@ -734,7 +734,7 @@ let request = SubscribeRequest {
 {% endtab %}
 {% endtabs %}
 
-Each update carries a `SlotStatus` enum, see [intra-slot updates](dragon-s-mouth-grpc.md#intra-slot-updates) for the full lifecycle.
+Each update carries a `SlotStatus` enum, see [intra-slot updates](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) for the full lifecycle.
 
 ### Blocks
 

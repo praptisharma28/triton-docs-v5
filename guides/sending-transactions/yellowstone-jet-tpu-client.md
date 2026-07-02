@@ -22,7 +22,7 @@ Anza's `tpu-client-next` shares much of its design and solves the performance pr
 * **Custom TPU contact info.** Bypass the gossip-provided contact info and supply your own TPU addresses.
 * **Arbitrary remote peers.** Bypass the leader schedule entirely to implement your own offloading or routing logic.
 * **Multi-step identity updates.** Rotate the sending identity through a controlled, multi-step process while keeping every sub-module in sync.
-* **Allowlist and blocklist support.** Pass a custom blocklist when you call `send_txn_with_blocklist`. To gate sending on on-chain validator policies, see [Protect transactions from MEV with Shield](protect-transactions-with-shield).
+* **Allowlist and blocklist support.** Pass a custom blocklist when you call `send_txn_with_blocklist`. To gate sending on on-chain validator policies, see [Protect transactions from MEV with Shield](https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/sending-transactions/protect-transactions-with-shield).
 
 ## Prerequisites
 
@@ -325,7 +325,7 @@ The callback returns a `TxSent` response carrying the signature and the identity
 
 ## What's next
 
-This client gives you the primitives to build your own routing logic without reinventing QUIC handling or leader tracking. To send only to validators you trust and skip known bad actors, combine it with on-chain Shield policies: [Protect transactions from MEV with Shield](protect-transactions-with-shield).
+This client gives you the primitives to build your own routing logic without reinventing QUIC handling or leader tracking. To send only to validators you trust and skip known bad actors, combine it with on-chain Shield policies: [Protect transactions from MEV with Shield](https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/sending-transactions/protect-transactions-with-shield).
 
 ***
 

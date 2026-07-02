@@ -52,7 +52,7 @@ The single and multiple account reads (`getAccountInfo`, `getMultipleAccounts`) 
 * **Reading many program accounts at scale** (DEX, lending, indexers): Cloudbreak serves indexed `getProgramAccounts` and token queries 500x+ faster on repeated filter shapes.
 * **Tracking a set of accounts live** (any frontend or backend with a large polling codebase): Account Sync keeps your existing code, stores it locally in RAM, backed by a stream, and serves your reads from there for lower latency and cost.
 * **Wallets and NFT apps**: DAS API fetches assets and metadata you need in one call, while Cloudbreak or Account Sync handle user balances lookups.
-* **Low-latency trading and market making**: to get the fastest data, we recommend streaming it with gRPC ([Dragon's Mouth](real-time-streaming/dragon-s-mouth-grpc.md)). If you want account reads in a web3.js-shaped client, Account Sync cuts read latency significantly compared to polling.
+* **Low-latency trading and market making**: to get the fastest data, we recommend streaming it with gRPC ([Dragon's Mouth](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc)). If you want account reads in a web3.js-shaped client, Account Sync cuts read latency significantly compared to polling.
 
 ## Limitations
 

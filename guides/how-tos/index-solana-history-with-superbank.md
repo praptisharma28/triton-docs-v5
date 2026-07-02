@@ -257,7 +257,7 @@ For **historical backfill**, there are two approaches depending on scale.
 
 **Large-scale backfill (recommended): Jetstreamer + Old Faithful**
 
-For ingesting months or years of history, use the Jetstreamer adapter pointed at Triton's [Old Faithful](https://docs.triton.one/project-yellowstone/old-faithful-historical-archive) archival backend. Old Faithful has full history back to genesis and serves data at wire speed, far faster than polling `getBlock` over HTTP. Bound the range with the epoch or slot arguments; see the [Filtering section](index-solana-history-with-superbank.md#filtering-to-your-own-transactions) for trade-offs if you also want a program filter.
+For ingesting months or years of history, use the Jetstreamer adapter pointed at Triton's [Old Faithful](https://docs.triton.one/project-yellowstone/old-faithful-historical-archive) archival backend. Old Faithful has full history back to genesis and serves data at wire speed, far faster than polling `getBlock` over HTTP. Bound the range with the epoch or slot arguments; see the [Filtering section](https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/how-tos/index-solana-history-with-superbank) for trade-offs if you also want a program filter.
 
 **Small-to-medium backfill: JSON-RPC source**
 

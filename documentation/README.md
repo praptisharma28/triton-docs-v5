@@ -39,11 +39,11 @@ Every Triton subscription gives you the complete feature set, free devnet, and f
 
 A single-purpose Solana node with isolated capacity, no noisy neighbours, no rate limits, and your choice of regions for easy colocation. It fits high-throughput workloads that need full bandwidth, dedicated compute, flat streaming costs, and the lowest, steadiest backend latency.
 
-gRPC streaming nodes are the most common dedicated setup. For other custom setups like indexing or history, we also offer managed solutions: [contact us](https://triton.one/contact). See [dedicated nodes](dedicated-nodes.md).
+gRPC streaming nodes are the most common dedicated setup. For other custom setups like indexing or history, we also offer managed solutions: [contact us](https://triton.one/contact). See [dedicated nodes](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/dedicated-nodes).
 
 ### Validator and staking
 
-For treasuries, institutions, and custodians, we run white-label validators under your brand, with full key separation and no operational overhead. For smaller stake, you can delegate to our private trusted validator (from 2,500 SOL) and receive your staking rewards, block rewards, and Jito MEV paid weekly in USDC. See [validator services](validator-services.md).
+For treasuries, institutions, and custodians, we run white-label validators under your brand, with full key separation and no operational overhead. For smaller stake, you can delegate to our private trusted validator (from 2,500 SOL) and receive your staking rewards, block rewards, and Jito MEV paid weekly in USDC. See [validator services](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/validator-services).
 
 ## Common builds
 

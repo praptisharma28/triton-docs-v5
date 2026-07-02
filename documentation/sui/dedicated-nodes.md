@@ -38,7 +38,7 @@ Triton provisions dedicated Sui nodes well above Sui's minimum full-node require
 
 ## History and archival
 
-A dedicated full node retains roughly the most recent two days (two epochs) of history, the same as the shared pool. For older data, query the [Archival storage and services](archival.md) endpoint, which serves the full history from genesis.
+A dedicated full node retains roughly the most recent two days (two epochs) of history, the same as the shared pool. For older data, query the [Archival storage and services](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/sui/archival) endpoint, which serves the full history from genesis.
 
 ## Getting a dedicated node
 

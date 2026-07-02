@@ -120,7 +120,7 @@ FumaroleEvent::SlotEnded(slot) => {
 
 ## What's next
 
-* [Fumarole cluster failover](fumarole-cluster-failover) for cross-region high availability.
+* [Fumarole cluster failover](https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/streaming/fumarole-cluster-failover) for cross-region high availability.
 * [`yellowstone-fumarole-client` on docs.rs](https://docs.rs/yellowstone-fumarole-client) for the full API, feature flags, and runnable examples.
 
 ***

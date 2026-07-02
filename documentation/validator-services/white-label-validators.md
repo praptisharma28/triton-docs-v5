@@ -16,7 +16,7 @@ You are not tied to Triton. You can move your validator to another operator with
 
 ## Your keys stay yours
 
-A Solana validator uses an identity key for the node, a vote account, and a stake account, with separate stake and withdraw authorities. The authorities that control your validator and its funds stay with you and are never shared with the operator. Triton runs the node; you hold the keys. See [vote-account setup](white-label-validators/vote-account-setup.md) and [node-identity protection](white-label-validators/node-identity-protection.md).
+A Solana validator uses an identity key for the node, a vote account, and a stake account, with separate stake and withdraw authorities. The authorities that control your validator and its funds stay with you and are never shared with the operator. Triton runs the node; you hold the keys. See [vote-account setup](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/validator-services/white-label-validators/vote-account-setup) and [node-identity protection](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/validator-services/white-label-validators/node-identity-protection).
 
 ## Who it's for
 

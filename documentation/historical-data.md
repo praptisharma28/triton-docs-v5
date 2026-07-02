@@ -26,7 +26,7 @@ Triton serves the complete Solana ledger as historical data through **Superbank*
 
 Because it answers the standard Solana JSON-RPC methods, existing clients work unchanged: the historical methods you already call are served by Superbank automatically, with nothing to set up.
 
-New here? The [Quickstart](historical-data/quickstart.md) reads an address's history with `getSignaturesForAddress`, `getTransaction`, and `getTransactionsForAddress`.
+New here? The [Quickstart](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/historical-data/quickstart) reads an address's history with `getSignaturesForAddress`, `getTransaction`, and `getTransactionsForAddress`.
 
 ## What Superbank serves
 

@@ -4,7 +4,7 @@ description: Direct HTTP endpoint for submitting Solana transactions through Cas
 
 # sendTx
 
-`POST /sendtx` is a direct HTTP transaction submission path on Cascade-enabled Solana endpoints. It takes a serialized transaction over plain HTTP and skips the JSON-RPC layer, removing several sources of latency that a standard [sendTransaction](sendtransaction.md) call carries. Reach for it on latency-sensitive workloads where every millisecond of submission overhead matters.
+`POST /sendtx` is a direct HTTP transaction submission path on Cascade-enabled Solana endpoints. It takes a serialized transaction over plain HTTP and skips the JSON-RPC layer, removing several sources of latency that a standard [sendTransaction](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/sending-transactions/sendtransaction) call carries. Reach for it on latency-sensitive workloads where every millisecond of submission overhead matters.
 
 ## Why use it over sendTransaction
 
@@ -15,7 +15,7 @@ A `sendTransaction` call wraps your transaction in a JSON-RPC envelope, which ad
 * **Smaller payloads.** Without the `jsonrpc`, `id`, `method`, and `params` wrapper, the request body is smaller on the wire.
 * **Simpler clients.** A single HTTP `POST`, with no Solana JSON-RPC client library.
 
-This suits browser apps that are sensitive to preflight latency and high-frequency backends sending large volumes. If you need full `sendTransaction` options such as `skipPreflight`, keep using [sendTransaction](sendtransaction.md).
+This suits browser apps that are sensitive to preflight latency and high-frequency backends sending large volumes. If you need full `sendTransaction` options such as `skipPreflight`, keep using [sendTransaction](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/sending-transactions/sendtransaction).
 
 ## Request
 
@@ -77,7 +77,7 @@ On success, the endpoint returns **HTTP 200**. If `response=signature` was set, 
 
 On failure, it returns **HTTP 4xx or 5xx** with error details in the body.
 
-`/sendtx` is submission only: it does not simulate or support other RPC methods. For client-side retries, compute budgets, and competitive [priority fees](getrecentprioritizationfees.md), apply the same delivery tactics as [sendTransaction](sendtransaction.md).
+`/sendtx` is submission only: it does not simulate or support other RPC methods. For client-side retries, compute budgets, and competitive [priority fees](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/sending-transactions/getrecentprioritizationfees), apply the same delivery tactics as [sendTransaction](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/sending-transactions/sendtransaction).
 
 ***
 

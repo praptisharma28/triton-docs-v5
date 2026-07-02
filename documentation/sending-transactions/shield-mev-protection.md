@@ -13,7 +13,7 @@ Solana's leader schedule is deterministic, so you often know which validator wil
 | Path                        | How                                                                                                                                                    | Use it when                                                            |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
 | **Triton RPC (SWQoS)**    | Add `forwardingPolicies` to your `sendTransaction` call. Triton checks the policy and routes for you.                                                  | You send through Triton RPC and want zero extra infrastructure.        |
-| **Jet TPU client (direct)** | Call `send_txn_with_shield_policies` from the [Jet TPU client](jet-sender.md). Your code connects to validator TPUs and enforces the policy itself. | You run your own sender and need RPC-independent control over routing. |
+| **Jet TPU client (direct)** | Call `send_txn_with_shield_policies` from the [Jet TPU client](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/jet-sender). Your code connects to validator TPUs and enforces the policy itself. | You run your own sender and need RPC-independent control over routing. |
 
 Either way the policy lives on-chain and the enforcement is identical: if the current leader is not allowed, the transaction is dropped, not queued.
 
@@ -49,7 +49,7 @@ Solana-ForwardingPolicies: "<your_policy_pda>,<your_policy_pda2>"
 
 ## Option B: Jet TPU client (direct)
 
-The [Jet TPU client](jet-sender.md) checks each leader against your policies inside your own process and sends only to allowed validators. Enable the `shield` feature and add `yellowstone-shield-store` (the workspace and `[patch.crates-io]` setup is on the [Jet TPU client](jet-sender.md) page).
+The [Jet TPU client](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/jet-sender) checks each leader against your policies inside your own process and sends only to allowed validators. Enable the `shield` feature and add `yellowstone-shield-store` (the workspace and `[patch.crates-io]` setup is on the [Jet TPU client](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/jet-sender) page).
 
 Build a `PolicyStore` that caches the on-chain policies and live-updates them over gRPC, wrap your policy addresses in a `ShieldBlockList`, then send. Here `sender` is a TPU sender created as shown in the [Jet TPU client crate docs](https://docs.rs/yellowstone-jet-tpu-client).
 

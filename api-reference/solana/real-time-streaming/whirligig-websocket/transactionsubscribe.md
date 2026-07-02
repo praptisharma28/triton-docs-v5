@@ -59,7 +59,7 @@ Equal to Solana's [`RpcBlockSubscribeConfig`](https://docs.rs/solana-client/late
 
 ## Notification
 
-Updates arrive as `transactionNotification` messages, each with a `context` (slot, apiVersion) and a `value` carrying the slot, signature, and the full transaction with its meta. Unsubscribe with [transactionUnsubscribe](transactionunsubscribe.md).
+Updates arrive as `transactionNotification` messages, each with a `context` (slot, apiVersion) and a `value` carrying the slot, signature, and the full transaction with its meta. Unsubscribe with [transactionUnsubscribe](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/real-time-streaming/whirligig-websocket/transactionunsubscribe).
 
 ***
 

@@ -197,7 +197,7 @@ curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
   }'
 ```
 
-Pass the `paginationToken` from the response in the next request to keep scanning. See [Historical data](../historical-data.md) for every option, filter, and response shape.
+Pass the `paginationToken` from the response in the next request to keep scanning. See [Historical data](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/historical-data) for every option, filter, and response shape.
 
 ## What's next
 

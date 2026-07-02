@@ -90,7 +90,7 @@ Geyser plugins can be enabled on our dedicated Solana nodes. They provide powerf
 
 Run our prebuilt `client-ubuntu` test client. It's a small Linux CLI we ship for exactly this purpose, known-good code that hits your endpoint with the same gRPC subscription patterns your app does. If it errors, the issue is on the endpoint and we should look at it. If it streams cleanly, the issue is in your application code.
 
-Full guide: [Verify your gRPC endpoint](error-handling/verify-your-grpc-endpoint.md).
+Full guide: [Verify your gRPC endpoint](https://app.gitbook.com/s/VeEf321LwceAVlSk9USV/solana/error-handling/verify-your-grpc-endpoint).
 
 </details>
 

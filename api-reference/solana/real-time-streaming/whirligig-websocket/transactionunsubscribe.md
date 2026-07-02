@@ -4,7 +4,7 @@ description: Cancel a transactionSubscribe subscription.
 
 # transactionUnsubscribe
 
-Cancel a [transactionSubscribe](transactionsubscribe.md) subscription using the subscription id returned when you subscribed.
+Cancel a [transactionSubscribe](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/real-time-streaming/whirligig-websocket/transactionsubscribe) subscription using the subscription id returned when you subscribed.
 
 {% tabs %}
 {% tab title="WebSocket message" %}

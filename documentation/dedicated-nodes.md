@@ -34,7 +34,7 @@ Dedicated nodes are set up with our team, not self-serve.
 1. **Talk to us.** Reach out through [contact sales](https://triton.one/contact). A short know-your-customer step collects your contact and location details.
 2. **Scope your node.** A discovery call covers your streaming volume, regions, and the job the cluster will run (gRPC streaming, DAS, or indexing). You agree the specs, region, and number of nodes before anything is deployed.
 3. **Provisioning.** Hardware is ordered to spec and set up as a dedicated subscription in your [customer dashboard](https://customers.triton.one). Because nodes are built to order rather than kept in stock, expect a short lead time. There are no same-day trials.
-4. **Connect.** Your node has its own endpoint, `https://<your-endpoint>.mainnet.rpcpool.com`. Point your gRPC client at it with your endpoint URL and token, exactly as you would any Triton endpoint. For client code in TypeScript, Rust, and Go, see [Dragon's Mouth gRPC](../real-time-streaming/dragon-s-mouth-grpc).
+4. **Connect.** Your node has its own endpoint, `https://<your-endpoint>.mainnet.rpcpool.com`. Point your gRPC client at it with your endpoint URL and token, exactly as you would any Triton endpoint. For client code in TypeScript, Rust, and Go, see [Dragon's Mouth gRPC](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc).
 
 Pricing is a fixed monthly price per node with no metered or overage billing; see the [pricing page](https://triton.one/pricing).
 
@@ -43,7 +43,7 @@ Pricing is a fixed monthly price per node with no metered or overage billing; se
 * **Put all your streaming traffic on the dedicated endpoint.** Leaving streams on a shared endpoint means metered charges and defeats the point of a fixed-cost node.
 * **Run your backend close to the node.** gRPC streams are backend-to-backend, so geographic distance is the main latency factor. Place your service in the same region as your node rather than relying on geo-distribution.
 * **Use the regional endpoint** where a product has one, connecting to the regional hostname rather than the shared geo-routed one.
-* **Filter to cut volume.** Server-side filters (skip votes, restrict to the accounts and programs you care about) reduce both bandwidth and cost. See [streaming best practices](../real-time-streaming/best-practices).
+* **Filter to cut volume.** Server-side filters (skip votes, restrict to the accounts and programs you care about) reduce both bandwidth and cost. See [streaming best practices](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/best-practices).
 * **Failover is automatic.** Nodes fail over into a backup pool, so a single node restarting or briefly falling behind the chain tip does not interrupt your stream.
 
 ## What's next

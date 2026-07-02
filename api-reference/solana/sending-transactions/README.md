@@ -37,7 +37,7 @@ These size the fee before you send:
 | `getFeeForMessage` | The fee the cluster would charge to process a message. |
 | `getRecentPrioritizationFees` | Recent priority-fee samples for setting a competitive fee. |
 
-To build swap transactions, see the [Metis](metis/README.md) and [Titan](titan/README.md) swap APIs.
+To build swap transactions, see the [Metis](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/sending-transactions/metis) and [Titan](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/sending-transactions/titan) swap APIs.
 
 ***
 

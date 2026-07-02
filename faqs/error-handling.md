@@ -19,13 +19,13 @@ A step-by-step process to diagnose and fix issues with your Triton One RPC.
 
 First, determine if the error is Solana-wide or specific to Triton by attempting the same method against the Solana public RPC `https://api.mainnet-beta.solana.com`.
 
-If the same issue exists with Solana, identify the bug and resolution by following the standard list of [Common Solana JSON-RPC codes](error-handling/common-solana-errors.md).
+If the same issue exists with Solana, identify the bug and resolution by following the standard list of [Common Solana JSON-RPC codes](https://app.gitbook.com/s/VeEf321LwceAVlSk9USV/solana/error-handling/common-solana-errors).
 
 If you fail to resolve your issue on Solana's public RPC, it's time to troubleshoot with possible and known Triton One errors:
 
-* Determine if your issue returns any of the [Triton RPC error codes](error-handling/triton-rpc-error-codes.md).
+* Determine if your issue returns any of the [Triton RPC error codes](https://app.gitbook.com/s/VeEf321LwceAVlSk9USV/solana/error-handling/triton-rpc-error-codes).
 * Determine if your issue exhibits any of the possible Triton RPC symptoms.
-* Determine if your issue fits any of the uncommon [Web3JS errors](error-handling/web3js-socket-connection-issues.md) we helped some of our customers resolve.
+* Determine if your issue fits any of the uncommon [Web3JS errors](https://app.gitbook.com/s/VeEf321LwceAVlSk9USV/solana/error-handling/web3js-socket-connection-issues) we helped some of our customers resolve.
 
 If you fail to resolve your issue despite the steps above, it's time to call in the big guns!
 

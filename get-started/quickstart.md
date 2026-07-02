@@ -32,7 +32,7 @@ Create your account at [customers.triton.one](https://customers.triton.one) and 
 {% step %}
 **Get your endpoint**
 
-Your endpoints are already provisioned. In the [customer portal](https://customers.triton.one), select the network, then click the endpoint name to copy its URL and secret token (see [Authentication](authentication.md) for details).
+Your endpoints are already provisioned. In the [customer portal](https://customers.triton.one), select the network, then click the endpoint name to copy its URL and secret token (see [Authentication](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/authentication) for details).
 {% endstep %}
 
 {% step %}
