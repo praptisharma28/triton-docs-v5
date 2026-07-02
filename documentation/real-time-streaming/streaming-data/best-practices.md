@@ -1,17 +1,14 @@
 ---
-description: Keep real-time Solana streams reliable and low-latency in production.
+description: Keep real-time Solana streams reliable and ensure lowest-latency in production.
 ---
 
 # Best practices
-
-How to run real-time Solana streams reliably and at low latency.
 
 ## Pick the right stream
 
 * **For lowest latency on a backend, use Dragon's Mouth (gRPC).** It is more stable than the legacy WebSocket interface and delivers intra-slot updates up to 400 ms faster. gRPC is server-to-server only.
 * **For a browser or frontend, use Whirligig WebSockets.** It gives the same intra-slot advantage over a browser-compatible WebSocket; gRPC is not supported in browsers.
-* **For "never miss an event" workloads (accounting, analytics, indexing, compliance, archival, or confirmed-data apps like wallets), use Fumarole** instead of raw gRPC. Dragon's Mouth prioritises latency over completeness; Fumarole adds persistence, redundancy, and replay.
-* **For pre-parsed, program-specific data, use Program Data Streams (Vixen)** rather than building your own parsing.
+* **For "never miss an event" workloads (accounting, analytics, indexing, compliance, or confirmed-data apps like wallets), use Fumarole** instead of raw gRPC. Dragon's Mouth prioritises latency over completeness; Fumarole adds persistence, redundancy, and replay.
 * **For the earliest possible signal (arbitrage, market making, liquidations, HFT), use Deshred.** It reconstructs transactions from shreds before execution, so it has no confirmation guarantee; pair it with the normal `transactions` stream if you need finality.
 
 ## Provision the subscriber
@@ -21,8 +18,7 @@ How to run real-time Solana streams reliably and at low latency.
 * **Enable Zstd compression** and **set the HTTP/2 adaptive window to true.** Without compression it is hard to stay on the tip during spikes.
 * **Run subscribers on a persistent server (VPS or bare metal), not serverless functions** like Lambda or Cloud Functions. They recycle every few minutes, and each cold start and reconnect handshake lets the chain move on, so you drop messages and miss confirmations.
 * **Update your `@triton-one/yellowstone-grpc` client to v5+ for high-volume streams.** We added NAPI-as-an-Engine (NaaE), which moves the gRPC engine into Rust for \~400% more throughput than the previous pure-JavaScript version. It's a drop-in replacement. [Learn more](https://blog.triton.one/grpc-js-alternative-napi-rust/).
-* **Benchmark with the `client-ubuntu` tool before going live:** a ping every 10 seconds at 60 to 80 Mbps means you can hold the tip without disconnects.
-* **Treat frequent disconnects as a client-side problem** (weak or under-provisioned setup), not a server fault.
+* **Solve frequent disconnects early and rule out a client-side problem** (a weak or under-provisioned setup) before assuming a server fault. [Learn more](https://blog.triton.one/solana-grpc-streaming-optimisation-and-troubleshooting-2026-guide/).
 
 ## Stay on the tip during high load
 
