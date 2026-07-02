@@ -686,7 +686,7 @@ Yes, for the supported methods. The request and response formats are JSON-RPC 2.
 
 <details>
 
-<summary>Why does my `getProgramAccounts` for a program return `-32010`?</summary>
+<summary>Why does my <code>getProgramAccounts</code> for a program return <code>-32010</code>?</summary>
 
 That program's accounts are not indexed, so Cloudbreak cannot serve the query. Widely used programs are indexed automatically; if you hit this for a program you expect to be covered, let the Triton team know.
 
@@ -694,7 +694,7 @@ That program's accounts are not indexed, so Cloudbreak cannot serve the query. W
 
 <details>
 
-<summary>Why does `getAccountInfo` return `null` for an account I know exists on-chain?</summary>
+<summary>Why does <code>getAccountInfo</code> return <code>null</code> for an account I know exists on-chain?</summary>
 
 The account's owner program is not among the programs Cloudbreak indexes, so the account is not stored. Account lookups return `null` (or `0` for `getBalance`) rather than an error in that case.
 
@@ -702,7 +702,7 @@ The account's owner program is not among the programs Cloudbreak indexes, so the
 
 <details>
 
-<summary>Why is one `getProgramAccounts` query fast and a similar one slow?</summary>
+<summary>Why is one <code>getProgramAccounts</code> query fast and a similar one slow?</summary>
 
 The fast one has a matching index and the slow one does not. A new query shape becomes fast once it is requested often enough for automatic index creation to pick it up. Both return correct data regardless.
 
@@ -710,7 +710,7 @@ The fast one has a matching index and the slow one does not. A new query shape b
 
 <details>
 
-<summary>My large `getProgramAccounts` response failed to parse. What happened?</summary>
+<summary>My large <code>getProgramAccounts</code> response failed to parse. What happened?</summary>
 
 A streamed response that errors partway through is truncated on purpose, so your JSON parser reports an incomplete document. Treat that as a failed request and retry; do not treat a partial body as a partial result.
 
