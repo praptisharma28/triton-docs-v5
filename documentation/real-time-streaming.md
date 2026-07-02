@@ -37,8 +37,6 @@ sequenceDiagram
     S-->>C: event (intra-slot)
     S-->>C: event
     S-->>C: event
-    S-->>C: event
-    S-->>C: event
 ```
 {% endcolumn %}
 {% endcolumns %}
