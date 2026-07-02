@@ -11,7 +11,7 @@ Solana produces a new block every \~400 ms. If you poll RPC every 200 ms, your d
 Streaming inverts the model: you open one connection, say what you need (specific accounts, programs, or transactions), and the node pushes you matching events the instant they happen.
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','clusterBkg':'#FBF9FD','clusterBorder':'#C9B6DC'}}}%%
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','clusterBkg':'#FBF9FD','clusterBorder':'#C9B6DC'},'flowchart':{'nodeSpacing':30,'rankSpacing':45,'curve':'linear'}}}%%
 flowchart LR
     subgraph P["Polling"]
         direction LR
