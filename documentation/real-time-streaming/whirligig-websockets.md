@@ -12,7 +12,7 @@ Native Solana WebSockets run inside the RPC process, so notifications can lag or
 
 * **Browsers.** Frontends and dApps can't speak gRPC. They subscribe over `wss://` and get gRPC-backed data with no library changes.
 * **Mobile apps.** Connections run over HTTP/3 for lower-latency streaming on mobile networks.
-* **Backends.** If you can run a gRPC client, [Dragon's Mouth](dragon-s-mouth-grpc.md) is the lower-latency path for server-side services. Whirligig also fits backends that already run a standard Solana WebSocket client, or that want its higher limits and added subscriptions without rewriting to gRPC.
+* **Backends.** If you can run a gRPC client, [Dragon's Mouth](dragon-s-mouth-grpc.md) is the lower-latency path for server-side services. Whirligig also fits backends that already run a standard Solana WebSocket client.
 
 ## Features and benefits
 
@@ -768,7 +768,7 @@ Whirligig is billed at `$0.08 / GB` of bandwidth, and you only pay for data stre
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Streaming best practices</strong></td><td>Filtering, reconnect, and commitment guidance across the streaming services.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/best-practices">Streaming best practices</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Streaming best practices</strong></td><td>Filtering, reconnect, and commitment guidance across the streaming services.</td><td><a href="best-practices">Streaming best practices</a></td></tr></tbody></table>
 
 ***
 
