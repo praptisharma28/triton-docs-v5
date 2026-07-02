@@ -53,7 +53,7 @@ flowchart LR
     style you fill:#D6EAF8,stroke:#259DD0
 ```
 
-## Methods
+## Supported methods
 
 Fumarole is a gRPC service. You manage a **persistent subscriber** (a consumer group) and stream from it:
 

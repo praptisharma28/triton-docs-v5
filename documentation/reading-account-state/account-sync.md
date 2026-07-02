@@ -284,7 +284,7 @@ Use this simple rule:
 
 If your network blocks gRPC, use WebSocket.
 
-## Method reference
+## Supported methods
 
 These are the main method signatures.
 

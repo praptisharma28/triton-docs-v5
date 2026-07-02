@@ -38,7 +38,7 @@ Over two years we've delivered major open-source enhancements to DAS: ingestion 
 
 DAS is enabled by default on every Triton endpoint.
 
-### Methods
+### Supported methods
 
 Every method's parameters and example request and response are in the [DAS API reference](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/reading-account-state/das-api). Grouped by what they do:
 
