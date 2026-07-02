@@ -37,7 +37,7 @@ Whirligig has full parity with the [Solana WebSocket API](https://solana.com/doc
 | `slotsUpdatesSubscribe` | Detailed slot-status updates | Solana-compatible (unstable Solana method) |
 | `transactionSubscribe` | Full transactions matching a filter | Whirligig extension, not in the native Solana WS API |
 
-## Get started
+## Connection options
 
 On Triton's shared infrastructure, your WebSocket connections route through Whirligig by default, with nothing to change, and run over HTTP/3 for lower-latency browser and mobile connections.
 
@@ -155,7 +155,7 @@ Whirligig supports all three commitment levels, set per subscription in the `con
 * **`confirmed`**: the highest slot voted on by a supermajority of the cluster.
 * **`finalized`**: the highest slot that has reached maximum lockout, recognized as finalized by a supermajority.
 
-## Subscribe
+## Subscribe request
 
 Each subscribe request returns a subscription `id` you later pass to its unsubscribe method.
 
