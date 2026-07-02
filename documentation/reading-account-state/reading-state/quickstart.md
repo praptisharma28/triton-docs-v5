@@ -1,5 +1,5 @@
 ---
-description: Read account state with JSON-RPC.
+description: Query account state via JSON-RPC and set up Account Sync in under 2 minutes.
 ---
 
 # Quickstart
@@ -138,7 +138,7 @@ await connection.close();
 {% endtab %}
 {% endtabs %}
 
-## 3. Verify your read
+## 3. Verify it works
 
 Run your code:
 
