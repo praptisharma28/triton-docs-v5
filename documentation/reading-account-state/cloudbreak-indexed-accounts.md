@@ -556,8 +556,8 @@ flowchart LR
     state --> q["JSON-RPC<br/>query layer"]
     idx --> q
     q --> you["Your app"]
-    idx <-.- tracker["Query tracker"]
-    tracker <-.- you
+    idx <-.-> tracker["Query tracker"]
+    tracker <-.-> you
     style you fill:#D6EAF8,stroke:#259DD0
 ```
 
