@@ -35,12 +35,23 @@ Deshred is for strategies that act on the earliest possible signal, before execu
 
 `SubscribeDeshred` supports four filter fields, combined as logical AND:
 
-| Parameter          | Type       | Required | Description                                                                      |
-| ------------------ | ---------- | -------- | -------------------------------------------------------------------------------- |
-| `vote`             | `bool`     | No       | Include or exclude vote transactions. `false` excludes votes.                    |
-| `account_include`  | `string[]` | No       | Accounts mentioned anywhere in the transaction (including loaded ALT addresses). |
-| `account_exclude`  | `string[]` | No       | Exclude transactions mentioning any of these accounts.                           |
-| `account_required` | `string[]` | Yes      | Accounts that MUST all be mentioned (every one of them).                         |
+{% tabs %}
+{% tab title="vote" %}
+`bool`. Optional. Include or exclude vote transactions; `false` excludes votes.
+{% endtab %}
+
+{% tab title="account_include" %}
+`string[]`. Optional. Accounts mentioned anywhere in the transaction, including loaded ALT addresses.
+{% endtab %}
+
+{% tab title="account_exclude" %}
+`string[]`. Optional. Exclude transactions mentioning any of these accounts.
+{% endtab %}
+
+{% tab title="account_required" %}
+`string[]`. Required. Accounts that must all be mentioned (every one of them).
+{% endtab %}
+{% endtabs %}
 
 ## Subscribe and consume
 
