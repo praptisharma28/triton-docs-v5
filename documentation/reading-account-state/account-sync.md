@@ -150,7 +150,8 @@ The SDK fills its local buffer in two ways:
 flowchart LR
     dm["Dragon's Mouth<br/>gRPC stream"] --> fan["Triton fanout service"]
     fan --> cache["Triton SDK<br/>local RAM cache"]
-    rpc["JSON-RPC<br/>first snapshot"] --> cache
+    agave["Agave node"] --> rpc["JSON-RPC<br/>first snapshot (once)"]
+    rpc --> cache
     cache --> you["Your app"]
     style you fill:#D6EAF8,stroke:#259DD0
 ```
