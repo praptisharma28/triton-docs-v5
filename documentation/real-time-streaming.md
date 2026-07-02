@@ -22,7 +22,7 @@ sequenceDiagram
     C->>S: getAccountInfo
     S-->>C: stale data
     C->>S: getAccountInfo
-    S-->>C: 429 under load
+    S-->>C: 429 Too Many Requests
 ```
 
 **Streaming — one subscription, then the node pushes every match:**
