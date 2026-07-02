@@ -26,7 +26,7 @@ Solana keeps all of its state in accounts: a wallet, each token balance, a DEX m
 
 However, Agave nodes make some of these reads slow or expensive as you scale:
 
-* **Set queries like** [**gPA**](https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/readme)**.** Fetching every account a program owns scans the program's entire account set and applies filters only after each account is loaded, so an unindexed scan gets slow and can time out on large programs.
+* **Set queries like gPA.** Fetching every account a program owns scans the program's entire account set and applies filters only after each account is loaded, so an unindexed scan gets slow and can time out on large programs.
 * **Polling for fresh state.** Re-fetching the same accounts on a loop leaves your data stale between calls and burns requests (and rate limits) against the same endpoint.
 * **NFT and compressed NFT.** Assembling an asset's owner, metadata, and (for compressed NFTs) its Merkle proof from raw accounts takes custom indexing, decompression, and many calls.
 
