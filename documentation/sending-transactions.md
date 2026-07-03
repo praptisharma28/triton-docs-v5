@@ -25,11 +25,11 @@ Every transaction sent to a Triton endpoint is handled by **Jet**, Triton's SWQo
 
 |                       |   `sendTransaction`   |             `/sendtx`             | Jet TPU client (self-hosted) |
 | --------------------- | :-------------------: | :-------------------------------: | :----------------------: |
+| SWQoS added by default (no extra charge) | ✓ | ✓ | ✗ (unless you integrate it) |
 | Interface             |    Solana JSON-RPC    |             HTTP POST             |       Rust library       |
 | Reaches the TPU via   | your endpoint (server-side) |       your endpoint (server-side)       |   your client (direct)   |
 | Latency               |          low          |    lower, no JSON-RPC overhead    | minimal, direct to the leader |
 | Ease of use           |    any Solana SDK     | a single HTTP POST, no RPC library |   you operate the client   |
-| SWQoS added by default (no extra charge) | ✓ | ✓ | ✗ (unless you integrate it) |
 | `skipPreflight` option | ✓ | ✗ (always skips preflight) | ✗ (direct send, no preflight) |
 | Client to run         |          none         |                none               |            yes           |
 | Best for              |  broad compatibility  |       browsers, HFT backends      |   bots, custom routers   |
