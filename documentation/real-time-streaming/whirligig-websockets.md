@@ -18,6 +18,19 @@ On top of the drop-in standard API, Whirligig adds:
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-bolt">:bolt:</i> <strong>transactionSubscribe</strong></td><td>A full-transaction subscription the native Solana WS API does not have, with account include, exclude, and required filters.</td><td></td></tr><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Intra-slot updates</strong></td><td>At processed commitment, account updates arrive up to 400 ms faster than native Solana WebSockets.</td><td></td></tr><tr><td><i class="fa-radio">:radio:</i> <strong>Backed by Dragon's Mouth</strong></td><td>Translates a Dragon's Mouth gRPC stream into WebSocket messages, so a browser gets gRPC-grade data.</td><td></td></tr><tr><td><i class="fa-code">:code:</i> <strong>jsonParsed encoding</strong></td><td><code>accountSubscribe</code> and <code>programSubscribe</code> return structured objects for parsable programs (SPL Token, Token-2022, Stake, Vote, Nonce, Sysvar, Address Lookup Table, BPF Loader, Config) instead of raw byte arrays, with resolved mint metadata on token accounts.</td><td></td></tr><tr><td><i class="fa-cube">:cube:</i> <strong>Stable blockSubscribe</strong></td><td>Full block notifications with filters for commitment level, transaction detail, and reward visibility. The native method is flagged unstable.</td><td></td></tr><tr><td><i class="fa-network-wired">:network-wired:</i> <strong>Higher connection limits</strong></td><td>Triton's bare-metal streaming nodes are stress-tested under hundreds of thousands of concurrent subscriptions.</td><td></td></tr></tbody></table>
 
+## How it works
+
+Native Solana WebSockets run inside the RPC node process: notifications can lag or drop under load, `processed` account updates are batched to slot boundaries, concurrent connections are capped, and there is no full-transaction subscription.
+
+Whirligig replaces that path with a Rust proxy running on dedicated streaming nodes. Your client opens a standard Solana WebSocket connection; Whirligig translates each subscription into a Dragon's Mouth gRPC subscription and streams the matching updates back as standard WebSocket notifications. Your code sees the normal pubsub API, but the data behind it is the gRPC stream, so at `processed` commitment account updates arrive intra-slot instead of waiting for a slot boundary.
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
+flowchart LR
+    dm["Dragon's Mouth<br/>gRPC stream"] --> w["Whirligig<br/>gRPC to WebSocket proxy"] --> you["Your client<br/>(standard Solana WS API)"]
+    style you fill:#D6EAF8,stroke:#259DD0
+```
+
 ## Supported methods
 
 Whirligig has full parity with the [Solana WebSocket API](https://solana.com/docs/rpc/websocket): it serves the standard `solana-pubsub` endpoint, plus one added subscription, `transactionSubscribe`, that the native API does not have. Each subscribe method returns a subscription `id` and has a matching unsubscribe (see [Unsubscribe](#unsubscribe)). The methods with request and response examples below are the most common; the rest follow the standard Solana WebSocket spec.
