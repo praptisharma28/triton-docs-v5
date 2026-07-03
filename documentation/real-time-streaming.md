@@ -52,7 +52,7 @@ Triton was first to ship gRPC streaming on Solana with **Yellowstone gRPC**, the
 * **Dedicated streaming clusters.** Specialised infrastructure that doesn't serve general RPC traffic, tuned for the I/O profile of pushing events to thousands of subscribers.
 * **Co-located with high-stake validators.** Streaming clusters sit next to high-stake validators in top-tier data centres and ingest shreds from our own validators, Jito, DoubleZero, and Turbine, so updates hit the edge as fast as physically possible.
 * **Globally distributed across 20+ points of presence.** GeoDNS routes you to the nearest cluster; automatic failover handles outages.
-* **Isolated services.** All the streaming services (Whirligig, Fumarole, Faithful streams) run on modular infrastructure, so a spike in one can't degrade the others.
+* **Isolated services.** All the streaming services (Whirligig, Fumarole, Superbank) run on modular infrastructure, so a spike in one can't degrade the others.
 
 ## Pick your stream
 
@@ -61,9 +61,9 @@ Three things matter in streaming: **latency, reliability, and replay**. Years of
 * Dragon's Mouth is the source of truth for live data, with Deshred giving you pre-execution transaction data on the same gRPC service.
 * Whirligig translates Dragon's Mouth output into standard Solana WebSocket messages for browsers.
 * Fumarole consumes multiple Dragon's Mouth nodes, deduplicates, and persists a cursor on the server side so you can resume exactly where you left off after disconnects.
-* Old Faithful taps the historical archive but uses the same gRPC interface, so the live and historical pipelines appear identical to your client code.
+* Superbank taps the historical archive but uses the same gRPC interface, so the live and historical pipelines appear identical to your client code.
 
-| Capability                 | Dragon's Mouth | Deshred tx | Whirligig websocket |         Fumarole        |  Old Faithful |
+| Capability                 | Dragon's Mouth | Deshred tx | Whirligig websocket |         Fumarole        |   Superbank   |
 | -------------------------- | :------------: | :--------: | :-----------------: | :---------------------: | :-----------: |
 | Real-time data             |        ✓       |      ✓     |          ✓          |            ✓            |       ✗       |
 | Pre-execution transactions |        ✗       |      ✓     |          ✗          |            ✗            |       ✗       |
