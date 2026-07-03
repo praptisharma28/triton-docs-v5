@@ -21,7 +21,7 @@ Titan is a good fit for:
 
 ## Getting started
 
-Titan is enabled by default on every Triton Solana subscription. Depending on whether you poll for quotes or stream them, you use the HTTP or the WebSocket endpoint (find them in your [customer dashboard](https://customers.triton.one)) under the `/titan` path:
+Titan is enabled by default on every Triton Solana subscription. Depending on whether you poll for quotes or stream them, you use the HTTP or the WebSocket endpoint (find them in your [customer dashboard](https://customers.triton.one)) with the `/titan` path added:
 
 * **Stream** (recommended): connect over `wss://` and receive continuous quote updates.
 * **Poll**: request quotes over `https://` on the same `/titan` path.
