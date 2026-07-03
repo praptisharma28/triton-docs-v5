@@ -17,7 +17,7 @@ Metis on Triton can power:
 
 ## Features and benefits
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Liquidity aggregation</strong></td><td>Combines liquidity from multiple AMMs and DEXes into a single route.</td><td></td></tr><tr><td><i class="fa-wallet">:wallet:</i> <strong>Platform fees</strong></td><td>Set a fee wallet and pass a platform-fee parameter directly in the quote API.</td><td></td></tr><tr><td><i class="fa-coins">:coins:</i> <strong>ExactOut mode</strong></td><td>For payment flows where you need an exact output amount, for example accepting many tokens but settling in USDC.</td><td></td></tr><tr><td><i class="fa-rotate">:rotate:</i> <strong>Circular arbitrage</strong></td><td>Triton enables circular routes (USDC to token to USDC) that Jupiter's public API disables by default.</td><td></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-wallet">:wallet:</i> <strong>Platform fees</strong></td><td>Set a fee wallet and pass a platform-fee parameter directly in the quote API.</td><td></td></tr><tr><td><i class="fa-coins">:coins:</i> <strong>ExactOut mode</strong></td><td>For payment flows where you need an exact output amount, for example accepting many tokens but settling in USDC.</td><td></td></tr><tr><td><i class="fa-rotate">:rotate:</i> <strong>Circular arbitrage</strong></td><td>Triton enables circular routes (USDC to token to USDC) that Jupiter's public API disables by default.</td><td></td></tr><tr><td><i class="fa-gauge">:gauge:</i> <strong>No rate limits</strong></td><td>Metered billing with no rate limits on Metis queries.</td><td></td></tr></tbody></table>
 
 ## Getting started
 
@@ -31,7 +31,7 @@ amount=1000000&\
 slippageBps=50'
 ```
 
-## Executing a swap
+### Executing a swap
 
 After you get a quote from `/quote`:
 
