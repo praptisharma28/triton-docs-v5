@@ -16,7 +16,7 @@ By the end you'll have a working setup that covers the full path from signal to 
 
 Five Triton products work together in this stack. Each card below opens the full product docs, useful when you want to tune defaults, see every option, or troubleshoot something specific to that product.
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth</strong></td><td>Subscribe to DEX pool account updates and transactions in real time.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc</a></td></tr><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred</strong></td><td>Receive transactions \~20 ms before standard gRPC at p90 for earliest signal.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions</a></td></tr><tr><td><i class="fa-arrow-trend-up">:arrow-trend-up:</i> <strong>Priority Fee API</strong></td><td>Get a percentile-based fee estimate before building your transaction.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/priority-fees-api">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/priority-fees-api</a></td></tr><tr><td><i class="fa-paper-plane">:paper-plane:</i> <strong>Jet</strong></td><td>Send transactions directly to the current leader with built-in SWQoS.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions">Sending transactions</a></td></tr><tr><td><i class="fa-shield-halved">:shield-halved:</i> <strong>Shield</strong></td><td>(Optional) Block specific validators from processing your transactions.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/shield-mev-protection">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/shield-mev-protection</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth</strong></td><td>Subscribe to DEX pool account updates and transactions in real time.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc</a></td></tr><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred</strong></td><td>Receive transactions \~20 ms before standard gRPC at p75 for earliest signal.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions</a></td></tr><tr><td><i class="fa-arrow-trend-up">:arrow-trend-up:</i> <strong>Priority Fee API</strong></td><td>Get a percentile-based fee estimate before building your transaction.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/priority-fees-api">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/priority-fees-api</a></td></tr><tr><td><i class="fa-paper-plane">:paper-plane:</i> <strong>Jet</strong></td><td>Send transactions directly to the current leader with built-in SWQoS.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions">Sending transactions</a></td></tr><tr><td><i class="fa-shield-halved">:shield-halved:</i> <strong>Shield</strong></td><td>(Optional) Block specific validators from processing your transactions.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/shield-mev-protection">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/shield-mev-protection</a></td></tr></tbody></table>
 
 ## Prerequisites
 
@@ -292,7 +292,7 @@ asyncio.run(stream_dex_data())
 
 An account update prints something like:
 
-```
+```text
 Pool state updated: 58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2
 ```
 
@@ -300,7 +300,7 @@ This is the pool's public key encoded in base58, the standard human-readable for
 
 A transaction update prints:
 
-```
+```text
 Transaction processed: 5Vk5mYDpFq3vQtXm8ZkRj2PnCwBsHeLfY6gNuoA1T9KdEpRsuW3HqXjc...
 ```
 
@@ -322,13 +322,12 @@ console.log(JSON.stringify(decoded, null, 2));
 
 ## Step 2: Get the earliest signal with Deshred
 
-Deshred reconstructs transactions from shreds before execution, delivering them approximately 20 ms ahead of standard Dragon's Mouth gRPC at p90 (p50 is \~6.3 ms). It uses a separate RPC method, `SubscribeDeshred`: on the same endpoint and token as Dragon's Mouth.
+Deshred reconstructs transactions from shreds before execution, delivering them \~20 ms ahead of standard Dragon's Mouth gRPC at p75 (p50 is \~6.3 ms). It uses a separate RPC method, `SubscribeDeshred`: on the same endpoint and token as Dragon's Mouth.
 
 Important limitations to understand before using Deshred:
 
 * **No execution metadata**: you receive intent only. There are no logs, balance changes, status, or compute unit data.
 * **No finality guarantee**: the transaction may fail, get dropped, or land on a dead fork. Always confirm with your Dragon's Mouth `processed` stream.
-* **Requires Agave 4.0+** on the validator (available on Triton's paid beta).
 
 {% tabs %}
 {% tab title="TypeScript" %}
@@ -480,11 +479,11 @@ asyncio.run(stream_deshred())
 {% endtab %}
 {% endtabs %}
 
-**Verify it works:** you should see pre-execution transactions printing before they appear in your Dragon's Mouth stream. Deshred messages arrive approximately 20 ms earlier at p90 (6.3 ms at p50).
+**Verify it works:** you should see pre-execution transactions printing before they appear in your Dragon's Mouth stream. Deshred messages arrive \~20 ms earlier at p75 (6.3 ms at p50).
 
 **What the output looks like:**
 
-```
+```text
 Deshred tx (pre-execution): 5Vk5mYDpFq3vQtXm8ZkRj2PnCwBsHeLfY6gNuoA1T9Kd... slot: 307152834
 ```
 
@@ -612,11 +611,11 @@ async def get_priority_fee(
 
 **What the output looks like:**
 
-```
+```text
 Priority fee (90th pct): 45000 micro-lamports/CU
 ```
 
-The fee is in micro-lamports per compute unit. A typical Raydium swap uses roughly 200,000-400,000 compute units, so 45,000 micro-lamports/CU × 300,000 CU ÷ 1,000,000,000 = \~0.0135 lamports total priority fee, a fraction of a cent at current prices.
+The fee is in micro-lamports per compute unit. A typical Raydium swap uses \~200,000 to 400,000 compute units, so 45,000 micro-lamports/CU × 300,000 CU ÷ 1,000,000 = 13,500 lamports (\~0.0000135 SOL) total priority fee, a fraction of a cent at current prices.
 
 You can layer your own strategy on top of this (for example, adding a fixed buffer during high-volatility periods), or pass it directly to `setComputeUnitPrice` in Step 4:
 
@@ -723,7 +722,7 @@ Set `maxRetries: 0` to disable server-side retries, then implement your own retr
 
 **What the output looks like:**
 
-```
+```text
 Sent: 5Vk5mYDpFq3vQtXm8ZkRj2PnCwBsHeLfY6gNuoA1T9KdEpRsuW3HqXjc...
 ```
 
@@ -741,7 +740,7 @@ if (status?.confirmationStatus === "confirmed" || status?.confirmationStatus ===
 }
 ```
 
-Because you set `maxRetries: 0`, retry logic is entirely in your hands. If the transaction hasn't confirmed within \~30 seconds (the blockhash expiry window), re-fetch a recent blockhash from `confirmed` or `finalized` commitment, re-sign the transaction, and resend.
+Because you set `maxRetries: 0`, retry logic is entirely in your hands. If the transaction hasn't confirmed within \~60 seconds (the blockhash expiry window), re-fetch a recent blockhash from `confirmed` or `finalized` commitment, re-sign the transaction, and resend.
 
 ## Putting it together
 
@@ -858,9 +857,9 @@ Two paths for two types of teams:
 
 <details>
 
-<summary>Do I need all four products?</summary>
+<summary>Do I need all five products?</summary>
 
-Dragon's Mouth and Jet cover the minimum, real-time data in, transactions out. Add Deshred if your strategy depends on acting before the network processes a transaction. Priority Fee API prevents you from overbidding during quiet periods.
+Dragon's Mouth and Jet cover the minimum, real-time data in, transactions out. Add Deshred if your strategy depends on acting before the network processes a transaction. Priority Fee API prevents you from overbidding during quiet periods. Shield is free on Triton and enforces your validator allowlist or blocklist on every send.
 
 </details>
 

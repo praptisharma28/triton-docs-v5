@@ -110,7 +110,7 @@ print(f"Connected - current slot: {slot}")
 
 **What the output looks like:**
 
-```
+```text
 Connected - current slot: 423835852
 ```
 
@@ -237,7 +237,7 @@ def get_wallet_state(wallet_address: str):
 
 **What the output looks like:**
 
-```
+```text
 SOL: 0.0
 Token PhiLR4JDZB9z92rYT5xBXKCxmq4pGB1LYjtybii7aiS: 22100.0
 Token kukb9fv4Y3MGuG1z6TodQqpctkYZjkGnuXQd91U8r1d: 28.0
@@ -433,7 +433,7 @@ asyncio.run(stream_wallet_updates("YourWalletAddressHere"))
 
 **What the output looks like:**
 
-```
+```text
 Account updated: 58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2
   New balance: 4.781558248 SOL
   Slot: 423839570
@@ -582,7 +582,7 @@ def get_transaction_history(wallet_address: str, limit: int = 10):
 
 **What the output looks like:**
 
-```
+```text
 Found 5 transactions
 4x7M5EjrJkuheoRmQCGR... slot=408661772 status=ok
 5Be9V7hfrimVyjHz15kb... slot=377756257 status=ok
@@ -840,13 +840,13 @@ console.log(status.value?.confirmationStatus); // "confirmed" or "finalized"
 
 The priority fee call returns the current network fee before the transaction is built:
 
-```
+```text
 Priority fee (90th pct): 2740943 micro-lamports/CU
 ```
 
 Then the send returns a signature:
 
-```
+```text
 Sent: 5ofMHS3yeHrLReLkij5V9SvcrTZoKajJYaLw8aos2UeM2cupWtARXp1Jrt9WsAKTCcqPbja2vQv8nyxmcurcvwg1
 Status: confirmed ✅
 ```
@@ -1093,7 +1093,7 @@ try {
 
 **What the output looks like:**
 
-```
+```text
 Sent: 4M43KqiKonCP86oqmmb6...........................................
 Status: confirmed ✅
 

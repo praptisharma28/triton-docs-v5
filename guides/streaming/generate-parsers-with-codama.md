@@ -69,7 +69,7 @@ node codama.cjs
 
 The generated folder structure:
 
-```
+```text
 example-parser/
 ├── proto/
 │   └── example_parser.proto

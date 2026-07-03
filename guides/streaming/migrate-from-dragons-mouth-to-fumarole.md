@@ -6,7 +6,7 @@ description: >-
 
 # How to migrate from Dragon's Mouth to Fumarole
 
-Fumarole serves the same Solana data as Dragon's Mouth, with a persistence and delivery layer in front of it: persistent subscribers you can resume after a disconnect, parallel gRPC connections that avoid head-of-line blocking, and automatic reconnect. The client API is close to `yellowstone-grpc`, so most of the work is swapping the client and choosing how you consume the stream.
+Fumarole serves the same Solana data as Dragon's Mouth, with a persistence and delivery layer in front of it: persistent subscribers you can resume after a disconnect, a 4-day data buffer to resume from, parallel gRPC connections that avoid head-of-line blocking, automatic reconnect, and an at-least-once delivery guarantee. The client API is close to `yellowstone-grpc`, so most of the work is swapping the client and choosing how you consume the stream.
 
 ## What changes
 
@@ -104,7 +104,7 @@ let subscription = client
 
 ## Control when progress commits
 
-The subscriber auto-commits its position by default. For at-least-once processing, set `auto_commit: false` and commit only after your slot work succeeds:
+Delivery is at-least-once, resuming from your last committed position. The subscriber auto-commits its position by default; to make the guarantee cover your own processing, set `auto_commit: false` and commit only after your slot work succeeds:
 
 {% tabs %}
 {% tab title="Rust" %}

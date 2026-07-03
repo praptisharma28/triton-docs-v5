@@ -31,7 +31,7 @@ Both options expose the same RPC interface, so you can start managed and migrate
 
 Superbank has three parts, each running as a separate process:
 
-```
+```text
 [Dragon's Mouth / Fumarole / RPC]
           ↓
   superbank (ingestor)      ← Rust binary; runs on your host or in a container
@@ -241,7 +241,7 @@ entries-table: "default.entries"
 
 On first run you'll see the consumer group created, then data flowing:
 
-```
+```text
 INFO superbank::ingest::fumarole: starting superbank fumarole ingest source="fumarole" endpoint=https://your-endpoint.rpcpool.com:443 consumer_group=superbank-mainnet
 INFO superbank::ingest::fumarole: created Fumarole consumer group consumer_group=superbank-mainnet
 INFO superbank::clickhouse: clickhouse insert committed table="default.transactions" rows=4051 slot_min=424497433 slot_max=424497435
@@ -257,7 +257,7 @@ For **historical backfill**, there are two approaches depending on scale.
 
 **Large-scale backfill (recommended): Jetstreamer + Old Faithful**
 
-For ingesting months or years of history, use the Jetstreamer adapter pointed at Triton's [Old Faithful](https://docs.triton.one/project-yellowstone/old-faithful-historical-archive) archival backend. Old Faithful has full history back to genesis and serves data at wire speed, far faster than polling `getBlock` over HTTP. Bound the range with the epoch or slot arguments; see the [Filtering section](https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/how-tos/index-solana-history-with-superbank) for trade-offs if you also want a program filter.
+For ingesting months or years of history, use the Jetstreamer adapter pointed at Triton's [Old Faithful](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/historical-data) archival backend. Old Faithful has full history back to genesis and serves data at wire speed, far faster than polling `getBlock` over HTTP. Bound the range with the epoch or slot arguments; see the [Filtering section](#filtering-to-your-own-transactions) for trade-offs if you also want a program filter.
 
 **Small-to-medium backfill: JSON-RPC source**
 
@@ -279,7 +279,7 @@ Use a Triton HTTP RPC endpoint (available from your [customers.triton.one](https
 
 #### ClickHouse insert retry
 
-For gRPC, RPC, and Bigtable sources, the ingestor retries failed ClickHouse inserts with exponential backoff. Fumarole is excluded — it manages durability at the consumer-group level.
+For gRPC, RPC, and Bigtable sources, the ingestor retries failed ClickHouse inserts with exponential backoff. Fumarole is excluded: it manages durability at the consumer-group level.
 
 | Config key | Env var | Default | Description |
 | --- | --- | --- | --- |
@@ -299,7 +299,7 @@ You'll see log lines as blocks are ingested. The ingestor writes to `transaction
 
 Example output (RPC backfill source):
 
-```
+```text
 INFO superbank: starting name="superbank" version="0.3.0"
 INFO superbank::ingest::rpc: starting superbank ingest source="rpc" from_slot=424274200 to_slot=424274209
 INFO superbank::clickhouse: clickhouse insert committed table="default.transactions" rows=1582 slot=424274200 progress_percent=100.0
@@ -308,7 +308,7 @@ INFO superbank::clickhouse: clickhouse insert committed table="default.blocks_me
 
 Example output (gRPC / Dragon's Mouth live source):
 
-```
+```text
 INFO superbank: starting name="superbank" version="0.3.0"
 INFO superbank::ingest::grpc: starting superbank ingest source="grpc" endpoint=https://your-endpoint.rpcpool.com:443
 INFO superbank::ingest::grpc: gRPC health check passed status="serving"
@@ -346,7 +346,7 @@ CLICKHOUSE_BLOCKS_METADATA_TABLE=default.blocks_metadata \
 ./target/release/superbank-rpc
 ```
 
-By default, all JSON-RPC responses use HTTP `200 OK` — including error bodies. To return HTTP `503 Service Unavailable` on server-side failures (useful for load balancers that route on HTTP status), add `--emit-http-errors` or set `SUPERBANK_RPC_EMIT_HTTP_ERRORS=true`. Only internal errors (`-32603`), timeouts (`-32000`), node unhealthy (`-32005`), and storage unreachable (`-32019`) are promoted to HTTP 503 — client and data-condition errors remain 200 OK.
+By default, all JSON-RPC responses use HTTP `200 OK`, including error bodies. To return HTTP `503 Service Unavailable` on server-side failures (useful for load balancers that route on HTTP status), add `--emit-http-errors` or set `SUPERBANK_RPC_EMIT_HTTP_ERRORS=true`. Only internal errors (`-32603`), timeouts (`-32000`), node unhealthy (`-32005`), and storage unreachable (`-32019`) are promoted to HTTP 503; client and data-condition errors remain 200 OK.
 
 Test it:
 
@@ -533,7 +533,7 @@ CLICKHOUSE_URL=http://localhost:8123 \
 
 On startup you'll see the head cache subscribe to Dragon's Mouth:
 
-```
+```text
 INFO superbank_rpc: starting name="superbank-rpc" version="0.3.0"
 INFO superbank_rpc::server: RPC server listening on http://0.0.0.0:8899
 INFO superbank_rpc::head_cache::dragonsmouth: head cache: subscribed to DragonsMouth block-meta stream endpoint="https://your-endpoint.rpcpool.com:443" min_commitment=Processed
@@ -562,7 +562,7 @@ curl -s http://localhost:8899 \
 The cache holds the last `HEAD_CACHE_RETAIN_SLOTS` slots in memory and merges them with ClickHouse results for `getTransaction` and `getSignatureStatuses` queries.
 
 {% hint style="info" %}
-**RAM requirement.** The head cache itself is lightweight: at the default of 32 slots, it holds roughly 32 × \~1,500 mainnet transactions worth of metadata in memory, typically under 500 MB. The dominant memory cost is ClickHouse: for a full mainnet history, plan for at least 32 GB RAM on the ClickHouse host (64 GB+ for comfortable production operation). The `superbank` and `superbank-rpc` binaries themselves each use well under 2 GB.
+**RAM requirement.** The head cache itself is lightweight: at the default of 32 slots, it holds \~32 × 1,500 mainnet transactions worth of metadata in memory, typically under 500 MB. The dominant memory cost is ClickHouse: for a full mainnet history, plan for at least 32 GB RAM on the ClickHouse host (64 GB+ for comfortable production operation). The `superbank` and `superbank-rpc` binaries themselves each use well under 2 GB.
 {% endhint %}
 
 {% hint style="info" %}
@@ -606,7 +606,7 @@ Configuration:
 
 When compiled with `--features disk-cache` (which implies `grpc-head-cache`) and enabled at runtime, superbank-rpc keeps a RocksDB-backed cache of recent **finalized** slots on local disk. The read tiering becomes:
 
-```
+```text
 head cache (memory, unfinalized tip) → disk cache (finalized, recent slots) → ClickHouse (full history)
 ```
 
@@ -615,10 +615,10 @@ The cache is hydrated from ClickHouse on startup, kept current as the Dragon's M
 Methods served from disk when covered: `getBlock`, `getBlocks`, `getBlocksWithLimit`, `getBlockTime`, `getTransaction`, `getSignatureStatuses`, `getSignaturesForAddress`, and `getTransactionsForAddress` (including `tokenAccounts` filters).
 
 {% hint style="warning" %}
-**Sizing:** at mainnet volume the default 10-epoch window (4,320,000 slots) needs on the order of **15–20 TB** of NVMe even with compression (\~1.5–2 TB per epoch). Set `DISK_CACHE_MAX_BYTES` to bound disk usage — the retention window shrinks to fit.
+**Sizing:** at mainnet volume the default 10-epoch window (4,320,000 slots) needs on the order of **15-20 TB** of NVMe even with compression (\~1.5-2 TB per epoch). Set `DISK_CACHE_MAX_BYTES` to bound disk usage; the retention window shrinks to fit.
 {% endhint %}
 
-Requires `HEAD_CACHE_ENABLED=true` with a `DRAGONSMOUTH_ENDPOINT`. Set `HEAD_CACHE_RETAIN_SLOTS` to at least `150` when the disk cache is enabled (the default `32` is too small — finalized slots are evicted before the disk snapshot hook fires).
+Requires `HEAD_CACHE_ENABLED=true` with a `DRAGONSMOUTH_ENDPOINT`. Set `HEAD_CACHE_RETAIN_SLOTS` to at least `150` when the disk cache is enabled (the default `32` is too small: finalized slots are evicted before the disk snapshot hook fires).
 
 ```bash
 # Build with disk-cache (implies grpc-head-cache)
@@ -641,7 +641,7 @@ Key configuration options:
 | Option | Environment | Default | Notes |
 | ------ | ----------- | ------- | ----- |
 | `--disk-cache-enabled` | `DISK_CACHE_ENABLED` | `false` | Enable at runtime |
-| `--disk-cache-path` | `DISK_CACHE_PATH` | — | RocksDB directory; required when enabled |
+| `--disk-cache-path` | `DISK_CACHE_PATH` | (none) | RocksDB directory; required when enabled |
 | `--disk-cache-retain-slots` | `DISK_CACHE_RETAIN_SLOTS` | `4320000` | Finalized slots to retain (\~10 epochs) |
 | `--disk-cache-max-bytes` | `DISK_CACHE_MAX_BYTES` | `0` | Disk byte budget; `0` = unlimited |
 | `--disk-cache-block-cache-bytes` | `DISK_CACHE_BLOCK_CACHE_BYTES` | `4294967296` | RocksDB block cache (4 GB default) |
@@ -705,7 +705,7 @@ Both binaries expose Prometheus metrics at `/metrics`:
 
 The ingestor tracks insert throughput, batch sizes, and ClickHouse write latency. Watch for any sustained gap between the max ingested slot and the chain tip: this indicates the ingestor is falling behind.
 
-The ingestor also exposes a liveness health check at `http://<host>:9901/health`. It returns `200 OK` while flushing normally, and `503 Service Unavailable` when no successful ClickHouse flush has occurred within `health-stale-secs` seconds (default: 120). Set `health-stale-secs: 0` in your config to disable the staleness check. Add `METRICS_CLUSTER_LABEL` to attach a static `cluster="..."` label to all ingestor metrics — useful for multi-cluster Prometheus setups.
+The ingestor also exposes a liveness health check at `http://<host>:9901/health`. It returns `200 OK` while flushing normally, and `503 Service Unavailable` when no successful ClickHouse flush has occurred within `health-stale-secs` seconds (default: 120). Set `health-stale-secs: 0` in your config to disable the staleness check. Add `METRICS_CLUSTER_LABEL` to attach a static `cluster="..."` label to all ingestor metrics, useful for multi-cluster Prometheus setups.
 
 When running the Fumarole source, the following additional gauges and counters are emitted:
 

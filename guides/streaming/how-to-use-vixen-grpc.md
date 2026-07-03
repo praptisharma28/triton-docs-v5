@@ -10,7 +10,7 @@ Program Data Streams are a high-performance gRPC endpoints that provides real-ti
 
 Powered by the [Yellowstone Vixen](https://github.com/rpcpool/yellowstone-vixen) open-source framework which provides the building blocks to create custom indexes for specific programs, accounts, and transactions. Vixen Streams enables developers to build responsive applications that can react to on-chain events without the complexity of building and maintaining custom parsing infrastructure.
 
-### The Problem
+### The problem
 
 Traditionally, monitoring blockchain activity requires:
 
@@ -18,16 +18,16 @@ Traditionally, monitoring blockchain activity requires:
 * Custom parsing and filtering logic, which is complex to develop and difficult to scale.
 * High infrastructure costs, as developers must manage large volumes of raw blockchain data.
 
-### The Solution
+### The solution
 
 Vixen Streams addresses these pain points by providing:
 
-* gRPC Streaming – Real-time, high-performance delivery of parsed Solana blockchain data.
-* Multi-Program Support – Detailed parsing for multiple Solana programs, with more coming soon.
-* Scalability – Designed to handle high transaction volumes efficiently.
-* TypeScript SDK – A simple and secure SDK for TypeScript applications with token-based authentication, abstracting away gRPC and protobuf complexity.
+* gRPC streaming: real-time, high-performance delivery of parsed Solana blockchain data.
+* Multi-program support: detailed parsing for multiple Solana programs, with more coming soon.
+* Scalability: designed to handle high transaction volumes efficiently.
+* TypeScript SDK: a simple and secure SDK for TypeScript applications with token-based authentication, abstracting away gRPC and protobuf complexity.
 
-## Getting Started
+## Getting started
 
 Install the [Typescript SDK](https://www.npmjs.com/package/@triton-one/vixen-stream)
 
@@ -76,7 +76,7 @@ stream.on("end", () => console.log("end"));
 stream.on("error", (e: Error) => console.log("error: ", e));
 ```
 
-## Supported Programs
+## Supported programs
 
 The following table lists the supported programs and their corresponding addresses. If you need support for additional programs, please reach out to our support.
 

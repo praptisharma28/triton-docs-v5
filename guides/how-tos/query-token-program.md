@@ -41,9 +41,9 @@ When querying the original token program it is important to specify dataSize as 
 {% endtab %}
 {% endtabs %}
 
-### Token22
+### Token-2022
 
-When querying Token 22 you do not add the dataSize parameter but instead filter by the byte on offset 165.
+When querying Token-2022 you do not add the dataSize parameter but instead filter by the byte on offset 165.
 
 {% tabs %}
 {% tab title="getProgramAccounts" %}
@@ -57,7 +57,7 @@ When querying Token 22 you do not add the dataSize parameter but instead filter 
         {
             "filters": [
                 {"memcmp": {"offset":0, "bytes": "FRAGJ157KSDfGvBJtCSrsTWUqFnZhrw4aC8N8LqHuoos"}},
-                {"memcmp": {"offset":165,"bytes": [2] }
+                {"memcmp": {"offset":165,"bytes": "3" }
                 }
             ],
             "encoding": "base64",
@@ -71,7 +71,7 @@ When querying Token 22 you do not add the dataSize parameter but instead filter 
 
 ## Query by owner
 
-The standard method for querying by owner is [`getTokenAccountsByOwner`](https://solana.com/docs/rpc/http/gettokenaccountsbyowner). You can also use getProgramAccounts to query the same data, with the added possibiltiy of more advanced filtering.
+The standard method for querying by owner is [`getTokenAccountsByOwner`](https://solana.com/docs/rpc/http/gettokenaccountsbyowner). You can also use getProgramAccounts to query the same data, with the added possibility of more advanced filtering.
 
 ### Original token program
 
@@ -125,7 +125,7 @@ The standard method for querying by owner is [`getTokenAccountsByOwner`](https:/
 {% endtab %}
 {% endtabs %}
 
-### Token22
+### Token-2022
 
 {% tabs %}
 {% tab title="getTokenAccountsByOwner" %}
@@ -159,7 +159,7 @@ The standard method for querying by owner is [`getTokenAccountsByOwner`](https:/
         {
             "filters": [
                 {"memcmp": {"offset":32, "bytes": "pumpCmXqMfrsAkQ5r49WcJnRayYRqmXz6ae8H7H9Dfn"}},
-                {"memcmp": {"offset":165,"bytes": [2] }
+                {"memcmp": {"offset":165,"bytes": "3" }
                 }
             ],
             "encoding": "base64",
@@ -175,7 +175,7 @@ The standard method for querying by owner is [`getTokenAccountsByOwner`](https:/
 
 A common error you may see when querying Token programs via getProgramAccounts is the following:
 
-```
+```text
 TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA excluded from account secondary indexes; this RPC method unavailable for key
 ```
 
@@ -185,7 +185,7 @@ If you see this error, please double check that you have included the parameters
 
 For a higher level API with better filtering functions, you can also use the Digital Assets API. This API supports both traditional tokens as well as compressed NFTs within the same interface, allowing you to query the full set of tokens owned by a user.
 
-Read more about the Digital Assets API.
+Read more about the [DAS API](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/metaplex-das-api).
 
 ***
 

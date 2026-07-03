@@ -23,7 +23,7 @@ Your endpoints are already provisioned. In the dashboard, select **Solana mainne
 * **Endpoint URL**: `<your-endpoint>.mainnet.rpcpool.com`
 * **Secret token**: a long random string
 
-Keep the token server-side only. Frontend code uses an origin allowlist instead. See Auth and security.
+Keep the token server-side only. Frontend code uses an origin allowlist instead. See [Auth and security](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/authentication).
 {% endstep %}
 
 {% step %}
@@ -82,7 +82,7 @@ A current slot number means you're connected:
 { "jsonrpc": "2.0", "result": 311340987, "id": 1 }
 ```
 
-Hitting a 401, 429, timeout, or gRPC 403? See the Error handling guide for the full debug flow.
+Hitting a 401, 429, timeout, or gRPC 403? See [Error handling](https://app.gitbook.com/s/VeEf321LwceAVlSk9USV/error-handling) for the full debug flow.
 {% endstep %}
 {% endstepper %}
 
