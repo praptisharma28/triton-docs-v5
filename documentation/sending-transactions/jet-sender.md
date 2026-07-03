@@ -16,12 +16,6 @@ Jet sender is billed as standard RPC: each send or simulate call (`sendTransacti
 
 The logic behind Jet sender is open source as the standalone `yellowstone-jet-tpu-client` Rust library, for teams that want to run it themselves for client-side control: per-transaction lifecycle callbacks, custom TPU targeting, routing around the leader schedule, sending to arbitrary peers, or enforcing [Shield](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/shield-mev-protection) policies in your own code. It is built for arbitrage bots, liquidation engines, and custom routers. It depends on Triton's patched Solana crates, pinned with a `[patch.crates-io]` block pointing at `rpcpool/solana-public` at tag `v3.0.6-triton-public`. See the [crate docs](https://docs.rs/yellowstone-jet-tpu-client) for the full quickstart and every constructor option.
 
-## Resources
-
-* Crate: [yellowstone-jet-tpu-client](https://crates.io/crates/yellowstone-jet-tpu-client)
-* API docs: [docs.rs/yellowstone-jet-tpu-client](https://docs.rs/yellowstone-jet-tpu-client)
-* Engine repository: [yellowstone-jet](https://github.com/rpcpool/yellowstone-jet)
-
 ## What's next
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Send a transaction with /sendtx in a few minutes.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/quickstart">Quickstart</a></td></tr><tr><td><i class="fa-shield-halved">:shield-halved:</i> <strong>Shield MEV protection</strong></td><td>Route only through validators you trust.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/shield-mev-protection">Shield MEV protection</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Land more transactions, faster.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/best-practices">Best practices</a></td></tr></tbody></table>

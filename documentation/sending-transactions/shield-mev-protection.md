@@ -155,13 +155,6 @@ Shield is a filter, not a guarantee.
 * **Policies need active maintenance.** New validators join every epoch and a bad actor can appear at any time. A blocklist only protects against what is on it, so the quality of protection depends entirely on how current the list is kept.
 * **Strict policies can drop time-sensitive transactions.** When no eligible leader is available the transaction is dropped, not queued. Be careful pairing a tight allowlist with arbitrage or liquidations.
 
-## Resources
-
-* Repository: [yellowstone-shield](https://github.com/rpcpool/yellowstone-shield)
-* Policy explorer: [validators.app/yellowstone-shield](https://www.validators.app/yellowstone-shield?locale=en\&network=mainnet)
-* Policy store crate: [yellowstone-shield-store](https://crates.io/crates/yellowstone-shield-store)
-* Blog: [Introducing Yellowstone Shield](https://blog.triton.one/introducing-yellowstone-shield) and [Protect your transactions from MEV](https://blog.triton.one/protect-your-transactions-from-mev-with-yellowstone-shield-and-the-tpu-client)
-
 ## What's next
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Send a transaction with /sendtx in a few minutes.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/quickstart">Quickstart</a></td></tr><tr><td><i class="fa-paper-plane">:paper-plane:</i> <strong>Jet sender</strong></td><td>The managed sending engine Shield policies run on.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/jet-sender">Jet sender</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Land more transactions, faster.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/best-practices">Best practices</a></td></tr></tbody></table>

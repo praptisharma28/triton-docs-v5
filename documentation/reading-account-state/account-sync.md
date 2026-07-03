@@ -79,7 +79,182 @@ await connection.getAccountInfo(account, {
 
 `minContextSlot` is checked against the SDK local buffer, not a node. If the stream does not deliver an update at or above that slot before `missTimeoutMs`, the read returns `null`.
 
-## Quickstart
+## Supported methods and helpers
+
+The SDK works as a web3.js-compatible `Connection`. Account reads are served from the stream-fed buffer; every other web3.js method routes to a normal RPC request.
+
+{% tabs %}
+{% tab title="Streaming-backed reads" %}
+| Method                                                   | What it does                                                        |
+| -------------------------------------------------------- | ------------------------------------------------------------------- |
+| `getAccountInfo(publicKey, config?)`                     | Gets one account from the local stream-fed buffer.                  |
+| `getAccountInfoAndContext(publicKey, config?)`           | Gets one account plus a context slot.                               |
+| `getMultipleAccountsInfo(publicKeys, config?)`           | Gets many accounts from the local buffer.                           |
+| `getMultipleAccountsInfoAndContext(publicKeys, config?)` | Gets many accounts plus one context slot.                           |
+| `getParsedAccountInfo(publicKey, config?)`               | Gets one account and returns parsed data when parsing is supported. |
+| `getMultipleParsedAccounts(publicKeys, config?)`         | Gets many parsed accounts.                                          |
+
+{% tabs %}
+{% tab title="getAccountInfo" %}
+```ts
+getAccountInfo(
+  publicKey: PublicKey,
+  commitmentOrConfig?: Commitment | GetAccountInfoConfig,
+): Promise<AccountInfo<Buffer> | null>;
+```
+{% endtab %}
+
+{% tab title="getAccountInfoAndContext" %}
+```ts
+getAccountInfoAndContext(
+  publicKey: PublicKey,
+  commitmentOrConfig?: Commitment | GetAccountInfoConfig,
+): Promise<RpcResponseAndContext<AccountInfo<Buffer> | null>>;
+```
+{% endtab %}
+
+{% tab title="getMultipleAccountsInfo" %}
+```ts
+getMultipleAccountsInfo(
+  publicKeys: PublicKey[],
+  commitmentOrConfig?: Commitment | GetMultipleAccountsConfig,
+): Promise<(AccountInfo<Buffer> | null)[]>;
+```
+{% endtab %}
+
+{% tab title="getMultipleAccountsInfoAndContext" %}
+```ts
+getMultipleAccountsInfoAndContext(
+  publicKeys: PublicKey[],
+  commitmentOrConfig?: Commitment | GetMultipleAccountsConfig,
+): Promise<RpcResponseAndContext<(AccountInfo<Buffer> | null)[]>>;
+```
+{% endtab %}
+
+{% tab title="getParsedAccountInfo" %}
+```ts
+getParsedAccountInfo(
+  publicKey: PublicKey,
+  commitmentOrConfig?: Commitment | GetAccountInfoConfig,
+): Promise<RpcResponseAndContext<AccountInfo<Buffer | ParsedAccountData> | null>>;
+```
+{% endtab %}
+
+{% tab title="getMultipleParsedAccounts" %}
+```ts
+getMultipleParsedAccounts(
+  publicKeys: PublicKey[],
+  rawConfig?: GetMultipleAccountsConfig,
+): Promise<RpcResponseAndContext<(AccountInfo<Buffer | ParsedAccountData> | null)[]>>;
+```
+{% endtab %}
+{% endtabs %}
+{% endtab %}
+
+{% tab title="Stream controls" %}
+| Method                       | What it does                                      |
+| ---------------------------- | ------------------------------------------------- |
+| `addAccounts(accountIds)`    | Adds accounts to the live stream.                 |
+| `removeAccounts(accountIds)` | Stops tracking accounts.                          |
+| `setAccounts(accountIds)`    | Replaces the full tracked account list.           |
+| `close()`                    | Closes the stream and releases resources.         |
+| `getLastTransportError()`    | Returns the latest stream error, if one happened. |
+
+```ts
+addAccounts(accountIds: ReadonlyArray<string | PublicKey>): Promise<void>;
+removeAccounts(accountIds: ReadonlyArray<string | PublicKey>): Promise<void>;
+setAccounts(accountIds: ReadonlyArray<string | PublicKey>): Promise<void>;
+close(): Promise<void>;
+getLastTransportError(): Error | null;
+```
+
+In Node, the config type is `NodeAccountSyncConnectionConfig`; in browser code, it is `BrowserAccountSyncConnectionConfig`.
+{% endtab %}
+
+{% tab title="Account data helpers" %}
+| Helper                                               | What it does                                                                    |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `convertAccountData(data, fromEncoding, toEncoding)` | Converts account data between supported encodings.                              |
+| `encodeAccount(account, encoding, options?)`         | Encodes account info into a Solana RPC-style account shape.                     |
+| `parseJsonParsed(account, options?)`                 | Parses account data into `jsonParsed` form when supported.                      |
+| `loadAccountEncodingWasm()`                          | Loads the WASM account encoder explicitly. Most users do not need this.         |
+
+```ts
+import { convertAccountData } from "@triton-one/triton-sdk";
+
+const base58Data = await convertAccountData(
+  "base64-account-data-here",
+  "base64",
+  "base58",
+);
+
+console.log(base58Data);
+```
+
+Supported encodings: `binary`, `base58`, `base64`, `base64+zstd`, `jsonParsed`. Most users do not need these helpers; use them when you need raw account data in a specific Solana RPC encoding.
+{% endtab %}
+{% endtabs %}
+
+## Install the SDK
+
+```bash
+npm install @triton-one/triton-sdk
+```
+
+The SDK re-exports web3.js types and helpers, so most apps import from one package:
+
+```ts
+import { Connection, PublicKey } from "@triton-one/triton-sdk";
+```
+
+If your app already uses web3.js, the first change is usually the import:
+
+```diff
+- import { Connection, PublicKey } from "@solana/web3.js";
++ import { Connection, PublicKey } from "@triton-one/triton-sdk";
+```
+
+### Migrate from web3.js
+
+For many apps, migration is small:
+
+1. Install `@triton-one/triton-sdk`.
+2. Change imports from `@solana/web3.js` to `@triton-one/triton-sdk`.
+3. Add `accountSync` options to your `Connection`.
+4. Keep calling `getAccountInfo` and `getMultipleAccountsInfo` like before.
+5. Call `close()` when the connection is no longer needed.
+
+{% tabs %}
+{% tab title="Before" %}
+```ts
+import { Connection, PublicKey } from "@solana/web3.js";
+
+const accountId = "ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989";
+const connection = new Connection("https://api.mainnet-beta.solana.com");
+const account = await connection.getAccountInfo(new PublicKey(accountId));
+```
+{% endtab %}
+
+{% tab title="After" %}
+```ts
+import { Connection, PublicKey } from "@triton-one/triton-sdk";
+
+const accountId = "ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989";
+const connection = new Connection("https://api.rpcpool.com/YOUR_TOKEN", {
+  accountSync: {
+    transport: "grpc",
+    initialAccounts: [accountId],
+  },
+});
+
+const account = await connection.getAccountInfo(new PublicKey(accountId));
+
+await connection.close();
+```
+{% endtab %}
+{% endtabs %}
+
+## Get started
 
 Pick your transport: gRPC for Node backends, workers, and scripts; WebSocket for browsers (it also works in Node). Point both at your Triton endpoint: `https://` for gRPC, `wss://` for WebSocket.
 
@@ -407,122 +582,6 @@ Call `close()` when your script, test, or app page is done with the connection. 
 await connection.close();
 ```
 
-## Supported methods and helpers
-
-The SDK works as a web3.js-compatible `Connection`. Account reads are served from the stream-fed buffer; every other web3.js method routes to a normal RPC request.
-
-{% tabs %}
-{% tab title="Streaming-backed reads" %}
-| Method                                                   | What it does                                                        |
-| -------------------------------------------------------- | ------------------------------------------------------------------- |
-| `getAccountInfo(publicKey, config?)`                     | Gets one account from the local stream-fed buffer.                  |
-| `getAccountInfoAndContext(publicKey, config?)`           | Gets one account plus a context slot.                               |
-| `getMultipleAccountsInfo(publicKeys, config?)`           | Gets many accounts from the local buffer.                           |
-| `getMultipleAccountsInfoAndContext(publicKeys, config?)` | Gets many accounts plus one context slot.                           |
-| `getParsedAccountInfo(publicKey, config?)`               | Gets one account and returns parsed data when parsing is supported. |
-| `getMultipleParsedAccounts(publicKeys, config?)`         | Gets many parsed accounts.                                          |
-
-{% tabs %}
-{% tab title="getAccountInfo" %}
-```ts
-getAccountInfo(
-  publicKey: PublicKey,
-  commitmentOrConfig?: Commitment | GetAccountInfoConfig,
-): Promise<AccountInfo<Buffer> | null>;
-```
-{% endtab %}
-
-{% tab title="getAccountInfoAndContext" %}
-```ts
-getAccountInfoAndContext(
-  publicKey: PublicKey,
-  commitmentOrConfig?: Commitment | GetAccountInfoConfig,
-): Promise<RpcResponseAndContext<AccountInfo<Buffer> | null>>;
-```
-{% endtab %}
-
-{% tab title="getMultipleAccountsInfo" %}
-```ts
-getMultipleAccountsInfo(
-  publicKeys: PublicKey[],
-  commitmentOrConfig?: Commitment | GetMultipleAccountsConfig,
-): Promise<(AccountInfo<Buffer> | null)[]>;
-```
-{% endtab %}
-
-{% tab title="getMultipleAccountsInfoAndContext" %}
-```ts
-getMultipleAccountsInfoAndContext(
-  publicKeys: PublicKey[],
-  commitmentOrConfig?: Commitment | GetMultipleAccountsConfig,
-): Promise<RpcResponseAndContext<(AccountInfo<Buffer> | null)[]>>;
-```
-{% endtab %}
-
-{% tab title="getParsedAccountInfo" %}
-```ts
-getParsedAccountInfo(
-  publicKey: PublicKey,
-  commitmentOrConfig?: Commitment | GetAccountInfoConfig,
-): Promise<RpcResponseAndContext<AccountInfo<Buffer | ParsedAccountData> | null>>;
-```
-{% endtab %}
-
-{% tab title="getMultipleParsedAccounts" %}
-```ts
-getMultipleParsedAccounts(
-  publicKeys: PublicKey[],
-  rawConfig?: GetMultipleAccountsConfig,
-): Promise<RpcResponseAndContext<(AccountInfo<Buffer | ParsedAccountData> | null)[]>>;
-```
-{% endtab %}
-{% endtabs %}
-{% endtab %}
-
-{% tab title="Stream controls" %}
-| Method                       | What it does                                      |
-| ---------------------------- | ------------------------------------------------- |
-| `addAccounts(accountIds)`    | Adds accounts to the live stream.                 |
-| `removeAccounts(accountIds)` | Stops tracking accounts.                          |
-| `setAccounts(accountIds)`    | Replaces the full tracked account list.           |
-| `close()`                    | Closes the stream and releases resources.         |
-| `getLastTransportError()`    | Returns the latest stream error, if one happened. |
-
-```ts
-addAccounts(accountIds: ReadonlyArray<string | PublicKey>): Promise<void>;
-removeAccounts(accountIds: ReadonlyArray<string | PublicKey>): Promise<void>;
-setAccounts(accountIds: ReadonlyArray<string | PublicKey>): Promise<void>;
-close(): Promise<void>;
-getLastTransportError(): Error | null;
-```
-
-In Node, the config type is `NodeAccountSyncConnectionConfig`; in browser code, it is `BrowserAccountSyncConnectionConfig`.
-{% endtab %}
-
-{% tab title="Account data helpers" %}
-| Helper                                               | What it does                                                                    |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `convertAccountData(data, fromEncoding, toEncoding)` | Converts account data between supported encodings.                              |
-| `encodeAccount(account, encoding, options?)`         | Encodes account info into a Solana RPC-style account shape.                     |
-| `parseJsonParsed(account, options?)`                 | Parses account data into `jsonParsed` form when supported.                      |
-| `loadAccountEncodingWasm()`                          | Loads the WASM account encoder explicitly. Most users do not need this.         |
-
-```ts
-import { convertAccountData } from "@triton-one/triton-sdk";
-
-const base58Data = await convertAccountData(
-  "base64-account-data-here",
-  "base64",
-  "base58",
-);
-
-console.log(base58Data);
-```
-
-Supported encodings: `binary`, `base58`, `base64`, `base64+zstd`, `jsonParsed`. Most users do not need these helpers; use them when you need raw account data in a specific Solana RPC encoding.
-{% endtab %}
-{% endtabs %}
-
 ## Check stream errors
 
 If account reads keep returning `null`, the stream is the first place to look.
@@ -576,65 +635,6 @@ for (let attempt = 0; attempt < 10; attempt += 1) {
 * **Forgetting to close in scripts.** If a script does not exit, call `await connection.close()`.
 * **Passing a bad public key.** All account ids must be valid Solana public keys.
 * **Expecting old historical state.** The SDK stores the latest streamed state, not a historical database. For account state from a past slot, use a service built for historical reads.
-
-## Install the SDK
-
-```bash
-npm install @triton-one/triton-sdk
-```
-
-The SDK re-exports web3.js types and helpers, so most apps import from one package:
-
-```ts
-import { Connection, PublicKey } from "@triton-one/triton-sdk";
-```
-
-If your app already uses web3.js, the first change is usually the import:
-
-```diff
-- import { Connection, PublicKey } from "@solana/web3.js";
-+ import { Connection, PublicKey } from "@triton-one/triton-sdk";
-```
-
-### Migrate from web3.js
-
-For many apps, migration is small:
-
-1. Install `@triton-one/triton-sdk`.
-2. Change imports from `@solana/web3.js` to `@triton-one/triton-sdk`.
-3. Add `accountSync` options to your `Connection`.
-4. Keep calling `getAccountInfo` and `getMultipleAccountsInfo` like before.
-5. Call `close()` when the connection is no longer needed.
-
-{% tabs %}
-{% tab title="Before" %}
-```ts
-import { Connection, PublicKey } from "@solana/web3.js";
-
-const accountId = "ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989";
-const connection = new Connection("https://api.mainnet-beta.solana.com");
-const account = await connection.getAccountInfo(new PublicKey(accountId));
-```
-{% endtab %}
-
-{% tab title="After" %}
-```ts
-import { Connection, PublicKey } from "@triton-one/triton-sdk";
-
-const accountId = "ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989";
-const connection = new Connection("https://api.rpcpool.com/YOUR_TOKEN", {
-  accountSync: {
-    transport: "grpc",
-    initialAccounts: [accountId],
-  },
-});
-
-const account = await connection.getAccountInfo(new PublicKey(accountId));
-
-await connection.close();
-```
-{% endtab %}
-{% endtabs %}
 
 ## Pricing
 

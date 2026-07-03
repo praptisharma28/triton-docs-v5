@@ -65,13 +65,13 @@ curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> \
   }'
 ```
 
-### Pricing and limits
-
-DAS is billed at `$0.08 / GB` of bandwidth plus `$50 / million` requests.
-
 ## Further reading
 
 Metaplex publishes a JavaScript DAS client with examples: [digital-asset-standard-api](https://github.com/metaplex-foundation/digital-asset-standard-api/tree/main/clients/js#examples). For the protocol and asset model, see [developers.metaplex.com/das-api](https://developers.metaplex.com/das-api).
+
+## Pricing
+
+DAS is billed at `$0.08 / GB` of bandwidth plus `$50 / million` requests.
 
 ## What's next
 

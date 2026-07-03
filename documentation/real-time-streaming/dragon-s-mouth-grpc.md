@@ -23,6 +23,18 @@ When not to use it:
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-timer">:timer:</i> <strong>Sub-slot latency</strong></td><td>Intra-slot updates arrive ~400 ms ahead of standard RPC, which only emits at slot boundaries.</td><td></td></tr><tr><td><i class="fa-filter">:filter:</i> <strong>Server-side filtering</strong></td><td>Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state, all server-side.</td><td></td></tr><tr><td><i class="fa-right-left">:right-left:</i> <strong>Bi-directional streams</strong></td><td>Modify subscriptions on the fly without reconnecting. Send a new request, server swaps your filter set.</td><td></td></tr><tr><td><i class="fa-feather">:feather:</i> <strong>Compact Protobuf payloads</strong></td><td>Binary serialisation cuts bandwidth and CPU. Cheaper to stream, faster to parse.</td><td></td></tr><tr><td><i class="fa-compress">:compress:</i> <strong>Compressed account filters</strong></td><td>Track millions of accounts with a Cuckoo-filter set instead of a raw pubkey list, cutting subscription payloads ~10x.</td><td></td></tr><tr><td><i class="fa-arrows-rotate">:arrows-rotate:</i> <strong>Auto-reconnect and backfill</strong></td><td>The Rust and TS clients automatically reconnect, replay from your last completed slot (up to ~1,000 slots), and dedup the replay window.</td><td></td></tr></tbody></table>
 
+## How it works
+
+Dragon's Mouth taps the validator's Geyser plugin, so updates are pushed the moment the node processes them instead of waiting on a polling loop. You open a gRPC stream, send a `SubscribeRequest` describing the accounts, transactions, slots, blocks, or entries you want, and matching updates arrive as protobuf messages at your chosen commitment level (`processed`, `confirmed`, or `finalized`). The same stream accepts updated requests, the service answers one-shot unary calls, and on reconnect you can replay from a recent slot so a brief disconnect costs you nothing.
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
+flowchart LR
+    v["Validator<br/>(Geyser plugin)"] --> dm["Dragon's Mouth<br/>Yellowstone gRPC"] --> app["Your app"]
+    app -.->|"SubscribeRequest (filters)"| dm
+    style app fill:#D6EAF8,stroke:#259DD0
+```
+
 ## Stream types and unary operations
 
 Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscriptions and one-shot unary calls you can use for occasional queries.
@@ -1388,13 +1400,6 @@ If you're experiencing errors, you can sanity-check your endpoint with Triton's 
 ## Pricing
 
 Dragon's Mouth is billed at `$0.08 / GB` of bandwidth. You only pay for the data streamed.
-
-## Resources
-
-* Source: [rpcpool/yellowstone-grpc](https://github.com/rpcpool/yellowstone-grpc)
-* Rust client: [yellowstone-grpc-client](https://crates.io/crates/yellowstone-grpc-client)
-* Node / TypeScript SDK: [@triton-one/yellowstone-grpc](https://www.npmjs.com/package/@triton-one/yellowstone-grpc)
-* Examples: [Rust, TypeScript, Python, and Go](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples)
 
 ## What's next
 

@@ -6,17 +6,6 @@ description: Stream Solana transactions reconstructed from shreds before the nod
 
 Deshred is a separate gRPC method on the Yellowstone gRPC service, same as Dragon's Mouth. It delivers transactions reconstructed from shreds before the node executes them.
 
-Unlike the standard `Subscribe` transaction stream, deshred updates are emitted **before** Replay. You receive the decoded transaction earlier, but without execution context.
-
-```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
-flowchart LR
-    s["Shreds"] --> r["Reconstruct<br/>transactions"]
-    r --> e["Execute + replay"] --> g["Regular gRPC"]
-    r --> d["Deshred transactions<br/>(pre-execution, ~20 ms earlier)"]
-    style d fill:#D6EAF8,stroke:#259DD0
-```
-
 ## Use cases
 
 Deshred is for strategies that act on the earliest possible signal:
@@ -30,6 +19,19 @@ Deshred is for strategies that act on the earliest possible signal:
 ## Features and benefits
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-eye">:eye:</i> <strong>Earliest signal</strong></td><td>Pre-execution stream from raw shreds. ~20ms ahead at p75 vs confirmed transactions.</td><td></td></tr><tr><td><i class="fa-code-fork">:code-fork:</i> <strong>Same gRPC interface</strong></td><td>Drops into your existing Dragon's Mouth pipeline. Separate method, same client.</td><td></td></tr><tr><td><i class="fa-tags">:tags:</i> <strong>Resolved ALT addresses</strong></td><td>Includes writable and readonly addresses resolved from Address Lookup Tables.</td><td></td></tr></tbody></table>
+
+## How it works
+
+Unlike the standard `Subscribe` transaction stream, deshred updates are emitted **before** Replay. You receive the decoded transaction earlier, but without execution context.
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
+flowchart LR
+    s["Shreds"] --> r["Reconstruct<br/>transactions"]
+    r --> e["Execute + replay"] --> g["Regular gRPC"]
+    r --> d["Deshred transactions<br/>(pre-execution, ~20 ms earlier)"]
+    style d fill:#D6EAF8,stroke:#259DD0
+```
 
 ## Filter configuration
 
