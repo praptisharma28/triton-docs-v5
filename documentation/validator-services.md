@@ -4,9 +4,9 @@ description: Run a branded Solana validator or stake with Triton for weekly USDC
 
 # Validator services
 
-There are two paths to earning with Solana validators on Triton: run a validator under your own brand, or stake your SOL for weekly USDC pay-outs with nothing to operate.
+There are two paths to monetise your SOL with Triton infrastructure: get a white-label validator under your own brand, or stake your SOL with our Private Trusted Validator for weekly USDC pay-outs.
 
-The dividing line is stake size. From \~150,000 SOL, a branded validator pays for itself: you keep 100% of commission, gain on-chain brand visibility, and vote on governance, while Triton handles hardware, upgrades, and failover. Below that, running a validator operates at a loss, so staking for pay-outs wins on economics. Full break-even math and provider-evaluation criteria: [Comprehensive guide to white-label validators on Solana](https://blog.triton.one/comprehensive-guide-to-white-label-validators-on-solana/).
+In both cases Triton handles all the ops; your stake size and use case decide between them. Below \~150,000 SOL (at the time of writing), running a validator operates at a loss, so staking your SOL (from 2,500 SOL) for USDC pay-outs wins on economics.
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>White-label validators</strong></td><td>Triton runs a Solana validator under your brand and your keys; you keep your delegators. Sales-led (KYC and contract).</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/validator-services/white-label-validators">White-label validators</a></td></tr><tr><td><strong>SOL staking (USDC pay-outs)</strong></td><td>Delegate SOL to a Triton validator and receive rewards weekly in USDC. 2,500 SOL minimum.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/validator-services/sol-staking-usdc-pay-outs">SOL staking (USDC pay-outs)</a></td></tr></tbody></table>
 
