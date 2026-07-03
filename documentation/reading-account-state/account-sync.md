@@ -85,8 +85,8 @@ The SDK works as a web3.js-compatible `Connection`. Account reads are served fro
 
 {% tabs %}
 {% tab title="Streaming-backed reads" %}
-| Method                                                   | What it does                                                        |
-| -------------------------------------------------------- | ------------------------------------------------------------------- |
+| Method | Returns |
+| --- | --- |
 | `getAccountInfo(publicKey, config?)`                     | Gets one account from the local stream-fed buffer.                  |
 | `getAccountInfoAndContext(publicKey, config?)`           | Gets one account plus a context slot.                               |
 | `getMultipleAccountsInfo(publicKeys, config?)`           | Gets many accounts from the local buffer.                           |
@@ -152,8 +152,8 @@ getMultipleParsedAccounts(
 {% endtab %}
 
 {% tab title="Stream controls" %}
-| Method                       | What it does                                      |
-| ---------------------------- | ------------------------------------------------- |
+| Method | Returns |
+| --- | --- |
 | `addAccounts(accountIds)`    | Adds accounts to the live stream.                 |
 | `removeAccounts(accountIds)` | Stops tracking accounts.                          |
 | `setAccounts(accountIds)`    | Replaces the full tracked account list.           |
@@ -172,8 +172,8 @@ In Node, the config type is `NodeAccountSyncConnectionConfig`; in browser code, 
 {% endtab %}
 
 {% tab title="Account data helpers" %}
-| Helper                                               | What it does                                                                    |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------- |
+| Helper | Returns |
+| --- | --- |
 | `convertAccountData(data, fromEncoding, toEncoding)` | Converts account data between supported encodings.                              |
 | `encodeAccount(account, encoding, options?)`         | Encodes account info into a Solana RPC-style account shape.                     |
 | `parseJsonParsed(account, options?)`                 | Parses account data into `jsonParsed` form when supported.                      |

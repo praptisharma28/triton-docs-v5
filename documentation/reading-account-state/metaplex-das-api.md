@@ -32,13 +32,22 @@ Over the last two years we've delivered major open-source enhancements to DAS: i
 
 ## Supported methods
 
-Every method's parameters and example request and response are in the [DAS API reference](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/readme/das-api). Grouped by what they do:
+Every method's parameters and example request and response are in the [DAS API reference](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/readme/das-api).
 
-| Group | Methods |
+| Method | Returns |
 | --- | --- |
-| **Read assets** | `getAsset`, `getAssets`, `getAssetBatch`, `getAssetProof`, `getAssetProofBatch` |
-| **List assets** | `getAssetsByOwner`, `getAssetsByAuthority`, `getAssetsByCreator`, `getAssetsByGroup`, `searchAssets` |
-| **Tokens, editions, and history** | `getTokenAccounts`, `getTokenLargestAccounts`, `getNftEditions`, `getSignaturesForAsset` |
+| `getAsset` | A single asset by ID: metadata, ownership, royalty, and collection |
+| `getAssets`, `getAssetBatch` | Multiple assets by ID in one call |
+| `getAssetProof`, `getAssetProofBatch` | Merkle proofs for compressed assets |
+| `getAssetsByOwner` | Assets owned by an address |
+| `getAssetsByAuthority` | Assets controlled by an authority |
+| `getAssetsByCreator` | Assets created by a creator address |
+| `getAssetsByGroup` | Assets in a group, for example a collection |
+| `searchAssets` | Assets matching your search criteria |
+| `getTokenAccounts` | Token accounts by owner or mint |
+| `getTokenLargestAccounts` | The largest token accounts for a mint |
+| `getNftEditions` | Edition NFTs printed from a master edition |
+| `getSignaturesForAsset` | Transaction signatures for a compressed asset |
 
 `getAssetsByGroup` is temporarily disabled for performance work.
 

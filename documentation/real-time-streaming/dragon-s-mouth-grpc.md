@@ -53,14 +53,14 @@ Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscr
 {% endtab %}
 
 {% tab title="Unary operations" %}
-| Method                | What it does                                                              |
-| --------------------- | -------------------------------------------------------------------- |
-| `getLatestBlockhash`  | Returns the latest blockhash + last valid block height at a commitment level |
-| `getBlockHeight`      | Returns the current block height at a commitment level |
-| `getSlot`             | Returns the current slot at a commitment level |
-| `isValidBlockhash`    | Returns whether a given blockhash is still valid |
-| `subscribeReplayInfo` | Returns earliest slot still available for stream replay |
-| `getVersion`          | Returns the Geyser gRPC plugin and Solana version |
+| Method | Returns |
+| --- | --- |
+| `getLatestBlockhash`  | The latest blockhash + last valid block height at a commitment level |
+| `getBlockHeight`      | The current block height at a commitment level |
+| `getSlot`             | The current slot at a commitment level |
+| `isValidBlockhash`    | Whether a given blockhash is still valid |
+| `subscribeReplayInfo` | Earliest slot still available for stream replay |
+| `getVersion`          | The Geyser gRPC plugin and Solana version |
 | `ping`                | Liveness check; the server replies with a `pong` |
 {% endtab %}
 {% endtabs %}

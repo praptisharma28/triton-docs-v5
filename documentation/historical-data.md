@@ -49,7 +49,7 @@ For the full architecture (storage layout, materialised views, tiered storage) s
 
 The complete ledger from genesis: every block, transaction, and entry. Most Superbank methods match standard Solana JSON-RPC exactly; a few add an optional parameter or extend it.
 
-| Method | What it does |
+| Method | Returns |
 | --- | --- |
 | `getBlock`, `getBlocks`, `getBlocksWithLimit`, `getBlockTime`, `getBlockHeight`, `getSlot`, `getTransactionCount`, `getLatestBlockhash`, `getFirstAvailableBlock`, `getInflationReward`, `getSignatureStatuses`, `getHealth`, `minimumLedgerSlot` | Standard Solana JSON-RPC |
 | `getTransaction` | Standard, plus Triton's optional `slot` hint (`u64`): skips the ledger-wide signature search by querying that exact slot. The response is `null` if the signature isn't present in that slot |
