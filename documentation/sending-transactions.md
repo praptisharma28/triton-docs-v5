@@ -9,7 +9,8 @@ layout:
 
 You build and sign a transaction, then submit it so a validator includes it in a block. Landing reliably under load comes down to a few things:
 
-* **Delivery.** Reaching the current leader quickly, with stake-weighted quality of service (SWQoS) so your transaction is prioritised.
+* **Delivery.** Reaching the current leader quickly.
+* **SWQoS.** Stake-weighted quality of service so your transaction is prioritised, added by default on every Triton endpoint.
 * **Fees.** Attaching a priority fee that reflects the real market rate.
 * **Protection.** Optionally restricting which validators can process your transaction, to avoid harmful MEV.
 
