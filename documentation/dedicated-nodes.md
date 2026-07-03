@@ -8,17 +8,36 @@ description: >-
 
 A dedicated node is single-tenant Triton infrastructure: a bare-metal server, or a cluster of them, that only you use. You get your own endpoint, isolated capacity no other customer shares (so there are no noisy neighbours), open rate limits, and a fixed monthly price with no per-query metering.
 
-Triton's shared infrastructure is the opposite trade: multi-tenant, globally distributed, and billed per usage. Shared suits front-ends, dashboards, and most production reads. Dedicated suits streaming, indexing, and latency-sensitive backends that want isolation, maximum throughput, and the lowest, steadiest latency.
-
 Dedicated nodes are provisioned for **gRPC streaming** and other **single-purpose clusters** (for example a dedicated DAS or custom-indexing cluster). Each cluster runs one job; mixed-purpose nodes are not offered.
 
-This is the hybrid model most teams run: dedicated nodes carry the heavy backend workloads, streaming and indexing, while JSON-RPC reads (`getAccountInfo`, `getProgramAccounts`, `getTransaction`, and the rest) run on Triton's shared, globally distributed infrastructure.
+## Shared vs dedicated
 
-## When to choose one
+| | Shared infrastructure | Dedicated node |
+| --- | --- | --- |
+| Tenancy | Multi-tenant | Single-tenant, bare metal |
+| Geo-distribution | Globally distributed, geo-routed | One region of your choice (Europe, North America, Asia, Pacific) |
+| Auto-failover | Yes, across the global cluster | Yes, fails over to the shared cluster |
+| Rate and connection limits | Flexible limits, tuned per plan | Open, no rate limits |
+| Billing | Usage-based: `$0.08 / GB` plus per-call rates. Minimum deposit `$125`, usable across all services, valid 12 months | Fixed monthly price per node; streaming nodes start at `$2,900 / month`, no metering or overage |
+| JSON-RPC reads | Served in place | Routed to the shared cluster and billed separately, per usage |
 
-Choose a dedicated node for the workloads it is built for: sustained gRPC streaming, heavy indexing, and ultra-low-latency paths. The value is not a one-off low ping, it is predictable latency and low jitter under sustained load, because no neighbour's traffic burst can knock you off. Shared infrastructure is cost-effective and globally distributed, but it is rate-limited to protect other tenants, so some latency variance is unavoidable. For the full breakdown, see [shared vs dedicated RPC infrastructure](https://blog.triton.one/practical-guide-to-enterprise-solana-rpc-infrastructure/).
+The cost cut-over is simple to estimate: at `$0.08 / GB`, streaming about 36 TB a month on shared costs the same as a `$2,900` dedicated node. Above that, or when you need guaranteed isolation, dedicated wins. Compare your own volume against the [pricing page](https://triton.one/pricing).
 
-It is also a cost decision. On shared you pay for what you use; a dedicated node is a flat monthly price. If your streaming volume is large and steady, the fixed price is both cheaper and more predictable. Compare your usage against the [pricing page](https://triton.one/pricing).
+This is also why the hybrid model is what most teams run: dedicated nodes carry the heavy backend workloads, streaming and indexing, while JSON-RPC reads (`getAccountInfo`, `getProgramAccounts`, `getTransaction`, and the rest) run on Triton's shared, globally distributed infrastructure.
+
+## Use cases
+
+Choose a dedicated node for the workloads it is built for:
+
+* **Sustained gRPC streaming** at high volume, where a fixed price beats metered bandwidth.
+* **Heavy indexing** and other single-purpose clusters (DAS, custom indexes) that need full, uncontended throughput.
+* **Ultra-low-latency backends.** The value is not a one-off low ping, it is predictable latency and low jitter under sustained load, because no neighbour's traffic burst can knock you off.
+
+Not for front-ends, dashboards, or general production reads: shared infrastructure is cost-effective, globally distributed, and the right answer there. For the full breakdown, see [shared vs dedicated RPC infrastructure](https://blog.triton.one/practical-guide-to-enterprise-solana-rpc-infrastructure/).
+
+## Features and benefits
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-server">:server:</i> <strong>Isolated capacity</strong></td><td>A bare-metal server only you use. No noisy neighbours, no contention, maximum throughput.</td><td></td></tr><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Open rate limits</strong></td><td>No rate or connection limits on your endpoint. Push it as hard as your workload needs.</td><td></td></tr><tr><td><i class="fa-coins">:coins:</i> <strong>Fixed monthly price</strong></td><td>Streaming nodes start at $2,900 / month with no metering or overage billing.</td><td></td></tr><tr><td><i class="fa-globe">:globe:</i> <strong>Your choice of region</strong></td><td>Europe, North America, Asia, or the Pacific, so you can colocate your backend next to the node.</td><td></td></tr><tr><td><i class="fa-shield">:shield:</i> <strong>Logging-policy control</strong></td><td>Pick the logging policy your legal or privacy requirements demand: Max Privacy, Enhanced Privacy (default), or GDPR Privacy.</td><td></td></tr><tr><td><i class="fa-arrows-rotate">:arrows-rotate:</i> <strong>Automatic failover</strong></td><td>If your node restarts or falls behind the tip, traffic fails over to the shared cluster and your stream keeps flowing.</td><td></td></tr></tbody></table>
 
 ## What you can configure
 
@@ -26,17 +45,39 @@ It is also a cost decision. On shared you pay for what you use; a dedicated node
 * The hardware tier.
 * The region: dedicated nodes are available in Europe, North America, Asia, and the Pacific.
 * Access controls: token auth and allowed origins on your endpoint.
+* The logging policy: **Max Privacy** (no request parameters or payloads logged), **Enhanced Privacy** (the default: method parameters may be logged, but a transaction's signer is never linked to an originating IP), or **GDPR Privacy** (full logging for support, legal, or compliance needs). See [privacy and data protection](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/privacy-and-security).
 
 ## Getting started
 
 Dedicated nodes are set up with our team, not self-serve.
 
-1. **Talk to us.** Reach out through [contact sales](https://triton.one/contact). A short know-your-customer step collects your contact and location details.
-2. **Scope your node.** A discovery call covers your streaming volume, regions, and the job the cluster will run (gRPC streaming, DAS, or indexing). You agree the specs, region, and number of nodes before anything is deployed.
-3. **Provisioning.** Hardware is ordered to spec and set up as a dedicated subscription in your [customer dashboard](https://customers.triton.one). Because nodes are built to order rather than kept in stock, expect a short lead time. There are no same-day trials.
-4. **Connect.** Your node has its own endpoint, `https://<your-endpoint>.mainnet.rpcpool.com`. Point your gRPC client at it with your endpoint URL and token, exactly as you would any Triton endpoint. For client code in TypeScript, Rust, and Go, see [Dragon's Mouth gRPC](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc).
+{% stepper %}
+{% step %}
+### Talk to us
 
-Pricing is a fixed monthly price per node with no metered or overage billing; see the [pricing page](https://triton.one/pricing).
+Reach out through [contact sales](https://triton.one/contact). A short know-your-customer step collects your contact and location details.
+{% endstep %}
+
+{% step %}
+### Scope your node
+
+A discovery call covers your streaming volume, regions, and the job the cluster will run (gRPC streaming, DAS, or indexing). You agree the specs, region, and number of nodes before anything is deployed.
+{% endstep %}
+
+{% step %}
+### Provisioning
+
+Hardware is ordered to spec and set up as a dedicated subscription in your [customer dashboard](https://customers.triton.one). Because nodes are built to order rather than kept in stock, expect a short lead time. There are no same-day trials.
+{% endstep %}
+
+{% step %}
+### Connect
+
+Your node has its own endpoint, `https://<your-endpoint>.mainnet.rpcpool.com`. Point your gRPC client at it with your endpoint URL and token, exactly as you would any Triton endpoint. For client code in TypeScript, Rust, and Go, see [Dragon's Mouth gRPC](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc).
+{% endstep %}
+{% endstepper %}
+
+Pricing is a fixed monthly price per node, starting at `$2,900 / month` for streaming nodes, with no metered or overage billing; see the [pricing page](https://triton.one/pricing).
 
 ## Best practices
 
@@ -44,7 +85,7 @@ Pricing is a fixed monthly price per node with no metered or overage billing; se
 * **Run your backend close to the node.** gRPC streams are backend-to-backend, so geographic distance is the main latency factor. Place your service in the same region as your node rather than relying on geo-distribution.
 * **Use the regional endpoint** where a product has one, connecting to the regional hostname rather than the shared geo-routed one.
 * **Filter to cut volume.** Server-side filters (skip votes, restrict to the accounts and programs you care about) reduce both bandwidth and cost. See [streaming best practices](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/best-practices).
-* **Failover is automatic.** Nodes fail over into a backup pool, so a single node restarting or briefly falling behind the chain tip does not interrupt your stream.
+* **Failover is automatic.** If your node restarts or briefly falls behind the chain tip, traffic fails over to the shared cluster, so your stream is not interrupted.
 
 ## What's next
 
