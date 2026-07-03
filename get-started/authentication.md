@@ -140,7 +140,7 @@ If a misconfigured proxy causes abusive traffic, we'll be forced to severely lim
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-laptop">:laptop:</i> <strong>Platform overview</strong></td><td>Where to get your endpoint and token, monitor usage, and top up your balance.</td><td><a href="https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/platform-overview">https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/platform-overview</a></td></tr><tr><td><i class="fa-shield-halved">:shield-halved:</i> <strong>Privacy and data protection</strong></td><td>Triton's defence-in-depth security model and how your data is protected.</td><td><a href="https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/privacy-and-security">https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/privacy-and-security</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-laptop">:laptop:</i> <strong>Platform overview</strong></td><td>Where to get your endpoint and token, monitor usage, and top up your balance.</td><td><a href="https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/platform-overview">Platform overview</a></td></tr><tr><td><i class="fa-shield-halved">:shield-halved:</i> <strong>Privacy and data protection</strong></td><td>Triton's defence-in-depth security model and how your data is protected.</td><td><a href="https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/privacy-and-security">https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/privacy-and-security</a></td></tr></tbody></table>
 
 ***
 
