@@ -47,10 +47,8 @@ const res = await fetch("https://<your-endpoint>.mainnet.rpcpool.com/<your-token
 console.log((await res.json()).result);
 ```
 {% endtab %}
-{% endtabs %}
 
-### Expected response
-
+{% tab title="Response" %}
 An array of signature objects, newest first:
 
 ```json
@@ -69,6 +67,8 @@ An array of signature objects, newest first:
   "id": 1
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 Each result carries the `signature`, `slot`, `blockTime`, and `err`. Take a `signature` from the response for the next step.
 
@@ -105,10 +105,8 @@ const res = await fetch("https://<your-endpoint>.mainnet.rpcpool.com/<your-token
 console.log((await res.json()).result);
 ```
 {% endtab %}
-{% endtabs %}
 
-### Expected response
-
+{% tab title="Response" %}
 The full transaction, decoded. Trimmed:
 
 ```json
@@ -123,6 +121,8 @@ The full transaction, decoded. Trimmed:
   "id": 1
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 This is the standard two-step pattern: one call to discover signatures, then one `getTransaction` per signature. For a busy address, that becomes an N+1 round-trip flow.
 
@@ -159,10 +159,8 @@ const res = await fetch("https://<your-endpoint>.mainnet.rpcpool.com/<your-token
 console.log((await res.json()).result);
 ```
 {% endtab %}
-{% endtabs %}
 
-### Expected response
-
+{% tab title="Response" %}
 A `data` array of transactions plus a `paginationToken`, all in one response:
 
 ```json
@@ -183,6 +181,8 @@ A `data` array of transactions plus a `paginationToken`, all in one response:
   "id": 1
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 Filters apply server-side and pagination uses a single cursor. For example, only successful transactions within a slot range:
 
