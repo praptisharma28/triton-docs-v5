@@ -60,6 +60,14 @@ The single and multiple account reads (`getAccountInfo`, `getMultipleAccounts`) 
 * **Light Protocol (ZK Compression) accounts** are not served by `getProgramAccounts` or the Yellowstone streams.
 * **Commitment.** Cloudbreak ingests from a gRPC stream at `confirmed` commitment, so `processed` is not served on the methods routed through Cloudbreak.
 
+## Pricing
+
+| What | Price |
+| --- | --- |
+| Account and token reads (Cloudbreak Accounts) | Standard RPC: `$0.08 / GB` of bandwidth plus `$10 / million` calls, indexing included |
+| Account Sync | Bandwidth only, `$0.08 / GB` of streamed data, no per-call charge |
+| Metaplex DAS API | `$0.08 / GB` of bandwidth plus `$50 / million` requests |
+
 ## What's next
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Query account state via JSON-RPC and set up Account Sync in under 2 minutes.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/quickstart">Quickstart</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>How to reach the lowest latency, maximum performance, and minimum cost on your account state reads.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/best-practices">Best practices</a></td></tr></tbody></table>
