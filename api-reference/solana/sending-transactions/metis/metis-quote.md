@@ -1,12 +1,12 @@
 ---
 description: >-
-  Get a swap route and quote from the Metis Swap API, Triton's self-hosted
+  Get a swap route and quote from the Metis Swap API, Triton's hosted
   Jupiter routing engine.
 ---
 
 # Metis /quote
 
-Metis is Jupiter's routing and quote engine, self-hosted on Triton (no staked $JUP required). The `/metis/quote` endpoint scans 20+ DEXes and AMMs, finds the optimal route, splits trades when it helps, and returns a quote ready to turn into a signed transaction. Triton also enables circular arbitrage routes (USDC to token to USDC), which Jupiter's public API disables by default.
+Metis is Triton's hosted quoting and routing engine (no staked $JUP required). The `/metis/quote` endpoint scans 20+ DEXes and AMMs, finds the optimal route, splits trades when it helps, and returns a quote ready to turn into a signed transaction. Triton also enables circular arbitrage routes (USDC to token to USDC), which Jupiter's public API disables by default.
 
 ## Request
 

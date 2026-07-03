@@ -2,9 +2,9 @@
 description: Simulate Jito transaction bundles with Triton's Jito RPC support.
 ---
 
-# Jito bundles
+# Jito bundle simulation
 
-Triton enables Jito RPC on every plan, which gives you Jito's improved simulation support so you can simulate bundles of transactions.
+Triton supports Jito's `simulateBundle` method on every plan, so you can test atomic transaction bundles on a Jito-enabled RPC before submitting them.
 
 {% hint style="warning" %}
 **Triton simulates Jito bundles, it does not forward them.** `simulateBundle` runs on Triton's Jito-enabled RPC nodes. Submitting a bundle for inclusion uses `sendBundle`, a Jito-exclusive call that needs a direct, active connection to the Jito Block Engine, so it does not route through Triton. To send bundles, connect to the Jito Block Engine yourself: your IP must be whitelisted with Jito to use those features.

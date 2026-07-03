@@ -26,7 +26,7 @@
   * [Trading APIs](sending-transactions/3rd-party-apis/README.md)
     * [Metis swap API](sending-transactions/3rd-party-apis/metis-swap-api.md)
     * [Titan swap API](sending-transactions/3rd-party-apis/titan-swap-api.md)
-    * [Jito bundles](sending-transactions/3rd-party-apis/jito-bundles.md)
+    * [Jito bundle simulation](sending-transactions/3rd-party-apis/jito-bundles.md)
   * [Best practices](sending-transactions/sending-transactions/best-practices.md)
 * [Validator services](validator-services.md)
   * [White-label validators](validator-services/white-label-validators.md)

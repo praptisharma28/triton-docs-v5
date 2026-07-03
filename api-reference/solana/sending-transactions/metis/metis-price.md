@@ -1,5 +1,5 @@
 ---
-description: Get token prices from the Metis Swap API, Triton's self-hosted Jupiter engine.
+description: Get token prices from the Metis Swap API, Triton's hosted quoting engine.
 ---
 
 # Metis /price

@@ -1,12 +1,12 @@
 ---
-description: Swap routing and bundle APIs Triton hosts for trading apps on Solana.
+description: Quoting, routing, swap, and bundle APIs Triton hosts for easy integration into your trading stack.
 ---
 
 # Trading APIs
 
-Swap routing and transaction-bundle APIs Triton hosts for trading apps: on-demand and real-time swap quotes, plus Jito bundle simulation.
+If you don't want to wire your own quoting, routing, or swap logic, or you need to simulate a bundle through a Jito-enabled RPC, Triton hosts the pieces out of the box: on-demand and real-time swap quotes, ready-to-sign swaps, and Jito bundle simulation.
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-route">:route:</i> <strong>Metis swap API</strong></td><td>Jupiter's routing and quote engine, self-hosted on Triton, no staked JUP required. Scans 20+ DEXes and AMMs and builds ready-to-sign swaps.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/metis-swap-api">Metis swap API</a></td></tr><tr><td><i class="fa-bolt">:bolt:</i> <strong>Titan swap API</strong></td><td>Streams swap quotes in real time over WebSocket, powered by the Argos meta-aggregator and DART. Low-latency live pricing for frontends.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/titan-swap-api">Titan swap API</a></td></tr><tr><td><i class="fa-cubes">:cubes:</i> <strong>Jito bundles</strong></td><td>Jito RPC on every plan, with Jito's improved simulation so you can simulate bundles of transactions.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/jito-bundles">Jito bundles</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-route">:route:</i> <strong>Metis swap API</strong></td><td>Quoting, routing, and ready-to-sign swaps across 20+ DEXes and AMMs, hosted by Triton. No staked JUP required.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/metis-swap-api">Metis swap API</a></td></tr><tr><td><i class="fa-bolt">:bolt:</i> <strong>Titan swap API</strong></td><td>Streams swap quotes in real time over WebSocket, powered by the Argos meta-aggregator and DART. Low-latency live pricing for frontends.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/titan-swap-api">Titan swap API</a></td></tr><tr><td><i class="fa-cubes">:cubes:</i> <strong>Jito bundle simulation</strong></td><td>Triton supports the <code>simulateBundle</code> method on Jito-enabled RPC, so you can test atomic transaction bundles before submitting them.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/jito-bundles">Jito bundle simulation</a></td></tr></tbody></table>
 
 ***
 
