@@ -22,7 +22,7 @@
 * [Sending transactions](sending-transactions.md)
   * [Quickstart](sending-transactions/sending-transactions/quickstart.md)
   * [Priority fees API](sending-transactions/priority-fees-api.md)
-  * [Shield MEV protection](sending-transactions/shield-mev-protection.md)
+  * [Shield Protection](sending-transactions/shield-mev-protection.md)
   * [Trading APIs](sending-transactions/3rd-party-apis/README.md)
     * [Metis swap API](sending-transactions/3rd-party-apis/metis-swap-api.md)
     * [Titan swap API](sending-transactions/3rd-party-apis/titan-swap-api.md)

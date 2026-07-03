@@ -2,29 +2,56 @@
 description: Route Solana transactions only through validators you trust, using an on-chain policy.
 ---
 
-# Shield MEV protection
+# Shield Protection
 
 Yellowstone Shield lets you control which validators handle your Solana transactions. You create an on-chain policy listing validators you trust (an allowlist) or do not trust (a blocklist), attach the policy when you send, and your transaction only goes to validators that match.
 
 Solana's leader schedule is deterministic, so you often know which validator will process your transaction. If that leader runs sandwich attacks, frontrunning, or other harmful MEV, a normal send still routes to them. Shield is how you opt out. Background: [Introducing Yellowstone Shield](https://blog.triton.one/introducing-yellowstone-shield).
 
-## Two ways to apply a policy
+## Use cases
 
-| Path                        | How                                                                                                                                                    | Use it when                                                            |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
-| **Triton RPC (SWQoS)**    | Add `forwardingPolicies` to your `sendTransaction` call. Triton checks the policy and routes for you.                                                  | You send through Triton RPC and want zero extra infrastructure.        |
-| **Jet TPU client (direct)** | Call `send_txn_with_shield_policies` from the [Jet TPU client](https://github.com/rpcpool/yellowstone-jet). Your code connects to validator TPUs and enforces the policy itself. | You run your own sender and need RPC-independent control over routing. |
+* **Trading apps and wallets** protecting swaps from sandwich attacks and frontrunning by never sending to validators known for them.
+* **Senders that route only to vetted validators**: top validators by stake, geographically distributed sets, or performance-based allowlists.
+* **RPC providers and transaction forwarders** enforcing policy-based routing for their users.
 
-Either way the policy lives on-chain and the enforcement is identical: if the current leader is not allowed, the transaction is dropped, not queued.
+## Features and benefits
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-filter">:filter:</i> <strong>Allowlist or blocklist</strong></td><td>Two strategies: forward only to validators on your allowlist, or never to validators on your blocklist.</td><td></td></tr><tr><td><i class="fa-bolt">:bolt:</i> <strong>Out of the box on Triton</strong></td><td>Add <code>forwardingPolicies</code> to any send through Triton. No extra infrastructure, no separate charge.</td><td></td></tr><tr><td><i class="fa-cube">:cube:</i> <strong>On-chain and transparent</strong></td><td>Each policy is a Program Derived Address anyone can inspect, and anyone who knows the address can use it.</td><td></td></tr><tr><td><i class="fa-key">:key:</i> <strong>Token-gated management</strong></td><td>A Token Extensions asset controls each policy. Hold a token to manage it; mint more to share control.</td><td></td></tr><tr><td><i class="fa-users">:users:</i> <strong>Community policies</strong></td><td>Reuse maintained allow and deny lists from the policy explorer instead of curating your own.</td><td></td></tr><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Fast enforcement</strong></td><td>Policies are cached and checked in the sender via the shield store, with atomic updates and thread-safe checks.</td><td></td></tr></tbody></table>
+
+## How it works
+
+1. **Create a policy**: an on-chain list of identities (typically validators) with an `allow` or `deny` strategy. The policy lives at a Program Derived Address, paired with an SPL token (Token Extensions): creating it mints you 1 token and keeps you the mint authority.
+2. **Attach the policy address to your transactions**, either as the `forwardingPolicies` parameter on `sendTransaction` or as an HTTP header.
+3. **The sender checks the current leader against your policy** on every send and forwards only when it passes. If the leader fails the check, the transaction is dropped, not held or queued.
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
+flowchart LR
+    you["Your app"] -->|"tx + policy address"| rpc["Triton RPC / Jet"]
+    policy["On-chain policy<br/>(PDA + token)"] -.-> check
+    rpc --> check["Policy check<br/>against current leader"]
+    check -->|"leader allowed"| val["Validator"]
+    check -->|"leader blocked"| drop["Dropped<br/>(not queued)"]
+    style you fill:#D6EAF8,stroke:#259DD0
+```
+
+Ownership follows the token. Anyone holding a policy's token can manage it (add or remove validators), and because the token is fungible and mintable, you can mint and send tokens to share policy management with others. The policy itself is public: anyone who knows its address can use it in their transactions.
 
 {% hint style="info" %}
-Shield only works with Shield-enabled senders (Triton RPC, or the Jet TPU client). A standard Solana RPC ignores the policy and sends to every leader.
+Shield only works with Shield-enabled senders (Triton RPC, or the Jet TPU client). A standard Solana RPC ignores the policy parameter and sends to every leader.
 {% endhint %}
 
-## Option A: Triton RPC (SWQoS)
+## Finding and using an existing policy
 
-Add the policy address to your `sendTransaction` request.
+Browse the policy explorer at [validators.app/yellowstone-shield](https://www.validators.app/yellowstone-shield?locale=en\&network=mainnet) to see all existing policies, which validators each includes or excludes, and when it was last updated, then copy the policy address for your transactions. Common policy types:
 
+* **Allow lists**: top validators by stake, geographically distributed validators, performance-based selection.
+* **Block lists (deny lists)**: validators known for sandwich attacks or frontrunning, poor performers, community-flagged validators.
+
+Attach the policy to your sends through Triton:
+
+{% tabs %}
+{% tab title="JSON-RPC" %}
 ```json
 {
   "jsonrpc": "2.0",
@@ -40,78 +67,58 @@ Add the policy address to your `sendTransaction` request.
   ]
 }
 ```
+{% endtab %}
 
-Or set it as an HTTP header, comma-separated for multiple policies:
+{% tab title="HTTP header" %}
+Comma-separated for multiple policies:
 
 ```
 Solana-ForwardingPolicies: "<your_policy_pda>,<your_policy_pda2>"
 ```
+{% endtab %}
 
-## Option B: Jet TPU client (direct)
+{% tab title="TypeScript" %}
+The standard web3.js `sendTransaction` wrapper does not pass the policy parameter, so make the RPC call directly:
 
-The [Jet TPU client](https://github.com/rpcpool/yellowstone-jet) checks each leader against your policies inside your own process and sends only to allowed validators. Enable the `shield` feature and add `yellowstone-shield-store` (the workspace and `[patch.crates-io]` setup is on the [Jet TPU client](https://github.com/rpcpool/yellowstone-jet) page).
+```typescript
+import { Transaction } from "@solana/web3.js";
+import bs58 from "bs58";
 
-Build a `PolicyStore` that caches the on-chain policies and live-updates them over gRPC, wrap your policy addresses in a `ShieldBlockList`, then send. Here `sender` is a TPU sender created as shown in the [Jet TPU client crate docs](https://docs.rs/yellowstone-jet-tpu-client).
+const transaction = new Transaction().add(/* your instructions */);
+const signedTx = await wallet.signTransaction(transaction);
+const serializedTx = bs58.encode(signedTx.serialize());
 
-```rust
-use {
-    solana_pubkey::Pubkey,
-    std::{str::FromStr, time::Duration},
-    yellowstone_jet_tpu_client::yellowstone_grpc::sender::ShieldBlockList,
-    yellowstone_shield_store::{
-        PolicyStore, PolicyStoreConfig, PolicyStoreGrpcConfig, PolicyStoreRpcConfig,
-    },
-};
+const response = await fetch("https://<your-endpoint>.rpcpool.com/<your-token>", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    jsonrpc: "2.0",
+    id: 1,
+    method: "sendTransaction",
+    params: [
+      serializedTx,
+      {
+        encoding: "base58",
+        skipPreflight: true,
+        forwardingPolicies: ["<your_policy_pda>"],
+      },
+    ],
+  }),
+});
 
-// 1. Cache on-chain policies and keep them current over gRPC.
-let config = PolicyStoreConfig {
-    rpc: PolicyStoreRpcConfig { endpoint: rpc_endpoint.clone() },
-    grpc: PolicyStoreGrpcConfig {
-        endpoint: grpc_endpoint.clone(),
-        x_token: grpc_x_token.clone(),
-        commitment: None, // defaults to Confirmed
-        timeout: Duration::from_secs(60),
-        connect_timeout: Duration::from_secs(10),
-        tcp_nodelay: true,
-        http2_adaptive_window: true,
-        http2_keep_alive: false,
-        http2_keep_alive_interval: None,
-        http2_keep_alive_timeout: None,
-        http2_keep_alive_while_idle: None,
-        max_decoding_message_size: Some(16 * 1024 * 1024), // 16 MiB
-        initial_connection_window_size: None,
-        initial_stream_window_size: None,
-    },
-};
-let policy_store = PolicyStore::build().config(config).run().await?;
-
-// 2. A community blocklist of known MEV sandwichers (Sandwiched.me DROPS list).
-let policy = Pubkey::from_str("xMTozeQTEX2MR9KUon8vjg17U5Q9459RSASE3wy5eNB")?;
-
-// 3. Bind the policy store to your policy addresses.
-let shield = ShieldBlockList {
-    policy_store: &policy_store,
-    shield_policy_addresses: &[policy],
-    default_return_value: true, // fail open: send if the policy check itself errors
-};
-
-// 4. Send only if the current leader is allowed. Err means it was blocked and dropped.
-sender
-    .send_txn_with_shield_policies(signature, bincoded_txn, shield)
-    .await?;
+const result = await response.json();
+const signature = result.result;
 ```
+{% endtab %}
+{% endtabs %}
 
-To try every leader instead of only the current one, `send_txn_fanout_with_blocklist` fans out across upcoming leaders with the same blocklist. For the complete program, see the [yellowstone-shield](https://github.com/rpcpool/yellowstone-shield) repository.
+Running your own sender instead of sending through Triton RPC? The Jet TPU client enforces the same policies inside your own process: follow the [Shield protection guide](https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/sending-transactions/protect-transactions-with-shield) and the [Jet TPU client guide](https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/sending-transactions/yellowstone-jet-tpu-client).
 
-## Get a policy
+## Creating your own policy
 
-### Use an existing one
+You need the Solana CLI installed and configured, SOL for transaction fees, and a list of validator addresses.
 
-Browse [validators.app/yellowstone-shield](https://www.validators.app/yellowstone-shield?locale=en\&network=mainnet) for community policies: deny lists of known sandwichers and poor performers, allow lists of top or geographically distributed validators. Copy the policy address and use it directly.
-
-### Create your own
-
-Install the CLI:
+**1. Install the Shield CLI.**
 
 ```bash
 git clone https://github.com/rpcpool/yellowstone-shield
@@ -119,34 +126,55 @@ cd yellowstone-shield
 cargo build --release --bin yellowstone-shield-cli
 ```
 
-Create the policy. `--strategy deny` blocks the listed validators; `--strategy allow` permits only the listed validators. `--uri` points at policy metadata you have uploaded to IPFS or Arweave.
+**2. Prepare metadata.** Create a JSON file describing your policy, upload it to IPFS or Arweave, and save the URL:
+
+```json
+{
+  "name": "My Validator Policy",
+  "symbol": "MVP",
+  "description": "Blocks validators known for sandwich attacks",
+  "image": "https://your-image-url.com/image.png",
+  "external_url": "https://your-website.com",
+  "attributes": []
+}
+```
+
+**3. Create the policy.** `--strategy deny` blocks the listed validators; `--strategy allow` permits only the listed validators.
 
 ```bash
 yellowstone-shield-cli policy create \
   --strategy deny \
-  --name "My MEV blocklist" \
-  --symbol "MEVBLOCK" \
+  --name "My Validator Policy" \
+  --symbol "MVP" \
   --uri "https://your-metadata-url.json"
-# Output: Policy Mint Address: <your_policy_pda>
 ```
 
-Add validators from a file with one identity per line:
+The CLI outputs your policy's mint address: save it. You receive 1 token and retain mint authority, so you can mint more tokens later to share policy management.
+
+**4. Add validators.** Create a text file with one validator address per line, then:
 
 ```bash
 yellowstone-shield-cli identities add \
-  --mint <your_policy_pda> \
+  --mint <your_mint_address> \
   --identities-path validators.txt
 ```
 
-`identities update` replaces the whole list, `identities remove` drops specific validators, and `policy show --mint <pda>` prints the current policy.
+**Managing the policy.** You must hold at least 1 policy token to manage it; if you transfer all your tokens away, you lose the ability to manage the policy.
 
-## How policies and ownership work
+```bash
+# Replace the entire validator list
+yellowstone-shield-cli identities update \
+  --mint <mint_address> \
+  --identities-path new_validators.txt
 
-Each policy is a Program Derived Address on-chain, paired with an SPL token (Token Extensions). Creating a policy mints you one token and keeps you the mint authority. Holding a token lets you manage the policy (add or remove validators); minting more lets you share management. Anyone who knows a policy's address can use it in their own transactions.
+# Remove specific validators
+yellowstone-shield-cli identities remove \
+  --mint <mint_address> \
+  --identities-path validators_to_remove.txt
 
-## Pricing
-
-Shield adds no separate charge. On Triton RPC the `forwardingPolicies` enforcement is included on every send, so a Shield-protected `sendTransaction` is billed exactly like any other send.
+# View policy details
+yellowstone-shield-cli policy show --mint <mint_address>
+```
 
 ## Limitations
 
@@ -154,10 +182,22 @@ Shield is a filter, not a guarantee.
 
 * **Policies need active maintenance.** New validators join every epoch and a bad actor can appear at any time. A blocklist only protects against what is on it, so the quality of protection depends entirely on how current the list is kept.
 * **Strict policies can drop time-sensitive transactions.** When no eligible leader is available the transaction is dropped, not queued. Be careful pairing a tight allowlist with arbitrage or liquidations.
+* **Only Shield-enabled senders enforce policies.** A standard Solana RPC ignores `forwardingPolicies`, and the standard web3.js `sendTransaction` wrapper does not pass it: make direct RPC calls as shown in the TypeScript tab above.
+
+## For RPC providers
+
+Running your own RPC and want to support Shield?
+
+* **Yellowstone Jet**: Shield support is built in.
+* **Custom integration**: use the [yellowstone-shield-store](https://crates.io/crates/yellowstone-shield-store) crate to cache policies locally with atomic updates, check validators against policies thread-safely, and integrate the checks with your transaction forwarding logic.
+
+## Pricing
+
+Shield is applied for free when your transactions route through Triton. You pay only for the transaction itself: the `sendTransaction` or `sendTx` call, billed as one RPC request.
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Send a transaction with /sendtx in a few minutes.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/quickstart">Quickstart</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Land more transactions, faster.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/best-practices">Best practices</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-shield">:shield:</i> <strong>Shield protection guide</strong></td><td>The full walkthrough: choose RPC or TPU-client enforcement, pick a policy, and protect your sends.</td><td><a href="https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/sending-transactions/protect-transactions-with-shield">Shield protection guide</a></td></tr><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Send a transaction through Triton in a few minutes.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/quickstart">Quickstart</a></td></tr><tr><td><i class="fa-newspaper">:newspaper:</i> <strong>Introducing Yellowstone Shield</strong></td><td>The launch post: why validator-level MEV happens and how Shield closes the gap.</td><td><a href="https://blog.triton.one/introducing-yellowstone-shield">Introducing Yellowstone Shield</a></td></tr></tbody></table>
 
 ***
 
