@@ -6,16 +6,14 @@ description: Keep real-time Solana streams reliable and ensure lowest-latency in
 
 ## Pick the right stream
 
-* **For lowest latency on a backend, use Dragon's Mouth (gRPC).** It is more stable than the legacy WebSocket interface and delivers intra-slot updates up to 400 ms faster. gRPC is server-to-server only.
-* **For a browser or frontend, use Whirligig WebSockets.** It gives the same intra-slot advantage over a browser-compatible WebSocket; gRPC is not supported in browsers.
-* **For "never miss an event" workloads (accounting, analytics, indexing, compliance, or confirmed-data apps like wallets), use Fumarole** instead of raw gRPC. Dragon's Mouth prioritises latency over completeness; Fumarole adds persistence, redundancy, and replay.
-* **For the earliest possible signal (arbitrage, market making, liquidations, HFT), use Deshred.** It reconstructs transactions from shreds before execution, so it has no confirmation guarantee; pair it with the normal `transactions` stream if you need finality.
+* **Dragon's Mouth (gRPC), for lowest latency on a backend.** The ecosystem-standard gRPC stream: account and transaction updates pushed over a persistent connection as the node processes them, up to 400 ms faster than RPC polling. Server-to-server only.
+* **Whirligig WebSockets, for browsers and frontends.** The same intra-slot latency as gRPC, but over a standard, browser-compatible Solana WebSocket, more reliable and faster than the native one, and with a full-transaction subscription the native API lacks. gRPC isn't available in browsers.
+* **Fumarole, for reliability-first pipelines** (accounting, analytics, indexing, compliance). Adds persistence, redundancy, and replay on top of Dragon's Mouth, which trades completeness for latency.
+* **Deshred, for the earliest possible signal** (arbitrage, market making, liquidations, HFT). Reconstructs transactions from shreds before execution, so no confirmation guarantee; pair it with the `transactions` stream when you need finality.
 
 ## Provision the subscriber
 
 * **Provision 5 Gbps minimum for large subscriptions, 10 Gbps for full-chain** (accounts plus transactions). The full feed can spike to \~1.3 to 1.8 Gbps, and cloud instances are often capped at \~1 Gbps by default.
-* **Keep round-trip latency to the endpoint at 50 ms or less.**
-* **Enable Zstd compression** and **set the HTTP/2 adaptive window to true.** Without compression it is hard to stay on the tip during spikes.
 * **Run subscribers on a persistent server (VPS or bare metal), not serverless functions** like Lambda or Cloud Functions. They recycle every few minutes, and each cold start and reconnect handshake lets the chain move on, so you drop messages and miss confirmations.
 * **Update your `@triton-one/yellowstone-grpc` client to v5+ for high-volume streams.** We added NAPI-as-an-Engine (NaaE), which moves the gRPC engine into Rust for \~400% more throughput than the previous pure-JavaScript version. It's a drop-in replacement. [Learn more](https://blog.triton.one/grpc-js-alternative-napi-rust/).
 * **Solve frequent disconnects early and rule out a client-side problem** (a weak or under-provisioned setup) before assuming a server fault. [Learn more](https://blog.triton.one/solana-grpc-streaming-optimisation-and-troubleshooting-2026-guide/).
