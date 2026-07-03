@@ -2,7 +2,7 @@
 description: Pull a Solana address's full transaction history, back to genesis, in one Superbank request.
 layout:
   pagination:
-    visible: false
+    visible: true
 ---
 
 # Quickstart

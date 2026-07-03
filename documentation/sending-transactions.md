@@ -2,7 +2,7 @@
 description: Triton's transaction-sending tools, swap APIs, and SWQoS routing.
 layout:
   pagination:
-    visible: false
+    visible: true
 ---
 
 # Sending transactions
