@@ -9,15 +9,15 @@ layout:
 
 You build and sign a transaction, then submit it so a validator includes it in a block. Landing reliably under load comes down to a few things:
 
-* **Delivery.** Reaching the current leader quickly through our Jet engine, which runs on its own traffic route and does not compete with your RPC requests.
-* **SWQoS.** Stake-weighted quality of service so your transaction is prioritised, added by default on every Triton endpoint.
-* **Fees.** Attaching a priority fee that reflects the real market rate.
+* **Fast delivery.** Reaching the current leader quickly through a specialised traffic route that does not compete with your read requests.
+* **Stake-weighted quality of service (SWQoS).** Prioritising your transactions for higher landing rates and reliability, added by default on every Triton endpoint at no extra cost.
+* **Priority fees.** Attaching a fee that reflects the real market rate without overpaying.
 * **Protection.** Optionally restricting which validators can process your transaction, to avoid harmful MEV.
 
 
 ## Pick your send path
 
-Most transactions go through a Triton endpoint, where **Jet sender**, Triton's production sending engine, applies SWQoS, tracks the leader schedule, and forwards your transaction to the leader's TPU. Jet runs on isolated infrastructure that does not compete with your RPC reads. You can submit two ways, with a third path (the self-hosted Jet TPU client) for full client-side control.
+Every transaction sent to a Triton endpoint is handled by **Jet**, Triton's SWQoS-powered production sending engine: it tracks the leader schedule and forwards your transaction directly to the leader's TPU. You can submit through two managed routes depending on your use case, or self-host the Jet TPU client for full client-side control.
 
 * **`sendTransaction`** is the standard Solana JSON-RPC method. We route it through our specialised Jet engine for the lowest latency and apply SWQoS for higher reliability.
 * **`/sendtx`** is a direct HTTP submission endpoint that takes the same delivery path as `sendTransaction`, but skips the JSON-RPC envelope, so there is no JSON parsing, no CORS preflight, and a smaller payload. It delivers lower latency and needs no RPC client library.
