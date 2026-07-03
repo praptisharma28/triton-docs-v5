@@ -59,7 +59,78 @@ Equal to Solana's [`RpcBlockSubscribeConfig`](https://docs.rs/solana-client/late
 
 ## Notification
 
-Updates arrive as `transactionNotification` messages, each with a `context` (slot, apiVersion) and a `value` carrying the slot, signature, and the full transaction with its meta. Unsubscribe with [transactionUnsubscribe](transactionunsubscribe.md).
+The subscribe call returns a subscription id (`{"jsonrpc":"2.0","result":70527,"id":1}`). Updates then arrive as `transactionNotification` messages, each with a `context` (slot) and a `value` carrying the slot and the full transaction — the encoded transaction, its `meta`, and its `version`. Long fields are truncated (`...`) in the example below:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "transactionNotification",
+  "params": {
+    "result": {
+      "context": { "slot": 430532825 },
+      "value": {
+        "slot": 430532825,
+        "transaction": {
+          "transaction": [
+            "61zPSp4TNQGmAQjxuU2TDpJDSYC4vh1rjedsDQFX...M6nm5cnb",
+            "base58"
+          ],
+          "meta": {
+            "err": null,
+            "status": { "Ok": null },
+            "fee": 5000,
+            "preBalances": [66412920, 2039280, 0, 2039280, "..."],
+            "postBalances": [0, 0, 2039280, 2039280, "..."],
+            "innerInstructions": [
+              {
+                "index": 2,
+                "instructions": [
+                  {
+                    "programIdIndex": 12,
+                    "accounts": [9],
+                    "data": "84eT",
+                    "stackHeight": 2
+                  },
+                  "..."
+                ]
+              }
+            ],
+            "logMessages": [
+              "Program ComputeBudget111111111111111111111111111111 invoke [1]",
+              "Program ComputeBudget111111111111111111111111111111 success",
+              "..."
+            ],
+            "preTokenBalances": [
+              {
+                "accountIndex": 1,
+                "mint": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
+                "uiTokenAmount": {
+                  "uiAmount": 0.1379,
+                  "decimals": 6,
+                  "amount": "137900",
+                  "uiAmountString": "0.1379"
+                },
+                "owner": "EnA3aCS9nYfYSniQBFV8G8QxPyYgZGXAs9tsuj5tSecR",
+                "programId": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+              },
+              "..."
+            ],
+            "postTokenBalances": ["..."],
+            "rewards": null,
+            "loadedAddresses": { "writable": [], "readonly": [] },
+            "computeUnitsConsumed": 16059,
+            "costUnits": 18648
+          },
+          "version": "legacy"
+        }
+      }
+    },
+    "subscription": 70527
+  }
+}
+```
+
+Unsubscribe with [transactionUnsubscribe](transactionunsubscribe.md).
 
 ***
 

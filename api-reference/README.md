@@ -29,7 +29,7 @@ These return an account's data directly, whether you want a single account, many
 | `getAccountInfo` | The state and metadata of one account, or null if it doesn't exist. |
 | `getMultipleAccounts` | The same, for many addresses in one call, in request order. |
 | `getBalance` | The lamport (SOL) balance of an address. |
-| `getProgramAccounts` | Every account a program owns, with optional data or size filters. |
+| `getProgramAccounts` | Every account a program owns, with data or size filters (required on shared endpoints for programs other than SPL Token / Token-2022). |
 
 These cover SPL token balances, holders, and supply:
 
