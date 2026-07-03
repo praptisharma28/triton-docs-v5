@@ -29,7 +29,7 @@ A dedicated Sui streaming node delivers isolated capacity, minimal latency throu
 ## What you get
 
 * **Isolated capacity** on hardware reserved for you, with flexible rate and connection limits.
-* **Your own endpoint**, a per-customer subdomain in the form `<your-slug>.sui.rpcpool.com`. Archival is served from a separate endpoint, `archive-<your-slug>.sui.rpcpool.com`.
+* **Your own endpoint**, a per-customer subdomain in the form `<your-endpoint>.sui.rpcpool.com`. Archival is served from a separate endpoint, `archive-<your-endpoint>.sui.rpcpool.com`.
 * **The full Sui stack:** gRPC unary calls, gRPC streaming, and JSON-RPC (deprecating; see [Overview](./)).
 
 ## Hardware
@@ -85,7 +85,7 @@ Hardware is ordered to spec and set up as a dedicated subscription in your [cust
 {% step %}
 ### Connect
 
-Your node has its own endpoint, `<your-slug>.sui.rpcpool.com`. Point your gRPC client at it with your endpoint URL and token, exactly as you would any Triton endpoint. For requests and client setup, see [gRPC](grpc.md).
+Your node has its own endpoint, `<your-endpoint>.sui.rpcpool.com`. Point your gRPC client at it with your endpoint URL and token, exactly as you would any Triton endpoint. For requests and client setup, see [gRPC](grpc.md).
 {% endstep %}
 {% endstepper %}
 
