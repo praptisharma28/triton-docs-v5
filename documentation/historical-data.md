@@ -68,14 +68,39 @@ Serving notes:
 
 ## Streaming historical data
 
-Superbank also serves history as gRPC streams alongside JSON-RPC, for server-side-filtered bulk pulls where paginating JSON-RPC calls would be the slow path.
+Superbank also serves history as gRPC streams alongside JSON-RPC, for server-side-filtered bulk pulls where paginating JSON-RPC calls would be the slow path. Both methods replay bounded, inclusive slot ranges straight from ClickHouse.
 
-| Method | What you receive |
-| --- | --- |
-| `StreamBlocks` | One message per block in the requested range, with block metadata, rewards, and transaction payloads. |
-| `StreamTransactions` | One message per matching transaction in the requested range. |
+{% tabs %}
+{% tab title="StreamBlocks" %}
+Streams one message per block in the range, with block metadata, rewards, and transaction payloads:
 
-Both replay bounded, inclusive slot ranges straight from ClickHouse, and filter server-side: account include/exclude/required matching, vote filtering, and success/failure filtering.
+```bash
+grpcurl -proto superbank.proto \
+  -d '{ "start_slot": 250000000, "end_slot": 250000009 }' \
+  <your-endpoint>:10000 superbank.Superbank/StreamBlocks
+```
+{% endtab %}
+
+{% tab title="StreamTransactions" %}
+Streams one message per matching transaction. Filter server-side by accounts, votes, and success or failure:
+
+```bash
+grpcurl -proto superbank.proto \
+  -d '{
+    "start_slot": 250000000,
+    "end_slot": 250000009,
+    "filter": {
+      "vote": false,
+      "failed": false,
+      "account_include": ["EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"]
+    }
+  }' \
+  <your-endpoint>:10000 superbank.Superbank/StreamTransactions
+```
+{% endtab %}
+{% endtabs %}
+
+The proto lives at [superbank.proto](https://github.com/solana-rpc/superbank/blob/main/crates/superbank-rpc/proto/superbank.proto), and `10000` is the default gRPC port. The proto also defines unary methods and a bidirectional `Get` for compatibility; in v1 they return `UNIMPLEMENTED`.
 
 ## getTransactionsForAddress
 
