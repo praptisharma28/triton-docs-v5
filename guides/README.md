@@ -104,7 +104,7 @@ Each product is purpose-built for one job. Pick the category, then the product.
 {% endtab %}
 
 {% tab title="History" %}
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-clock-rotate-left">:clock-rotate-left:</i> <strong>Superbank</strong></td><td>History with developer-shaped indexes. Millisecond reads from genesis across the full ledger.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/historical-data">Superbank</a></td></tr><tr><td><i class="fa-box-archive">:box-archive:</i> <strong>Superbank streams</strong></td><td>Replay bounded slot ranges of history over gRPC with StreamBlocks and StreamTransactions.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/historical-data#how-it-works">Superbank streams</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-box-archive">:box-archive:</i> <strong>Superbank streams</strong></td><td>Replay bounded slot ranges of history over gRPC with StreamBlocks and StreamTransactions.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/historical-data#how-it-works">Superbank streams</a></td></tr></tbody></table>
 {% endtab %}
 
 {% tab title="Sending transactions" %}
