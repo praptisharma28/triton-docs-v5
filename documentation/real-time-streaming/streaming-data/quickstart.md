@@ -24,7 +24,7 @@ All streaming services we'll be testing use Triton endpoints with token-based au
 Set up a fresh project for the service you want to try.
 
 {% tabs %}
-{% tab title="Dragon's Mouth" %}
+{% tab title="Dragon’s Mouth" %}
 {% tabs %}
 {% tab title="TypeScript" %}
 ```bash
@@ -147,7 +147,7 @@ anyhow = "1"
 ## 2. Connect and subscribe
 
 {% tabs %}
-{% tab title="Dragon's Mouth" %}
+{% tab title="Dragon’s Mouth" %}
 **What we're doing:** subscribe to all writes on a specific account (the USDC mint) and log each Protobuf-decoded update.
 
 First, initialise the client and connect:
@@ -658,7 +658,7 @@ Then walk through this checklist:
 ### Expected first message
 
 {% tabs %}
-{% tab title="Dragon's Mouth" %}
+{% tab title="Dragon’s Mouth" %}
 A Protobuf-decoded `SubscribeUpdate`. Each message has the matching filter labels and a payload type (`account`, `transaction`, `slot`, `block`, `blockMeta`, or `entry`). Account-update example:
 
 ```
