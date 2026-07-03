@@ -43,7 +43,7 @@ sequenceDiagram
 
 You get sub-slot latency, structured Protobuf payloads, and lower costs, also significantly cheaper than the equivalent polling traffic, as it only incurs bandwidth cost.
 
-For teams with heavy polling codebases, Yellowstone Accounts Sync delivers streaming-grade reads through a one-line SDK swap.
+For teams with heavy polling codebases, the [Account Sync](reading-account-state/account-sync.md) feature delivers streaming-grade read speed and pricing through a one-line SDK swap.
 
 ## Triton streaming stack
 
@@ -58,10 +58,10 @@ Triton was first to ship gRPC streaming on Solana with **Yellowstone gRPC**, the
 
 Three things matter in streaming: **latency, reliability, and replay**. Years of running Yellowstone at scale taught us that no single product leads on all of them. So we built one for each, all on the Yellowstone Geyser foundation.
 
-* Dragon's Mouth is the source of truth for live data, with Deshred giving you pre-execution transaction data on the same gRPC service.
-* Whirligig translates Dragon's Mouth output into standard Solana WebSocket messages for browsers.
-* Fumarole consumes multiple Dragon's Mouth nodes, deduplicates, and persists a cursor on the server side so you can resume exactly where you left off after disconnects.
-* Superbank taps the historical archive but uses the same gRPC interface, so the live and historical pipelines appear identical to your client code.
+* **Dragon's Mouth** is the source of truth for live data, with **Deshred** giving you pre-execution transaction data on the same gRPC service.
+* **Whirligig** translates Dragon's Mouth output into standard Solana WebSocket messages for browsers.
+* **Fumarole** consumes multiple Dragon's Mouth nodes, deduplicates, and persists a cursor on the server side so you can resume exactly where you left off after disconnects.
+* **Superbank streams** tap the historical archive but use the same gRPC interface, so the live and historical pipelines appear identical to your client code.
 
 | Capability                 | Dragon's Mouth | Deshred tx | Whirligig websocket |         Fumarole        |   Superbank   |
 | -------------------------- | :------------: | :--------: | :-----------------: | :---------------------: | :-----------: |
