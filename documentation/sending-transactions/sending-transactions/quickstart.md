@@ -144,7 +144,7 @@ The JSON-RPC result is the transaction signature:
 {% endtab %}
 {% endtabs %}
 
-## 3. Verify
+## 3. Verify it landed
 
 With `response=signature`, the POST returns the signature. Confirm it landed:
 
