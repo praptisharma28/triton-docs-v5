@@ -36,8 +36,6 @@ You query Superbank with the standard Solana JSON-RPC methods. Behind that, it i
 
 Reads are tiered. A head cache holds the newest, not-yet-finalized slots in memory, so recent reads return in under 1 ms. An optional RocksDB disk cache serves recent finalized slots from local disk in place of ClickHouse. ClickHouse serves the full history, and a miss at any cache layer falls through to the next one automatically.
 
-Superbank can also expose gRPC streams alongside JSON-RPC: `StreamBlocks` and `StreamTransactions` replay bounded slot ranges of history straight from ClickHouse, with account include/exclude/required, vote, and success/failure filters.
-
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
 flowchart LR
@@ -56,6 +54,7 @@ The complete ledger from genesis: every block, transaction, and entry. Most Supe
 | `getBlock`, `getBlocks`, `getBlocksWithLimit`, `getBlockTime`, `getBlockHeight`, `getSlot`, `getTransactionCount`, `getLatestBlockhash`, `getFirstAvailableBlock`, `getInflationReward`, `getSignatureStatuses`, `getHealth`, `minimumLedgerSlot` | Standard Solana JSON-RPC |
 | `getTransaction`, `getSignaturesForAddress` | Triton's optional slot hint that lets you skip the database lookup and get the response faster when you already know the slot (`slot` on `getTransaction`; `beforeSlot`/`untilSlot` on `getSignaturesForAddress`) |
 | `getTransactionsForAddress` | Triton's extension: a complete address history in one call (ATAs included) with server-side filters (by status, slot, block time, and token accounts) and a pagination cursor |
+| `StreamBlocks`, `StreamTransactions` | Triton's gRPC streaming extension: replay bounded slot ranges of history as a stream, with server-side filters. See [Streaming historical data](#streaming-historical-data) |
 
 `getTransactionsForAddress` is documented below. Responses are spec-compliant, so no client changes are needed when a method moves to Superbank from Old Faithful.
 
@@ -74,9 +73,20 @@ Every method takes the standard Solana parameters. Two add an optional slot hint
 | `getTransaction` | `slot` (optional `u64`) | Queries that exact slot directly. The response is `null` if the signature isn't present in that slot. |
 | `getSignaturesForAddress` | `beforeSlot`, `untilSlot` (optional `u64`) | Exclusive whole-slot bounds (`slot < beforeSlot`, `slot > untilSlot`), not signature-position cursors. `beforeSlot` can't be combined with `before`; `untilSlot` can't be combined with `until`. |
 
-A `before` or `until` signature that Superbank can't find returns JSON-RPC error `-32020` (`Transaction <signature> not found`).
+On `getSignaturesForAddress`, if the signature you pass as `before` or `until` can't be found, the call returns JSON-RPC error `-32020` (`Transaction <signature> not found`).
 
 `getTransactionsForAddress` is documented below; it also accepts `beforeSlot`/`untilSlot` as aliases for `filters.slot.lt`/`filters.slot.gt`.
+
+## Streaming historical data
+
+Superbank also serves history as gRPC streams alongside JSON-RPC, for server-side-filtered bulk pulls where paginating JSON-RPC calls would be the slow path.
+
+| Method | What you receive |
+| --- | --- |
+| `StreamBlocks` | One message per block in the requested range, with block metadata, rewards, and transaction payloads. |
+| `StreamTransactions` | One message per matching transaction in the requested range. |
+
+Both replay bounded, inclusive slot ranges straight from ClickHouse, and filter server-side: account include/exclude/required matching, vote filtering, and success/failure filtering.
 
 ## getTransactionsForAddress
 
