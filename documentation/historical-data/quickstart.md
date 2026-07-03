@@ -1,5 +1,5 @@
 ---
-description: Pull a Solana address's full transaction history, back to genesis, in one Superbank request.
+description: Read Solana's complete history faster and easier with Superbank.
 layout:
   pagination:
     visible: true
@@ -7,7 +7,7 @@ layout:
 
 # Quickstart
 
-Read Solana's complete on-chain history on Triton. Historical methods are served from Superbank automatically, as spec-compliant Solana JSON-RPC, so the calls you already know work unchanged across the full ledger back to genesis (billed at $0.08/GB plus $10 per million requests). This reads an address's history two ways: the standard `getSignaturesForAddress` then `getTransaction` pattern, and the `getTransactionsForAddress` extension that returns it in a single call.
+This guide will walk you through the most common history read, `getTransaction`, and Triton's extension `getTransactionsForAddress`. All historical methods are routed through the Superbank backend automatically, and responses are 100% spec-compliant with Solana JSON-RPC, so it requires zero changes to your existing code.
 
 ## 0. Prerequisites
 
