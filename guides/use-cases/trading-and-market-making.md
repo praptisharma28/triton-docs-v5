@@ -83,8 +83,8 @@ Dragon's Mouth delivers account and transaction updates as the node processes th
   SubscribeRequest,
 } from "@triton-one/yellowstone-grpc";
 
-const ENDPOINT = "https://your-endpoint.rpcpool.com";
-const TOKEN = "your-token";
+const ENDPOINT = "https://<your-endpoint>.rpcpool.com";
+const TOKEN = "<your-token>";
 
 // Raydium AMM v4 program, replace with the DEX program you're trading
 const RAYDIUM_AMM = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8";
@@ -166,8 +166,8 @@ use yellowstone_grpc_proto::prelude::{
     SubscribeRequestFilterAccounts, SubscribeRequestFilterTransactions,
 };
 
-const ENDPOINT: &str = "https://your-endpoint.rpcpool.com";
-const TOKEN: &str = "your-token";
+const ENDPOINT: &str = "https://<your-endpoint>.rpcpool.com";
+const TOKEN: &str = "<your-token>";
 const RAYDIUM_AMM: &str = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8";
 
 #[tokio::main]
@@ -243,8 +243,8 @@ from geyser_pb2 import (
 )
 from geyser_pb2_grpc import GeyserStub
 
-ENDPOINT = "your-endpoint.rpcpool.com:443"
-TOKEN = "your-token"
+ENDPOINT = "<your-endpoint>.rpcpool.com:443"
+TOKEN = "<your-token>"
 RAYDIUM_AMM = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8"
 
 async def stream_dex_data():
@@ -336,8 +336,8 @@ Important limitations to understand before using Deshred:
   SubscribeRequestFilterDeshredTransactions,
 } from "@triton-one/yellowstone-grpc";
 
-const ENDPOINT = "https://your-endpoint.rpcpool.com";
-const TOKEN = "your-token";
+const ENDPOINT = "https://<your-endpoint>.rpcpool.com";
+const TOKEN = "<your-token>";
 const RAYDIUM_AMM = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8";
 
 async function streamDeshred() {
@@ -390,8 +390,8 @@ use yellowstone_grpc_proto::prelude::{
     subscribe_update_deshred, SubscribeDeshredRequest, SubscribeRequestFilterDeshredTransactions,
 };
 
-const ENDPOINT: &str = "https://your-endpoint.rpcpool.com";
-const TOKEN: &str = "your-token";
+const ENDPOINT: &str = "https://<your-endpoint>.rpcpool.com";
+const TOKEN: &str = "<your-token>";
 const RAYDIUM_AMM: &str = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8";
 
 #[tokio::main]
@@ -444,8 +444,8 @@ from geyser_pb2 import (
 )
 from geyser_pb2_grpc import GeyserStub
 
-ENDPOINT = "your-endpoint.rpcpool.com:443"
-TOKEN = "your-token"
+ENDPOINT = "<your-endpoint>.rpcpool.com:443"
+TOKEN = "<your-token>"
 RAYDIUM_AMM = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8"
 
 async def stream_deshred():
@@ -748,8 +748,8 @@ A minimal trading loop combining all four steps:
 
 ```typescript
 
-const ENDPOINT = "https://your-endpoint.rpcpool.com";
-const TOKEN = "your-token";
+const ENDPOINT = "https://<your-endpoint>.rpcpool.com";
+const TOKEN = "<your-token>";
 const RAYDIUM_AMM = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8";
 
 async function getPriorityFee(

@@ -48,17 +48,17 @@ import {
 
 const creds = credentials.createSsl();
 
-// <token> is your Triton One authentication token
-const callCredentials = createCallCredentials("<token>");
+// <your-token> is your Triton One authentication token
+const callCredentials = createCallCredentials("<your-token>");
 
 const combinedCredentials = credentials.combineChannelCredentials(
   creds,
   callCredentials
 );
 
-// <endpoint> is your Triton One RPC endpoint
+// <your-endpoint> is your Triton One RPC endpoint
 const client = new ProgramStreamsServiceClient(
-  "<endpoint>",
+  "<your-endpoint>",
   combinedCredentials
 );
 

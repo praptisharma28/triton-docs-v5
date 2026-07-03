@@ -240,7 +240,7 @@ const account = await connection.getAccountInfo(new PublicKey(accountId));
 import { Connection, PublicKey } from "@triton-one/triton-sdk";
 
 const accountId = "ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989";
-const connection = new Connection("https://api.rpcpool.com/YOUR_TOKEN", {
+const connection = new Connection("https://api.rpcpool.com/<your-token>", {
   accountSync: {
     transport: "grpc",
     initialAccounts: [accountId],
@@ -263,7 +263,7 @@ Pick your transport: gRPC for Node backends, workers, and scripts; WebSocket for
 ```ts
 import { Connection, PublicKey } from "@triton-one/triton-sdk";
 
-const endpoint = "https://api.rpcpool.com/YOUR_TOKEN";
+const endpoint = "https://api.rpcpool.com/<your-token>";
 const account = new PublicKey("ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989");
 
 const connection = new Connection(endpoint, {
@@ -298,8 +298,8 @@ Browsers only support WebSocket; do not use `transport: "grpc"` in browser code.
 ```ts
 import { Connection, PublicKey } from "@triton-one/triton-sdk";
 
-const rpcEndpoint = "https://api.rpcpool.com/YOUR_TOKEN";
-const wsEndpoint = "wss://api.rpcpool.com/YOUR_TOKEN";
+const rpcEndpoint = "https://api.rpcpool.com/<your-token>";
+const wsEndpoint = "wss://api.rpcpool.com/<your-token>";
 const account = new PublicKey("ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989");
 
 const connection = new Connection(rpcEndpoint, {
@@ -360,7 +360,7 @@ Account reads keep their web3.js signatures, and every call resolves from the lo
 ```ts
 import { Connection, PublicKey } from "@triton-one/triton-sdk";
 
-const connection = new Connection("https://api.rpcpool.com/YOUR_TOKEN", {
+const connection = new Connection("https://api.rpcpool.com/<your-token>", {
   accountSync: {
     transport: "grpc",
     initialAccounts: ["ping6gwBZx1ccMMFyLgkVSupUmujYrFidEXuNRPq989"],

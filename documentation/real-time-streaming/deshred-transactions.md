@@ -106,7 +106,7 @@ use {
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let endpoint = std::env::var("ENDPOINT")
-        .unwrap_or("https://<endpoint>".into());
+        .unwrap_or("https://<your-endpoint>".into());
     let x_token = std::env::var("X_TOKEN").ok();
 
     let mut client = GeyserGrpcClient::build_from_shared(endpoint)?

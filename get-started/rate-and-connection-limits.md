@@ -79,7 +79,7 @@ Dedicated nodes run on isolated hardware and apply no connection or subscription
 Every endpoint exposes its current limits at `/ratelimits`:
 
 ```bash
-curl https://<your-endpoint>/<token>/ratelimits
+curl https://<your-endpoint>/<your-token>/ratelimits
 ```
 
 The response is JSON, listing the request budget per window, every per-method override, and the connection cap. It's the source of truth for **your** endpoint's exact numbers, which can differ from the defaults above if our team has tuned them.

@@ -25,18 +25,18 @@ Solana throughput keeps climbing, so a full-chain feed pushes more data every mo
 * **The flow-control window is smaller than your bandwidth-delay product (BDP).** gRPC runs on HTTP/2, which only lets the server send a window's worth of data before it waits for an acknowledgement. The volume you need in flight is the BDP, `bandwidth × RTT` (2 Gbps at 10 ms RTT is \~2.38 MiB). A window below the BDP leaves bandwidth idle. Let the client and server negotiate it with adaptive window sizing; there is no reason to turn it off:
 
   ```rust
-  GeyserGrpcBuilder::from_shared("https://your-endpoint")
+  GeyserGrpcBuilder::from_shared("https://<your-endpoint>")
       .http2_adaptive_window_size(true)
   ```
 
 * **Large feeds run uncompressed.** Uncompressed full-chain traffic needs a larger BDP and is more sensitive to loss and jitter. Enable Zstd above \~8 ms RTT, and almost always above 30 ms:
 
   ```rust
-  GeyserGrpcBuilder::from_shared("https://your-endpoint")
+  GeyserGrpcBuilder::from_shared("https://<your-endpoint>")
       .accept_compressed(Some(CompressionEncoding::Zstd))
   ```
 
-* **You are too far from the endpoint.** Distance is the biggest driver of RTT. `yellowstone-grpc` caps the HTTP/2 window at 14.6 MiB, which puts the ceiling for full-chain streaming near 14.6 MiB / 2 Gbps, \~60 ms, so target under 50 ms. Measure yours with `ping <endpoint>` and run close to a Solana cluster:
+* **You are too far from the endpoint.** Distance is the biggest driver of RTT. `yellowstone-grpc` caps the HTTP/2 window at 14.6 MiB, which puts the ceiling for full-chain streaming near 14.6 MiB / 2 Gbps, \~60 ms, so target under 50 ms. Measure yours with `ping <your-endpoint>` and run close to a Solana cluster:
 
   | Scenario | Typical distance | Expected RTT |
   | --- | --- | --- |

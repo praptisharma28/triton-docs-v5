@@ -289,7 +289,7 @@ while let Some(message) = stream.next().await {
 ./grpcurl \
   -proto geyser.proto \
   -d '{"slots": { "slots": {} }, "accounts": { "usdc": { "account": ["EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}}' \
-  -H "x-token: <token>" \
+  -H "x-token: <your-token>" \
   api.rpcpool.com:443 \
   geyser.Geyser/Subscribe
 ```
@@ -569,7 +569,7 @@ use {
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let endpoint = std::env::var("ENDPOINT")
-        .unwrap_or("https://<endpoint>".into());
+        .unwrap_or("https://<your-endpoint>".into());
     let x_token = std::env::var("X_TOKEN").ok();
 
     let mut client = GeyserGrpcClient::build_from_shared(endpoint)?

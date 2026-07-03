@@ -24,7 +24,7 @@ import {
 } from "@solana/web3.js";
 import bs58 from "bs58";
 
-const connection = new Connection("https://your-endpoint.mainnet.rpcpool.com/your-token", "confirmed");
+const connection = new Connection("https://<your-endpoint>.mainnet.rpcpool.com/<your-token>", "confirmed");
 const payer = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.SECRET_KEY!))); // 64-byte secret key
 
 const tx = new Transaction().add(
@@ -61,7 +61,7 @@ POST the serialised transaction. Pass `response=signature` to get the signature 
 {% tab title="TypeScript" %}
 ```ts
 const res = await fetch(
-  "https://your-endpoint.mainnet.rpcpool.com/your-token/sendtx?response=signature&max_retries=3",
+  "https://<your-endpoint>.mainnet.rpcpool.com/<your-token>/sendtx?response=signature&max_retries=3",
   {
     method: "POST",
     headers: { "Content-Type": "application/octet-stream" },
@@ -75,7 +75,7 @@ console.log("Signature:", await res.text());
 
 {% tab title="curl (raw bytes)" %}
 ```bash
-curl -X POST 'https://your-endpoint.mainnet.rpcpool.com/your-token/sendtx?response=signature&max_retries=3' \
+curl -X POST 'https://<your-endpoint>.mainnet.rpcpool.com/<your-token>/sendtx?response=signature&max_retries=3' \
   -H 'Content-Type: application/octet-stream' \
   --data-binary @transaction.bin
 ```
@@ -83,7 +83,7 @@ curl -X POST 'https://your-endpoint.mainnet.rpcpool.com/your-token/sendtx?respon
 
 {% tab title="curl (base64)" %}
 ```bash
-curl -X POST 'https://your-endpoint.mainnet.rpcpool.com/your-token/sendtx?encoding=base64&response=signature' \
+curl -X POST 'https://<your-endpoint>.mainnet.rpcpool.com/<your-token>/sendtx?encoding=base64&response=signature' \
   -H 'Content-Type: text/plain' \
   -d 'BASE64_SIGNED_TX'
 ```
@@ -110,7 +110,7 @@ console.log("Signature:", signature);
 
 {% tab title="curl" %}
 ```bash
-curl https://your-endpoint.mainnet.rpcpool.com/your-token -s -X POST \
+curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -149,7 +149,7 @@ The JSON-RPC result is the transaction signature:
 With `response=signature`, the POST returns the signature. Confirm it landed:
 
 ```bash
-curl https://your-endpoint.mainnet.rpcpool.com/your-token -s -X POST \
+curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",

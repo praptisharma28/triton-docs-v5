@@ -1213,7 +1213,7 @@ Subscribe to account updates:
 ```shell
 cargo run --bin client -- \
   -e https://api.rpcpool.com \
-  --x-token <token> \
+  --x-token <your-token> \
   subscribe \
   --accounts \
   --accounts-account <Pubkey>
@@ -1224,7 +1224,7 @@ Subscribe to slots (with commitment override):
 ```shell
 cargo run --bin client -- \
   -e https://api.rpcpool.com \
-  --x-token <token> \
+  --x-token <your-token> \
   --commitment processed \
   subscribe \
   --slots
@@ -1235,7 +1235,7 @@ Subscribe to non-vote, non-failed transactions touching an account:
 ```shell
 cargo run --bin client -- \
   -e https://api.rpcpool.com \
-  --x-token <token> \
+  --x-token <your-token> \
   subscribe \
   --transactions \
   --transactions-vote false \
@@ -1248,7 +1248,7 @@ Subscribe to deshred transactions (Triton-only):
 ```shell
 cargo run --bin client -- \
   -e https://api.rpcpool.com \
-  --x-token <token> \
+  --x-token <your-token> \
   subscribe-deshred \
   --vote false \
   --account-include <Pubkey>
@@ -1259,7 +1259,7 @@ Unary calls (`ping`, `get-latest-blockhash`, `get-block-height`, `get-slot`, `is
 ```shell
 cargo run --bin client -- \
   -e https://api.rpcpool.com \
-  --x-token <token> \
+  --x-token <your-token> \
   get-slot
 # response: GetSlotResponse { slot: 196214563 }
 ```
@@ -1324,7 +1324,7 @@ Full example: [yellowstone-grpc/examples/typescript](https://github.com/rpcpool/
 ./grpcurl \
   -proto geyser.proto \
   -d '{"slots": { "slots": {} }, "accounts": { "usdc": { "account": ["9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}}' \
-  -H "x-token: <token>" \
+  -H "x-token: <your-token>" \
   api.rpcpool.com:443 \
   geyser.Geyser/Subscribe
 ```

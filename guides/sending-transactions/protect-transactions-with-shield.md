@@ -275,7 +275,7 @@ use {
 async fn main() -> anyhow::Result<()> {
     let rpc_endpoint = "<your-rpc-endpoint>".to_string();
     let grpc_endpoint = "<your-grpc-endpoint>".to_string();
-    let grpc_x_token = Some("<your-x-token>".to_string());
+    let grpc_x_token = Some("<your-token>".to_string());
 
     // In production, read this from a file.
     let identity = Keypair::new();

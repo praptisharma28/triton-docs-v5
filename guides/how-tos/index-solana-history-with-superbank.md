@@ -199,8 +199,8 @@ For live ingestion via Dragon's Mouth (gRPC):
 ```yaml
 source: "grpc"
 
-endpoint: "https://your-endpoint.rpcpool.com:443"
-x-token: "your-token"
+endpoint: "https://<your-endpoint>.rpcpool.com:443"
+x-token: "<your-token>"
 commitment: "finalized"
 # "*" = resume from the highest slot already in blocks_metadata on restart (recommended for production).
 # 0   = start from the earliest available slot.
@@ -221,8 +221,8 @@ For live ingestion via **Fumarole** (persistent consumer group, resumes from whe
 ```yaml
 source: "fumarole"
 
-fumarole-endpoint: "https://your-endpoint.rpcpool.com:443"
-fumarole-x-token: "your-token"
+fumarole-endpoint: "https://<your-endpoint>.rpcpool.com:443"
+fumarole-x-token: "<your-token>"
 fumarole-consumer-group: "superbank-mainnet"
 fumarole-create-consumer-group: true  # set to false after first run
 fumarole-data-plane-tcp-connections: 4       # parallel TCP connections for download; max 20
@@ -242,7 +242,7 @@ entries-table: "default.entries"
 On first run you'll see the consumer group created, then data flowing:
 
 ```text
-INFO superbank::ingest::fumarole: starting superbank fumarole ingest source="fumarole" endpoint=https://your-endpoint.rpcpool.com:443 consumer_group=superbank-mainnet
+INFO superbank::ingest::fumarole: starting superbank fumarole ingest source="fumarole" endpoint=https://<your-endpoint>.rpcpool.com:443 consumer_group=superbank-mainnet
 INFO superbank::ingest::fumarole: created Fumarole consumer group consumer_group=superbank-mainnet
 INFO superbank::clickhouse: clickhouse insert committed table="default.transactions" rows=4051 slot_min=424497433 slot_max=424497435
 INFO superbank::clickhouse: clickhouse insert committed table="default.blocks_metadata" rows=3 slot_min=424497433 slot_max=424497435
@@ -266,7 +266,7 @@ For shorter ranges (e.g. a few thousand slots), the `rpc` source works well:
 ```yaml
 source: "rpc"
 
-rpc-url: "https://your-endpoint.rpcpool.com/your-token"
+rpc-url: "https://<your-endpoint>.rpcpool.com/<your-token>"
 rpc-from-slot: 424000000
 rpc-slot-count: 10000    # or use rpc-to-slot for an explicit end slot
 rpc-max-inflight: 64
@@ -310,7 +310,7 @@ Example output (gRPC / Dragon's Mouth live source):
 
 ```text
 INFO superbank: starting name="superbank" version="0.3.0"
-INFO superbank::ingest::grpc: starting superbank ingest source="grpc" endpoint=https://your-endpoint.rpcpool.com:443
+INFO superbank::ingest::grpc: starting superbank ingest source="grpc" endpoint=https://<your-endpoint>.rpcpool.com:443
 INFO superbank::ingest::grpc: gRPC health check passed status="serving"
 INFO superbank::ingest::grpc: subscribed to gRPC stream from_slot=424432530
 INFO superbank::clickhouse: clickhouse insert committed table="default.transactions" rows=2387 slot_min=424432637 slot_max=424432638
@@ -397,7 +397,7 @@ Use the `rpc-from-slot` / `rpc-to-slot` parameters (or the Jetstreamer epoch arg
 ```yaml
 # superbank.yaml - ingest a specific slot range, no program filter
 source: "rpc"
-rpc-url: "https://your-endpoint.rpcpool.com/your-token"
+rpc-url: "https://<your-endpoint>.rpcpool.com/<your-token>"
 rpc-from-slot: 420000000
 rpc-to-slot:   425000000
 rpc-max-inflight: 64
@@ -522,8 +522,8 @@ Then start the RPC server with the head cache pointed at a Dragon's Mouth endpoi
 
 ```bash
 HEAD_CACHE_ENABLED=true \
-DRAGONSMOUTH_ENDPOINT=https://your-endpoint.rpcpool.com:443 \
-DRAGONSMOUTH_X_TOKEN=your-token \
+DRAGONSMOUTH_ENDPOINT=https://<your-endpoint>.rpcpool.com:443 \
+DRAGONSMOUTH_X_TOKEN=<your-token> \
 HEAD_CACHE_RETAIN_SLOTS=32 \
 HEAD_CACHE_MIN_COMMITMENT=processed \
 CLICKHOUSE_URL=http://localhost:8123 \
@@ -536,8 +536,8 @@ On startup you'll see the head cache subscribe to Dragon's Mouth:
 ```text
 INFO superbank_rpc: starting name="superbank-rpc" version="0.3.0"
 INFO superbank_rpc::server: RPC server listening on http://0.0.0.0:8899
-INFO superbank_rpc::head_cache::dragonsmouth: head cache: subscribed to DragonsMouth block-meta stream endpoint="https://your-endpoint.rpcpool.com:443" min_commitment=Processed
-INFO superbank_rpc::head_cache::dragonsmouth: head cache: subscribed to DragonsMouth endpoint="https://your-endpoint.rpcpool.com:443" min_commitment=Processed
+INFO superbank_rpc::head_cache::dragonsmouth: head cache: subscribed to DragonsMouth block-meta stream endpoint="https://<your-endpoint>.rpcpool.com:443" min_commitment=Processed
+INFO superbank_rpc::head_cache::dragonsmouth: head cache: subscribed to DragonsMouth endpoint="https://<your-endpoint>.rpcpool.com:443" min_commitment=Processed
 ```
 
 Test all three commitment levels:
@@ -628,8 +628,8 @@ cargo build --release -p superbank-rpc --features disk-cache
 RPC_HOST=0.0.0.0 RPC_PORT=8899 \
 CLICKHOUSE_URL=http://localhost:8123 CLICKHOUSE_DATABASE=default \
 HEAD_CACHE_ENABLED=true HEAD_CACHE_RETAIN_SLOTS=150 \
-DRAGONSMOUTH_ENDPOINT=https://your-endpoint.rpcpool.com:443 \
-DRAGONSMOUTH_X_TOKEN=your-token \
+DRAGONSMOUTH_ENDPOINT=https://<your-endpoint>.rpcpool.com:443 \
+DRAGONSMOUTH_X_TOKEN=<your-token> \
 DISK_CACHE_ENABLED=true \
 DISK_CACHE_PATH=/var/lib/superbank/disk-cache \
 DISK_CACHE_MAX_BYTES=2199023255552 \

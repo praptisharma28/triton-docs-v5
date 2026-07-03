@@ -41,7 +41,7 @@ import Client, {
 
 async function main() {
   // Connect to the gRPC endpoint
-  const client = new Client("https://your-endpoint.rpcpool.com", "your-x-token", {
+  const client = new Client("https://<your-endpoint>.rpcpool.com", "your-x-token", {
     grpcMaxDecodingMessageSize: 64 * 1024 * 1024, // 64MiB
   });
 
@@ -118,7 +118,7 @@ use {
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     // Connect to the gRPC endpoint
-    let mut client = GeyserGrpcClient::build_from_shared("https://your-endpoint.rpcpool.com")?
+    let mut client = GeyserGrpcClient::build_from_shared("https://<your-endpoint>.rpcpool.com")?
         .x_token(Some("your-x-token".to_string()))?
         .connect()
         .await?;

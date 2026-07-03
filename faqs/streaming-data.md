@@ -72,7 +72,7 @@ Yes, on both shared and dedicated infrastructure. Your existing WebSocket connec
 
 <summary>How do I connect to WebSockets?</summary>
 
-Replace `https` with `wss` in your RPC endpoint URL. For example: `wss://your-endpoint.rpcpool.com`. For backends, we recommend using gRPC instead, see [Dragon’s Mouth gRPC](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) for the lower-latency path.
+Replace `https` with `wss` in your RPC endpoint URL. For example: `wss://<your-endpoint>.rpcpool.com`. For backends, we recommend using gRPC instead, see [Dragon’s Mouth gRPC](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) for the lower-latency path.
 
 </details>
 
@@ -116,7 +116,7 @@ The most common cause is a filter that's too narrow. Try widening it (subscribe 
 
 <summary>I'm getting 401 or 403 errors</summary>
 
-Verify your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one). For Whirligig, the token is part of the URL: `wss://<endpoint>.mainnet.rpcpool.com/<token>/whirligig`. For gRPC services, the token is passed as the `x-token` metadata header, not in the URL. If you've recently configured allowed origins, double-check your origin matches what's whitelisted.
+Verify your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one). For Whirligig, the token is part of the URL: `wss://<your-endpoint>.mainnet.rpcpool.com/<your-token>/whirligig`. For gRPC services, the token is passed as the `x-token` metadata header, not in the URL. If you've recently configured allowed origins, double-check your origin matches what's whitelisted.
 
 </details>
 
