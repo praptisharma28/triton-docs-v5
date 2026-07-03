@@ -159,7 +159,7 @@ curl https://your-endpoint.mainnet.rpcpool.com/your-token -s -X POST \
   }'
 ```
 
-### Expected response
+The response shows the signature's confirmation status:
 
 ```json
 {
