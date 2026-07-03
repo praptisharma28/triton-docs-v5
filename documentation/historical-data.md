@@ -49,7 +49,7 @@ Every method takes the standard Solana parameters. Two add an optional slot hint
 | Method | Extension | Behaviour |
 | --- | --- | --- |
 | `getTransaction` | `slot` (optional `u64`) | Queries that exact slot directly. The response is `null` if the signature isn't present in that slot. |
-| `getSignaturesForAddress` | `beforeSlot` / `untilSlot` (optional `u64`) | Exclusive whole-slot bounds (`slot < beforeSlot`, `slot > untilSlot`), not signature-position cursors. `beforeSlot` can't be combined with `before`; `untilSlot` can't be combined with `until`. |
+| `getSignaturesForAddress` | `beforeSlot`, `untilSlot` (optional `u64`) | Exclusive whole-slot bounds (`slot < beforeSlot`, `slot > untilSlot`), not signature-position cursors. `beforeSlot` can't be combined with `before`; `untilSlot` can't be combined with `until`. |
 
 A `before` or `until` signature that Superbank can't find returns JSON-RPC error `-32020` (`Transaction <signature> not found`).
 
