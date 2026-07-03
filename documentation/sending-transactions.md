@@ -27,8 +27,10 @@ Most transactions go through a Triton endpoint, where **Jet sender**, Triton's p
 | --------------------- | :-------------------: | :-------------------------------: | :----------------------: |
 | Interface             |    Solana JSON-RPC    |             HTTP POST             |       Rust library       |
 | Reaches the TPU via   | your endpoint (server-side) |       your endpoint (server-side)       |   your client (direct)   |
-| Overhead              |   JSON-RPC envelope   | minimal, no envelope or preflight |   operating the client   |
-| SWQoS added by default (no extra charge) | ✓ | ✓ | ✓ |
+| Latency               |          low          |    lower, no JSON-RPC overhead    | minimal, direct to the leader |
+| Ease of use           |    any Solana SDK     | a single HTTP POST, no RPC library |   you operate the client   |
+| SWQoS added by default (no extra charge) | ✓ | ✓ | ✗ (unless you integrate it) |
+| `skipPreflight` option | ✓ | ✗ (always skips preflight) | ✗ (direct send, no preflight) |
 | Client to run         |          none         |                none               |            yes           |
 | Best for              |  broad compatibility  |       browsers, HFT backends      |   bots, custom routers   |
 
