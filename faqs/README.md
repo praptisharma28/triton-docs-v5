@@ -47,8 +47,8 @@ Project Yellowstone is Triton's suite of open-source Solana data tools, each nam
 | Metaplex DAS API  | Digital Asset Standard (DAS) API: query NFTs, compressed NFTs, and fungible tokens through one indexed request.          |
 | Account Sync      | A streaming-backed local cache for account reads: live updates with no polling and no code changes.                      |
 | Priority Fees API | Priority-fee estimation with tail-aware percentiles, so transactions land without overpaying.                            |
-| Metis swap API    | Swap routing across 20+ DEXes, with exact-out and platform-fee support.                                                  |
-| Titan swap API    | Real-time streaming quotes and routes over WebSocket, from the Argos meta-aggregator.                                    |
+| Metis Swap API    | Swap routing across 20+ DEXes, with exact-out and platform-fee support.                                                  |
+| Titan Swap API    | Real-time streaming quotes and routes over WebSocket, from the Argos meta-aggregator.                                    |
 | Jito              | Jito-enabled RPC: simulate atomic transaction bundles.                                                                   |
 | Dedicated nodes   | Private, single-purpose clusters (gRPC streaming, DAS, indexing) with isolated CPU and unlimited concurrent connections. |
 

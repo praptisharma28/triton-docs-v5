@@ -2,7 +2,7 @@
 description: Simulate Jito transaction bundles with Triton's Jito RPC support.
 ---
 
-# Jito bundle simulation
+# Jito Bundle Simulation
 
 Triton supports Jito's `simulateBundle` method on every plan, so you can test atomic transaction bundles on a Jito-enabled RPC before submitting them. For more information, see the [Jito searcher examples](https://github.com/jito-labs/searcher-examples) and [Jito's low-latency transactions documentation](https://docs.jito.wtf/lowlatencytxnsend).
 

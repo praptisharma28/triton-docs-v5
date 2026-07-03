@@ -42,7 +42,7 @@ All of the methods can be combined with Triton's percentile-based priority fee e
 
 Triton hosts routing, quote, and bundle APIs if you don't want to assemble any of these yourself.
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-code-branch">:code-branch:</i> <strong>Metis swap API</strong></td><td>Quoting, routing, and swaps across 20+ DEXes, hosted by Triton. No staked JUP required.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/metis-swap-api">Metis swap API</a></td></tr><tr><td><i class="fa-route">:route:</i> <strong>Titan swap API</strong></td><td>Real-time streaming quotes over WebSocket from the Argos meta-aggregator.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/titan-swap-api">Titan swap API</a></td></tr><tr><td><i class="fa-box">:box:</i> <strong>Jito bundle simulation</strong></td><td>Simulate atomic bundles on Triton's Jito-enabled RPC. Submitting goes direct to the Jito Block Engine.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/jito-bundles">Jito bundle simulation</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-code-branch">:code-branch:</i> <strong>Metis Swap API</strong></td><td>Quoting, routing, and swaps across 20+ DEXes, hosted by Triton. No staked JUP required.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/metis-swap-api">Metis Swap API</a></td></tr><tr><td><i class="fa-route">:route:</i> <strong>Titan Swap API</strong></td><td>Real-time streaming quotes over WebSocket from the Argos meta-aggregator.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/titan-swap-api">Titan Swap API</a></td></tr><tr><td><i class="fa-box">:box:</i> <strong>Jito Bundle Simulation</strong></td><td>Simulate atomic bundles on Triton's Jito-enabled RPC. Submitting goes direct to the Jito Block Engine.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/jito-bundles">Jito Bundle Simulation</a></td></tr></tbody></table>
 
 ## Pricing
 
@@ -52,9 +52,9 @@ Triton hosts routing, quote, and bundle APIs if you don't want to assemble any o
 | `simulateTransaction` | Standard RPC: `$0.08 / GB` of bandwidth plus `$10 / million` requests |
 | SWQoS | Included at no extra charge on every send through your Triton endpoint |
 | Priority fees API | Standard RPC: `$0.08 / GB` plus `$10 / million` calls |
-| Metis swap API | `$0.08 / GB` plus `$80 / million` queries |
-| Titan swap API | Bandwidth only, `$0.08 / GB` |
-| Jito bundles (simulation only) | Standard RPC: `$0.08 / GB` plus `$10 / million` calls |
+| Metis Swap API | `$0.08 / GB` plus `$80 / million` queries |
+| Titan Swap API | Bandwidth only, `$0.08 / GB` |
+| Jito Bundle Simulation | Standard RPC: `$0.08 / GB` plus `$10 / million` calls |
 
 {% hint style="info" %}
 With `skipPreflight: false` (the default), `sendTransaction` runs the preflight simulation as a separate call, so one send bills as 2 requests. `/sendtx` always skips preflight.

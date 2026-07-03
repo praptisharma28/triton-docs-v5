@@ -50,7 +50,7 @@ How to land Solana transactions reliably, especially under congestion.
 * **Shield only works on Shield-enabled RPCs** (those using Jet sender); standard Solana RPCs ignore the policy.
 * **Maintain your lists every epoch** and treat Shield as a filter, not a guarantee. Be careful with strict policies on time-critical sends (arbitrage, liquidations): Shield drops, rather than queues, a transaction when no eligible validator is available.
 
-## Jito bundles
+## Jito Bundle Simulation
 
 * **Simulate bundles with `simulateBundle`** (Jito RPC is available on all plans).
 * **`sendBundle` is Jito-exclusive** and requires your IP to be whitelisted with Jito's Block Engine.

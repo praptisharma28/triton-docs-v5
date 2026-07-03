@@ -2,7 +2,7 @@
 description: Stream or poll Solana swap quotes in real time and execute them, powered by Argos and DART.
 ---
 
-# Titan swap API
+# Titan Swap API
 
 Titan is a plug-and-play quoting and swap execution layer for your transactions, hosted on Triton: it finds the optimal route across Solana liquidity and re-optimises your trade on-chain the moment it settles.
 
@@ -21,7 +21,7 @@ Titan is a good fit for:
 
 ## Getting started
 
-Titan is enabled by default on every Triton Solana subscription. Depending on whether you poll for quotes or stream them, you use the HTTP or the WebSocket endpoint, both on your Triton endpoint (from your [customer dashboard](https://customers.triton.one)) under the `/titan` path:
+Titan is enabled by default on every Triton Solana subscription. Depending on whether you poll for quotes or stream them, you use the HTTP or the WebSocket endpoint (find them in your [customer dashboard](https://customers.triton.one)) under the `/titan` path:
 
 * **Stream** (recommended): connect over `wss://` and receive continuous quote updates.
 * **Poll**: request quotes over `https://` on the same `/titan` path.
@@ -38,7 +38,7 @@ const ws = new WebSocket(
 );
 
 ws.onopen = () => {
-  console.log("Connected to the Titan swap API");
+  console.log("Connected to the Titan Swap API");
 };
 
 ws.onmessage = (event) => {
@@ -57,7 +57,7 @@ Each streamed quote carries the route information you need to execute:
 4. **Select a quote**: pick the best by your criteria, such as price or provider.
 5. **Execute**: each `SwapRoute` arrives with either instructions to build and sign a transaction, or a ready-to-sign transaction you can submit directly.
 
-For the request and response format and the full execution flow, see the [Titan swap API docs](https://titan-exchange.gitbook.io/titan/titan-developer-docs/apis/swap-api#websocket-connections). A TypeScript SDK is available: [@titanexchange/sdk-ts](https://www.npmjs.com/package/@titanexchange/sdk-ts).
+For the request and response format and the full execution flow, see the [Titan Swap API docs](https://titan-exchange.gitbook.io/titan/titan-developer-docs/apis/swap-api#websocket-connections). A TypeScript SDK is available: [@titanexchange/sdk-ts](https://www.npmjs.com/package/@titanexchange/sdk-ts).
 
 ## Pricing
 

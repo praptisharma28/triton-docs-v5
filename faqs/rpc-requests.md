@@ -156,7 +156,7 @@ Jetstreamer is the tool for bulk-backfilling large ranges of Solana history from
 
 <summary>Can I use Jito sendBundle and bundle simulation with Triton RPCs?</summary>
 
-Bundle simulation is available to everyone: see [Jito bundle simulation](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/jito-bundles) for the full reference.
+Bundle simulation is available to everyone: see [Jito Bundle Simulation](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/jito-bundles) for the full reference.
 
 `sendBundle` itself isn't routed through our infrastructure. Routing bundles through Triton would add an extra hop in front of the Jito block engine, which adds latency and runs counter to the reason you're using bundles in the first place.
 
