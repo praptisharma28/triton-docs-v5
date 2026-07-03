@@ -18,12 +18,12 @@ Server-side filtering is per-method, so use what each method actually supports:
 * **`getTransaction` has no filters or pagination, so pass the `slot` hint when you know it.** A signature carries no timing information, so an unhinted lookup searches the entire ledger for it. Triton's optional `slot` parameter narrows the search to that one slot, cutting response time by roughly 50% and sparing the server a fall-back to deeper, costlier storage.
 * **`minContextSlot` is a consistency guard, not a speed lever.** It fails the request if the server has not reached that slot yet, protecting you from stale reads. Recent reads are fast on their own: the newest slots are served from the in-memory head cache in under 1 ms.
 
-## Backfill large history with streaming, not polling
+## Backfill large history with streaming
 
-Polling `getBlock` and `getTransaction` over HTTP for months of history is the slow path: use it only for small slot ranges. For real backfills, stream:
+Polling `getBlock` and `getTransaction` over HTTP for months of history is the slow path: use it only for small slot ranges. For heavy or full-chain backfills, we recommend two streaming paths:
 
-* **Jetstreamer + the public Old Faithful archive, for the largest backfills.** [Jetstreamer](https://github.com/anza-xyz/jetstreamer) is Anza's open-source backfilling toolkit that streams the full ledger from [Old Faithful](https://old-faithful.net/), the open public-good archive of every Solana block and transaction from genesis to tip. It replays history highly parallelised (over 2.7M TPS with strong hardware) into Jetstreamer or Geyser plugins. One limitation to plan around: Old Faithful carries no account updates, so Jetstreamer does not either. The [self-hosting walkthrough](https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/how-tos/index-solana-history-with-superbank) uses this path to backfill Superbank.
-* **Superbank's gRPC streams, for server-side-filtered pulls.** `StreamBlocks` and `StreamTransactions` replay bounded slot ranges straight from ClickHouse, with account include/exclude/required, vote, and success/failure filters, so you receive only the relevant slice instead of fetching everything.
+* **Jetstreamer + the public Old Faithful archive.** [Jetstreamer](https://github.com/anza-xyz/jetstreamer), Anza's open-source backfilling toolkit, streams from [Old Faithful](https://old-faithful.net/), the open public-good archive of every Solana block and transaction. It replays history highly parallelised (over 2.7M TPS with strong hardware) into ClickHouse or any other sink you choose. See the [guide](https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/how-tos/index-solana-history-with-superbank) for more details.
+* **Superbank's gRPC streams.** Managed `StreamBlocks` and `StreamTransactions` methods for replaying bounded slot ranges straight from ClickHouse with no operational overhead, plus account include/exclude/required, vote, and success/failure filters.
 
 ***
 
