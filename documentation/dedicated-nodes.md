@@ -82,10 +82,8 @@ Pricing is a fixed monthly price per node, starting at `$2,900 / month` for stre
 ## Best practices
 
 * **Put all your streaming traffic on the dedicated endpoint.** Leaving streams on a shared endpoint means metered charges and defeats the point of a fixed-cost node.
-* **Run your backend close to the node.** gRPC streams are backend-to-backend, so geographic distance is the main latency factor. Place your service in the same region as your node rather than relying on geo-distribution.
-* **Use the regional endpoint** where a product has one, connecting to the regional hostname rather than the shared geo-routed one.
-* **Filter to cut volume.** Server-side filters (skip votes, restrict to the accounts and programs you care about) reduce both bandwidth and cost. See [streaming best practices](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/best-practices).
-* **Failover is automatic.** If your node restarts or briefly falls behind the chain tip, traffic fails over to the shared cluster, so your stream is not interrupted.
+* **Run your backend close to the node.** gRPC streams are backend-to-backend, so geographic distance is the main latency factor.
+* **Filter to cut volume.** Server-side filters (skip votes, restrict to the accounts and programs you care about) reduce the bandwidth you pull and help you stay on the chain tip under load. See [streaming best practices](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/best-practices).
 
 ## What's next
 
