@@ -1,5 +1,5 @@
 ---
-description: Send a Solana transaction with /sendtx, Triton's direct HTTP submission endpoint that skips JSON-RPC overhead.
+description: Send a Solana transaction two ways, with /sendtx, the direct HTTP submission endpoint, and with standard sendTransaction.
 layout:
   pagination:
     visible: false
@@ -7,7 +7,7 @@ layout:
 
 # Quickstart
 
-Send a Solana transaction with **`/sendtx`**, the direct HTTP submission endpoint on every Triton endpoint. Both `/sendtx` and `sendTransaction` route through Yellowstone Jet, Triton's sending engine, with SWQoS on by default; `/sendtx` just skips the JSON-RPC envelope: no JSON parsing, no CORS preflight, a smaller payload, and no RPC client library. For all the send options and how they compare, see [Sending transactions](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions).
+In this quickstart we'll send a transaction two ways: **`/sendtx`**, the direct HTTP submission endpoint on every Triton endpoint, and standard **`sendTransaction`**. Both route through our Jet engine with SWQoS applied; `/sendtx` skips the JSON-RPC envelope for lower latency.
 
 ## 0. Prerequisites
 
@@ -42,7 +42,9 @@ const wire = tx.serialize();           // raw bytes
 const signature = bs58.encode(tx.signature!); // base58 signature, known before you send
 ```
 
-## 2. Submit with /sendtx
+## 2. Submit it
+
+### With /sendtx
 
 POST the serialised transaction. Pass `response=signature` to get the signature back in the response body.
 
@@ -79,7 +81,7 @@ curl -X POST 'https://your-endpoint.mainnet.rpcpool.com/your-token/sendtx?encodi
 {% endtab %}
 {% endtabs %}
 
-### Expected response
+#### Expected response
 
 With `response=signature`, the body is the transaction signature as plain text, not JSON:
 
@@ -89,9 +91,43 @@ With `response=signature`, the body is the transaction signature as plain text, 
 
 Query parameters: `encoding` (`base58` or `base64`, for text bodies; default `base58`), `response=signature` (return the signature on success), and `max_retries` (override the retry count). To route only through validators you trust, add the `Solana-ForwardingPolicies` header with your [Yellowstone Shield](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/shield-mev-protection) policy addresses.
 
-{% hint style="info" %}
-Prefer the standard JSON-RPC interface, or need options like `skipPreflight`? `sendTransaction` works on the same endpoint. See [Best practices](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/best-practices).
+{% hint style="warning" %}
+`/sendtx` is submission only and always skips preflight, so `skipPreflight: false` and simulation are not supported on it. Use `sendTransaction` if you need preflight, though we recommend running `simulateTransaction` as a separate call either way.
 {% endhint %}
+
+### With sendTransaction
+
+The standard Solana JSON-RPC method, on the same endpoint. Use it when you want the JSON-RPC interface or options like `skipPreflight`:
+
+{% tabs %}
+{% tab title="TypeScript" %}
+```ts
+const signature = await connection.sendRawTransaction(wire);
+console.log("Signature:", signature);
+```
+{% endtab %}
+
+{% tab title="curl" %}
+```bash
+curl https://your-endpoint.mainnet.rpcpool.com/your-token -s -X POST \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "sendTransaction",
+    "params": ["BASE64_SIGNED_TX", { "encoding": "base64" }]
+  }'
+```
+{% endtab %}
+{% endtabs %}
+
+#### Expected response
+
+The JSON-RPC result is the transaction signature:
+
+```json
+{ "jsonrpc": "2.0", "result": "5j7s4Hk3vQmPq8nLZ9xTe8oP...", "id": 1 }
+```
 
 ## 3. Verify
 

@@ -46,12 +46,15 @@ Triton hosts routing, quote, and bundle APIs if you don't want to assemble any o
 
 | What | Price |
 | --- | --- |
-| `sendTransaction`, `/sendtx`, `simulateTransaction` | Standard RPC: `$0.08 / GB` of bandwidth plus `$10 / million` requests |
+| `sendTransaction`, `/sendtx` | Standard RPC: `$0.08 / GB` of bandwidth plus `$10 / million` requests |
+| `simulateTransaction` | Its own standard RPC call, billed as a separate request |
 | SWQoS | Included at no extra charge on every send through your Triton endpoint |
 | Priority fees API | Standard RPC: `$0.08 / GB` plus `$10 / million` calls |
 | Metis swap API | `$0.08 / GB` plus `$80 / million` queries |
 | Titan swap API | Bandwidth only, `$0.08 / GB` |
 | Jito bundles | Simulation billed as standard RPC; bundle submission goes to the Jito Block Engine and is not billed by Triton |
+
+With `skipPreflight: false` (the default), `sendTransaction` runs the preflight simulation as a separate call, so one send bills as 2 requests. `/sendtx` always skips preflight.
 
 Each product page carries the details, and the full rate card is at [triton.one/pricing](https://triton.one/pricing).
 

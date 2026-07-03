@@ -41,7 +41,7 @@ Send the serialized transaction as the request body, one of two ways:
 
 | Header                     | Description                                                                          |
 | -------------------------- | ----------------------------------------------------------------------------------- |
-| `solana-forwardingpolicies` | Comma-separated Yellowstone Shield policy addresses to apply when forwarding.        |
+| `Solana-ForwardingPolicies` | Comma-separated [Yellowstone Shield](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/shield-mev-protection) policy addresses to apply when forwarding. |
 
 ## Examples
 
@@ -65,7 +65,7 @@ curl -X POST 'https://<your-endpoint>/sendtx?encoding=base64&response=signature'
 {% tab title="Base64 + Shield policy" %}
 ```bash
 curl -X POST 'https://<your-endpoint>/sendtx?encoding=base64&response=signature' \
-  -H 'solana-forwardingpolicies: <policy-address>' \
+  -H 'Solana-ForwardingPolicies: <policy-address>' \
   -d '<base64-encoded-transaction>'
 ```
 {% endtab %}
