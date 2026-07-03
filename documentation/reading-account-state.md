@@ -56,15 +56,6 @@ Depending on your use case, your build might combine multiple read paths:
 * **Wallets and NFT apps**: DAS API fetches assets and metadata you need in one call, while Cloudbreak or Account Sync handle user balances lookups.
 * **Low-latency trading and market making**: to get the fastest data, we recommend streaming it with gRPC ([Dragon's Mouth](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc)). If you want account reads in a web3.js-shaped client, Account Sync cuts read latency significantly compared to polling.
 
-## Pricing
-
-| Service | Price |
-| --- | --- |
-| Standard RPC | `$0.08 / GB` of bandwidth plus `$10 / million` calls |
-| Cloudbreak | Billed as standard RPC: `$0.08 / GB` plus `$10 / million` calls. Indexing is included by default and isn't charged separately |
-| Account Sync | Bandwidth only, `$0.08 / GB` of streamed data. The first read of each account is one standard JSON-RPC fetch; every read after resolves locally, with no per-call charge |
-| DAS API | `$0.08 / GB` of bandwidth plus `$50 / million` requests |
-
 ## Limitations
 
 * **Excluded methods.** `getLargestAccounts` is not served on shared endpoints. `getTokenLargestAccounts` does not accept JSON-RPC batch requests.
@@ -73,11 +64,12 @@ Depending on your use case, your build might combine multiple read paths:
 
 ## Pricing
 
-| What | Price |
+| Service | Price |
 | --- | --- |
-| Account and token reads (Cloudbreak Accounts) | Standard RPC: `$0.08 / GB` of bandwidth plus `$10 / million` calls, indexing included |
-| Account Sync | Bandwidth only, `$0.08 / GB` of streamed data, no per-call charge |
-| Metaplex DAS API | `$0.08 / GB` of bandwidth plus `$50 / million` requests |
+| Standard RPC | `$0.08 / GB` of bandwidth plus `$10 / million` calls |
+| Cloudbreak | Billed as standard RPC: `$0.08 / GB` plus `$10 / million` calls. Indexing is included by default and isn't charged separately |
+| Account Sync | Bandwidth only, `$0.08 / GB` of streamed data. The first read of each account is one standard JSON-RPC fetch; every read after resolves locally, with no per-call charge |
+| DAS API | `$0.08 / GB` of bandwidth plus `$50 / million` requests |
 
 ## What's next
 
