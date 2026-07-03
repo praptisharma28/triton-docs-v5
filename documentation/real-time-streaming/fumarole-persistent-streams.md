@@ -238,7 +238,7 @@ If you already have code built for our gRPC streams in Dragon's Mouth, integrati
 
 The main difference is that you need to manage a **persistent subscriber**, and alter your subscribe request slightly.
 
-For more details see the [yellowstone-fumarole-client docs](https://docs.rs/yellowstone-fumarole-client/latest/yellowstone_fumarole_client/).
+For the full walkthrough, follow the [Dragon's Mouth to Fumarole migration guide](https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/streaming/migrate-from-dragons-mouth-to-fumarole). For the complete API, see the [yellowstone-fumarole-client docs](https://docs.rs/yellowstone-fumarole-client/latest/yellowstone_fumarole_client/).
 
 ## Pricing
 

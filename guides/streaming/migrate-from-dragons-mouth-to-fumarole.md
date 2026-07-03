@@ -22,7 +22,7 @@ Fumarole serves the same Solana data as Dragon's Mouth, with a persistence and d
 Add the [`yellowstone-fumarole-client`](https://docs.rs/yellowstone-fumarole-client) crate and build a client from a config. The preferred form is a YAML file read with `serde_yaml`:
 
 ```yaml
-endpoint: https://fumarole.endpoint.rpcpool.com
+endpoint: https://ams.rpcpool.com # or nyc.rpcpool.com; connect to a regional cluster directly
 x-token: <your-token>
 response_compression: zstd
 ```
@@ -92,7 +92,7 @@ For heavy or high-latency workloads, open parallel data-plane connections and en
 {% tab title="Rust" %}
 ```rust
 let subscribe_config = FumaroleSubscribeConfig {
-    num_data_plane_tcp_connections: NonZeroU8::new(4).unwrap(), // up to 4
+    num_data_plane_tcp_connections: NonZeroU8::new(4).unwrap(), // e.g. 4 parallel connections
     ..Default::default()
 };
 let subscription = client
