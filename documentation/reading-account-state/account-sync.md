@@ -638,7 +638,7 @@ for (let attempt = 0; attempt < 10; attempt += 1) {
 
 ## Pricing
 
-Account Sync is billed on bandwidth only, `$0.08 / GB` of streamed data, with no per-call charge.
+The first pull of an account is a standard JSON-RPC read, billed at `$0.08 / GB` plus `$10 / million` requests. All subsequent reads of the same account are served from the stream and billed on bandwidth only, at `$0.08 / GB`.
 
 ## What's next
 
