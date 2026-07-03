@@ -32,7 +32,7 @@ Fumarole fits pipelines that value completeness and reliability over raw speed:
 * **Analytics and accounting** systems that cannot tolerate gaps in the data.
 * **Compliance and monitoring** tools that need a complete, ordered record.
 
-Not for latency-first workloads. If you need data as fast as possible for trading or MEV and can tolerate the occasional missed slot, use [Dragon's Mouth gRPC](dragon-s-mouth-grpc.md) instead: it is the lowest-latency source. Fumarole trades a little latency for completeness and resumability.
+Don't use it for latency-first workloads. If you need data as fast as possible for trading, look into [Dragon's Mouth gRPC](dragon-s-mouth-grpc.md) instead.
 
 ## Features and benefits
 

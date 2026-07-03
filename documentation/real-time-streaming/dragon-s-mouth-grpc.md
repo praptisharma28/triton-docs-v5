@@ -35,9 +35,9 @@ flowchart LR
     style app fill:#D6EAF8,stroke:#259DD0
 ```
 
-## Stream types and unary operations
+## Supported methods
 
-Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscriptions and one-shot unary calls you can use for occasional queries.
+Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscriptions (via the `Subscribe` method, plus the separate `SubscribeDeshred`) and one-shot unary calls you can use for occasional queries.
 
 {% tabs %}
 {% tab title="Streaming subscriptions" %}
