@@ -15,7 +15,7 @@ Server-side filtering is per-method, so use what each method actually supports:
 
 * **`getTransactionsForAddress` carries the full filter set.** Pass the `slot`, `blockTime`, `signature`, `status`, and `tokenAccounts` filters so you receive only the slice you need, and page with the returned `paginationToken`. Bound deep scans with a slot range (`slot: { gte, lt }`).
 * **`getSignaturesForAddress` paginates with `before`/`until` signature cursors**, plus Triton's `beforeSlot`/`untilSlot` whole-slot bounds when you already know the slot range: they skip the signature-to-slot lookup the standard cursors force on the server. It has no content filters.
-* **`getTransaction` has no filters or pagination, so pass the `slot` hint when you know it.** A signature carries no timing information, so an unhinted lookup searches the entire ledger for it. Triton's optional `slot` parameter narrows the search to that one slot, cutting response time by roughly 50% and sparing the server a fall-back to deeper, costlier storage.
+* **`getTransaction` has no filters or pagination, so pass the `slot` hint when you know it.** A signature carries no timing information, so an unhinted lookup searches the entire ledger for it. Triton's optional `slot` parameter narrows the search to that one slot, cutting response time by ~50% and sparing the server a fall-back to deeper, costlier storage.
 * **`minContextSlot` is a consistency guard, not a speed lever.** It fails the request if the server has not reached that slot yet, protecting you from stale reads. Recent reads are fast on their own: the newest slots are served from the in-memory head cache in under 1 ms.
 
 ## Backfill large history with streaming

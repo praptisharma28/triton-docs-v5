@@ -67,7 +67,7 @@ The full transaction, decoded. Trimmed:
 {% endtab %}
 {% endtabs %}
 
-If you already know the transaction's slot, pass Triton's optional `slot` hint. Superbank then queries that exact slot instead of searching the whole ledger for the signature, cutting response time by roughly 50%:
+If you already know the transaction's slot, pass Triton's optional `slot` hint. Superbank then queries that exact slot instead of searching the whole ledger for the signature, cutting response time by ~50%:
 
 ```bash
 curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
