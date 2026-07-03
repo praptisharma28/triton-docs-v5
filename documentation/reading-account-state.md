@@ -45,14 +45,25 @@ Every account-read method is served by one of these. Standard RPC covers the met
 | **Account Sync** (served from RAM via SDK)                                          | `getAccountInfo`, `getMultipleAccountsInfo`, `getParsedAccountInfo`, `getMultipleParsedAccounts` (and `*AndContext` variants)                                                                                                                    |
 | **DAS API** (Metaplex JSON-RPC extension)                                           | `getAsset`, `getAssets`, `getAssetProof`, `getAssetsByOwner`, `getAssetsByAuthority`, `getAssetsByCreator`, `getAssetsByGroup`, `searchAssets`, `getTokenAccounts`, `getNftEditions`, `getSignaturesForAsset`                                    |
 
+{% hint style="info" %}
 The single and multiple account reads (`getAccountInfo`, `getMultipleAccounts`) route through Cloudbreak by default, but you can also use Account Sync (the `@triton-one/triton-sdk` SDK) to resolve them from your local cache, faster and cheaper.
+{% endhint %}
 
-## Use cases
+Depending on your use case, your build might combine multiple read paths:
 
 * **Reading many program accounts at scale** (DEX, lending, indexers): Cloudbreak serves indexed `getProgramAccounts` and token queries 500x+ faster on repeated filter shapes.
 * **Tracking a set of accounts live** (any frontend or backend with a large polling codebase): Account Sync keeps your existing code, stores it locally in RAM, backed by a stream, and serves your reads from there for lower latency and cost.
 * **Wallets and NFT apps**: DAS API fetches assets and metadata you need in one call, while Cloudbreak or Account Sync handle user balances lookups.
 * **Low-latency trading and market making**: to get the fastest data, we recommend streaming it with gRPC ([Dragon's Mouth](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc)). If you want account reads in a web3.js-shaped client, Account Sync cuts read latency significantly compared to polling.
+
+## Pricing
+
+| Service | Price |
+| --- | --- |
+| Standard RPC | `$0.08 / GB` of bandwidth plus `$10 / million` calls |
+| Cloudbreak | Billed as standard RPC: `$0.08 / GB` plus `$10 / million` calls. Indexing is included by default and isn't charged separately |
+| Account Sync | Bandwidth only, `$0.08 / GB` of streamed data. The first read of each account is one standard JSON-RPC fetch; every read after resolves locally, with no per-call charge |
+| DAS API | `$0.08 / GB` of bandwidth plus `$50 / million` requests |
 
 ## Limitations
 
