@@ -10,7 +10,7 @@ Whirligig is a Rust proxy between your client and a Dragon's Mouth gRPC stream, 
 
 * **Real-time browser apps and extensions.** Frontends, dApps, and extensions can't speak gRPC. They subscribe over `wss://` and get gRPC-backed data with no library changes.
 * **Mobile apps.** The same drop-in WebSocket subscriptions work from iOS and Android clients.
-* **Backends.** If you can run a gRPC client, [Dragon's Mouth](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) is the lower-latency path for server-side services. Whirligig also fits backends that already run a standard Solana WebSocket client.
+* **Backends.** If you can run a gRPC client, [Dragon's Mouth](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) is the lower-latency path for server-side services, but Whirligig can also be used if you prefer a standard Solana WebSocket client.
 
 ## Features and benefits
 
