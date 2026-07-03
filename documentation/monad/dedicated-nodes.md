@@ -11,7 +11,7 @@ layout:
   outline:
     visible: true
   pagination:
-    visible: false
+    visible: true
   metadata:
     visible: true
   tags:
@@ -26,7 +26,7 @@ A dedicated Monad node is a private node provisioned for a single customer, with
 
 ## Getting a dedicated node
 
-Dedicated Monad nodes are provisioned on request. [Contact sales](https://triton.one/contact), or ask in your [customer dashboard](https://customers.triton.one) chat, to scope a node for your workload.
+Dedicated Monad nodes are provisioned on request. [Contact sales](https://triton.one/contact), or ask in your [customer dashboard](https://customers.triton.one) chat, and we'll talk through the best options for your workload.
 
 ***
 

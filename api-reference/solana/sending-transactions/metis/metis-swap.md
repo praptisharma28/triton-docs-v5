@@ -4,7 +4,7 @@ description: Build a signed-ready swap transaction from a Metis quote.
 
 # Metis /swap
 
-Turns a quote from [Metis quote](metis-quote.md) into a ready-to-sign swap transaction. Served at `/metis/swap` on your Triton endpoint. The flow is: get a quote, post it to `/metis/swap` to build the transaction, then sign and send it to the network.
+Turns a quote from [Metis quote](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/sending-transactions/metis/metis-quote) into a ready-to-sign swap transaction. Served at `/metis/swap` on your Triton endpoint. The flow is: get a quote, post it to `/metis/swap` to build the transaction, then sign and send it to the network.
 
 ## Request
 

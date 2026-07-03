@@ -11,7 +11,7 @@ layout:
   outline:
     visible: true
   pagination:
-    visible: false
+    visible: true
   metadata:
     visible: true
   tags:
@@ -29,7 +29,7 @@ Two interfaces stream live updates; pick by transport and throughput:
 | Whirligig WebSockets | Standard WebSocket subscriptions to accounts, programs, logs, signatures, slots, and roots, plus the Triton-only `transactionSubscribe` and `blockSubscribe` methods. |
 | gRPC (Dragon's Mouth) | High-throughput, backend-to-backend Geyser streaming of accounts, transactions, slots, blocks, and entries. |
 
-On gRPC, [Deshred](yellowstone-grpc/deshred.md) streams transactions reconstructed from shreds before the validator executes them, for the earliest possible signal.
+On gRPC, [Deshred](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/real-time-streaming/yellowstone-grpc/deshred) streams transactions reconstructed from shreds before the validator executes them, for the earliest possible signal.
 
 ***
 

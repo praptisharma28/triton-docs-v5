@@ -126,7 +126,7 @@ const transaction = pipe(
 ```
 
 {% hint style="info" %}
-The Ping Thing follows [best practices for transaction sending](https://docs.triton.one/chains/solana/sending-txs), including blockhash management and compute limits. See its [blockhash management source](https://github.com/Block-Logic/ping-thing-client/blob/main/utils/blockhash.ts).
+The Ping Thing follows [best practices for transaction sending](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions), including blockhash management and compute limits. See its [blockhash management source](https://github.com/Block-Logic/ping-thing-client/blob/main/src/utils/blockhash.rs).
 {% endhint %}
 {% endstep %}
 

@@ -13,7 +13,7 @@ layout:
   outline:
     visible: true
   pagination:
-    visible: false
+    visible: true
   metadata:
     visible: true
   tags:
@@ -23,6 +23,8 @@ layout:
 ---
 
 # Overview
+
+Monad is a high-performance, EVM-compatible Layer 1. Triton runs Monad RPC endpoints for early builders, with the standard Ethereum JSON-RPC and WebSocket APIs, so your existing EVM tooling works unchanged.
 
 ## Block explorers
 
@@ -39,7 +41,7 @@ layout:
 The differences between Monad and the standard Geth client are described here: [https://docs.monad.xyz/reference/rpc-differences](https://docs.monad.xyz/reference/rpc-differences)
 {% endhint %}
 
-### JSON-RPC
+## JSON-RPC
 
 Monad supports most of the JSON-RPC methods available in Geth. You can find the official documentation [here](https://docs.monad.xyz/reference/json-rpc/)
 
@@ -70,7 +72,7 @@ Expected result:
 }
 ```
 
-### WebSocket
+## WebSocket
 
 The WebSocket API is also available in Monad. You can find the official documentation [here](https://docs.monad.xyz/reference/websockets)
 

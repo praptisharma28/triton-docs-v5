@@ -1,5 +1,5 @@
 ---
-description: The complete Solana ledger served as spec-compliant Solana JSON-RPC by Superbank, Triton's historical-data backend.
+description: The complete Solana ledger, made faster and easier-to-use with Superbank.
 layout:
   width: default
   title:
@@ -11,7 +11,7 @@ layout:
   outline:
     visible: true
   pagination:
-    visible: false
+    visible: true
   metadata:
     visible: true
   tags:
@@ -22,50 +22,85 @@ layout:
 
 # Historical data
 
-Triton serves the complete Solana ledger as historical data through **Superbank**, its historical-data backend. Superbank is an open-source Rust workspace that ingests the full ledger, stores it in ClickHouse, and serves it as spec-compliant Solana JSON-RPC. It is the historical module of RPC 2.0 and the successor to Old Faithful, open source under AGPL at [github.com/solana-rpc/superbank](https://github.com/solana-rpc/superbank).
+Superbank is an [open-source](https://github.com/solana-rpc/superbank) Rust workspace that ingests the full ledger, stores it in ClickHouse, and serves it as spec-compliant Solana JSON-RPC, adding advanced filters, native pagination, and a new `getTransactionsForAddress` method.
 
-Because Superbank answers the standard Solana JSON-RPC methods, existing clients work unchanged. On a Triton endpoint where it is enabled, the historical methods you already call are served from Superbank automatically, with nothing to route or configure on your side.
+Because it's 100% compatible with the standard Solana JSON-RPC methods, existing clients work unchanged: all the historical methods you already call are served by our endpoints through the Superbank backend automatically.
 
-{% hint style="info" %}
-Superbank serves historical reads. For real-time data, use Dragon's Mouth (gRPC), Whirligig (WebSocket), Deshred (pre-execution), or Fumarole (persistent streams).
-{% endhint %}
+## Features and benefits
 
-New here? The [Quickstart](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/historical-data/quickstart) reads an address's history with `getSignaturesForAddress`, `getTransaction`, and `getTransactionsForAddress`.
-
-## What Superbank serves
-
-The complete ledger from genesis: every block, transaction, and entry. Historical methods currently served from Superbank:
-
-* `getTransaction`
-* `getSignaturesForAddress`
-* `getSignatureStatuses`
-* `getTransactionsForAddress` (a Superbank extension, documented below)
-
-The remaining historical methods are being migrated over from Old Faithful. Responses are spec-compliant, so no client changes are needed when a method moves to Superbank.
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-database">:database:</i> <strong>Complete ledger from genesis</strong></td><td>Every block, transaction, and entry, queryable back to genesis.</td><td></td></tr><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Faster historical queries</strong></td><td>At p50 against public RPC: 5x faster getSignaturesForAddress, 38x getSignatureStatuses, 3.3x getTransaction.</td><td></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Address history in one call</strong></td><td>getTransactionsForAddress returns a complete history (ATAs included) with server-side filters and a pagination cursor.</td><td></td></tr><tr><td><i class="fa-bolt">:bolt:</i> <strong>Sub-1 ms recent reads</strong></td><td>A head cache keeps the newest slots in memory, so recent reads return in under 1 ms.</td><td></td></tr><tr><td><i class="fa-coins">:coins:</i> <strong>Flat pricing across all the epochs and methods</strong></td><td>Every historical query costs $0.08 / GB plus $10 / million calls, no matter how deep into history it reaches.</td><td></td></tr><tr><td><i class="fa-code-fork">:code-fork:</i> <strong>Open source under AGPL</strong></td><td>Run, audit, or self-host the full stack, with source-agnostic ingest.</td><td></td></tr></tbody></table>
 
 ## How it works
 
-Superbank runs as three independent layers, ingest, storage, and query. Each scales on its own, and the data can be partitioned and sharded across servers when a single node is not enough.
+You query Superbank with the standard Solana JSON-RPC methods. Behind that, it ingests the full ledger into ClickHouse (a columnar database) and translates each request into SQL tuned to how the data is sorted.
 
-### Ingest
+Reads are tiered. A head cache holds the newest, not-yet-finalized slots in memory, so recent reads return in under 1 ms. An optional RocksDB disk cache serves recent finalized slots from local disk in place of ClickHouse. ClickHouse serves the full history, and a miss at any cache layer falls through to the next one automatically.
 
-The ingestor decodes blocks and transactions into rows and writes them to ClickHouse with no filtering or transformation, so writes stay at maximum throughput. It is source-agnostic, with built-in support for Dragon's Mouth gRPC, BigTable, JSON-RPC, and Anza's Jetstreamer, so you can backfill from an existing archive and then switch to a live stream without rewriting the pipeline. Triton backfills the ledger with Jetstreamer, then stays at chain tip with a Dragon's Mouth gRPC stream at `confirmed` commitment.
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
+flowchart LR
+    ledger["Full Solana ledger"] --> ingest["Ingest"] --> ch["ClickHouse<br/>columnar store"] --> q["JSON-RPC + gRPC streams<br/>head + disk cache tiers"] --> you["Your app"]
+    style you fill:#D6EAF8,stroke:#259DD0
+```
 
-### Storage
+The full architecture (storage layout, materialised views, tiered storage) matters mostly if you self-host. See [Self-hosting](#self-hosting) below.
 
-Reading history is an analytics workload: scan many rows, return a few columns, reach deep into the ledger, and let the server sort and filter. Superbank stores the data in ClickHouse, a columnar database, and leans on that for performance:
+## Supported methods
 
-* **Columnar storage**, so a query reads only the columns it asks for and skips the rest.
-* **Insert-time materialised views.** Each write to the `transactions` table also produces derived, pre-sorted copies, sorted the way each method reaches the data: by signature for `getSignatureStatuses`, by address for `getSignaturesForAddress`, and by token owner for `getTransactionsForAddress`.
-* **Per-column compression** (Delta + ZSTD for sequential values like slot, ZSTD for large repetitive blobs).
-* **Tiered storage** as data ages, from NVMe for recent epochs to HDD for older epochs to S3 for deep history, with no schema change.
-* A **bloom filter on signature** lets a lookup skip chunks that cannot contain a given signature, and an optional `gsfa_hot` partitioning spreads reads for very high-traffic addresses such as the USDC mint.
+The complete ledger from genesis: every block, transaction, and entry. Most Superbank methods match standard Solana JSON-RPC exactly; a few add an optional parameter or extend it.
 
-Base tables `blocks_metadata` and `transactions` are keyed by slot, and views are read newest-first. The full table schemas are at [github.com/solana-rpc/superbank/tree/main/ddl](https://github.com/solana-rpc/superbank/tree/main/ddl).
+| Methods | Features |
+| --- | --- |
+| `getBlock`, `getBlocks`, `getBlocksWithLimit`, `getBlockTime`, `getBlockHeight`, `getSlot`, `getTransactionCount`, `getLatestBlockhash`, `getFirstAvailableBlock`, `getInflationReward`, `getSignatureStatuses`, `getHealth`, `minimumLedgerSlot` | Standard Solana JSON-RPC |
+| `getTransaction` | Standard, plus Triton's optional `slot` hint (`u64`): skips the ledger-wide signature search by querying that exact slot. The response is `null` if the signature isn't present in that slot |
+| `getSignaturesForAddress` | Standard, plus Triton's `beforeSlot`/`untilSlot` (`u64`): exclusive whole-slot bounds (`slot < beforeSlot`, `slot > untilSlot`), not signature-position cursors. `beforeSlot` can't be combined with `before`, nor `untilSlot` with `until` |
+| `getTransactionsForAddress` | Triton's extension: a complete address history in one call (ATAs included) with server-side filters (by status, slot, block time, and token accounts) and a pagination cursor |
+| `StreamBlocks`, `StreamTransactions` | Triton's gRPC streaming extension: replay bounded slot ranges of history as a stream, with server-side filters. See [Streaming historical data](#streaming-historical-data) |
 
-### Query
+`getTransactionsForAddress` is documented below. Responses are spec-compliant, so no client changes are needed when a method moves to Superbank from Old Faithful.
 
-The query layer is a standard Solana JSON-RPC server plus the `getTransactionsForAddress` extension. Each request is translated into SQL tuned to the tables' physical sort order. A **head cache** subscribes to an upstream gRPC stream and holds the newest slots in memory, returning the latest data in under 1 ms and making `processed` commitment available for historical methods. Repeat reads come from a query cache (`getTransaction` results carry a longer TTL because finalised transactions never change), and `getSlot` is answered from an in-memory slot synchroniser. Every response carries headers showing which backend served it (ClickHouse, the head cache, or both) and how much work it did (rows read, rows returned, bytes processed).
+Serving notes:
+
+* JSON-RPC batch envelopes are supported.
+* `minimumLedgerSlot` reports the lowest slot retained in Superbank's ClickHouse-backed block storage.
+* On `getSignaturesForAddress`, if the signature you pass as `before` or `until` can't be found, the call returns JSON-RPC error `-32020` (`Transaction <signature> not found`).
+* With the head cache, `processed` commitment is served on the signature and transaction methods (`getSignaturesForAddress`, `getSignatureStatuses`, `getTransaction`, `getTransactionsForAddress`) and the slot and block-list methods (`getSlot`, `getBlockHeight`, `getTransactionCount`, `getLatestBlockhash`, `getBlocks`, `getBlocksWithLimit`). `getBlock`, `getBlockTime`, `getFirstAvailableBlock`, and `getInflationReward` take `confirmed` or `finalized`.
+
+## Streaming historical data
+
+Superbank also serves history as gRPC streams alongside JSON-RPC, for server-side-filtered bulk pulls where paginating JSON-RPC calls would be the slow path. Both methods replay bounded, inclusive slot ranges straight from ClickHouse.
+
+{% tabs %}
+{% tab title="StreamBlocks" %}
+Streams one message per block in the range, with block metadata, rewards, and transaction payloads:
+
+```bash
+grpcurl -proto superbank.proto \
+  -d '{ "start_slot": 250000000, "end_slot": 250000009 }' \
+  <your-endpoint>:10000 superbank.Superbank/StreamBlocks
+```
+{% endtab %}
+
+{% tab title="StreamTransactions" %}
+Streams one message per matching transaction. Filter server-side by accounts, votes, and success or failure:
+
+```bash
+grpcurl -proto superbank.proto \
+  -d '{
+    "start_slot": 250000000,
+    "end_slot": 250000009,
+    "filter": {
+      "vote": false,
+      "failed": false,
+      "account_include": ["EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"]
+    }
+  }' \
+  <your-endpoint>:10000 superbank.Superbank/StreamTransactions
+```
+{% endtab %}
+{% endtabs %}
+
+The proto lives at [superbank.proto](https://github.com/solana-rpc/superbank/blob/main/crates/superbank-rpc/proto/superbank.proto), and `10000` is the default gRPC port. The proto also defines unary methods and a bidirectional `Get` for compatibility; in v1 they return `UNIMPLEMENTED`.
 
 ## getTransactionsForAddress
 
@@ -101,14 +136,21 @@ It is a custom RPC method, not part of the standard Solana JSON-RPC API, but it 
 }
 ```
 
-### Parameters
+<details>
+
+<summary>Parameters</summary>
 
 | Parameter | Type   | Required | Description                              |
 | --------- | ------ | -------- | ---------------------------------------- |
 | address   | string | Yes      | Base58 Solana account address to search. |
 | options   | object | No       | Query options and filters.               |
 
-### Options
+</details>
+
+
+<details>
+
+<summary>Options</summary>
 
 | Option                         | Type                                   | Default                           | Description                                  |
 | ------------------------------ | -------------------------------------- | --------------------------------- | -------------------------------------------- |
@@ -122,7 +164,12 @@ It is a custom RPC method, not part of the standard Solana JSON-RPC API, but it 
 | maxSupportedTransactionVersion | number                                 | none                              | Used when transactionDetails is full.        |
 | filters                        | object                                 | none                              | Optional filters.                            |
 
-### Filters
+</details>
+
+
+<details>
+
+<summary>Filters</summary>
 
 | Filter        | Type                          | Description                                                          |
 | ------------- | ----------------------------- | -------------------------------------------------------------------- |
@@ -141,7 +188,14 @@ Comparison object example:
 }
 ```
 
-### Token account filtering
+`beforeSlot` and `untilSlot` are accepted as aliases for `filters.slot.lt` and `filters.slot.gt`. An alias can't be combined with a same-side slot filter (`lt`/`lte` for `beforeSlot`, `gt`/`gte` for `untilSlot`).
+
+</details>
+
+
+<details>
+
+<summary>Token account filtering</summary>
 
 `tokenAccounts` controls whether token-account activity owned by the requested address is included.
 
@@ -151,7 +205,10 @@ Comparison object example:
 | all            | Also include transactions involving token accounts owned by the address.  |
 | balanceChanged | Include owned token-account transactions only when token balance changed. |
 
-Token-owner activity is derived from transaction pre/post token balance metadata.
+Token-owner activity is derived from transaction pre/post token balance metadata, so these filters require the token-owner activity table to be populated.
+
+</details>
+
 
 ### Response
 
@@ -205,8 +262,43 @@ When `transactionDetails` is `full`, each result contains the encoded transactio
 {% endtab %}
 {% endtabs %}
 
-### Pagination
+### Examples
 
+{% tabs %}
+{% tab title="Successful only" %}
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "getTransactionsForAddress",
+  "params": ["AddressBase58", { "filters": { "status": "succeeded" } }]
+}
+```
+{% endtab %}
+
+{% tab title="Token balance changes" %}
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "getTransactionsForAddress",
+  "params": ["OwnerAddressBase58", { "filters": { "tokenAccounts": "balanceChanged" } }]
+}
+```
+{% endtab %}
+
+{% tab title="Slot range" %}
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "getTransactionsForAddress",
+  "params": ["AddressBase58", { "filters": { "slot": { "gte": 250000000, "lt": 251000000 } } }]
+}
+```
+{% endtab %}
+
+{% tab title="Pagination" %}
 Use the returned `paginationToken` in the next request to continue scanning.
 
 ```json
@@ -223,48 +315,23 @@ Use the returned `paginationToken` in the next request to continue scanning.
   ]
 }
 ```
-
-### Example: successful transactions only
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "getTransactionsForAddress",
-  "params": ["AddressBase58", { "filters": { "status": "succeeded" } }]
-}
-```
-
-### Example: token balance changes
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "getTransactionsForAddress",
-  "params": ["OwnerAddressBase58", { "filters": { "tokenAccounts": "balanceChanged" } }]
-}
-```
-
-### Example: slot range
-
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "getTransactionsForAddress",
-  "params": ["AddressBase58", { "filters": { "slot": { "gte": 250000000, "lt": 251000000 } } }]
-}
-```
+{% endtab %}
+{% endtabs %}
 
 ## Self-hosting
 
 Superbank is open source under AGPL, so you can run, audit, and extend it yourself. Its source-agnostic ingest means you can backfill from BigTable or an existing archive and then switch to a live stream.
 
 * Source and schemas: [github.com/solana-rpc/superbank](https://github.com/solana-rpc/superbank)
-* Walkthrough: [Index Solana history with Superbank](https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/how-tos/index-solana-history-with-superbank)
+* Walkthrough: [Index Solana history with Superbank](https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/how-tos/index-solana-history-with-superbank)
 
 Prefer not to operate it? Triton runs Superbank as a managed, globally distributed service. [Get an endpoint](https://customers.triton.one/onboarding).
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-sitemap">:sitemap:</i> <strong>Architecture breakdown</strong></td><td>How Superbank ingests, stores, and serves the full ledger.</td><td><a href="https://blog.triton.one/inside-superbank-architecture-breakdown">Inside Superbank</a></td></tr><tr><td><i class="fa-rocket">:rocket:</i> <strong>Self-hosting walkthrough</strong></td><td>Index Solana history with Superbank, from backfill to live tip.</td><td><a href="https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/how-tos/index-solana-history-with-superbank">Index Solana history with Superbank</a></td></tr></tbody></table>
+
+## What's next
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Read an address's full history in one call, back to genesis, in under 2 minutes.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/historical-data/quickstart">Quickstart</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Query history efficiently: pagination, filters, and cost control at scale.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/historical-data/best-practices">Best practices</a></td></tr></tbody></table>
 
 ***
 

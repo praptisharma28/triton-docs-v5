@@ -31,7 +31,7 @@ Both options expose the same RPC interface, so you can start managed and migrate
 
 Superbank has three parts, each running as a separate process:
 
-```
+```text
 [Dragon's Mouth / Fumarole / RPC]
           ↓
   superbank (ingestor)      ← Rust binary; runs on your host or in a container
@@ -71,7 +71,7 @@ Adding `processed` commitment (in addition to `confirmed`/`finalized`) requires 
 
 * **ClickHouse**, 26.x or later. Docker is the fastest way to get one running.
 * **Rust**, stable toolchain, 1.80+. Install via [rustup.rs](https://rustup.rs).
-* **A Dragon's Mouth gRPC endpoint or Fumarole subscription**, for live ingestion. Get one at [triton.one](https://triton.one). For backfill only, the JSON-RPC source works with any public endpoint.
+* **A Dragon's Mouth gRPC endpoint or Fumarole subscription**, for live ingestion. Get one at [customers.triton.one](https://customers.triton.one). For backfill only, the JSON-RPC source works with any public endpoint.
 * Git and standard build tools (`gcc`, `pkg-config`, `libssl-dev` on Linux / Xcode Command Line Tools on macOS).
 
 ## Build and run
@@ -199,9 +199,12 @@ For live ingestion via Dragon's Mouth (gRPC):
 ```yaml
 source: "grpc"
 
-endpoint: "https://your-endpoint.rpcpool.com:443"
-x-token: "your-token"
+endpoint: "https://<your-endpoint>.rpcpool.com:443"
+x-token: "<your-token>"
 commitment: "finalized"
+# "*" = resume from the highest slot already in blocks_metadata on restart (recommended for production).
+# 0   = start from the earliest available slot.
+dragonsmouth-from-slot: "*"
 
 clickhouse-url: "http://localhost:8123"
 clickhouse-database: "default"
@@ -218,10 +221,13 @@ For live ingestion via **Fumarole** (persistent consumer group, resumes from whe
 ```yaml
 source: "fumarole"
 
-fumarole-endpoint: "https://your-endpoint.rpcpool.com:443"
-fumarole-x-token: "your-token"
+fumarole-endpoint: "https://<your-endpoint>.rpcpool.com:443"
+fumarole-x-token: "<your-token>"
 fumarole-consumer-group: "superbank-mainnet"
 fumarole-create-consumer-group: true  # set to false after first run
+fumarole-data-plane-tcp-connections: 4       # parallel TCP connections for download; max 20
+fumarole-concurrent-download-limit-per-tcp: 2
+# fumarole-memory-soft-limit-bytes: 25769803776  # 24 GiB soft limit; set 0 to disable
 
 clickhouse-url: "http://localhost:8123"
 clickhouse-database: "default"
@@ -235,8 +241,8 @@ entries-table: "default.entries"
 
 On first run you'll see the consumer group created, then data flowing:
 
-```
-INFO superbank::ingest::fumarole: starting superbank fumarole ingest source="fumarole" endpoint=https://your-endpoint.rpcpool.com:443 consumer_group=superbank-mainnet
+```text
+INFO superbank::ingest::fumarole: starting superbank fumarole ingest source="fumarole" endpoint=https://<your-endpoint>.rpcpool.com:443 consumer_group=superbank-mainnet
 INFO superbank::ingest::fumarole: created Fumarole consumer group consumer_group=superbank-mainnet
 INFO superbank::clickhouse: clickhouse insert committed table="default.transactions" rows=4051 slot_min=424497433 slot_max=424497435
 INFO superbank::clickhouse: clickhouse insert committed table="default.blocks_metadata" rows=3 slot_min=424497433 slot_max=424497435
@@ -251,7 +257,7 @@ For **historical backfill**, there are two approaches depending on scale.
 
 **Large-scale backfill (recommended): Jetstreamer + Old Faithful**
 
-For ingesting months or years of history, use the Jetstreamer adapter pointed at Triton's [Old Faithful](https://docs.triton.one/project-yellowstone/old-faithful-historical-archive) archival backend. Old Faithful has full history back to genesis and serves data at wire speed, far faster than polling `getBlock` over HTTP. Bound the range with the epoch or slot arguments; see the [Filtering section](index-solana-history-with-superbank.md#filtering-to-your-own-transactions) for trade-offs if you also want a program filter.
+For ingesting months or years of history, use the Jetstreamer adapter pointed at Triton's [Old Faithful](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/historical-data) archival backend. Old Faithful has full history back to genesis and serves data at wire speed, far faster than polling `getBlock` over HTTP. Bound the range with the epoch or slot arguments; see the [Filtering section](#filtering-to-your-own-transactions) for trade-offs if you also want a program filter.
 
 **Small-to-medium backfill: JSON-RPC source**
 
@@ -260,7 +266,7 @@ For shorter ranges (e.g. a few thousand slots), the `rpc` source works well:
 ```yaml
 source: "rpc"
 
-rpc-url: "https://your-endpoint.rpcpool.com/your-token"
+rpc-url: "https://<your-endpoint>.rpcpool.com/<your-token>"
 rpc-from-slot: 424000000
 rpc-slot-count: 10000    # or use rpc-to-slot for an explicit end slot
 rpc-max-inflight: 64
@@ -269,7 +275,17 @@ clickhouse-url: "http://localhost:8123"
 # ... rest same as above
 ```
 
-Use a Triton HTTP RPC endpoint (available from your [rpcpool.com](https://rpcpool.com) dashboard). Dragon's Mouth is gRPC, so the `rpc` source needs your regular HTTP JSON-RPC endpoint. Triton's shared pool allows up to 120 RPS, so `rpc-max-inflight: 64` runs without throttling. Triton also automatically routes `getBlock` for older slots through Old Faithful, so you get full history regardless of slot age. The public `api.mainnet-beta.solana.com` endpoint rate-limits `getBlock` aggressively and lacks full history; avoid it for any bulk backfill.
+Use a Triton HTTP RPC endpoint (available from your [customers.triton.one](https://customers.triton.one) dashboard). Dragon's Mouth is gRPC, so the `rpc` source needs your regular HTTP JSON-RPC endpoint. Triton's shared pool allows up to 120 RPS, so `rpc-max-inflight: 64` runs without throttling. Triton also automatically routes `getBlock` for older slots through Old Faithful, so you get full history regardless of slot age. The public `api.mainnet-beta.solana.com` endpoint rate-limits `getBlock` aggressively and lacks full history; avoid it for any bulk backfill.
+
+#### ClickHouse insert retry
+
+For gRPC, RPC, and Bigtable sources, the ingestor retries failed ClickHouse inserts with exponential backoff. Fumarole is excluded: it manages durability at the consumer-group level.
+
+| Config key | Env var | Default | Description |
+| --- | --- | --- | --- |
+| `insert-max-retries` | `CLICKHOUSE_INSERT_MAX_RETRIES` | `5` | Maximum retry attempts per batch |
+| `insert-retry-base-ms` | `CLICKHOUSE_INSERT_RETRY_BASE_MS` | `1000` | Initial retry delay (ms) |
+| `insert-retry-max-ms` | `CLICKHOUSE_INSERT_RETRY_MAX_MS` | `30000` | Maximum retry delay after backoff (ms) |
 {% endstep %}
 
 {% step %}
@@ -283,7 +299,7 @@ You'll see log lines as blocks are ingested. The ingestor writes to `transaction
 
 Example output (RPC backfill source):
 
-```
+```text
 INFO superbank: starting name="superbank" version="0.3.0"
 INFO superbank::ingest::rpc: starting superbank ingest source="rpc" from_slot=424274200 to_slot=424274209
 INFO superbank::clickhouse: clickhouse insert committed table="default.transactions" rows=1582 slot=424274200 progress_percent=100.0
@@ -292,9 +308,9 @@ INFO superbank::clickhouse: clickhouse insert committed table="default.blocks_me
 
 Example output (gRPC / Dragon's Mouth live source):
 
-```
+```text
 INFO superbank: starting name="superbank" version="0.3.0"
-INFO superbank::ingest::grpc: starting superbank ingest source="grpc" endpoint=https://your-endpoint.rpcpool.com:443
+INFO superbank::ingest::grpc: starting superbank ingest source="grpc" endpoint=https://<your-endpoint>.rpcpool.com:443
 INFO superbank::ingest::grpc: gRPC health check passed status="serving"
 INFO superbank::ingest::grpc: subscribed to gRPC stream from_slot=424432530
 INFO superbank::clickhouse: clickhouse insert committed table="default.transactions" rows=2387 slot_min=424432637 slot_max=424432638
@@ -330,6 +346,8 @@ CLICKHOUSE_BLOCKS_METADATA_TABLE=default.blocks_metadata \
 ./target/release/superbank-rpc
 ```
 
+By default, all JSON-RPC responses use HTTP `200 OK`, including error bodies. To return HTTP `503 Service Unavailable` on server-side failures (useful for load balancers that route on HTTP status), add `--emit-http-errors` or set `SUPERBANK_RPC_EMIT_HTTP_ERRORS=true`. Only internal errors (`-32603`), timeouts (`-32000`), node unhealthy (`-32005`), and storage unreachable (`-32019`) are promoted to HTTP 503; client and data-condition errors remain 200 OK.
+
 Test it:
 
 ```bash
@@ -360,6 +378,8 @@ curl -s http://localhost:8899 \
 # → {"count": 3, "firstSlot": 424497440}
 ```
 
+Each item in `getTransactionsForAddress` now includes a `version` field (`"legacy"` or `0` for versioned transactions). Pass `maxSupportedTransactionVersion: 0` in the params to receive versioned transactions.
+
 Your Superbank instance is now serving Solana-compatible RPC at `:8899`.
 {% endstep %}
 {% endstepper %}
@@ -377,7 +397,7 @@ Use the `rpc-from-slot` / `rpc-to-slot` parameters (or the Jetstreamer epoch arg
 ```yaml
 # superbank.yaml - ingest a specific slot range, no program filter
 source: "rpc"
-rpc-url: "https://your-endpoint.rpcpool.com/your-token"
+rpc-url: "https://<your-endpoint>.rpcpool.com/<your-token>"
 rpc-from-slot: 420000000
 rpc-to-slot:   425000000
 rpc-max-inflight: 64
@@ -502,8 +522,8 @@ Then start the RPC server with the head cache pointed at a Dragon's Mouth endpoi
 
 ```bash
 HEAD_CACHE_ENABLED=true \
-DRAGONSMOUTH_ENDPOINT=https://your-endpoint.rpcpool.com:443 \
-DRAGONSMOUTH_X_TOKEN=your-token \
+DRAGONSMOUTH_ENDPOINT=https://<your-endpoint>.rpcpool.com:443 \
+DRAGONSMOUTH_X_TOKEN=<your-token> \
 HEAD_CACHE_RETAIN_SLOTS=32 \
 HEAD_CACHE_MIN_COMMITMENT=processed \
 CLICKHOUSE_URL=http://localhost:8123 \
@@ -513,11 +533,11 @@ CLICKHOUSE_URL=http://localhost:8123 \
 
 On startup you'll see the head cache subscribe to Dragon's Mouth:
 
-```
+```text
 INFO superbank_rpc: starting name="superbank-rpc" version="0.3.0"
 INFO superbank_rpc::server: RPC server listening on http://0.0.0.0:8899
-INFO superbank_rpc::head_cache::dragonsmouth: head cache: subscribed to DragonsMouth block-meta stream endpoint="https://your-endpoint.rpcpool.com:443" min_commitment=Processed
-INFO superbank_rpc::head_cache::dragonsmouth: head cache: subscribed to DragonsMouth endpoint="https://your-endpoint.rpcpool.com:443" min_commitment=Processed
+INFO superbank_rpc::head_cache::dragonsmouth: head cache: subscribed to DragonsMouth block-meta stream endpoint="https://<your-endpoint>.rpcpool.com:443" min_commitment=Processed
+INFO superbank_rpc::head_cache::dragonsmouth: head cache: subscribed to DragonsMouth endpoint="https://<your-endpoint>.rpcpool.com:443" min_commitment=Processed
 ```
 
 Test all three commitment levels:
@@ -542,16 +562,99 @@ curl -s http://localhost:8899 \
 The cache holds the last `HEAD_CACHE_RETAIN_SLOTS` slots in memory and merges them with ClickHouse results for `getTransaction` and `getSignatureStatuses` queries.
 
 {% hint style="info" %}
-**RAM requirement.** The head cache itself is lightweight: at the default of 32 slots, it holds roughly 32 × \~1,500 mainnet transactions worth of metadata in memory, typically under 500 MB. The dominant memory cost is ClickHouse: for a full mainnet history, plan for at least 32 GB RAM on the ClickHouse host (64 GB+ for comfortable production operation). The `superbank` and `superbank-rpc` binaries themselves each use well under 2 GB.
+**RAM requirement.** The head cache itself is lightweight: at the default of 32 slots, it holds \~32 × 1,500 mainnet transactions worth of metadata in memory, typically under 500 MB. The dominant memory cost is ClickHouse: for a full mainnet history, plan for at least 32 GB RAM on the ClickHouse host (64 GB+ for comfortable production operation). The `superbank` and `superbank-rpc` binaries themselves each use well under 2 GB.
 {% endhint %}
 
 {% hint style="info" %}
 The `grpc-head-cache` feature pulls in AGPL-licensed dependencies via the Yellowstone gRPC crate. This is why it's an opt-in compile feature rather than the default.
 {% endhint %}
 
-## Optional: disk cache (v0.4.0+)
+## Optional: gRPC streaming (`grpc-streaming`)
 
-Superbank v0.4.0+ adds an optional disk cache that serves hot queries from local storage before touching ClickHouse.
+When compiled with `--features grpc-streaming` and enabled at runtime, the RPC server exposes a tonic gRPC endpoint alongside JSON-RPC. The current implementation supports historical `StreamBlocks` and `StreamTransactions` over bounded inclusive slot ranges from ClickHouse.
+
+`StreamBlocks` returns one message per matching block with block metadata, rewards, and transaction payloads. `StreamTransactions` returns one message per matching transaction. Both support account include/exclude/required filters, vote filtering, and failed/success filtering.
+
+Build with the feature:
+
+```bash
+cargo build --release -p superbank-rpc --features grpc-streaming
+```
+
+Then start with gRPC enabled (add alongside the env vars from the RPC server step):
+
+```bash
+SUPERBANK_GRPC_ENABLED=true \
+SUPERBANK_GRPC_PORT=10000 \
+./target/release/superbank-rpc
+```
+
+Configuration:
+
+| Flag | Env var | Default | Description |
+| --- | --- | --- | --- |
+| `--superbank-grpc-enabled` | `SUPERBANK_GRPC_ENABLED` | `false` | Enable gRPC endpoint at runtime |
+| `--superbank-grpc-host` | `SUPERBANK_GRPC_HOST` | `0.0.0.0` | Bind host |
+| `--superbank-grpc-port` | `SUPERBANK_GRPC_PORT` | `10000` | Bind port |
+| `--superbank-grpc-max-slot-range` | `SUPERBANK_GRPC_MAX_SLOT_RANGE` | `100` | Maximum inclusive slots per stream request |
+| `--superbank-grpc-query-timeout-ms` | `SUPERBANK_GRPC_QUERY_TIMEOUT_MS` | `30000` | Per-chunk ClickHouse range-query timeout (ms) |
+| `--superbank-grpc-chunk-slots` | `SUPERBANK_GRPC_CHUNK_SLOTS` | `8` | Slots fetched from ClickHouse per chunk |
+| `--superbank-grpc-max-send-bytes` | `SUPERBANK_GRPC_MAX_SEND_BYTES` | `104857600` | Max encoded gRPC response message size (100 MB) |
+| `--superbank-grpc-max-concurrent-streams` | `SUPERBANK_GRPC_MAX_CONCURRENT_STREAMS` | `20` | HTTP/2 concurrent stream limit |
+
+## Optional: disk cache (`disk-cache`)
+
+When compiled with `--features disk-cache` (which implies `grpc-head-cache`) and enabled at runtime, superbank-rpc keeps a RocksDB-backed cache of recent **finalized** slots on local disk. The read tiering becomes:
+
+```text
+head cache (memory, unfinalized tip) → disk cache (finalized, recent slots) → ClickHouse (full history)
+```
+
+The cache is hydrated from ClickHouse on startup, kept current as the Dragon's Mouth stream finalizes slots, and self-repairs gaps from ClickHouse. It never writes to ClickHouse. Any miss, hole, or decode failure silently falls back to a ClickHouse read.
+
+Methods served from disk when covered: `getBlock`, `getBlocks`, `getBlocksWithLimit`, `getBlockTime`, `getTransaction`, `getSignatureStatuses`, `getSignaturesForAddress`, and `getTransactionsForAddress` (including `tokenAccounts` filters).
+
+{% hint style="warning" %}
+**Sizing:** at mainnet volume the default 10-epoch window (4,320,000 slots) needs on the order of **15-20 TB** of NVMe even with compression (\~1.5-2 TB per epoch). Set `DISK_CACHE_MAX_BYTES` to bound disk usage; the retention window shrinks to fit.
+{% endhint %}
+
+Requires `HEAD_CACHE_ENABLED=true` with a `DRAGONSMOUTH_ENDPOINT`. Set `HEAD_CACHE_RETAIN_SLOTS` to at least `150` when the disk cache is enabled (the default `32` is too small: finalized slots are evicted before the disk snapshot hook fires).
+
+```bash
+# Build with disk-cache (implies grpc-head-cache)
+cargo build --release -p superbank-rpc --features disk-cache
+
+# Run
+RPC_HOST=0.0.0.0 RPC_PORT=8899 \
+CLICKHOUSE_URL=http://localhost:8123 CLICKHOUSE_DATABASE=default \
+HEAD_CACHE_ENABLED=true HEAD_CACHE_RETAIN_SLOTS=150 \
+DRAGONSMOUTH_ENDPOINT=https://<your-endpoint>.rpcpool.com:443 \
+DRAGONSMOUTH_X_TOKEN=<your-token> \
+DISK_CACHE_ENABLED=true \
+DISK_CACHE_PATH=/var/lib/superbank/disk-cache \
+DISK_CACHE_MAX_BYTES=2199023255552 \
+./target/release/superbank-rpc
+```
+
+Key configuration options:
+
+| Option | Environment | Default | Notes |
+| ------ | ----------- | ------- | ----- |
+| `--disk-cache-enabled` | `DISK_CACHE_ENABLED` | `false` | Enable at runtime |
+| `--disk-cache-path` | `DISK_CACHE_PATH` | (none) | RocksDB directory; required when enabled |
+| `--disk-cache-retain-slots` | `DISK_CACHE_RETAIN_SLOTS` | `4320000` | Finalized slots to retain (\~10 epochs) |
+| `--disk-cache-max-bytes` | `DISK_CACHE_MAX_BYTES` | `0` | Disk byte budget; `0` = unlimited |
+| `--disk-cache-block-cache-bytes` | `DISK_CACHE_BLOCK_CACHE_BYTES` | `4294967296` | RocksDB block cache (4 GB default) |
+| `--disk-cache-read-concurrency` | `DISK_CACHE_READ_CONCURRENCY` | `64` | Max concurrent blocking disk reads |
+| `--disk-cache-backfill-enabled` | `DISK_CACHE_BACKFILL_ENABLED` | `true` | ClickHouse→disk backfill on startup |
+
+Observability: `superbank_disk_cache_*` metrics cover coverage span, hit/miss per operation, and write/backfill/repair/eviction activity. The `X-Superbank-Sources` response header reports `disk-cache` when a response was served from disk.
+
+Parity validation and performance comparison scripts are in `tests/k6/scenarios/validation/superbank-rpc-disk-cache-parity.js` and `tests/k6/scenarios/performance/superbank-rpc-disk-cache-compare.js`.
+
+{% hint style="info" %}
+The `disk-cache` feature implies `grpc-head-cache` and therefore pulls in `yellowstone-block-machine` (AGPL-3.0).
+{% endhint %}
 
 ## Going to production
 
@@ -601,6 +704,18 @@ Both binaries expose Prometheus metrics at `/metrics`:
 **Key ingestor metrics (`:9901`):**
 
 The ingestor tracks insert throughput, batch sizes, and ClickHouse write latency. Watch for any sustained gap between the max ingested slot and the chain tip: this indicates the ingestor is falling behind.
+
+The ingestor also exposes a liveness health check at `http://<host>:9901/health`. It returns `200 OK` while flushing normally, and `503 Service Unavailable` when no successful ClickHouse flush has occurred within `health-stale-secs` seconds (default: 120). Set `health-stale-secs: 0` in your config to disable the staleness check. Add `METRICS_CLUSTER_LABEL` to attach a static `cluster="..."` label to all ingestor metrics, useful for multi-cluster Prometheus setups.
+
+When running the Fumarole source, the following additional gauges and counters are emitted:
+
+| Metric | Description |
+| --- | --- |
+| `superbank_ingest_fumarole_memory_soft_limit_bytes` | Configured memory soft limit |
+| `superbank_ingest_fumarole_buffered_bytes` | Estimated assembler bytes in memory |
+| `superbank_ingest_fumarole_pending_slots` | Slots waiting to flush |
+| `superbank_ingest_fumarole_rss_bytes` | Process RSS sampled by the memory guard |
+| `superbank_ingest_fumarole_pressure_flushes_total` | Backpressure-triggered flushes (rising counter indicates memory pressure) |
 
 **Example Prometheus queries:**
 

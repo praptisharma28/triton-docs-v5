@@ -13,7 +13,7 @@ layout:
   outline:
     visible: true
   pagination:
-    visible: false
+    visible: true
   metadata:
     visible: true
   tags:
@@ -24,21 +24,21 @@ layout:
 
 # Archival service
 
-### Overview
-
 Full nodes on Sui enforce limited data retention for performance and scalability reasons. Once a full node prunes older data, it is no longer available through the standard gRPC or JSON-RPC endpoints.
 
 The **Archival Storage and Service** solves this by providing long-term, consistent access to the full historical record of the Sui blockchain, including old transactions, checkpoints, and object states from genesis. It is the historical backbone for indexers, analytics platforms, exchanges, and any application that needs to query data older than what a full node retains.
 
 The Archival Service exposes the same `LedgerService` gRPC interface, so if you are already using the standard gRPC API, switching to the archival endpoint for historical lookups requires no client changes beyond the endpoint URL.
 
-> **Note:** The standard gRPC full node endpoint does **not** automatically fall back to Archival when data has been pruned. Your application must query the Archival endpoint explicitly for historical data.
+{% hint style="warning" %}
+The standard gRPC full node endpoint does **not** automatically fall back to Archival when data has been pruned. Your application must query the Archival endpoint explicitly for historical data.
+{% endhint %}
 
 ***
 
-### Endpoints
+## Endpoints
 
-#### Shared clients
+### Shared infrastructure
 
 Shared plan clients access the Archival Service via a fixed shared endpoint:
 
@@ -52,19 +52,17 @@ archive.mainnet.sui.rpcpool.com:443
 X-Token: <your-token>
 ```
 
-Your token can be found in your [client panel](https://customers.triton.one/).
+Your token can be found in your [customer dashboard](https://customers.triton.one/).
 
 ***
 
-#### Dedicated clients
+### Dedicated nodes
 
 Dedicated plan clients have a private archival endpoint provisioned exclusively for their use:
 
 ```
-archive-XXX.sui.rpcpool.com:443
+archive-<your-endpoint>.sui.rpcpool.com:443
 ```
-
-Replace `XXX` with your dedicated endpoint slug shown in the panel.
 
 **Authentication** is required via the `X-Token` header:
 
@@ -72,11 +70,11 @@ Replace `XXX` with your dedicated endpoint slug shown in the panel.
 X-Token: <your-token>
 ```
 
-Both your endpoint and token can be found in your [client panel](https://customers.triton.one/).
+Both your endpoint and token can be found in your [customer dashboard](https://customers.triton.one/).
 
 ***
 
-### Authentication
+## Authentication
 
 All archival endpoints require the `X-Token` header on every request, the same token used for your standard gRPC endpoint.
 
@@ -91,7 +89,7 @@ grpcurl \
 
 ***
 
-### What data is available
+## What data is available
 
 The Archival Service stores and serves the complete history of the Sui mainnet, including:
 
@@ -102,11 +100,11 @@ The Archival Service stores and serves the complete history of the Sui mainnet, 
 
 ***
 
-### Using the archival service
+## Using the archival service
 
 The Archival Service uses the standard Sui gRPC `LedgerService` interface. You interact with it the same way as a regular gRPC full node, the only difference is the endpoint URL.
 
-#### List available services
+### List available services
 
 ```bash
 grpcurl \
@@ -115,7 +113,7 @@ grpcurl \
   list
 ```
 
-#### Get a historical transaction
+### Get a historical transaction
 
 ```bash
 grpcurl \
@@ -127,7 +125,7 @@ grpcurl \
   sui.rpc.v2.LedgerService/GetTransaction
 ```
 
-#### Get a historical checkpoint
+### Get a historical checkpoint
 
 ```bash
 grpcurl \
@@ -139,7 +137,7 @@ grpcurl \
   sui.rpc.v2.LedgerService/GetCheckpoint
 ```
 
-#### Get an object at a historical checkpoint
+### Get an object at a historical checkpoint
 
 ```bash
 grpcurl \
@@ -152,11 +150,11 @@ grpcurl \
   sui.rpc.v2.LedgerService/GetObject
 ```
 
-> For dedicated clients, replace `archive.mainnet.sui.rpcpool.com` with your dedicated archival endpoint `archive-XXX.sui.rpcpool.com`.
+> For dedicated nodes, replace `archive.mainnet.sui.rpcpool.com` with your dedicated archival endpoint `archive-<your-endpoint>.sui.rpcpool.com`.
 
 ***
 
-### Routing strategy: full node vs archival
+## Routing strategy: full node vs archival
 
 A common production pattern is to query your standard gRPC endpoint first for recent data, and fall back to the Archival endpoint when data is not found (i.e. when the node returns `NotFound`).
 
@@ -164,33 +162,33 @@ A common production pattern is to query your standard gRPC endpoint first for re
 Request
   │
   ▼
-Standard gRPC endpoint (XXX.sui.rpcpool.com)
+Standard gRPC endpoint (<your-endpoint>.sui.rpcpool.com)
   │
   ├─ Found → Return result
   │
   └─ NotFound → Retry on Archival endpoint
                   (archive.mainnet.sui.rpcpool.com
-                   or archive-XXX.sui.rpcpool.com)
+                   or archive-<your-endpoint>.sui.rpcpool.com)
 ```
 
 This keeps latency low for recent data while ensuring full coverage for historical lookups.
 
 ***
 
-### Endpoint summary
+## Endpoint summary
 
 | Plan          | Standard gRPC Endpoint    | Archival Endpoint                     |
 | ------------- | ------------------------- | ------------------------------------- |
-| **Shared**    | `XXX.sui.rpcpool.com:443` | `archive.mainnet.sui.rpcpool.com:443` |
-| **Dedicated** | `XXX.sui.rpcpool.com:443` | `archive-XXX.sui.rpcpool.com:443`     |
+| **Shared**    | `<your-endpoint>.sui.rpcpool.com:443` | `archive.mainnet.sui.rpcpool.com:443` |
+| **Dedicated** | `<your-endpoint>.sui.rpcpool.com:443` | `archive-<your-endpoint>.sui.rpcpool.com:443`     |
 
-> `XXX` is your unique endpoint slug, visible in the [client panel](https://customers.triton.one/).
+> `<your-endpoint>` is your unique endpoint slug, visible in the [customer dashboard](https://customers.triton.one/).
 
 Authentication is the same `X-Token` header for both endpoint types.
 
 ***
 
-### Resources
+## Resources
 
 * [Official: Archival Store and Service](https://docs.sui.io/develop/accessing-data/archival-store)
 * [Official: Querying Historical Data with Archival Service](https://docs.sui.io/develop/accessing-data/archival-store/using-archival-store)

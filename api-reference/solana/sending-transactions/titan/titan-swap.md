@@ -8,7 +8,7 @@ Each Titan quote arrives with the individual Solana instructions needed to execu
 
 ## Flow
 
-1. Connect to the Titan WebSocket (see [Titan quote](titan-quote.md)) and receive a live quote.
+1. Connect to the Titan WebSocket (see [Titan quote](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/sending-transactions/titan/titan-quote)) and receive a live quote.
 2. Take the swap instructions from the quote payload.
 3. Build, sign, and send the transaction with your wallet.
 

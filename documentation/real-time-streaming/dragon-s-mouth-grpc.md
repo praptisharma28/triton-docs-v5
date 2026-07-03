@@ -4,28 +4,40 @@ description: Triton's Geyser gRPC stream for sub-slot Solana account, transactio
 
 # Dragon's Mouth gRPC
 
-Triton's Geyser-fed gRPC streaming interface for Solana. Sub-slot account, transaction, slot, and block subscriptions. The fastest live data path available for processed events.
+Dragon's Mouth (or Yellowstone gRPC) taps the validator's Geyser plugin directly, so you get account, transaction, slot, and block updates as the validator processes them, giving you up to a 400 ms head start over a polling client.
 
-## What is Dragon's Mouth
-
-Dragon's Mouth is Triton's Geyser-fed gRPC interface for streaming Solana data. It taps the validator's Geyser plugin directly, so you get account, transaction, slot, and block updates as the validator processes them, giving you up to a 400 ms head start over a polling client.
+## Use cases
 
 It's the fastest live data path available for `processed` events and the recommended choice for any backend service where latency matters.
 
-* **Trading and MEV.** Lowest-latency reads of pool state, oracles, AMM accounts, and price-impacting transactions
-* **Real-time UIs (backend).** Live balances, transaction feeds, and account state for backends that proxy to wallets and explorers
-* **Application middle layer.** Stream directly to your app's middle layer on a cloud provider and update your backend database with the lowest possible latency
-* **Compliance and analytics.** Watch specific addresses or programs, route updates downstream
+* **Trading, MEV, market making, and bots.** Lowest-latency reads of pool state, oracles, AMM accounts, and price-impacting transactions.
+* **DeFi backends.** Live pool, order-book, and account state for services that react to the chain in real time.
+* **Real-time UIs (backend).** Live balances, transaction feeds, and account state for backends that proxy to wallets and explorers.
 
-For browser clients that can't communicate with gRPC, use Whirligig WebSockets instead.
+When not to use it:
+
+* Browsers and frontends cannot speak gRPC, so you should use [Whirligig WebSocket](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/whirligig-websockets) instead.
+* If your pipeline cannot miss a block (indexing, analytics, compliance), use [Fumarole](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/fumarole-persistent-streams), which guarantees at-least-once delivery and auto-backfills up to 4 days of data on reconnect.
 
 ## Features and benefits
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-timer">:timer:</i> <strong>Sub-slot latency</strong></td><td>Intra-slot updates arrive ~400 ms ahead of standard RPC, which only emits at slot boundaries.</td><td></td></tr><tr><td><i class="fa-sliders-horizontal">:sliders-horizontal:</i> <strong>Server-side filtering</strong></td><td>Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state, all server-side.</td><td></td></tr><tr><td><i class="fa-repeat-2">:repeat-2:</i> <strong>Bi-directional streams</strong></td><td>Modify subscriptions on the fly without reconnecting. Send a new request, server swaps your filter set.</td><td></td></tr><tr><td><i class="fa-feather">:feather:</i> <strong>Compact Protobuf payloads</strong></td><td>Binary serialisation cuts bandwidth and CPU. Cheaper to stream, faster to parse.</td><td></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-timer">:timer:</i> <strong>Sub-slot latency</strong></td><td>Intra-slot updates arrive ~400 ms ahead of standard RPC, which only emits at slot boundaries.</td><td></td></tr><tr><td><i class="fa-filter">:filter:</i> <strong>Server-side filtering</strong></td><td>Filter by pubkey, program owner, signature, memcmp, datasize, or token-account state, all server-side.</td><td></td></tr><tr><td><i class="fa-right-left">:right-left:</i> <strong>Bi-directional streams</strong></td><td>Modify subscriptions on the fly without reconnecting. Send a new request, server swaps your filter set.</td><td></td></tr><tr><td><i class="fa-feather">:feather:</i> <strong>Compact Protobuf payloads</strong></td><td>Binary serialisation cuts bandwidth and CPU. Cheaper to stream, faster to parse.</td><td></td></tr><tr><td><i class="fa-compress">:compress:</i> <strong>Compressed account filters</strong></td><td>Track millions of accounts with a Cuckoo-filter set instead of a raw pubkey list, cutting subscription payloads ~10x.</td><td></td></tr><tr><td><i class="fa-arrows-rotate">:arrows-rotate:</i> <strong>Auto-reconnect and backfill</strong></td><td>The Rust and TS clients automatically reconnect, replay from your last completed slot (up to ~1,000 slots), and dedup the replay window.</td><td></td></tr></tbody></table>
 
-## Stream types and unary operations
+## How it works
 
-Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscriptions and one-shot unary calls you can use for occasional queries.
+Dragon's Mouth taps the validator's Geyser plugin, so updates are pushed the moment the node processes them instead of waiting on a polling loop. You open a gRPC stream, send a `SubscribeRequest` describing the accounts, transactions, slots, blocks, or entries you want, and matching updates arrive as protobuf messages at your chosen commitment level (`processed`, `confirmed`, or `finalized`). The same stream accepts updated requests, the service answers one-shot unary calls, and on reconnect you can replay from a recent slot so a brief disconnect costs you nothing.
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
+flowchart LR
+    v["Validator<br/>(Geyser plugin)"] --> dm["Dragon's Mouth<br/>Yellowstone gRPC"] --> app["Your app"]
+    app -.->|"SubscribeRequest (filters)"| dm
+    style app fill:#D6EAF8,stroke:#259DD0
+```
+
+## Supported methods
+
+Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscriptions (via the `Subscribe` method, plus the separate `SubscribeDeshred`) and one-shot unary calls you can use for occasional queries.
 
 {% tabs %}
 {% tab title="Streaming subscriptions" %}
@@ -33,7 +45,7 @@ Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscr
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | Account writes       | Updates whenever a matching account's data, lamports, or owner changes                                                   |
 | Transactions         | Every transaction matching your filter, with full `meta` (logs, status, balance deltas)                                  |
-| Deshred transactions | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See Deshred transactions. |
+| Deshred Transactions gRPC | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See Deshred Transactions gRPC. |
 | Entries              | Solana ledger entries (low-level, rare use case)                                                                         |
 | Block notifications  | Full blocks as they're produced, optionally with their transactions and accounts                                         |
 | Block metadata       | Block headers only, without the transaction payload                                                                      |
@@ -69,7 +81,7 @@ Commitment level for buffering. Optional. Defaults to `processed`.
 | `CONFIRMED` (1) | Voted on by supermajority. Some buffering.             |
 | `FINALIZED` (2) | Max vote lockout. Most buffering.                      |
 
-For maximum performance, work at `processed` and manage commitment client-side by subscribing to [slot notifications](dragon-s-mouth-grpc.md#slots) alongside your data. The pattern:
+For maximum performance, work at `processed` and manage commitment client-side by subscribing to [slot notifications](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) alongside your data. The pattern:
 
 1. Subscribe to slot notifications alongside your data stream.
 2. Buffer incoming events by slot.
@@ -84,7 +96,7 @@ For maximum performance, work at `processed` and manage commitment client-side b
 {% tab title="ping" %}
 Sends a periodic keepalive to prevent idle-stream drops by upstream cloud providers (e.g. Cloudflare). Server replies with `pong`. Optional but recommended for long-running streams.
 
-See [pings](dragon-s-mouth-grpc.md#pings).
+See [pings](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc).
 {% endtab %}
 
 {% tab title="accountsDataSlice" %}
@@ -96,7 +108,7 @@ Example: `[{ "offset": 32, "length": 40 }]` returns 40 bytes starting at byte 32
 {% tab title="fromSlot" %}
 Replay buffered updates starting from this slot, then continue live on the same stream. Optional. Used for reconnection after short disconnections.
 
-See [replay from a slot](dragon-s-mouth-grpc.md#replay-from-a-slot).
+See [replay from a slot](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc).
 {% endtab %}
 {% endtabs %}
 
@@ -104,7 +116,7 @@ See [replay from a slot](dragon-s-mouth-grpc.md#replay-from-a-slot).
 
 A single gRPC connection can carry many subscriptions. Add multiple named entries to any of the filter maps (`accounts`, `transactions`, `slots`, `blocks`, `blocksMeta`, `entry`) and they all stream over the same connection. Each match is tagged with the filter name(s) that produced it, so you can route updates downstream without splitting connections.
 
-The canonical multiplex example is the [Multiple programs Accounts subscription](dragon-s-mouth-grpc.md#accounts), two named owner filters under `accounts`, one connection. The same pattern works across stream types: subscribe to accounts AND transactions AND slots in one request.
+The canonical multiplex example is the [Multiple programs Accounts subscription](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc), two named owner filters under `accounts`, one connection. The same pattern works across stream types: subscribe to accounts AND transactions AND slots in one request.
 
 ### Filter configuration
 
@@ -186,7 +198,7 @@ Before you start, make sure you have:
 
 The latest protobuf files live in the [yellowstone-grpc repo](https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto). For Rust, use the [yellowstone-grpc-proto crate](https://crates.io/crates/yellowstone-grpc-proto).
 
-The examples below use gRPC JSON for the request body and TypeScript for the client. Other languages use the same shape. Each example assumes you've already created and connected a `Client` (see [clients and SDKs](dragon-s-mouth-grpc.md#clients-and-sdks)).
+The examples below use gRPC JSON for the request body and TypeScript for the client. Other languages use the same shape. Each example assumes you've already created and connected a `Client` (see [clients and SDKs](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc)).
 
 ### Accounts
 
@@ -350,8 +362,6 @@ Combine multiple programs in one filter, or use separate filters for different r
 
 Both programs in one filter:
 
-{% tabs %}
-{% tab title="gRPC" %}
 ```json
 {
   "slots": { "slots": {} },
@@ -369,13 +379,9 @@ Both programs in one filter:
   "accounts_data_slice": []
 }
 ```
-{% endtab %}
-{% endtabs %}
 
 Separate filters with different tags:
 
-{% tabs %}
-{% tab title="gRPC" %}
 ```json
 {
   "slots": { "slots": {} },
@@ -389,8 +395,6 @@ Separate filters with different tags:
   "accounts_data_slice": []
 }
 ```
-{% endtab %}
-{% endtabs %}
 {% endtab %}
 
 {% tab title="Advanced filters + data slice" %}
@@ -510,15 +514,14 @@ For subscriptions tracking thousands of accounts, the explicit pubkey list domin
 |        1,000,000 |           \~4 MiB |              \~44 MB |
 |        2,000,000 |           \~8 MiB |              \~84 MB |
 
-Inserts and removes on the filter are O(1), so account-set mutations skip a full filter rebuild.
+Inserts and removes on the filter are O(1), so account-set mutations skip a full filter rebuild. And because it uses SipHash-2-4, a TypeScript client and a Rust client emit identical filter bytes for the same pubkey set, so one tracked set works across languages and Rust compiler versions.
 
 **Tradeoffs:**
 
 * **False positives** stay under 1%. Your client should keep an exact tracked set and drop incoming updates whose pubkey isn't in it. A `HashSet` check is the standard pattern; the probabilistic part lives only on the wire.
 * **One-time build cost.** A 2M-account filter takes \~390 ms on a release build. Every subsequent insert, remove, and resend is cheap.
-* **Cross-language compatibility.** SipHash-2-4 produces identical filter bytes across languages and Rust compiler versions, so a TypeScript client and a Rust client emit the same filter for the same pubkey set.
 
-Rust API today; TypeScript is coming. Build a `CompressedAccountFilterSet` and attach it to your `SubscribeRequest`:
+Available in the Rust and TypeScript clients (TypeScript from `@triton-one/yellowstone-grpc` v5.0.9). The Rust API builds a `CompressedAccountFilterSet` and attaches it to your `SubscribeRequest`:
 
 ```rust
 use yellowstone_grpc_proto::cuckoo::CompressedAccountFilterSet;
@@ -548,13 +551,13 @@ if accounts.contains(&incoming_pubkey) {
 }
 ```
 
-Full deep-dive: [Compressed filters for Yellowstone gRPC](https://blog.triton.one/compressed-filters-yellowstone-grpc).
+Full deep-dive: [Compressed filters for Yellowstone gRPC](https://blog.triton.one/compressed-filters-for-yellowstone-grpc-track-millions-of-accounts-with-10x-less-overhead).
 {% endtab %}
 {% endtabs %}
 
 ### Transactions
 
-If you want the **earliest possible signal** on a transaction, we expose Deshred transactions, a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the validator executes them.
+Use the `transactions` subscription to receive executed transactions at your chosen commitment level; `processed` delivers them as soon as the node processes them, while `confirmed` and `finalized` add latency. If you want the **earliest possible signal**, before execution, use [Deshred Transactions gRPC](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions), a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the node executes them.
 
 {% tabs %}
 {% tab title="All non-vote, non-failed" %}
@@ -743,7 +746,7 @@ let request = SubscribeRequest {
 {% endtab %}
 {% endtabs %}
 
-Each update carries a `SlotStatus` enum, see [intra-slot updates](dragon-s-mouth-grpc.md#intra-slot-updates) for the full lifecycle.
+Each update carries a `SlotStatus` enum, see [intra-slot updates](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) for the full lifecycle.
 
 ### Blocks
 
@@ -891,7 +894,7 @@ To unsubscribe from everything but keep the connection open:
 {% endtab %}
 {% endtabs %}
 
-## Pings
+## Sending pings
 
 Some cloud providers (e.g. Cloudflare) close idle streams. To avoid this, you need to keep sending pings to the server. The server responds with a `pong` message every 15 seconds.
 
@@ -1192,67 +1195,47 @@ enum SlotStatus {
 Simplified lifecycle of a slot, time flowing left to right:
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'fontSize':'17px','primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','edgeLabelBackground':'transparent'},'flowchart':{'nodeSpacing':12,'rankSpacing':20,'padding':12,'curve':'linear'}}}%%
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
 flowchart LR
     SD["<b>Slot download</b><br/><br/>FIRST_SHRED → SHRED 2<br/>→ … → SHRED N<br/>→ COMPLETED"] --> RS["<b>Replay stage</b><br/><br/>BANK_CREATED → ACCOUNT_UPDATE<br/>→ TX1 → TX2 → ENTRY1<br/>→ … → BLOCK_META → PROCESSED"] --> CN["<b>Consensus</b><br/><br/>CONFIRMED → FINALIZED"]
 ```
 
 ## Clients and SDKs
 
-Sample clients in multiple languages live in the [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples) directory. Match your client to the current proto version.
-
-### Prebuilt test binary
-
-For a quick test without building anything, the `yellowstone-grpc` project ships a prebuilt `client-ubuntu` binary for Ubuntu 22.04 and 24.04. Download it from the [Releases](https://github.com/rpcpool/yellowstone-grpc/releases) page.
-
-```shell
-# all accounts and slots
-./client-ubuntu-22.04 --endpoint https://<your-endpoint>.mainnet.rpcpool.com --x-token <your-token> subscribe --accounts --slots
-
-# a specific program, e.g. Raydium AMM v4
-./client-ubuntu-22.04 --endpoint https://<your-endpoint>.mainnet.rpcpool.com --x-token <your-token> subscribe --accounts --slots --accounts-owner 675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8
-```
-
-Add `--stats` to print subscription stats: total accounts and slots streamed, plus bandwidth used.
+We provide SDKs in Rust, TypeScript, Go, and Python. Sample clients for each live in the [yellowstone-grpc/examples](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples) directory; match your client to the current proto version.
 
 {% tabs %}
 {% tab title="Rust" %}
 The repo's [yellowstone-grpc/examples/rust](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/rust) directory ships a `client` binary that exercises every subscribe and unary method against any endpoint.
 
-```
 Subscribe to account updates:
-```
 
 ```shell
 cargo run --bin client -- \
   -e https://api.rpcpool.com \
-  --x-token <token> \
+  --x-token <your-token> \
   subscribe \
   --accounts \
   --accounts-account <Pubkey>
 ```
 
-```
 Subscribe to slots (with commitment override):
-```
 
 ```shell
 cargo run --bin client -- \
   -e https://api.rpcpool.com \
-  --x-token <token> \
+  --x-token <your-token> \
   --commitment processed \
   subscribe \
   --slots
 ```
 
-```
 Subscribe to non-vote, non-failed transactions touching an account:
-```
 
 ```shell
 cargo run --bin client -- \
   -e https://api.rpcpool.com \
-  --x-token <token> \
+  --x-token <your-token> \
   subscribe \
   --transactions \
   --transactions-vote false \
@@ -1260,27 +1243,23 @@ cargo run --bin client -- \
   --transactions-account-include <Pubkey>
 ```
 
-```
 Subscribe to deshred transactions (Triton-only):
-```
 
 ```shell
 cargo run --bin client -- \
   -e https://api.rpcpool.com \
-  --x-token <token> \
+  --x-token <your-token> \
   subscribe-deshred \
   --vote false \
   --account-include <Pubkey>
 ```
 
-```
 Unary calls (`ping`, `get-latest-blockhash`, `get-block-height`, `get-slot`, `is-blockhash-valid`, `get-version`):
-```
 
 ```shell
 cargo run --bin client -- \
   -e https://api.rpcpool.com \
-  --x-token <token> \
+  --x-token <your-token> \
   get-slot
 # response: GetSlotResponse { slot: 196214563 }
 ```
@@ -1345,7 +1324,7 @@ Full example: [yellowstone-grpc/examples/typescript](https://github.com/rpcpool/
 ./grpcurl \
   -proto geyser.proto \
   -d '{"slots": { "slots": {} }, "accounts": { "usdc": { "account": ["9wFFyRfZBsuAha4YcuxcXLKwMxJR43S7fPfQLusDBzvT"] } }, "transactions": {}, "blocks": {}, "blocks_meta": {}}' \
-  -H "x-token: <token>" \
+  -H "x-token: <your-token>" \
   api.rpcpool.com:443 \
   geyser.Geyser/Subscribe
 ```
@@ -1363,9 +1342,7 @@ go run ./cmd/grpc-client/ \
   -slots
 ```
 
-```
 Non-SSL connections work too:
-```
 
 ```shell
 go run ./cmd/grpc-client/ \
@@ -1374,28 +1351,59 @@ go run ./cmd/grpc-client/ \
   -blocks
 ```
 
-```
 Updating proto files needs `protoc` plus the Go plugins:
-```
 
 ```shell
 go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.35.1
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1
 ```
 
-```
 Run `make` to regenerate. Full source: [yellowstone-grpc/examples/golang](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/golang).
-```
 
 {% hint style="info" %}
 The Go example may lag the latest stable proto version. For production-ready code, the Rust client is the reference implementation.
 {% endhint %}
 {% endtab %}
+
+{% tab title="Python" %}
+The repo's [yellowstone-grpc/examples/python](https://github.com/rpcpool/yellowstone-grpc/tree/master/examples/python) directory ships `helloworld_geyser.py`. It sends the `x-token` as call metadata over TLS, then calls a unary method:
+
+```python
+import grpc
+import geyser_pb2, geyser_pb2_grpc
+
+class TritonAuth(grpc.AuthMetadataPlugin):
+    def __init__(self, x_token):
+        self.x_token = x_token
+
+    def __call__(self, context, callback):
+        # metadata is a 1-tuple; the trailing comma is required
+        callback((("x-token", self.x_token),), None)
+
+ssl_creds = grpc.ssl_channel_credentials()
+call_creds = grpc.metadata_call_credentials(TritonAuth("<your-token>"))
+creds = grpc.composite_channel_credentials(ssl_creds, call_creds)
+
+with grpc.secure_channel("<your-endpoint>.mainnet.rpcpool.com:443", creds) as channel:
+    stub = geyser_pb2_grpc.GeyserStub(channel)
+    print(stub.GetSlot(geyser_pb2.GetSlotRequest()))
+```
+
+Install `grpcio`, `grpcio-tools`, and `protobuf`, and generate `geyser_pb2` from the proto files first.
+{% endtab %}
 {% endtabs %}
 
-## What's next?
+{% hint style="info" %}
+If you're experiencing errors, you can sanity-check your endpoint with Triton's prebuilt `client-ubuntu` test binary, no code required. See [Is it the endpoint or your code?](https://app.gitbook.com/s/VeEf321LwceAVlSk9USV/solana/error-handling/verify-your-grpc-endpoint).
+{% endhint %}
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions">Deshred transactions</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/whirligig-websockets">Whirligig WebSockets</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 96h of stored data and built-in cursor resume.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/fumarole-persistent-streams">Fumarole reliable streams</a></td></tr><tr><td><i class="fa-compass">:compass:</i> <strong>Streaming overview</strong></td><td>Compare every Triton streaming service side by side.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming">Streaming overview</a></td></tr></tbody></table>
+## Pricing
+
+Dragon's Mouth is billed at `$0.08 / GB` of bandwidth. You only pay for the data streamed.
+
+## What's next
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred Transactions gRPC</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions">Deshred Transactions gRPC</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSocket</strong></td><td>Drop-in for native Solana WebSockets, backed by gRPC. The fastest real-time data for frontends.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/whirligig-websockets">Whirligig WebSocket</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole Persistent gRPC</strong></td><td>Redundant streaming layer with 4 days of stored data and built-in cursor resume.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/fumarole-persistent-streams">Fumarole Persistent gRPC</a></td></tr><tr><td><i class="fa-compass">:compass:</i> <strong>Streaming overview</strong></td><td>Compare every Triton streaming service and choose the right fit for your workload.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming">Streaming overview</a></td></tr></tbody></table>
 
 ***
 

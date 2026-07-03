@@ -1,20 +1,20 @@
 ---
-description: Send a Solana transaction with /sendtx, Triton's direct HTTP submission endpoint that skips JSON-RPC overhead.
+description: Send a Solana transaction two ways, with /sendtx, the direct HTTP submission endpoint, and with standard sendTransaction.
 layout:
   pagination:
-    visible: false
+    visible: true
 ---
 
 # Quickstart
 
-Send a Solana transaction with **`/sendtx`**, the direct HTTP submission endpoint on every Triton endpoint. It applies SWQoS and forwards your transaction to the leader, same as `sendTransaction`, but skips the JSON-RPC envelope: no JSON parsing, no CORS preflight, a smaller payload, and no RPC client library. For all the send options and how they compare, see [Sending transactions](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions).
+In this quickstart we'll send a transaction two ways: **`/sendtx`**, the direct HTTP submission endpoint on every Triton endpoint, and standard **`sendTransaction`**. Both route through our Jet engine with SWQoS applied; `/sendtx` skips the JSON-RPC envelope for lower latency.
 
-## Step 0. Prerequisites
+## 0. Prerequisites
 
 * A Triton Solana endpoint and token, from your [customer dashboard](https://customers.triton.one).
 * A funded keypair and a way to build and sign a transaction (`@solana/web3.js`, `@solana/kit`, or your SDK of choice).
 
-## Step 1. Build and sign a transaction
+## 1. Build and sign a transaction
 
 Build and sign as usual, then serialise it to raw bytes. The signature is deterministic, so you can read it from the signed transaction before you send.
 
@@ -22,9 +22,10 @@ Build and sign as usual, then serialise it to raw bytes. The signature is determ
 import {
   Connection, Keypair, PublicKey, SystemProgram, Transaction,
 } from "@solana/web3.js";
+import bs58 from "bs58";
 
-const connection = new Connection("https://your-endpoint.mainnet.rpcpool.com/your-token", "confirmed");
-const payer = Keypair.fromSecretKey(/* your secret key bytes */);
+const connection = new Connection("https://<your-endpoint>.mainnet.rpcpool.com/<your-token>", "confirmed");
+const payer = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.SECRET_KEY!))); // 64-byte secret key
 
 const tx = new Transaction().add(
   SystemProgram.transfer({
@@ -38,18 +39,29 @@ tx.feePayer = payer.publicKey;
 tx.sign(payer);
 
 const wire = tx.serialize();           // raw bytes
-const signature = tx.signatures[0].signature; // derive the signature locally
+const signature = bs58.encode(tx.signature!); // base58 signature, known before you send
 ```
 
-## Step 2. Submit with /sendtx
+## 2. Submit it
 
+Two routes reach the same Jet delivery path. `/sendtx` is the lower-latency one:
+
+* **No JSON parsing.** The server receives your transaction bytes directly.
+* **No CORS preflight.** With `Content-Type: application/octet-stream` or `text/plain`, browsers skip the preflight `OPTIONS` round-trip.
+* **Smaller payloads.** No `jsonrpc`/`id`/`method`/`params` wrapper on the wire.
+* **Simpler client code.** One HTTP POST, no Solana JSON-RPC library.
+
+That makes it the fit for browser apps sensitive to preflight latency and high-frequency backends sending volume. Pick `sendTransaction` when you want the standard JSON-RPC interface or options like `skipPreflight`.
+
+{% tabs %}
+{% tab title="/sendtx" %}
 POST the serialised transaction. Pass `response=signature` to get the signature back in the response body.
 
 {% tabs %}
 {% tab title="TypeScript" %}
 ```ts
 const res = await fetch(
-  "https://your-endpoint.mainnet.rpcpool.com/your-token/sendtx?response=signature&max_retries=3",
+  "https://<your-endpoint>.mainnet.rpcpool.com/<your-token>/sendtx?response=signature&max_retries=3",
   {
     method: "POST",
     headers: { "Content-Type": "application/octet-stream" },
@@ -63,7 +75,7 @@ console.log("Signature:", await res.text());
 
 {% tab title="curl (raw bytes)" %}
 ```bash
-curl -X POST 'https://your-endpoint.mainnet.rpcpool.com/your-token/sendtx?response=signature&max_retries=3' \
+curl -X POST 'https://<your-endpoint>.mainnet.rpcpool.com/<your-token>/sendtx?response=signature&max_retries=3' \
   -H 'Content-Type: application/octet-stream' \
   --data-binary @transaction.bin
 ```
@@ -71,25 +83,73 @@ curl -X POST 'https://your-endpoint.mainnet.rpcpool.com/your-token/sendtx?respon
 
 {% tab title="curl (base64)" %}
 ```bash
-curl -X POST 'https://your-endpoint.mainnet.rpcpool.com/your-token/sendtx?encoding=base64&response=signature' \
+curl -X POST 'https://<your-endpoint>.mainnet.rpcpool.com/<your-token>/sendtx?encoding=base64&response=signature' \
   -H 'Content-Type: text/plain' \
   -d 'BASE64_SIGNED_TX'
 ```
 {% endtab %}
 {% endtabs %}
 
-Query parameters: `encoding` (`base58` or `base64`, for text bodies; default `base58`), `response=signature` (return the signature on success), and `max_retries` (override the retry count). To route only through validators you trust, add the `solana-forwardingpolicies` header with your [Yellowstone Shield](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection) policy addresses.
+Query parameters: `encoding` (`base58` or `base64`, for text bodies; default `base58`), `response=signature` (return the signature on success), and `max_retries` (override the default retry count).
 
-{% hint style="info" %}
-Prefer the standard JSON-RPC interface, or need options like `skipPreflight`? `sendTransaction` works on the same endpoint. See [Best practices](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/best-practices).
+{% hint style="warning" %}
+`/sendtx` is submission only and always skips preflight, so `skipPreflight: false` and simulation are not supported on it. Use `sendTransaction` if you need preflight, though we recommend running `simulateTransaction` as a separate call either way.
 {% endhint %}
+{% endtab %}
 
-## Step 3. Verify
+{% tab title="sendTransaction" %}
+The standard Solana JSON-RPC method, on the same endpoint:
+
+{% tabs %}
+{% tab title="TypeScript" %}
+```ts
+const signature = await connection.sendRawTransaction(wire);
+console.log("Signature:", signature);
+```
+{% endtab %}
+
+{% tab title="curl" %}
+```bash
+curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "sendTransaction",
+    "params": ["BASE64_SIGNED_TX", { "encoding": "base64" }]
+  }'
+```
+{% endtab %}
+{% endtabs %}
+{% endtab %}
+{% endtabs %}
+
+### Expected response
+
+{% tabs %}
+{% tab title="/sendtx" %}
+With `response=signature`, the body is the transaction signature as plain text, not JSON:
+
+```
+5j7s4Hk3vQmPq8nLZ9xTe8oP...
+```
+{% endtab %}
+
+{% tab title="sendTransaction" %}
+The JSON-RPC result is the transaction signature:
+
+```json
+{ "jsonrpc": "2.0", "result": "5j7s4Hk3vQmPq8nLZ9xTe8oP...", "id": 1 }
+```
+{% endtab %}
+{% endtabs %}
+
+## 3. Verify it landed
 
 With `response=signature`, the POST returns the signature. Confirm it landed:
 
 ```bash
-curl https://your-endpoint.mainnet.rpcpool.com/your-token -s -X POST \
+curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -99,11 +159,26 @@ curl https://your-endpoint.mainnet.rpcpool.com/your-token -s -X POST \
   }'
 ```
 
+The response shows the signature's confirmation status:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "context": { "slot": 275123456 },
+    "value": [
+      { "slot": 275123456, "confirmations": 12, "err": null, "confirmationStatus": "confirmed" }
+    ]
+  },
+  "id": 1
+}
+```
+
 A `confirmationStatus` of `confirmed` or `finalized` means it landed.
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-paper-plane">:paper-plane:</i> <strong>Jet sender</strong></td><td>Full client-side control: send straight to validator TPUs over QUIC with callbacks and custom routing.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/jet-sender">Jet sender</a></td></tr><tr><td><i class="fa-arrow-trend-up">:arrow-trend-up:</i> <strong>Priority fees API</strong></td><td>Estimate a priority fee that lands under congestion.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api">Priority fees API</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Land transactions reliably under congestion.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/best-practices">Best practices</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-paper-plane">:paper-plane:</i> <strong>Jet TPU client</strong></td><td>End-to-end integration guide: direct-to-leader forwarding over QUIC with leader scheduling, connection pooling, and retries built in.</td><td><a href="https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/sending-transactions/yellowstone-jet-tpu-client">Jet TPU client</a></td></tr><tr><td><i class="fa-arrow-trend-up">:arrow-trend-up:</i> <strong>Priority Fees API</strong></td><td>Smart fee estimation with tail-aware percentiles. Reliable landing without overpaying.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/priority-fees-api">Priority Fees API</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Land your transactions fast and reliably.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/best-practices">Best practices</a></td></tr></tbody></table>
 
 ***
 

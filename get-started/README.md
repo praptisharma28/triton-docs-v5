@@ -2,24 +2,6 @@
 description: >-
   Premium bare-metal infrastructure for production workloads on Solana, Sui, and
   Monad.
-layout:
-  width: default
-  title:
-    visible: true
-  description:
-    visible: true
-  tableOfContents:
-    visible: true
-  outline:
-    visible: true
-  pagination:
-    visible: false
-  metadata:
-    visible: true
-  tags:
-    visible: true
-  actions:
-    visible: true
 ---
 
 # Welcome to Triton One
@@ -42,7 +24,7 @@ We run premium infrastructure clusters for Solana, Sui, and Monad.
 
 {% tabs %}
 {% tab title="Solana" %}
-<table><thead><tr><th>Network</th><th width="119.1953125" align="center">JSON-RPC</th><th width="123.5" align="center">WebSocket</th><th width="128.99609375" align="center">Yellowstone gRPC</th><th width="109.296875" align="center">Fumarole gRPC</th><th width="126.1484375" align="center">Cloudbreak accounts</th><th width="120.12890625" align="center">Superbank archive</th></tr></thead><tbody><tr><td>Mainnet</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td></tr><tr><td>Devnet</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✗</td><td align="center">v1 only</td><td align="center">✓</td></tr></tbody></table>
+<table><thead><tr><th>Network</th><th width="119.1953125" align="center">JSON-RPC</th><th width="123.5" align="center">WebSocket</th><th width="128.99609375" align="center">Yellowstone gRPC</th><th width="109.296875" align="center">Fumarole gRPC</th><th width="126.1484375" align="center">Cloudbreak Accounts</th><th width="120.12890625" align="center">Superbank archive</th></tr></thead><tbody><tr><td>Mainnet</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td></tr><tr><td>Devnet</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✗</td><td align="center">v1 only</td><td align="center">✓</td></tr></tbody></table>
 {% endtab %}
 
 {% tab title="Sui" %}
@@ -61,11 +43,11 @@ We run premium infrastructure clusters for Solana, Sui, and Monad.
 
 ## How to get started
 
-These docs are split into five tabs, switchable from the top of any page. When you're ready to integrate, the [Documentation tab](https://app.gitbook.com/o/z7eEj3vw2lWeBtVPERxu/s/Xz3Ki4zincxsnRG91NNt/) walks you through every product across supported chains.
+These docs are split into five tabs, switchable from the top of any page. When you're ready to integrate, the [Documentation tab](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana) walks you through every product across supported chains.
 
 You can start here:
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-credit-card">:credit-card:</i> <strong>Plans and billing</strong></td><td>Understand how pay-as-you-go billing works and estimate your spend</td><td><a href="plans-and-billing.md">plans-and-billing.md</a></td></tr><tr><td><i class="fa-rocket">:rocket:</i> <strong>Solana overview</strong></td><td>Explore Solana RPC, streaming, trading, and historical tooling</td><td><a href="https://app.gitbook.com/o/z7eEj3vw2lWeBtVPERxu/s/Jhkd9LWLrP5SjK8WtYBC/">Solana docs</a></td></tr><tr><td><i class="fa-droplet">:droplet:</i> <strong>Sui overview</strong></td><td>Connect to Sui real-time and archival services with your endpoint</td><td><a href="https://app.gitbook.com/o/z7eEj3vw2lWeBtVPERxu/s/7XTSDkV8e0YYDQch7Krp/">SUI</a></td></tr><tr><td><i class="fa-cube">:cube:</i> <strong>Monad overview</strong></td><td>See what Triton runs on Monad, and how to connect</td><td><a href="https://app.gitbook.com/o/z7eEj3vw2lWeBtVPERxu/s/Cz2cI3eYbcnJyUbl7e85/">Monad</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-credit-card">:credit-card:</i> <strong>Plans and billing</strong></td><td>Understand how pay-as-you-go billing works and estimate your spend</td><td><a href="https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/plans-and-billing">Plans and billing</a></td></tr><tr><td><i class="fa-rocket">:rocket:</i> <strong>Solana overview</strong></td><td>Explore Solana RPC, streaming, trading, and historical tooling</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana">Solana overview</a></td></tr><tr><td><i class="fa-droplet">:droplet:</i> <strong>Sui overview</strong></td><td>Connect to Sui real-time and archival services with your endpoint</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/sui">Sui overview</a></td></tr><tr><td><i class="fa-cube">:cube:</i> <strong>Monad overview</strong></td><td>See what Triton runs on Monad, and how to connect</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/monad">Monad overview</a></td></tr></tbody></table>
 
 ## For AI agents
 

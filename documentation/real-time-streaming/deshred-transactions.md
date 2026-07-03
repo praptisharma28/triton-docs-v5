@@ -1,22 +1,37 @@
 ---
-description: Stream Solana transactions reconstructed from shreds before the validator executes them.
+description: Stream Solana transactions reconstructed from shreds before the node executes them.
 ---
 
-# Deshred transactions
+# Deshred Transactions gRPC
 
-Pre-execution transaction stream reconstructed from shreds, before the validator executes them. The earliest usable on-chain signal exposed by Yellowstone gRPC.
+Deshred is a separate gRPC method on the Yellowstone gRPC service, same as Dragon's Mouth. It delivers transactions reconstructed from shreds before the node executes them.
 
-## What is Deshred
+## Use cases
 
-Deshred is a separate gRPC method (`SubscribeDeshred`) on the same yellowstone-grpc service as Dragon's Mouth. It delivers transactions reconstructed from shreds **before** the validator executes them.
+Deshred is for strategies that act on the earliest possible signal:
 
-This is the earliest usable on-chain signal Triton exposes. It's designed for latency-sensitive systems that care about transaction intent as early as possible: arbitrage, market making, copy trading, liquidations, HFT.
+* **HFT and arbitrage** that react to transaction intent the moment entries form from shreds.
+* **MEV and market making** that need the earliest view of price-impacting transactions.
+* **Copy-trading and liquidations** that follow specific accounts as soon as they act.
 
-Unlike the standard `Subscribe` transaction stream, deshred updates are emitted **before** Replay. You receive the decoded transaction earlier, but without execution context.
+**What not to use it for.** If you need execution results (status, balance changes, logs) or any confirmation guarantee, use the [Dragon's Mouth](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) `transactions` stream instead, or run it in parallel and join on `signature`. Deshred is intent-only: a transaction may fail, land on a dead fork, or never confirm.
 
 ## Features and benefits
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-eye">:eye:</i> <strong>Earliest signal</strong></td><td>Pre-execution stream from raw shreds. ~20ms ahead at p75 vs confirmed transactions.</td><td></td></tr><tr><td><i class="fa-git-fork">:git-fork:</i> <strong>Same gRPC service</strong></td><td>Drops into your existing Dragon's Mouth pipeline. Separate method, same client.</td><td></td></tr><tr><td><i class="fa-tags">:tags:</i> <strong>Resolved ALT addresses</strong></td><td>Includes writable and readonly addresses resolved from Address Lookup Tables.</td><td></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-eye">:eye:</i> <strong>Earliest signal</strong></td><td>Pre-execution stream from raw shreds. ~20ms ahead at p75 vs confirmed transactions.</td><td></td></tr><tr><td><i class="fa-code-fork">:code-fork:</i> <strong>Same gRPC interface</strong></td><td>Drops into your existing Dragon's Mouth pipeline. Separate method, same client.</td><td></td></tr><tr><td><i class="fa-tags">:tags:</i> <strong>Resolved ALT addresses</strong></td><td>Includes writable and readonly addresses resolved from Address Lookup Tables.</td><td></td></tr></tbody></table>
+
+## How it works
+
+Unlike the standard `Subscribe` transaction stream, deshred updates are emitted **before** Replay. You receive the decoded transaction earlier, but without execution context.
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
+flowchart LR
+    s["Shreds"] --> r["Reconstruct<br/>transactions"]
+    r --> e["Execute + replay"] --> g["Regular gRPC"]
+    r --> d["Deshred Transactions gRPC<br/>(pre-execution, ~20 ms earlier)"]
+    style d fill:#D6EAF8,stroke:#259DD0
+```
 
 ## Filter configuration
 
@@ -24,19 +39,12 @@ Unlike the standard `Subscribe` transaction stream, deshred updates are emitted 
 
 | Parameter          | Type       | Required | Description                                                                      |
 | ------------------ | ---------- | -------- | -------------------------------------------------------------------------------- |
-| `vote`             | `bool`     | —        | Include or exclude vote transactions. `false` excludes votes.                    |
-| `account_include`  | `string[]` | —        | Accounts mentioned anywhere in the transaction (including loaded ALT addresses). |
-| `account_exclude`  | `string[]` | —        | Exclude transactions mentioning any of these accounts.                           |
+| `vote`             | `bool`     | No       | Include or exclude vote transactions. `false` excludes votes.                    |
+| `account_include`  | `string[]` | No       | Accounts mentioned anywhere in the transaction (including loaded ALT addresses). |
+| `account_exclude`  | `string[]` | No       | Exclude transactions mentioning any of these accounts.                           |
 | `account_required` | `string[]` | Yes      | Accounts that MUST all be mentioned (every one of them).                         |
 
 ## Subscribe and consume
-
-Before you start, make sure you have:
-
-* An active Triton subscription
-* Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/) (how to get them)
-* A backend environment in TypeScript, Rust, Go, or another language with a gRPC client
-* Familiarity with gRPC and Protocol Buffers
 
 The latest protobuf files live in the [yellowstone-grpc repo](https://github.com/rpcpool/yellowstone-grpc/tree/master/yellowstone-grpc-proto/proto). For Rust, use the [yellowstone-grpc-proto crate](https://crates.io/crates/yellowstone-grpc-proto).
 
@@ -98,7 +106,7 @@ use {
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     let endpoint = std::env::var("ENDPOINT")
-        .unwrap_or("https://<endpoint>".into());
+        .unwrap_or("https://<your-endpoint>".into());
     let x_token = std::env::var("X_TOKEN").ok();
 
     let mut client = GeyserGrpcClient::build_from_shared(endpoint)?
@@ -179,17 +187,29 @@ A deshred update is a `SubscribeUpdateDeshred` containing a single transaction r
 
 The `loaded_writable_addresses` and `loaded_readonly_addresses` fields contain addresses resolved from Address Lookup Tables (ALTs), so deshred filters match both static account keys and dynamically loaded addresses.
 
-{% hint style="warning" %}
-**No execution context.** Deshred only carries the raw transaction. No status, logs, inner instructions, balance changes, compute units, or `TransactionStatusMeta`. There's also no confirmation or finality guarantee, a transaction may fail, land on a dead fork, or never confirm.
+## Limitations
+
+Deshred carries the raw transaction only, captured before execution, so what it returns differs from the standard `transactions` stream:
+
+| What you get | Standard transactions (Dragon's Mouth) | Deshred |
+| --- | --- | --- |
+| Timing | After execution and replay | Pre-execution, from shreds (~20 ms earlier at p75) |
+| Transaction | Full transaction | Full transaction |
+| ALT addresses | Resolved | Resolved (writable and readonly) |
+| Execution context | Full: status, balance changes, inner instructions, logs, compute units | None: intent only |
+| Confirmation or finality | Yes | None: a transaction may fail, fork off, or never confirm |
 
 If your pipeline needs status, logs, or balance deltas, run a parallel Dragon's Mouth `transactions` subscription and join on `signature`.
-{% endhint %}
 
 For a deeper overview of architecture and tradeoffs, see [Deshred transactions: the fastest path to Solana data](https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/).
 
-## What's next?
+## Pricing
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr><tr><td><i class="fa-book-marked">:book-marked:</i> <strong>Deshred blog post</strong></td><td>Architecture, tradeoffs, and how Deshred fits the Solana shred pipeline.</td><td><a href="https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/">https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/</a></td></tr></tbody></table>
+Deshred is billed at `$0.08 / GB` of bandwidth, like every Triton streaming service.
+
+## What's next
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-tower-broadcast">:tower-broadcast:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr><tr><td><i class="fa-newspaper">:newspaper:</i> <strong>Deshred blog post</strong></td><td>Architecture, tradeoffs, and how Deshred fits the Solana shred pipeline.</td><td><a href="https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/">https://blog.triton.one/deshred-transactions-the-fastest-path-to-solana-data/</a></td></tr></tbody></table>
 
 ***
 

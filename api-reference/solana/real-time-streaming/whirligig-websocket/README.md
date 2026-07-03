@@ -11,7 +11,7 @@ layout:
   outline:
     visible: true
   pagination:
-    visible: false
+    visible: true
   metadata:
     visible: true
   tags:
@@ -20,7 +20,7 @@ layout:
     visible: true
 ---
 
-# Whirligig WebSockets
+# Whirligig WebSocket
 
 These push live updates for accounts and the programs that own them:
 

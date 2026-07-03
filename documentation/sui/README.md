@@ -1,7 +1,5 @@
 ---
-description: >-
-  Full-service Sui API access on mainnet and testnet, including gRPC, JSON-RPC,
-  Walrus, and Seal.
+description: Sui gRPC, Walrus, and Seal API access on mainnet and testnet.
 layout:
   width: default
   title:
@@ -13,7 +11,7 @@ layout:
   outline:
     visible: true
   pagination:
-    visible: false
+    visible: true
   metadata:
     visible: true
   tags:
@@ -26,20 +24,16 @@ layout:
 
 As one of the original validators on Sui we provide full-service Sui API access. We support:
 
-* Mainnet
-  * JSON-RPC (deactivates 31 July 2026)
-  * gRPC, generally available (replacing JSON-RPC)
-  * Walrus storage, publisher and aggregator
-  * Seal permissioned server
-* Testnet
-  * JSON-RPC (deactivates 31 July 2026)
-  * gRPC, generally available (replacing JSON-RPC)
-  * Walrus storage, publisher and aggregator
-  * Seal open and permissioned server
+| Service                                      | Mainnet | Testnet |
+| -------------------------------------------- | :-----: | :-----: |
+| gRPC (replacing JSON-RPC)                    |    ✓    |    ✓    |
+| JSON-RPC (deactivates 31 July 2026)          |    ✓    |    ✓    |
+| Archival gRPC, full Sui history from genesis |    ✓    |    ✗    |
+| Walrus storage, publisher and aggregator     |    ✓    |    ✓    |
+| Seal open server                             |    ✗    |    ✓    |
+| Seal permissioned server                     |    ✓    |    ✓    |
 
-Sui is rolling out GraphQL alpha, indexed-based APIs, and Triton will support them in Q1-Q2 2026.
-
-Note: the Sui WebSocket API is officially deprecated and is being retired by Mysten Labs.
+Sui is rolling out GraphQL alpha, indexed-based APIs, and Triton will support them in Q3 2026.
 
 ***
 

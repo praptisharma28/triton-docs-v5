@@ -1,17 +1,10 @@
 ---
-description: Jupiter's swap routing engine, self-hosted on Triton with no staked JUP required.
+description: Triton-hosted swap quoting and routing across 20+ DEXes, no staked JUP required.
 ---
 
-# Metis swap API
+# Metis Swap API
 
-Metis is Jupiter's routing and quote engine, self-hosted on Triton. You do not need any staked $JUP; Triton runs the binary for you. It scans 20+ DEXes and AMMs across Solana's DeFi ecosystem, finds the optimal route, splits trades when it helps, and builds ready-to-sign swap transactions.
-
-## Key features
-
-* **Liquidity aggregation**: combines liquidity from multiple AMMs and DEXes into a single route.
-* **Platform fees**: set a fee wallet and pass a platform-fee parameter directly in the quote API.
-* **ExactOut mode**: for payment flows where you need an exact output amount, for example accepting many tokens but settling in USDC.
-* **Circular arbitrage**: Triton enables circular routes (USDC to token to USDC) that Jupiter's public API disables by default.
+Metis is the Triton-hosted Jupiter routing and quote engine: integrate swaps into your app over a plain HTTP endpoint, with no staked $JUP required. It scans 20+ DEXes and AMMs across Solana's DeFi ecosystem, finds the optimal route, splits trades when it helps, and builds ready-to-sign swap transactions.
 
 ## Use cases
 
@@ -22,9 +15,13 @@ Metis on Triton can power:
 * Trading bots and arbitrage systems, including circular-arbitrage strategies
 * DEX frontends with clean swap flows
 
+## Features and benefits
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-wallet">:wallet:</i> <strong>Platform fees</strong></td><td>Set a fee wallet and pass a platform-fee parameter directly in the quote API.</td><td></td></tr><tr><td><i class="fa-coins">:coins:</i> <strong>ExactOut mode</strong></td><td>For payment flows where you need an exact output amount, for example accepting many tokens but settling in USDC.</td><td></td></tr><tr><td><i class="fa-rotate">:rotate:</i> <strong>Circular arbitrage</strong></td><td>Triton enables circular routes (USDC to token to USDC) that Jupiter's public API disables by default.</td><td></td></tr><tr><td><i class="fa-gauge">:gauge:</i> <strong>No rate limits</strong></td><td>Metered billing with no rate limits on Metis queries.</td><td></td></tr></tbody></table>
+
 ## Getting started
 
-Call the API on your Triton endpoint, under the `/metis` path.
+Metis is enabled by default on every Triton Solana subscription. Use your Triton endpoint, from your [customer dashboard](https://customers.triton.one), and add the `/metis` path.
 
 ```bash
 curl 'https://<your-endpoint>.mainnet.rpcpool.com/<your-token>/metis/quote?\
@@ -34,7 +31,7 @@ amount=1000000&\
 slippageBps=50'
 ```
 
-## Executing a swap
+### Executing a swap
 
 After you get a quote from `/quote`:
 
@@ -44,17 +41,12 @@ After you get a quote from `/quote`:
 
 Metis builds the ready-to-sign transaction for you.
 
+For the full parameter set and response shapes, see the [Metis docs](https://metis.builders/docs/get-quote).
+
 ## Pricing
 
-The self-hosted Metis swap API uses metered billing and is not rate-limited. It is $80 per million Metis queries. Because there are no rate limits, monitor your usage to avoid unexpected costs.
+The Metis Swap API uses metered billing and is not rate-limited. It is `$0.08 / GB` of bandwidth plus `$80 / million` Metis queries. Because there are no rate limits, monitor your usage to avoid unexpected costs.
 
-## Availability
-
-Available to all customers with an active Solana subscription, on both shared RPC pools and dedicated nodes.
-
-## API documentation
-
-For the full parameter set and response shapes, see the [Metis docs](https://metis.builders/docs/get-quote). Background: [Metis API for Solana swaps is live on Triton](https://blog.triton.one/metis-api-for-solana-swaps-is-live-on-triton/).
 
 ***
 

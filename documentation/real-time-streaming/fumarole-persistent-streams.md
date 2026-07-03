@@ -11,7 +11,7 @@ layout:
   outline:
     visible: true
   pagination:
-    visible: false
+    visible: true
   metadata:
     visible: true
   tags:
@@ -20,27 +20,195 @@ layout:
     visible: true
 ---
 
-# Fumarole persistent streams
+# Fumarole Persistent gRPC
 
-{% hint style="info" %}
-Fumarole is currently in **available by default on all mainnet subscriptions**. For questions or feedback, please reach out through your Triton CS channel.
-{% endhint %}
+Fumarole is reliable, persistent gRPC streaming for pipelines that can't miss a block: disconnect and resume exactly where you left off, with anything you missed backfilled automatically.
 
-Fumarole is our new streaming system to allow you to be able to reliably stream accounts and transactions.
+## Use cases
 
-#### Fumarole provides
+Fumarole fits pipelines that value completeness and reliability over raw speed:
 
-* **High availability**: by collecting data from multiple downstream Solana nodes and merging them into a single stream, your stream does not get interrupted if a node restarts or is upgraded.
-* Persistence: Fumarole stores up to 4 days of historical state and lets you reconnect your stream if your clients go down. Disconnect and resume from your last position any time within that window.
-* **Parallel replay download :** Fumarole can replay in parallel geyser data wherever you left off.
+* **Indexers** that must process every block exactly once.
+* **Analytics and accounting** systems that cannot tolerate gaps in the data.
+* **Compliance and monitoring** tools that need a complete, ordered record.
 
-#### How to get started
+Don't use it for latency-first workloads. If you need data as fast as possible for trading, look into [Dragon's Mouth gRPC](dragon-s-mouth-grpc.md) instead.
 
-1. Use your existing mainnet subscription token, no separate access request needed.
-2. Read our launch post and get started with the Fume CLI: [https://blog.triton.one/introducing-yellowstone-fumarole](https://blog.triton.one/introducing-yellowstone-fumarole)
-3. Build your integration with Fumarole via the Rust or Typescript SDKs: [https://github.com/rpcpool/yellowstone-fumarole](https://github.com/rpcpool/yellowstone-fumarole)
+## Features and benefits
 
-#### Regional endpoints
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-arrows-rotate">:arrows-rotate:</i> <strong>High availability</strong></td><td>Multi-node aggregation with automatic failover. A node restart, upgrade, or outage doesn't interrupt your stream.</td><td></td></tr><tr><td><i class="fa-database">:database:</i> <strong>Persistence</strong></td><td>Server-side cursor with 4 days of rolling retention. Go offline for hours or days and resume from your exact position.</td><td></td></tr><tr><td><i class="fa-circle-check">:circle-check:</i> <strong>At-least-once delivery</strong></td><td>Only whole blocks are served, with full block data arriving before slot status. No gaps in your data.</td><td></td></tr><tr><td><i class="fa-list-ol">:list-ol:</i> <strong>Consistent ordering</strong></td><td>Deterministic block order across sessions, so a reconnect replays in the same sequence as if it never dropped.</td><td></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Horizontal scaling</strong></td><td>A persistent subscriber distributes the full stream across multiple readers, each processing its own partition.</td><td></td></tr><tr><td><i class="fa-code-fork">:code-fork:</i> <strong>Dragon's Mouth compatible</strong></td><td>Same data, filters, and types as Dragon's Mouth, with an adapter that keeps your existing processing logic intact.</td><td></td></tr></tbody></table>
+
+## How it works
+
+1. Fumarole aggregates multiple Dragon's Mouth nodes, merging and deduplicating their updates into one stream.
+2. It persists your read position as a server-side cursor, with 4 days of rolling retention.
+3. You stream from a named persistent subscriber at your own pace. If you disconnect, reconnecting with the same name resumes from your last full slot, anywhere in the 4-day window.
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
+flowchart LR
+    n1["Dragon's Mouth"] --> f
+    n2["Dragon's Mouth"] --> f
+    n3["Dragon's Mouth"] --> f
+    n4["Dragon's Mouth"] --> f["Fumarole<br/>merge + dedupe + cursor<br/>(4-day retention)"]
+    f --> you["Your app"]
+    style you fill:#D6EAF8,stroke:#259DD0
+```
+
+## Supported methods
+
+Fumarole is a gRPC service. You manage a **persistent subscriber** (a consumer group) and stream from it:
+
+| Method | What it does |
+| --- | --- |
+| `CreateConsumerGroup` | Create a persistent subscriber that tracks your position server-side. |
+| `ListConsumerGroups`, `GetConsumerGroupInfo`, `DeleteConsumerGroup` | Manage your persistent subscribers. |
+| `Subscribe`, `SubscribeV2` | Open the control-plane stream that manages your subscription session. |
+| `SubscribeData` | Open the data-plane stream that delivers your account and transaction updates. |
+| `DownloadBlock`, `DownloadBlockDataShard` | Replay a specific block, in parallel shards. |
+| `GetChainTip`, `GetSlotRange`, `Version` | Inspect the stream's current tip, available slot range, and version. |
+
+## Get started
+
+Fumarole works with your existing mainnet subscription token, no separate access request needed.
+
+**1. Pick a regional endpoint.** Connect directly to the cluster closest to your backend (see [Regional endpoints](#regional-endpoints)): `ams.rpcpool.com` (EU) or `nyc.rpcpool.com` (US). Persistent subscribers are stateful per cluster, so avoid the shared `*.mainnet.rpcpool.com` endpoints.
+
+**2. Authenticate with your token.** Pass your existing mainnet token as the `x-token`.
+
+**3. Install a client.** The Fume CLI is the quickest way to try Fumarole and to create a persistent subscriber; the Rust and TypeScript SDKs are how you build.
+
+{% tabs %}
+{% tab title="Fume CLI" %}
+```bash
+cargo install yellowstone-fumarole-cli
+```
+{% endtab %}
+
+{% tab title="Rust" %}
+```toml
+[dependencies]
+yellowstone-fumarole-client = "0.6"
+```
+{% endtab %}
+
+{% tab title="TypeScript" %}
+```bash
+npm install @triton-one/yellowstone-fumarole
+```
+{% endtab %}
+{% endtabs %}
+
+**4. Create a persistent subscriber, then stream from it.** The subscriber tracks your position server-side, so reconnecting with the same name resumes where you left off.
+
+{% tabs %}
+{% tab title="Rust" %}
+```rust
+use futures::StreamExt;
+use std::collections::HashMap;
+use yellowstone_fumarole_client::{FumaroleClient, config::FumaroleConfig, stream::FumaroleEvent};
+use yellowstone_grpc_proto::geyser::{SubscribeRequest, SubscribeRequestFilterTransactions};
+
+#[tokio::main]
+async fn main() {
+    let config = FumaroleConfig {
+        endpoint: "https://ams.rpcpool.com".to_string(),
+        x_token: Some("<your-token>".to_string()),
+        ..Default::default()
+    };
+
+    let mut client = FumaroleClient::connect(config).await.expect("connect");
+
+    let request = SubscribeRequest {
+        transactions: HashMap::from([(
+            "f1".to_owned(),
+            SubscribeRequestFilterTransactions::default(),
+        )]),
+        ..Default::default()
+    };
+
+    // "my-subscriber" is a persistent subscriber you created (e.g. with the Fume CLI).
+    let subscription = client
+        .subscribe("my-subscriber".to_string(), request)
+        .await
+        .expect("subscribe failed");
+
+    let (_sink, stream) = subscription.split();
+    let mut slot_stream = stream.slot_sequential();
+
+    while let Some(item) = slot_stream.next().await {
+        match item.expect("stream error") {
+            FumaroleEvent::Data { slot, update } => println!("slot {slot}: {update:?}"),
+            FumaroleEvent::SlotEnded(slot) => println!("slot {slot} complete"),
+        }
+    }
+}
+```
+{% endtab %}
+
+{% tab title="TypeScript" %}
+```typescript
+import {
+  FumaroleClient,
+  SubscribeRequest,
+  CommitmentLevel,
+} from "@triton-one/yellowstone-fumarole";
+
+const client = await FumaroleClient.connect({
+  endpoint: "https://ams.rpcpool.com",
+  xToken: "<your-token>",
+  maxDecodingMessageSizeBytes: 100 * 1024 * 1024,
+});
+
+// Create the persistent subscriber once; reuse the name to resume.
+const subscriberName = "my-subscriber";
+await client.createPersistentSubscriber(subscriberName);
+
+const request: SubscribeRequest = {
+  commitment: CommitmentLevel.CONFIRMED,
+  accounts: {},
+  transactions: { f1: { accountInclude: [], accountExclude: [], accountRequired: [] } },
+  slots: {},
+  transactionsStatus: {},
+  blocks: {},
+  blocksMeta: {},
+  entry: {},
+  accountsDataSlice: [],
+};
+
+const { source } = await client.dragonsmouthSubscribeWithConfig(subscriberName, request, {
+  concurrentDownloadLimit: 1,
+  commitInterval: 5000,
+});
+
+await source.forEach((update) => console.log(update));
+```
+{% endtab %}
+{% endtabs %}
+
+For the full Fume CLI walkthrough, read the [launch post](https://blog.triton.one/introducing-yellowstone-fumarole); for the complete API, see the [Rust and TypeScript SDKs](https://github.com/rpcpool/yellowstone-fumarole).
+
+## Streaming modes
+
+The Rust client streams in three modes:
+
+* **Slot-sequential.** Events one slot at a time; slot N finishes completely before N+1 starts.
+* **Block stream.** Whole blocks as single payloads, for logic that processes entire blocks at once.
+* **Raw stream.** Events as they arrive, no slot-sequential ordering. The fastest mode: it skips the reordering and buffering overhead.
+
+Any mode can be paired with manual commitment, and all three use parallel shard downloads. Rust is the primary client; the TypeScript and Python clients don't support all three modes yet.
+
+By default Fumarole auto-advances your cursor as it delivers data. Set `auto_commit: false` to decide exactly when the cursor moves: write to your database first, and only commit receipt after the write succeeds.
+
+## Migrating from Dragon's Mouth
+
+If you already have code built for our gRPC streams in Dragon's Mouth, integrating with Fumarole for additional reliability is easy. The code changes should be minimal as Fumarole uses the same types as Dragon's Mouth.
+
+The main difference is that you need to manage a **persistent subscriber**, and alter your subscribe request slightly.
+
+For the full walkthrough, follow the [Dragon's Mouth to Fumarole migration guide](https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/streaming/migrate-from-dragons-mouth-to-fumarole). For the complete API, see the [yellowstone-fumarole-client docs](https://docs.rs/yellowstone-fumarole-client/latest/yellowstone_fumarole_client/).
+
+## Regional endpoints
 
 Fumarole runs as **independent regional clusters**. We currently operate:
 
@@ -49,37 +217,35 @@ Fumarole runs as **independent regional clusters**. We currently operate:
 | EU     | `ams.rpcpool.com` | Amsterdam |
 | US     | `nyc.rpcpool.com` | New York  |
 
-**Choosing an endpoint**
+### Choosing an endpoint
 
 For Fumarole, connect directly to a **regional endpoint** rather than shared `*.mainnet.rpcpool.com` endpoints. Pick the region closest to your backend infrastructure to minimise latency.
 
 {% hint style="warning" %}
-Shared `*.mainnet.rpcpool.com` endpoints are **not recommended for Fumarole**. See the next section for why.
+Shared `*.mainnet.rpcpool.com` endpoints are **not recommended for Fumarole**. See below for why.
 {% endhint %}
 
-**Why direct regional endpoints matter for Fumarole**
+### Why direct regional endpoints matter
 
-The shared endpoints (`*.mainnet.rpcpool.com`) routes traffic to the closest regional load balancer based on GeoDNS. For stateless RPC calls this is ideal, any region can serve any request.
+The shared endpoints (`*.mainnet.rpcpool.com`) route traffic to the closest regional load balancer based on GeoDNS. For stateless RPC calls this is ideal: any region can serve any request.
 
-**Persistent subscribers in Fumarole are stateful per cluster.** A persistent subscriber and the slot offsets it tracks live locally on the cluster where it was created and **do not replicate across regions**.
+### Persistent subscribers are stateful per cluster
 
-If you connect through a shared endpoint, your traffic can be routed to a region where your persistent subscriber does not exist - for example, after a routing change, a network event, or a shift in the perceived geography of your backend. When that happens, your subscriber will not be found on the new cluster and you will need to recreate it.
+A persistent subscriber and the slot offsets it tracks live locally on the cluster where it was created and **do not replicate across regions**.
 
-Pointing your Fumarole client directly at a regional endpoint avoids this entirely.
+If you connect through a shared endpoint, your traffic can be routed to a region where your persistent subscriber does not exist, for example after a routing change, a network event, or a shift in the perceived geography of your backend. When that happens, your subscriber will not be found on the new cluster and you will need to recreate it. Pointing your Fumarole client directly at a regional endpoint avoids this entirely.
 
-**Switching regions**
+### Switching regions
 
-To move a persistent subscriber from one regional cluster to another (e.g., EU → US):
+To move a persistent subscriber from one regional cluster to another (e.g., EU to US):
 
-1. Recreate your persistent subscriber on the new cluster - subscribers do not carry over between regional clusters.
+1. Recreate your persistent subscriber on the new cluster: subscribers do not carry over between regional clusters.
 2. Point your client to the new regional endpoint.
 3. Reconnect. Your existing token continues to work; no token changes are required.
 
-**Cross-region redundancy (customer-managed)**
+### Cross-region redundancy (customer-managed)
 
-With multiple regional clusters available, you can implement cross-region redundancy on the client side. If one cluster experiences a major issue, you can fail over to another region by recreating the persistent subscriber **from the last slot you observed on the failing cluster**.
-
-Fumarole makes this type of redundancy easy to handle in the client since it tracks the last **full** slot you consumed.
+With multiple regional clusters available, you can implement cross-region redundancy on the client side. If one cluster experiences a major issue, you can fail over to another region by recreating the persistent subscriber **from the last slot you observed on the failing cluster**. Fumarole makes this easy since it tracks the last **full** slot you consumed.
 
 This pattern is fully customer-managed:
 
@@ -87,17 +253,15 @@ This pattern is fully customer-managed:
 * Your client detects the failure and triggers the cutover.
 * Triton does not synchronise subscriber state, track last-seen slots, or orchestrate failover between clusters.
 
-If you need this level of redundancy, plan your slot bookkeeping and failover logic accordingly. For the full step-by-step detection, failover, and failback procedure, follow the [Fumarole cluster failover guide](https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/streaming/fumarole-cluster-failover).
+If you need this level of redundancy, plan your slot bookkeeping and failover logic accordingly. For the full step-by-step detection, failover, and failback procedure, follow the [Fumarole cluster failover guide](https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/streaming/fumarole-cluster-failover).
 
-#### Migrating from Dragon's Mouth
+## Pricing
 
-If you already have code built for our gRPC streams in Dragon's Mouth, integrating with Fumarole for additional reliability is easy. The code changes should be minimal as Fumarole uses the same types as Dragon's Mouth.
+Fumarole is billed at `$0.08 / GB` of bandwidth. You only pay for the data sent.
 
-The main difference is that you need to manage a **persistent subscriber**, and alter your subscribe request slightly.
+## What's next
 
-For more details see the Github repo:
-
-[Yellowstone-fumarole-client crates.io](https://docs.rs/yellowstone-fumarole-client/0.5.0+solana.3/yellowstone_fumarole_client/)
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-tower-broadcast">:tower-broadcast:</i> <strong>Dragon's Mouth gRPC</strong></td><td>Sub-slot real-time updates for accounts, transactions, slots, and blocks via gRPC.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc">Dragon's Mouth gRPC</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Filtering, reconnect, and commitment guidance across the streaming services.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/best-practices">Best practices</a></td></tr></tbody></table>
 
 ***
 

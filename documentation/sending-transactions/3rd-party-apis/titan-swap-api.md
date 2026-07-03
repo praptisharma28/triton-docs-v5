@@ -1,17 +1,10 @@
 ---
-description: Stream Solana swap quotes in real time and execute them, powered by Argos and DART.
+description: Stream or poll Solana swap quotes in real time and execute them, powered by Argos and DART.
 ---
 
-# Titan swap API
+# Titan Swap API
 
-The Titan swap API streams swap quotes in real time over a WebSocket. The Argos routing engine acts as a meta-aggregator, sourcing from multiple DEX aggregators and RFQ venues. Streaming over a WebSocket keeps latency low and lets a frontend update prices live without overwhelming the server with HTTP requests.
-
-## Key features
-
-* **Real-time streaming**: a WebSocket connection pushes continuous price updates.
-* **Meta-aggregator**: sources from multiple DEX aggregators and RFQ venues to minimise slippage.
-* **Low latency**: streams quotes faster than REST polling.
-* **DART routing**: [Dynamically Allocated Real-Time routing](https://titan-exchange.gitbook.io/titan/developer-doc/dart-swap-api/overview) re-optimises a trade at the moment of execution, not just at quote time, for the best execution when it matters.
+Titan is a plug-and-play quoting and swap execution layer for your transactions, hosted on Triton: it finds the optimal route across Solana liquidity and re-optimises your trade on-chain the moment it settles.
 
 ## Use cases
 
@@ -22,9 +15,16 @@ Titan is a good fit for:
 * Trading bots that need low-latency price feeds
 * Wallets with live swap pricing
 
+## Features and benefits
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Meta-aggregation</strong></td><td>The Argos engine compares and simulates its own routes against external aggregators and RFQ market makers (Hashflow, Pyth Express Relay), acting as your broker to return the best executable route.</td><td></td></tr><tr><td><i class="fa-route">:route:</i> <strong>DART on-chain routing</strong></td><td>Dynamically Allocated Real-Time routing finalises the trade at execution, re-optimising how your volume splits across pools against live state. Live on selected pairs.</td><td></td></tr><tr><td><i class="fa-tower-broadcast">:tower-broadcast:</i> <strong>Live quote streaming</strong></td><td>A single WebSocket channel pushes continuous quotes, each with route data and a ready-to-sign transaction.</td><td></td></tr><tr><td><i class="fa-coins">:coins:</i> <strong>Bandwidth-only pricing</strong></td><td>Billed at $0.08 / GB, with no per-request charge, rate or connection limits, or minimum spend.</td><td></td></tr></tbody></table>
+
 ## Getting started
 
-Connect over `wss://` (not `https://`, this is a WebSocket service) on your Triton endpoint, under the `/titan` path.
+Titan is enabled by default on every Triton Solana subscription. Depending on whether you poll for quotes or stream them, you use the HTTP or the WebSocket endpoint (find them in your [customer dashboard](https://customers.triton.one)) with the `/titan` path added:
+
+* **Stream** (recommended): connect over `wss://` and receive continuous quote updates.
+* **Poll**: request quotes over `https://` on the same `/titan` path.
 
 ```
 wss://<your-endpoint>.mainnet.rpcpool.com/<your-token>/titan/api/v1/ws
@@ -38,7 +38,7 @@ const ws = new WebSocket(
 );
 
 ws.onopen = () => {
-  console.log("Connected to the Titan swap API");
+  console.log("Connected to the Titan Swap API");
 };
 
 ws.onmessage = (event) => {
@@ -47,7 +47,7 @@ ws.onmessage = (event) => {
 };
 ```
 
-## Executing a swap
+### Executing a swap
 
 Each streamed quote carries the route information you need to execute:
 
@@ -57,17 +57,12 @@ Each streamed quote carries the route information you need to execute:
 4. **Select a quote**: pick the best by your criteria, such as price or provider.
 5. **Execute**: each `SwapRoute` arrives with either instructions to build and sign a transaction, or a ready-to-sign transaction you can submit directly.
 
+For the request and response format and the full execution flow, see the [Titan Swap API docs](https://titan-exchange.gitbook.io/titan/developer-doc/dart-swap-api/overview). A TypeScript SDK is available: [@titanexchange/sdk-ts](https://www.npmjs.com/package/@titanexchange/sdk-ts).
+
 ## Pricing
 
-Streaming is billed at $0.05 per GB.
+Titan API is billed for bandwidth only (even on polls), at $0.08 per GB.
 
-## Availability
-
-Available to all customers with an active Solana subscription, on both shared RPC pools and dedicated nodes.
-
-## API documentation
-
-For the request and response format and the full execution flow, see the [Titan swap API docs](https://titan-exchange.gitbook.io/titan/titan-developer-docs/apis/swap-api#websocket-connections). A TypeScript SDK is available: [@titanexchange/sdk-ts](https://www.npmjs.com/package/@titanexchange/sdk-ts). Background: [Titan Prime API for Solana swaps is live on Triton](https://blog.triton.one/titan-prime-api-for-solana-swaps-is-live-on-triton/).
 
 ***
 

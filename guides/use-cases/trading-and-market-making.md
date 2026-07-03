@@ -16,7 +16,7 @@ By the end you'll have a working setup that covers the full path from signal to 
 
 Five Triton products work together in this stack. Each card below opens the full product docs, useful when you want to tune defaults, see every option, or troubleshoot something specific to that product.
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth</strong></td><td>Subscribe to DEX pool account updates and transactions in real time.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc</a></td></tr><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred</strong></td><td>Receive transactions \~20 ms before standard gRPC at p90 for earliest signal.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions</a></td></tr><tr><td><i class="fa-arrow-trend-up">:arrow-trend-up:</i> <strong>Priority Fee API</strong></td><td>Get a percentile-based fee estimate before building your transaction.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api</a></td></tr><tr><td><i class="fa-paper-plane">:paper-plane:</i> <strong>Jet</strong></td><td>Send transactions directly to the current leader with built-in SWQoS.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/jet-sender">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/jet-sender</a></td></tr><tr><td><i class="fa-shield-halved">:shield-halved:</i> <strong>Shield</strong></td><td>(Optional) Block specific validators from processing your transactions.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-radio">:radio:</i> <strong>Dragon's Mouth</strong></td><td>Subscribe to DEX pool account updates and transactions in real time.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc</a></td></tr><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred</strong></td><td>Receive transactions \~20 ms before standard gRPC at p75 for earliest signal.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions</a></td></tr><tr><td><i class="fa-arrow-trend-up">:arrow-trend-up:</i> <strong>Priority Fee API</strong></td><td>Get a percentile-based fee estimate before building your transaction.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/priority-fees-api">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/priority-fees-api</a></td></tr><tr><td><i class="fa-paper-plane">:paper-plane:</i> <strong>Jet</strong></td><td>Send transactions directly to the current leader with built-in SWQoS.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions">Sending transactions</a></td></tr><tr><td><i class="fa-shield-halved">:shield-halved:</i> <strong>Shield</strong></td><td>(Optional) Block specific validators from processing your transactions.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/shield-mev-protection">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/shield-mev-protection</a></td></tr></tbody></table>
 
 ## Prerequisites
 
@@ -43,7 +43,7 @@ npm install @triton-one/yellowstone-grpc bs58 @solana/web3.js
 ```
 {% endtab %}
 
-{% tab title="Rust (Cargo.toml)" %}
+{% tab title="Rust" %}
 ```toml
 [dependencies]
 yellowstone-grpc-client = "2"
@@ -76,15 +76,15 @@ pip install grpcio grpcio-tools base58 solana httpx
 Dragon's Mouth delivers account and transaction updates as the node processes them, at processed commitment. For a trading bot you'll subscribe to the pool accounts and transactions of the DEX programs you're trading on.
 
 {% tabs %}
-{% tab title="stream-dex.ts" %}
+{% tab title="TypeScript" %}
 ```typescript
 
   CommitmentLevel,
   SubscribeRequest,
 } from "@triton-one/yellowstone-grpc";
 
-const ENDPOINT = "https://your-endpoint.rpcpool.com";
-const TOKEN = "your-token";
+const ENDPOINT = "https://<your-endpoint>.rpcpool.com";
+const TOKEN = "<your-token>";
 
 // Raydium AMM v4 program, replace with the DEX program you're trading
 const RAYDIUM_AMM = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8";
@@ -156,7 +156,7 @@ streamDexData().catch(console.error);
 ```
 {% endtab %}
 
-{% tab title="stream_dex.rs" %}
+{% tab title="Rust" %}
 ```rust
 use std::collections::HashMap;
 use futures::StreamExt;
@@ -166,8 +166,8 @@ use yellowstone_grpc_proto::prelude::{
     SubscribeRequestFilterAccounts, SubscribeRequestFilterTransactions,
 };
 
-const ENDPOINT: &str = "https://your-endpoint.rpcpool.com";
-const TOKEN: &str = "your-token";
+const ENDPOINT: &str = "https://<your-endpoint>.rpcpool.com";
+const TOKEN: &str = "<your-token>";
 const RAYDIUM_AMM: &str = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8";
 
 #[tokio::main]
@@ -225,7 +225,7 @@ async fn main() -> anyhow::Result<()> {
 ```
 {% endtab %}
 
-{% tab title="stream_dex.py" %}
+{% tab title="Python" %}
 ```python
 
 from grpc import aio
@@ -243,8 +243,8 @@ from geyser_pb2 import (
 )
 from geyser_pb2_grpc import GeyserStub
 
-ENDPOINT = "your-endpoint.rpcpool.com:443"
-TOKEN = "your-token"
+ENDPOINT = "<your-endpoint>.rpcpool.com:443"
+TOKEN = "<your-token>"
 RAYDIUM_AMM = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8"
 
 async def stream_dex_data():
@@ -292,7 +292,7 @@ asyncio.run(stream_dex_data())
 
 An account update prints something like:
 
-```
+```text
 Pool state updated: 58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2
 ```
 
@@ -300,7 +300,7 @@ This is the pool's public key encoded in base58, the standard human-readable for
 
 A transaction update prints:
 
-```
+```text
 Transaction processed: 5Vk5mYDpFq3vQtXm8ZkRj2PnCwBsHeLfY6gNuoA1T9KdEpRsuW3HqXjc...
 ```
 
@@ -322,23 +322,22 @@ console.log(JSON.stringify(decoded, null, 2));
 
 ## Step 2: Get the earliest signal with Deshred
 
-Deshred reconstructs transactions from shreds before execution, delivering them approximately 20 ms ahead of standard Dragon's Mouth gRPC at p90 (p50 is \~6.3 ms). It uses a separate RPC method, `SubscribeDeshred`: on the same endpoint and token as Dragon's Mouth.
+Deshred reconstructs transactions from shreds before execution, delivering them \~20 ms ahead of standard Dragon's Mouth gRPC at p75 (p50 is \~6.3 ms). It uses a separate RPC method, `SubscribeDeshred`: on the same endpoint and token as Dragon's Mouth.
 
 Important limitations to understand before using Deshred:
 
 * **No execution metadata**: you receive intent only. There are no logs, balance changes, status, or compute unit data.
 * **No finality guarantee**: the transaction may fail, get dropped, or land on a dead fork. Always confirm with your Dragon's Mouth `processed` stream.
-* **Requires Agave 4.0+** on the validator (available on Triton's paid beta).
 
 {% tabs %}
-{% tab title="stream-deshred.ts" %}
+{% tab title="TypeScript" %}
 ```typescript
 
   SubscribeRequestFilterDeshredTransactions,
 } from "@triton-one/yellowstone-grpc";
 
-const ENDPOINT = "https://your-endpoint.rpcpool.com";
-const TOKEN = "your-token";
+const ENDPOINT = "https://<your-endpoint>.rpcpool.com";
+const TOKEN = "<your-token>";
 const RAYDIUM_AMM = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8";
 
 async function streamDeshred() {
@@ -382,7 +381,7 @@ streamDeshred().catch(console.error);
 ```
 {% endtab %}
 
-{% tab title="stream_deshred.rs" %}
+{% tab title="Rust" %}
 ```rust
 use std::collections::HashMap;
 use futures::StreamExt;
@@ -391,8 +390,8 @@ use yellowstone_grpc_proto::prelude::{
     subscribe_update_deshred, SubscribeDeshredRequest, SubscribeRequestFilterDeshredTransactions,
 };
 
-const ENDPOINT: &str = "https://your-endpoint.rpcpool.com";
-const TOKEN: &str = "your-token";
+const ENDPOINT: &str = "https://<your-endpoint>.rpcpool.com";
+const TOKEN: &str = "<your-token>";
 const RAYDIUM_AMM: &str = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8";
 
 #[tokio::main]
@@ -433,7 +432,7 @@ async fn main() -> anyhow::Result<()> {
 ```
 {% endtab %}
 
-{% tab title="stream_deshred.py" %}
+{% tab title="Python" %}
 ```python
 
 from grpc import aio
@@ -445,8 +444,8 @@ from geyser_pb2 import (
 )
 from geyser_pb2_grpc import GeyserStub
 
-ENDPOINT = "your-endpoint.rpcpool.com:443"
-TOKEN = "your-token"
+ENDPOINT = "<your-endpoint>.rpcpool.com:443"
+TOKEN = "<your-token>"
 RAYDIUM_AMM = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8"
 
 async def stream_deshred():
@@ -480,11 +479,11 @@ asyncio.run(stream_deshred())
 {% endtab %}
 {% endtabs %}
 
-**Verify it works:** you should see pre-execution transactions printing before they appear in your Dragon's Mouth stream. Deshred messages arrive approximately 20 ms earlier at p90 (6.3 ms at p50).
+**Verify it works:** you should see pre-execution transactions printing before they appear in your Dragon's Mouth stream. Deshred messages arrive \~20 ms earlier at p75 (6.3 ms at p50).
 
 **What the output looks like:**
 
-```
+```text
 Deshred tx (pre-execution): 5Vk5mYDpFq3vQtXm8ZkRj2PnCwBsHeLfY6gNuoA1T9Kd... slot: 307152834
 ```
 
@@ -497,7 +496,7 @@ Use this signal to detect incoming order flow and react, for example, detecting 
 Before building your transaction, call Triton's Priority Fee API to get a fee at your target percentile. This avoids both underbidding (transaction doesn't land) and overbidding (unnecessary cost).
 
 {% tabs %}
-{% tab title="priority-fee.ts" %}
+{% tab title="TypeScript" %}
 ```typescript
 async function getPriorityFee(
   endpoint: string,
@@ -529,7 +528,7 @@ console.log("Priority fee (90th pct):", fee, "micro-lamports/CU");
 ```
 {% endtab %}
 
-{% tab title="priority_fee.rs" %}
+{% tab title="Rust" %}
 ```rust
 use reqwest::Client;
 use serde::Deserialize;
@@ -576,7 +575,7 @@ async fn get_priority_fee(
 ```
 {% endtab %}
 
-{% tab title="priority_fee.py" %}
+{% tab title="Python" %}
 ```python
 
 async def get_priority_fee(
@@ -612,11 +611,11 @@ async def get_priority_fee(
 
 **What the output looks like:**
 
-```
+```text
 Priority fee (90th pct): 45000 micro-lamports/CU
 ```
 
-The fee is in micro-lamports per compute unit. A typical Raydium swap uses roughly 200,000-400,000 compute units, so 45,000 micro-lamports/CU × 300,000 CU ÷ 1,000,000,000 = \~0.0135 lamports total priority fee, a fraction of a cent at current prices.
+The fee is in micro-lamports per compute unit. A typical Raydium swap uses \~200,000 to 400,000 compute units, so 45,000 micro-lamports/CU × 300,000 CU ÷ 1,000,000 = 13,500 lamports (\~0.0000135 SOL) total priority fee, a fraction of a cent at current prices.
 
 You can layer your own strategy on top of this (for example, adding a fixed buffer during high-volatility periods), or pass it directly to `setComputeUnitPrice` in Step 4:
 
@@ -629,7 +628,7 @@ ComputeBudgetProgram.setComputeUnitPrice({ microLamports: fee })
 Jet is Triton's transaction relay engine. When you send through your Triton endpoint, Jet automatically routes to the current leader over QUIC, handles connection caching, leader schedule tracking, and retry fanout. SWQoS is included, no extra configuration needed.
 
 {% tabs %}
-{% tab title="send-jet.ts" %}
+{% tab title="TypeScript" %}
 ```typescript
 
   Connection,
@@ -668,7 +667,7 @@ function addPriorityFee(tx: Transaction, microLamportsPerCU: number): void {
 ```
 {% endtab %}
 
-{% tab title="send_jet.rs" %}
+{% tab title="Rust" %}
 ```rust
 use solana_client::rpc_client::RpcClient;
 use solana_client::rpc_config::RpcSendTransactionConfig;
@@ -697,7 +696,7 @@ fn send_with_jet(
 ```
 {% endtab %}
 
-{% tab title="send_jet.py" %}
+{% tab title="Python" %}
 ```python
 from solana.rpc.api import Client
 from solana.rpc.types import TxOpts
@@ -723,7 +722,7 @@ Set `maxRetries: 0` to disable server-side retries, then implement your own retr
 
 **What the output looks like:**
 
-```
+```text
 Sent: 5Vk5mYDpFq3vQtXm8ZkRj2PnCwBsHeLfY6gNuoA1T9KdEpRsuW3HqXjc...
 ```
 
@@ -741,7 +740,7 @@ if (status?.confirmationStatus === "confirmed" || status?.confirmationStatus ===
 }
 ```
 
-Because you set `maxRetries: 0`, retry logic is entirely in your hands. If the transaction hasn't confirmed within \~30 seconds (the blockhash expiry window), re-fetch a recent blockhash from `confirmed` or `finalized` commitment, re-sign the transaction, and resend.
+Because you set `maxRetries: 0`, retry logic is entirely in your hands. If the transaction hasn't confirmed within \~60 seconds (the blockhash expiry window), re-fetch a recent blockhash from `confirmed` or `finalized` commitment, re-sign the transaction, and resend.
 
 ## Putting it together
 
@@ -749,8 +748,8 @@ A minimal trading loop combining all four steps:
 
 ```typescript
 
-const ENDPOINT = "https://your-endpoint.rpcpool.com";
-const TOKEN = "your-token";
+const ENDPOINT = "https://<your-endpoint>.rpcpool.com";
+const TOKEN = "<your-token>";
 const RAYDIUM_AMM = "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8";
 
 async function getPriorityFee(
@@ -852,15 +851,15 @@ Two paths for two types of teams:
 * **This guide**: build your own signal and execution stack. Full control, lowest latency, more engineering work.
 * **Metis / Titan**: plug in pre-built liquidity routing and quoting. Fastest time to market, less custom code.
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-code-branch">:code-branch:</i> <strong>Metis swap API</strong></td><td>Swap routing across 20+ DEXes with exact-out and platform-fee support built in.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/metis-swap-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/metis-swap-api</a></td></tr><tr><td><i class="fa-route">:route:</i> <strong>Titan swap API</strong></td><td>Streaming quotes and routes via DART live re-optimisation or the Prime API for high-volume desks.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/titan-swap-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/titan-swap-api</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-code-branch">:code-branch:</i> <strong>Metis Swap API</strong></td><td>Swap routing across 20+ DEXes with exact-out and platform-fee support built in.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/metis-swap-api">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/metis-swap-api</a></td></tr><tr><td><i class="fa-route">:route:</i> <strong>Titan Swap API</strong></td><td>Streaming quotes and routes via DART live re-optimisation or the Prime API for high-volume desks.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/titan-swap-api">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/titan-swap-api</a></td></tr></tbody></table>
 
 ## FAQs
 
 <details>
 
-<summary>Do I need all four products?</summary>
+<summary>Do I need all five products?</summary>
 
-Dragon's Mouth and Jet cover the minimum, real-time data in, transactions out. Add Deshred if your strategy depends on acting before the network processes a transaction. Priority Fee API prevents you from overbidding during quiet periods.
+Dragon's Mouth and Jet cover the minimum, real-time data in, transactions out. Add Deshred if your strategy depends on acting before the network processes a transaction. Priority Fee API prevents you from overbidding during quiet periods. Shield is free on Triton and enforces your validator allowlist or blocklist on every send.
 
 </details>
 
@@ -892,7 +891,7 @@ Orca Whirlpools: `whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc`
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/deshred-transactions</a></td></tr><tr><td><i class="fa-shield-halved">:shield-halved:</i> <strong>Shield MEV protection</strong></td><td>On-chain allowlists or blocklists with local enforcement. No added latency on the send path.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/shield-mev-protection</a></td></tr><tr><td><i class="fa-code-branch">:code-branch:</i> <strong>Metis swap API</strong></td><td>Swap routing across 20+ DEXes with exact-out and platform-fee support built in.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/metis-swap-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/metis-swap-api</a></td></tr><tr><td><i class="fa-route">:route:</i> <strong>Titan swap API</strong></td><td>Streaming quotes and routes via DART live re-optimisation or the Prime API for high-volume desks.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/titan-swap-api">https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/3rd-party-apis/titan-swap-api</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred Transactions gRPC</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions</a></td></tr><tr><td><i class="fa-shield-halved">:shield-halved:</i> <strong>Shield MEV protection</strong></td><td>On-chain allowlists or blocklists with local enforcement. No added latency on the send path.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/shield-mev-protection">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/shield-mev-protection</a></td></tr><tr><td><i class="fa-code-branch">:code-branch:</i> <strong>Metis Swap API</strong></td><td>Swap routing across 20+ DEXes with exact-out and platform-fee support built in.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/metis-swap-api">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/metis-swap-api</a></td></tr><tr><td><i class="fa-route">:route:</i> <strong>Titan Swap API</strong></td><td>Streaming quotes and routes via DART live re-optimisation or the Prime API for high-volume desks.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/titan-swap-api">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/3rd-party-apis/titan-swap-api</a></td></tr></tbody></table>
 
 ***
 

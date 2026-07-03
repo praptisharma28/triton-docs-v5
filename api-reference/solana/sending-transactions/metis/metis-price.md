@@ -1,5 +1,5 @@
 ---
-description: Get token prices from the Metis Swap API, Triton's self-hosted Jupiter engine.
+description: Get token prices from the Metis Swap API, Triton's hosted quoting engine.
 ---
 
 # Metis /price
@@ -22,7 +22,7 @@ curl 'https://<your-endpoint>.mainnet.rpcpool.com/<your-token>/metis/price?ids=S
 | --------- | ---------------------------------------- |
 | `ids`     | Comma-separated mint addresses to price. |
 
-Metis mirrors the Jupiter price surface. For the full parameter set and response shape, see the [Jupiter price reference](https://dev.jup.ag/docs/price-api).
+Metis mirrors the Jupiter price surface. For the full parameter set and response shape, see the [Jupiter price reference](https://dev.jup.ag/docs/price).
 
 ***
 

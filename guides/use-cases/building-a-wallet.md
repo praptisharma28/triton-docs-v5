@@ -79,7 +79,7 @@ Get your first response from Triton in under two minutes. Replace the endpoint a
 ```typescript
 import { Connection } from "@solana/web3.js";
 
-const connection = new Connection("https://your-endpoint.rpcpool.com/your-token");
+const connection = new Connection("https://<your-endpoint>.rpcpool.com/<your-token>");
 const slot = await connection.getSlot();
 console.log("Connected - current slot:", slot);
 ```
@@ -90,7 +90,7 @@ console.log("Connected - current slot:", slot);
 use solana_client::rpc_client::RpcClient;
 
 fn main() {
-    let client = RpcClient::new("https://your-endpoint.rpcpool.com/your-token");
+    let client = RpcClient::new("https://<your-endpoint>.rpcpool.com/<your-token>");
     let slot = client.get_slot().unwrap();
     println!("Connected - current slot: {}", slot);
 }
@@ -101,7 +101,7 @@ fn main() {
 ```python
 from solana.rpc.api import Client
 
-client = Client("https://your-endpoint.rpcpool.com/your-token")
+client = Client("https://<your-endpoint>.rpcpool.com/<your-token>")
 slot = client.get_slot().value
 print(f"Connected - current slot: {slot}")
 ```
@@ -110,7 +110,7 @@ print(f"Connected - current slot: {slot}")
 
 **What the output looks like:**
 
-```
+```text
 Connected - current slot: 423835852
 ```
 
@@ -132,8 +132,8 @@ import {
 } from "@solana/web3.js";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
-const ENDPOINT = "https://your-endpoint.rpcpool.com";
-const TOKEN = "your-token";
+const ENDPOINT = "https://<your-endpoint>.rpcpool.com";
+const TOKEN = "<your-token>";
 
 async function getWalletState(walletAddress: string) {
   const connection = new Connection(`${ENDPOINT}/${TOKEN}`);
@@ -168,8 +168,8 @@ use solana_client::rpc_request::TokenAccountsFilter;
 use solana_sdk::pubkey::Pubkey;
 use std::str::FromStr;
 
-const ENDPOINT: &str = "https://your-endpoint.rpcpool.com";
-const TOKEN: &str = "your-token";
+const ENDPOINT: &str = "https://<your-endpoint>.rpcpool.com";
+const TOKEN: &str = "<your-token>";
 const TOKEN_PROGRAM_ID: &str = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
 
 fn get_wallet_state(wallet_address: &str) -> anyhow::Result<()> {
@@ -207,8 +207,8 @@ from solana.rpc.api import Client
 from solana.rpc.types import TokenAccountOpts
 from solders.pubkey import Pubkey
 
-ENDPOINT = "https://your-endpoint.rpcpool.com"
-TOKEN = "your-token"
+ENDPOINT = "https://<your-endpoint>.rpcpool.com"
+TOKEN = "<your-token>"
 TOKEN_PROGRAM_ID = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
 
 def get_wallet_state(wallet_address: str):
@@ -237,7 +237,7 @@ def get_wallet_state(wallet_address: str):
 
 **What the output looks like:**
 
-```
+```text
 SOL: 0.0
 Token PhiLR4JDZB9z92rYT5xBXKCxmq4pGB1LYjtybii7aiS: 22100.0
 Token kukb9fv4Y3MGuG1z6TodQqpctkYZjkGnuXQd91U8r1d: 28.0
@@ -263,8 +263,8 @@ import Client, {
 } from "@triton-one/yellowstone-grpc";
 import bs58 from "bs58";
 
-const ENDPOINT = "https://your-endpoint.rpcpool.com";
-const TOKEN = "your-token";
+const ENDPOINT = "https://<your-endpoint>.rpcpool.com";
+const TOKEN = "<your-token>";
 
 async function streamWalletUpdates(walletAddress: string) {
   const client = new Client(ENDPOINT, TOKEN, {});
@@ -330,8 +330,8 @@ use yellowstone_grpc_proto::prelude::{
     SubscribeRequestFilterAccounts,
 };
 
-const ENDPOINT: &str = "https://your-endpoint.rpcpool.com";
-const TOKEN: &str = "your-token";
+const ENDPOINT: &str = "https://<your-endpoint>.rpcpool.com";
+const TOKEN: &str = "<your-token>";
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -391,8 +391,8 @@ from geyser_pb2 import (
 )
 from geyser_pb2_grpc import GeyserStub
 
-ENDPOINT = "your-endpoint.rpcpool.com:443"
-TOKEN = "your-token"
+ENDPOINT = "<your-endpoint>.rpcpool.com:443"
+TOKEN = "<your-token>"
 
 async def stream_wallet_updates(wallet_address: str):
     credentials = grpc.ssl_channel_credentials()
@@ -433,7 +433,7 @@ asyncio.run(stream_wallet_updates("YourWalletAddressHere"))
 
 **What the output looks like:**
 
-```
+```text
 Account updated: 58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2
   New balance: 4.781558248 SOL
   Slot: 423839570
@@ -477,8 +477,8 @@ import {
   ParsedTransactionWithMeta,
 } from "@solana/web3.js";
 
-const ENDPOINT = "https://your-endpoint.rpcpool.com";
-const TOKEN = "your-token";
+const ENDPOINT = "https://<your-endpoint>.rpcpool.com";
+const TOKEN = "<your-token>";
 
 async function getTransactionHistory(
   walletAddress: string,
@@ -523,8 +523,8 @@ use solana_commitment_config::CommitmentConfig;
 use solana_sdk::pubkey::Pubkey;
 use std::str::FromStr;
 
-const ENDPOINT: &str = "https://your-endpoint.rpcpool.com";
-const TOKEN: &str = "your-token";
+const ENDPOINT: &str = "https://<your-endpoint>.rpcpool.com";
+const TOKEN: &str = "<your-token>";
 
 fn get_transaction_history(wallet_address: &str, limit: usize) -> anyhow::Result<()> {
     let client = RpcClient::new(format!("{}/{}", ENDPOINT, TOKEN));
@@ -559,8 +559,8 @@ fn get_transaction_history(wallet_address: &str, limit: usize) -> anyhow::Result
 from solana.rpc.api import Client
 from solders.pubkey import Pubkey
 
-ENDPOINT = "https://your-endpoint.rpcpool.com"
-TOKEN = "your-token"
+ENDPOINT = "https://<your-endpoint>.rpcpool.com"
+TOKEN = "<your-token>"
 
 def get_transaction_history(wallet_address: str, limit: int = 10):
     client = Client(f"{ENDPOINT}/{TOKEN}")
@@ -582,7 +582,7 @@ def get_transaction_history(wallet_address: str, limit: int = 10):
 
 **What the output looks like:**
 
-```
+```text
 Found 5 transactions
 4x7M5EjrJkuheoRmQCGR... slot=408661772 status=ok
 5Be9V7hfrimVyjHz15kb... slot=377756257 status=ok
@@ -619,8 +619,8 @@ import {
   LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 
-const ENDPOINT = "https://your-endpoint.rpcpool.com";
-const TOKEN = "your-token";
+const ENDPOINT = "https://<your-endpoint>.rpcpool.com";
+const TOKEN = "<your-token>";
 
 async function sendSol(
   sender: Keypair,
@@ -706,8 +706,8 @@ use solana_sdk::{
 use solana_system_interface::instruction as system_instruction;
 use std::str::FromStr;
 
-const ENDPOINT: &str = "https://your-endpoint.rpcpool.com";
-const TOKEN: &str = "your-token";
+const ENDPOINT: &str = "https://<your-endpoint>.rpcpool.com";
+const TOKEN: &str = "<your-token>";
 
 #[derive(Deserialize)]
 struct PrioritizationFee {
@@ -777,8 +777,8 @@ from solders.transaction import Transaction as SolTransaction
 from solders.message import Message
 from solders.compute_budget import set_compute_unit_price, set_compute_unit_limit
 
-ENDPOINT = "https://your-endpoint.rpcpool.com"
-TOKEN = "your-token"
+ENDPOINT = "https://<your-endpoint>.rpcpool.com"
+TOKEN = "<your-token>"
 
 async def get_priority_fee(accounts: list[str], percentile: int) -> int:
     async with httpx.AsyncClient() as http:
@@ -840,13 +840,13 @@ console.log(status.value?.confirmationStatus); // "confirmed" or "finalized"
 
 The priority fee call returns the current network fee before the transaction is built:
 
-```
+```text
 Priority fee (90th pct): 2740943 micro-lamports/CU
 ```
 
 Then the send returns a signature:
 
-```
+```text
 Sent: 5ofMHS3yeHrLReLkij5V9SvcrTZoKajJYaLw8aos2UeM2cupWtARXp1Jrt9WsAKTCcqPbja2vQv8nyxmcurcvwg1
 Status: confirmed ✅
 ```
@@ -875,8 +875,8 @@ import {
   getMint,
 } from "@solana/spl-token";
 
-const ENDPOINT = "https://your-endpoint.rpcpool.com";
-const TOKEN = "your-token";
+const ENDPOINT = "https://<your-endpoint>.rpcpool.com";
+const TOKEN = "<your-token>";
 
 async function sendToken(
   sender: Keypair,
@@ -966,8 +966,8 @@ use solana_sdk::{
 };
 use spl_token::instruction::transfer_checked;
 
-const ENDPOINT: &str = "https://your-endpoint.rpcpool.com";
-const TOKEN: &str = "your-token";
+const ENDPOINT: &str = "https://<your-endpoint>.rpcpool.com";
+const TOKEN: &str = "<your-token>";
 
 fn send_token(
     sender: &Keypair,
@@ -1029,8 +1029,8 @@ from solders.compute_budget import set_compute_unit_price, set_compute_unit_limi
 from spl.token.instructions import transfer_checked, TransferCheckedParams
 from spl.token.constants import TOKEN_PROGRAM_ID
 
-ENDPOINT = "https://your-endpoint.rpcpool.com"
-TOKEN = "your-token"
+ENDPOINT = "https://<your-endpoint>.rpcpool.com"
+TOKEN = "<your-token>"
 
 def send_token(
     sender: Keypair,
@@ -1093,7 +1093,7 @@ try {
 
 **What the output looks like:**
 
-```
+```text
 Sent: 4M43KqiKonCP86oqmmb6...........................................
 Status: confirmed ✅
 

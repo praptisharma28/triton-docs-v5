@@ -1,10 +1,14 @@
 ---
-description: Run a branded Solana validator or stake for USDC pay-outs on Triton's infrastructure.
+description: Run a branded Solana validator or stake with Triton for weekly USDC pay-outs
 ---
 
 # Validator services
 
-White-label and private trusted validator services for institutional staking on Solana.
+There are two paths to monetise your SOL with Triton infrastructure: get a white-label validator under your own brand, or stake your SOL with our Private Trusted Validator for weekly USDC pay-outs.
+
+In both cases Triton handles all the ops; your stake size and use case decide between them. Below \~150,000 SOL (at the time of writing), running a validator operates at a loss, so staking your SOL (from 2,500 SOL) for USDC pay-outs wins on economics.
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><strong>White-label validators</strong></td><td>Triton runs a Solana validator under your brand and your keys; you keep your delegators. Sales-led (KYC and contract).</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/validator-services/white-label-validators">White-label validators</a></td></tr><tr><td><strong>SOL staking (USDC pay-outs)</strong></td><td>Delegate SOL to a Triton validator and receive rewards weekly in USDC. 2,500 SOL minimum.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/validator-services/sol-staking-usdc-pay-outs">SOL staking (USDC pay-outs)</a></td></tr></tbody></table>
 
 ***
 

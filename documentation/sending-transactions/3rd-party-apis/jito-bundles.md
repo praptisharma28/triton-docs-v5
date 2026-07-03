@@ -2,9 +2,9 @@
 description: Simulate Jito transaction bundles with Triton's Jito RPC support.
 ---
 
-# Jito bundles
+# Jito Bundle Simulation
 
-Triton enables Jito RPC on every plan, which gives you Jito's improved simulation support so you can simulate bundles of transactions.
+Triton supports Jito's `simulateBundle` method on every plan, so you can test atomic transaction bundles on a Jito-enabled RPC before submitting them. For more information, see the [Jito searcher examples](https://github.com/jito-labs/searcher-examples) and [Jito's low-latency transactions documentation](https://docs.jito.wtf/lowlatencytxnsend).
 
 {% hint style="warning" %}
 **Triton simulates Jito bundles, it does not forward them.** `simulateBundle` runs on Triton's Jito-enabled RPC nodes. Submitting a bundle for inclusion uses `sendBundle`, a Jito-exclusive call that needs a direct, active connection to the Jito Block Engine, so it does not route through Triton. To send bundles, connect to the Jito Block Engine yourself: your IP must be whitelisted with Jito to use those features.
@@ -93,10 +93,13 @@ pub struct RpcSimulateBundleConfig {
 
 </details>
 
-## Resources
+## Pricing
 
-* [Jito searcher examples](https://github.com/jito-labs/searcher-examples)
-* [Jito documentation: low-latency transactions](https://docs.jito.wtf/lowlatencytxnsend)
+Simulating bundles on Triton's Jito-enabled RPC is billed as standard RPC (`$0.08 / GB` plus `$10 / million` calls). Submitting a bundle goes directly to the Jito Block Engine and is not billed by Triton.
+
+## What's next
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Send a transaction via Triton endpoints in a few minutes.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/quickstart">Quickstart</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Land your transactions fast and reliably.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/best-practices">Best practices</a></td></tr></tbody></table>
 
 ***
 

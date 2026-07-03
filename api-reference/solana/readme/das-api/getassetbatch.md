@@ -6,7 +6,7 @@ description: >-
 
 # getAssetBatch
 
-`getAssetBatch` is an alias of [getAssets](getassets.md). It returns metadata for a set of assets in one call, including the asset URL, metadata, collection, creators, authorities, compression status, and ownership.
+`getAssetBatch` is an alias of [getAssets](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/readme/das-api/getassets). It returns metadata for a set of assets in one call, including the asset URL, metadata, collection, creators, authorities, compression status, and ownership.
 
 ## Request
 

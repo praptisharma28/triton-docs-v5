@@ -11,7 +11,7 @@ layout:
   outline:
     visible: true
   pagination:
-    visible: false
+    visible: true
   metadata:
     visible: true
   tags:
@@ -33,9 +33,9 @@ The Subscribe stream delivers these update types in one connection:
 | Block updates | Full blocks. |
 | Block metadata | Block headers without transactions. |
 | Entry updates | Ledger entries. |
-| Deshred transactions | Transactions reconstructed from shreds pre-execution. |
+| Deshred Transactions gRPC | Transactions reconstructed from shreds pre-execution. |
 
-Alongside the stream, a set of [unary calls](unary-calls/README.md) answer one-shot requests with no open stream.
+Alongside the stream, a set of [unary calls](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/real-time-streaming/yellowstone-grpc/unary-calls) answer one-shot requests with no open stream.
 
 ***
 

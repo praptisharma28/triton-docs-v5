@@ -11,7 +11,7 @@ layout:
   outline:
     visible: true
   pagination:
-    visible: false
+    visible: true
   metadata:
     visible: true
   tags:
@@ -59,7 +59,7 @@ One of:
 
 **`config`** · optional
 
-Solana's [`RpcBlockSubscribeConfig`](https://docs.rs/solana-client/latest/solana_client/rpc_config/struct.RpcBlockSubscribeConfig.html), the same config [transactionSubscribe](transactionsubscribe.md) uses:
+Solana's [`RpcBlockSubscribeConfig`](https://docs.rs/solana-client/latest/solana_client/rpc_config/struct.RpcBlockSubscribeConfig.html), the same config [transactionSubscribe](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/real-time-streaming/whirligig-websocket/transactionsubscribe) uses:
 
 | Field                            | Default      | Description                                                              |
 | -------------------------------- | ------------ | ----------------------------------------------------------------------- |
@@ -81,7 +81,7 @@ Solana's [`RpcBlockSubscribeConfig`](https://docs.rs/solana-client/latest/solana
 
 ## Result
 
-Subscription id. Pass this to [blockUnsubscribe](blockunsubscribe.md).
+Subscription id. Pass this to [blockUnsubscribe](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/real-time-streaming/whirligig-websocket/blockunsubscribe).
 
 ## Notification
 
@@ -90,7 +90,7 @@ Updates arrive as `blockNotification` messages, each with a `context` (`slot`) a
 | Field   | Type            | Description                                                       |
 | ------- | --------------- | ---------------------------------------------------------------- |
 | `slot`  | u64             | Slot of the block.                                               |
-| `block` | object \| null  | Block data, the same structure as [getBlock](../../historical-data/getblock.md). |
+| `block` | object \| null  | Block data, the same structure as [getBlock](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/historical-data/getblock). |
 | `err`   | null \| object  | Error if the block failed to publish, otherwise `null`.          |
 
 ***

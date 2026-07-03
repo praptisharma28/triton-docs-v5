@@ -16,6 +16,7 @@ How to land Solana transactions reliably, especially under congestion.
 
 * **Do not rely on the RPC node to retry.** Its legacy retry queue saturates under high traffic and causes widespread failures.
 * **Always send with `maxRetries: 0`** so the node does not use that queue.
+* **`/sendtx` handles retries differently:** unlike `sendTransaction` (where `maxRetries: 0` lets Jet fan out retries for you), `/sendtx` retries according to its `max_retries` parameter. Set it above 0 (for example `3`); leaving it at 0 can drop your landing rate.
 * **Build your own asynchronous retry logic:** re-fetch a recent blockhash and re-sign every few seconds.
 
 ## Separate simulation from sending
@@ -46,10 +47,10 @@ How to land Solana transactions reliably, especially under congestion.
 ## Protect transactions with Yellowstone Shield
 
 * **Apply forwarding policies** (allowlist or blocklist of validators) to avoid sandwich and front-running validators. Pass them via `forwardingPolicies` in `sendTransaction` or the `Solana-ForwardingPolicies` header.
-* **Shield only works on Shield-enabled RPCs** (those using Yellowstone Jet); standard Solana RPCs ignore the policy.
+* **Shield only works on Shield-enabled RPCs** (those using Jet sender); standard Solana RPCs ignore the policy.
 * **Maintain your lists every epoch** and treat Shield as a filter, not a guarantee. Be careful with strict policies on time-critical sends (arbitrage, liquidations): Shield drops, rather than queues, a transaction when no eligible validator is available.
 
-## Jito bundles
+## Jito Bundle Simulation
 
 * **Simulate bundles with `simulateBundle`** (Jito RPC is available on all plans).
 * **`sendBundle` is Jito-exclusive** and requires your IP to be whitelisted with Jito's Block Engine.

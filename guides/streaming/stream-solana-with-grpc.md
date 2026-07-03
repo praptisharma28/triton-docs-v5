@@ -41,7 +41,7 @@ import Client, {
 
 async function main() {
   // Connect to the gRPC endpoint
-  const client = new Client("https://your-endpoint.rpcpool.com", "your-x-token", {
+  const client = new Client("https://<your-endpoint>.rpcpool.com", "your-x-token", {
     grpcMaxDecodingMessageSize: 64 * 1024 * 1024, // 64MiB
   });
 
@@ -118,7 +118,7 @@ use {
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     // Connect to the gRPC endpoint
-    let mut client = GeyserGrpcClient::build_from_shared("https://your-endpoint.rpcpool.com")?
+    let mut client = GeyserGrpcClient::build_from_shared("https://<your-endpoint>.rpcpool.com")?
         .x_token(Some("your-x-token".to_string()))?
         .connect()
         .await?;
@@ -199,7 +199,7 @@ Subscribe to a single account by pubkey on `confirmed` commitment. Here `wsol/us
 ```
 {% endtab %}
 
-{% tab title="NodeJS" %}
+{% tab title="TypeScript" %}
 ```javascript
 import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
 
@@ -231,7 +231,7 @@ To subscribe to all accounts owned by a program, pass `owner`. This example stre
 ```
 {% endtab %}
 
-{% tab title="NodeJS" %}
+{% tab title="TypeScript" %}
 ```javascript
 import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
 
@@ -280,7 +280,7 @@ Add `filters` and `accounts_data_slice` to narrow the match and trim the payload
 ```
 {% endtab %}
 
-{% tab title="NodeJS" %}
+{% tab title="TypeScript" %}
 ```javascript
 import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
 
@@ -325,7 +325,7 @@ This streams all finalized non-vote, non-failed transactions:
 ```
 {% endtab %}
 
-{% tab title="NodeJS" %}
+{% tab title="TypeScript" %}
 ```javascript
 import { CommitmentLevel } from "@triton-one/yellowstone-grpc";
 
@@ -358,7 +358,7 @@ Filter to transactions mentioning specific accounts with `account_include`, excl
 ```
 {% endtab %}
 
-{% tab title="NodeJS" %}
+{% tab title="TypeScript" %}
 ```javascript
 const request = {
   "slots": {
@@ -392,7 +392,7 @@ To watch a single transaction as it confirms and finalizes, subscribe by signatu
 ```
 {% endtab %}
 
-{% tab title="NodeJS" %}
+{% tab title="TypeScript" %}
 ```javascript
 const request = {
   "slots": {},
@@ -421,7 +421,7 @@ Slot notifications need only a label.
 ```
 {% endtab %}
 
-{% tab title="NodeJS" %}
+{% tab title="TypeScript" %}
 ```javascript
 const request = {
   "slots": {
@@ -448,7 +448,7 @@ const request = {
 ```
 {% endtab %}
 
-{% tab title="NodeJS" %}
+{% tab title="TypeScript" %}
 ```javascript
 const request = {
   "slots": {},
@@ -476,7 +476,7 @@ For block-completion notifications without the transactions, use `blocks_meta`:
 ```
 {% endtab %}
 
-{% tab title="NodeJS" %}
+{% tab title="TypeScript" %}
 ```javascript
 const request = {
   "slots": {},
@@ -503,7 +503,7 @@ The Subscribe method is a bi-directional stream, so you can change your subscrip
 ```
 {% endtab %}
 
-{% tab title="NodeJS" %}
+{% tab title="TypeScript" %}
 ```javascript
 const request = {
   "slots": {},
@@ -616,7 +616,7 @@ Replay covers only the server's retained replay window. Replay starts at a slot 
 ```
 {% endtab %}
 
-{% tab title="NodeJS" %}
+{% tab title="TypeScript" %}
 ```typescript
 const request = {
   slots: {

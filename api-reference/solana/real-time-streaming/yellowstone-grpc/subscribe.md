@@ -12,19 +12,19 @@ description: >-
 
 A `SubscribeRequest` carries one map per data type, each keyed by a label you choose, plus stream-wide options:
 
-**`accounts`** · map: see [Account updates](accounts.md)
+**`accounts`** · map: see [Account updates](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/real-time-streaming/yellowstone-grpc/accounts)
 
-**`transactions`** · map: see [Transaction updates](transactions.md)
+**`transactions`** · map: see [Transaction updates](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/real-time-streaming/yellowstone-grpc/transactions)
 
-**`transactions_status`** · map: see [Transaction status](transaction-status.md)
+**`transactions_status`** · map: see [Transaction status](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/real-time-streaming/yellowstone-grpc/transaction-status)
 
-**`slots`** · map: see [Slot updates](slots.md)
+**`slots`** · map: see [Slot updates](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/real-time-streaming/yellowstone-grpc/slots)
 
-**`blocks`** · map: see [Block updates](blocks.md)
+**`blocks`** · map: see [Block updates](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/real-time-streaming/yellowstone-grpc/blocks)
 
-**`blocks_meta`** · map: see [Block metadata](blocks-meta.md)
+**`blocks_meta`** · map: see [Block metadata](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/real-time-streaming/yellowstone-grpc/blocks-meta)
 
-**`entry`** · map: see [Entry updates](entries.md)
+**`entry`** · map: see [Entry updates](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/real-time-streaming/yellowstone-grpc/entries)
 
 **`commitment`** · optional CommitmentLevel: `PROCESSED`, `CONFIRMED`, or `FINALIZED`.
 

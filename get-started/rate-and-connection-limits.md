@@ -11,7 +11,7 @@ layout:
   outline:
     visible: true
   pagination:
-    visible: false
+    visible: true
   metadata:
     visible: true
   tags:
@@ -79,7 +79,7 @@ Dedicated nodes run on isolated hardware and apply no connection or subscription
 Every endpoint exposes its current limits at `/ratelimits`:
 
 ```bash
-curl https://<your-endpoint>/<token>/ratelimits
+curl https://<your-endpoint>/<your-token>/ratelimits
 ```
 
 The response is JSON, listing the request budget per window, every per-method override, and the connection cap. It's the source of truth for **your** endpoint's exact numbers, which can differ from the defaults above if our team has tuned them.
@@ -104,7 +104,7 @@ If you connect through a browser, it caps how many requests run in parallel to o
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-laptop">:laptop:</i> <strong>Customer dashboard tour</strong></td><td>Find your endpoints, add users and allowed origins, and manage billing and support</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/platform-overview">https://kate-6.gitbook.io/triton-one-docs-v5/platform-overview</a></td></tr><tr><td><i class="fa-earth-americas">:earth-americas:</i> <strong>Endpoints, regions, and routing</strong></td><td>All available endpoints, regions they're served from, routing options, and how to use each</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/endpoints-regions-routing">https://kate-6.gitbook.io/triton-one-docs-v5/endpoints-regions-routing</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-laptop">:laptop:</i> <strong>Platform overview</strong></td><td>Where to get your endpoint and token, monitor usage, and top up your balance.</td><td><a href="https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/platform-overview">Platform overview</a></td></tr><tr><td><i class="fa-earth-americas">:earth-americas:</i> <strong>Endpoints, regions, and routing</strong></td><td>All available endpoints, regions they're served from, routing options, and how to use each</td><td><a href="https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/endpoints-regions-routing">https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/endpoints-regions-routing</a></td></tr></tbody></table>
 
 ***
 

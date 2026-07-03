@@ -11,7 +11,7 @@ layout:
   outline:
     visible: true
   pagination:
-    visible: false
+    visible: true
   metadata:
     visible: true
   tags:
@@ -50,7 +50,7 @@ These read cluster-wide and validator state rather than one account you name:
 | `getStakeMinimumDelegation` | The cluster's minimum stake delegation. |
 | `getVoteAccounts` | Current and delinquent vote accounts. |
 
-For NFTs, compressed assets, and token metadata, use the [Metaplex DAS API](solana/readme/das-api/README.md).
+For NFTs, compressed assets, and token metadata, use the [Metaplex DAS API](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/readme/das-api).
 
 ***
 

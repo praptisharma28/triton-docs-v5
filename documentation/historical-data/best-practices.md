@@ -1,38 +1,29 @@
 ---
-description: Practical tips for querying old Solana transactions, blocks, and address history efficiently.
+description: 'Query historical Solana data efficiently: address history, server-side filtering, pagination, and large backfills.'
 ---
 
 # Best practices
 
-How to query historical and archival Solana data: old transactions, blocks, and address history.
-
-## Let Triton route history for you
-
-* **Use Triton's endpoints rather than running your own archive.** Every Solana endpoint can query the full history back to the genesis block.
-* **Just make the normal call** (`getTransaction`, `getBlock`). Recent data (the last several epochs) is served from the low-latency backends; older data is automatically forwarded to the long-term archive (Superbank and Old Faithful). You do not route it yourself.
-* **Expect deeper queries to be slower.** Only very old data traverses the archival ledger systems.
-* **Budget for archive pricing on very old data:** Superbank is the final step for the oldest lookups, at $10.00 per million queries ($10.00/month minimum if used), across `getTransaction`, `getBlock`, `getSignaturesForAddress`, `getTransactionsForAddress`.
-
 ## Pull address history in one call
 
-* **Prefer `getTransactionsForAddress` over the `getSignaturesForAddress` + `getTransaction` two-step.** The standard pattern is an N+1 flow (one call to find signatures, then one per signature); the single method collapses it.
-* **Filter server-side**, not in the client: scope by slot, blockTime, signature, and status, and choose signature-level or full payloads in one query.
-* **Bound deep scans with a slot range** (`slot: { gte, lt }`) and **page with the returned `paginationToken`**, feeding it into the next request.
-* **To capture full token activity, set `tokenAccounts` to `all`** (or `balanceChanged`). The default `none` returns only transactions where the address appears directly.
+* **Use `getTransactionsForAddress` instead of the `getSignaturesForAddress` + `getTransaction` two-step.** The standard pattern is N+1 (one call to list signatures, then one per signature); `getTransactionsForAddress` collapses it into a single request.
+* **Set `tokenAccounts` to `all` or `balanceChanged` to capture token activity.** The default `none` returns only transactions where the address appears directly, not transactions involving token accounts it owns.
 
-## Use Old Faithful for bulk history
+## Filter and paginate server-side
 
-* **Use Old Faithful for bulk transaction and block data** from any past epoch back to genesis. It is the open-source archive and exposes both standard JSON-RPC and high-performance gRPC streams.
-* **A historical `getBlock` / `getTransaction` on your subscription routes to Old Faithful automatically** when required.
-* **Filter large datasets server-side with `StreamTransactions` / `StreamBlocks`** so you receive only the relevant slice instead of fetching everything.
-* **Backfill large amounts with Jetstreamer**, the recommended tool: it supports filtering, customizable storage backends, and existing geyser plugins.
+Server-side filtering is per-method, so use what each method actually supports:
 
-## Self-hosting and integrity
+* **`getTransactionsForAddress` carries the full filter set.** Pass the `slot`, `blockTime`, `signature`, `status`, and `tokenAccounts` filters so you receive only the slice you need, and page with the returned `paginationToken`. Bound deep scans with a slot range (`slot: { gte, lt }`).
+* **`getSignaturesForAddress` paginates with `before`/`until` signature cursors**, plus Triton's `beforeSlot`/`untilSlot` whole-slot bounds when you already know the slot range: they skip the signature-to-slot lookup the standard cursors force on the server. It has no content filters.
+* **`getTransaction` has no filters or pagination, so pass the `slot` hint when you know it.** A signature carries no timing information, so an unhinted lookup searches the entire ledger for it. Triton's optional `slot` parameter narrows the search to that one slot, cutting response time by roughly 50% and sparing the server a fall-back to deeper, costlier storage.
+* **`minContextSlot` is a consistency guard, not a speed lever.** It fails the request if the server has not reached that slot yet, protecting you from stale reads. Recent reads are fast on their own: the newest slots are served from the in-memory head cache in under 1 ms.
 
-* **The hosted Old Faithful gRPC interface is retired** (an updated version is in progress). You can still self-host it; contact support@triton.one for help.
-* **Choose managed endpoints unless you can provision significant storage** to run your own archive node.
-* **For self-hosted long-term storage, use CAR (Content Addressable aRchive) files** on any S3-compatible platform.
-* **Verify archive integrity before trusting historical data.** Triton validated the archive from genesis and open-sourced the tooling to verify it.
+## Backfill large history with streaming, not polling
+
+Polling `getBlock` and `getTransaction` over HTTP for months of history is the slow path: use it only for small slot ranges. For real backfills, stream:
+
+* **Jetstreamer + the public Old Faithful archive, for the largest backfills.** [Jetstreamer](https://github.com/anza-xyz/jetstreamer) is Anza's open-source backfilling toolkit that streams the full ledger from [Old Faithful](https://old-faithful.net/), the open public-good archive of every Solana block and transaction from genesis to tip. It replays history highly parallelised (over 2.7M TPS with strong hardware) into Jetstreamer or Geyser plugins. One limitation to plan around: Old Faithful carries no account updates, so Jetstreamer does not either. The [self-hosting walkthrough](https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/how-tos/index-solana-history-with-superbank) uses this path to backfill Superbank.
+* **Superbank's gRPC streams, for server-side-filtered pulls.** `StreamBlocks` and `StreamTransactions` replay bounded slot ranges straight from ClickHouse, with account include/exclude/required, vote, and success/failure filters, so you receive only the relevant slice instead of fetching everything.
 
 ***
 

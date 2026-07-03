@@ -13,7 +13,7 @@ layout:
   outline:
     visible: true
   pagination:
-    visible: false
+    visible: true
   metadata:
     visible: true
   tags:
@@ -25,7 +25,7 @@ layout:
 # Privacy and data protection
 
 {% hint style="info" %}
-This page covers Triton's edge and network defences, access controls, infrastructure hardening, and data handling. For client-side best practices on securing the endpoints with allowed origins and tokens, see [Auth and security](authentication.md).
+This page covers Triton's edge and network defences, access controls, infrastructure hardening, and data handling. For client-side best practices on securing the endpoints with allowed origins and tokens, see [Auth and security](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/authentication).
 {% endhint %}
 
 ### Endpoint defences
@@ -33,13 +33,13 @@ This page covers Triton's edge and network defences, access controls, infrastruc
 A multi-layered filter sits on every shared endpoint:
 
 * **Traffic filtering at the edge.** Load balancers inspect every request and reject anything that isn't valid JSON-RPC. Malformed traffic never reaches your nodes.
-* **Rate limiting per IP and per method.** See [Rate and connection limits](rate-and-connection-limits.md) for defaults and how the dual budgets work.
+* **Rate limiting per IP and per method.** See [Rate and connection limits](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/rate-and-connection-limits) for defaults and how the dual budgets work.
 * **Advanced fingerprinting.** Identifies actors trying to spoof tokens or origins, blocks them before they affect your endpoint.
 * **Origin and token validation.** Each request is authenticated by either an allowed origin (frontend) or a secret token (backend). Origin validation is intentionally disabled when a token is present.
 
 ### DDoS protection
 
-Triton's infrastructure handles DDoS mitigation natively. You don't need Cloudflare or another commercial provider in front, and putting one there actively breaks our routing (see [Why we advise against proxying](authentication.md#why-we-advise-against-proxying)).
+Triton's infrastructure handles DDoS mitigation natively. You don't need Cloudflare or another commercial provider in front, and putting one there actively breaks our routing (see [Why we advise against proxying](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/authentication)).
 
 ### Internal security posture
 
@@ -102,7 +102,7 @@ Additional filters return 403 errors to requests that appear to originate from a
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-gauge">:gauge:</i> <strong>Rate and connection limits</strong></td><td>Per-endpoint and method rate limits, plus streaming connection caps.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/rate-and-connection-limits">https://kate-6.gitbook.io/triton-one-docs-v5/rate-and-connection-limits</a></td></tr><tr><td><i class="fa-user-gear">:user-gear:</i> <strong>Account management</strong></td><td>Customer dashboard tour: endpoints, billing, team, and support.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/account-management">https://kate-6.gitbook.io/triton-one-docs-v5/guides/solana/account-management</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-gauge">:gauge:</i> <strong>Rate and connection limits</strong></td><td>Per-endpoint and method rate limits, plus streaming connection caps.</td><td><a href="https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/rate-and-connection-limits">https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/rate-and-connection-limits</a></td></tr><tr><td><i class="fa-user-gear">:user-gear:</i> <strong>Account management</strong></td><td>Customer dashboard tour: endpoints, billing, team, and support.</td><td><a href="https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/account-management-api">https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/account-management-api</a></td></tr></tbody></table>
 
 ***
 

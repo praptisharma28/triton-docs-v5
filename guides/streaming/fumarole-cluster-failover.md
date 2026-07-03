@@ -5,7 +5,7 @@ description: Set up Fumarole across regional clusters for automatic streaming fa
 # Fumarole cluster failover
 
 {% hint style="info" %}
-This guide shows how to implement cross-region failover for Fumarole from the subscriber side. For an overview of regional clusters and the redundancy model, see Fumarole Reliable Streams.
+This guide shows how to implement cross-region failover for Fumarole from the subscriber side. For an overview of regional clusters and the redundancy model, see [Fumarole Persistent gRPC](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/fumarole-persistent-streams).
 {% endhint %}
 
 Fumarole runs as **independent regional clusters**. Persistent subscriber state does not replicate across regions. This means that if your primary cluster experiences a major outage, you can fail over to another region, but the cutover is fully customer-managed and requires you to recreate your persistent subscriber on the secondary cluster from the last slot you consumed.
@@ -65,15 +65,15 @@ If `fume test-config` succeeds against the failing endpoint and the subscriber e
 
 When your detection logic concludes the primary cluster is down, execute the following sequence.
 
-**Step 1 — Stop the primary client**
+**Step 1: Stop the primary client**
 
 Halt consumption from `ams.rpcpool.com`. Stop reconnect attempts.
 
-**Step 2 — Read the last fully-consumed slot for the primary**
+**Step 2: Read the last fully-consumed slot for the primary**
 
 Read the value you have been tracking. This is the slot from which the secondary subscriber will resume. Call this `last_primary_slot`.
 
-**Step 3 — Create the subscriber on the secondary cluster**
+**Step 3: Create the subscriber on the secondary cluster**
 
 Connect to the secondary cluster and create the persistent subscriber there, starting from `last_primary_slot + 1`.
 
@@ -92,15 +92,15 @@ fume --config ~/.fumarole/config-us.yaml create \
   --from_slot 312500001
 ```
 
-The same pattern applies whether you use the Fume CLI or the Rust / TypeScript SDK, create a fresh subscriber pointing at your recovery slot.
+The same pattern applies whether you use the Fume CLI or the Rust / TypeScript SDK, create a fresh subscriber pointing at your recovery slot. The recovery slot must be within Fumarole's 4-day buffer: if the gap since `last_primary_slot` is longer, the create call fails, so start a fresh live subscriber instead and backfill the gap from historical sources.
 
-**Step 4 — Begin consuming from the secondary**
+**Step 4: Begin consuming from the secondary**
 
 Start your client against `nyc.rpcpool.com`. Resume normal processing.
 
 Until the secondary catches up to live tip, you will be receiving historical data. Expect some replay delay proportional to the gap between `last_primary_slot` and the current chain tip.
 
-**Step 5 — Confirm forward progress**
+**Step 5: Confirm forward progress**
 
 Once the secondary is at live tip and slots are advancing normally, your failover is complete. Log the cutover and update your monitoring to track the new active cluster.
 

@@ -1,6 +1,6 @@
 ---
 description: >-
-  Subscribe to transactions over Whirligig WebSockets. A Triton extension to the
+  Subscribe to transactions over Whirligig WebSocket. A Triton extension to the
   Solana WebSocket API.
 ---
 

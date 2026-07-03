@@ -1,61 +1,79 @@
 ---
-description: How to read Solana account state on Triton, and how to choose between standard RPC, Cloudbreak, Account Sync, and the DAS API.
+description: Standard RPC, Cloudbreak, Account Sync, and the DAS API overview.
 layout:
+  width: default
+  title:
+    visible: true
+  description:
+    visible: true
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
   pagination:
-    visible: false
+    visible: true
+  metadata:
+    visible: true
+  tags:
+    visible: true
+  actions:
+    visible: true
 ---
 
 # Reading account state
 
-Triton offers several ways to read Solana account state. This page covers how account reads work, what each option does, and how to pick the right one for your build.
+Solana keeps all of its state in accounts: a wallet, each token balance, a DEX market, an open order, and the program code itself. The standard way to read this state is Solana JSON-RPC polling, supported by every Triton endpoint.
 
-## How account reads work
+However, Agave nodes make some of these reads slow or expensive as you scale:
 
-Solana state lives in accounts. The standard way to read it is JSON-RPC: `getAccountInfo` and `getMultipleAccounts` for specific accounts, `getProgramAccounts` for every account a program owns, and the SPL token methods (`getTokenAccountsByOwner` and so on). These work on every Triton endpoint and need no special setup.
+* **Set queries like gPA.** Fetching every account a program owns scans the program's entire account set and applies filters only after each account is loaded, so an unindexed scan gets slow and can time out on large programs.
+* **Polling for fresh state.** Re-fetching the same accounts on a loop leaves your data stale between calls and burns requests (and rate limits) against the same endpoint.
+* **NFT and compressed NFT.** Assembling an asset's owner, metadata, and (for compressed NFTs) its Merkle proof from raw accounts takes custom indexing, decompression, and many calls.
 
-Two patterns get expensive as you scale:
+Triton's stack targets each of these, so you read accounts state fast and cost-efficiently while keeping the standard Solana JSON-RPC response shape:
 
-* **`getProgramAccounts` and token queries** scan large account sets. As a program grows toward millions of accounts, an unindexed scan gets slow and can time out.
-* **Polling for fresh state.** Calling `getAccountInfo` on a loop to keep data current means your reads are stale between calls, and you burn requests (and hit rate limits) hammering the same endpoint.
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-server">:server:</i> <strong>Standard RPC</strong></td><td>Every standard Solana JSON-RPC account method is supported. Most route through specialized pipelines for faster, cheaper responses, while the rest rely on standard Agave nodes.</td><td><a href="https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana">https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana</a></td></tr><tr><td><i class="fa-database">:database:</i> <strong>Cloudbreak</strong></td><td>Tailored indexes built from your live traffic for 99% faster account and token reads. Your requests are indexed and routed through Cloudbreak automatically, with nothing for you to set up.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/cloudbreak-indexed-accounts">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/cloudbreak-indexed-accounts</a></td></tr><tr><td><i class="fa-arrows-rotate">:arrows-rotate:</i> <strong>Account Sync</strong></td><td>Account reads served from a local cache kept fresh by a live gRPC or WS stream. You get streaming-grade speed and bandwidth-only billing for your existing polling code.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/account-sync">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/account-sync</a></td></tr><tr><td><i class="fa-image">:image:</i> <strong>DAS API</strong></td><td>One API to fetch ownership, metadata, and balances for NFTs, cNFTs, and tokens, via the Metaplex Digital Asset Standard, an extension of JSON-RPC.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/metaplex-das-api">https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/metaplex-das-api</a></td></tr></tbody></table>
 
-Triton's account-read products each target one of these, while keeping the standard Solana JSON-RPC shape so your client code barely changes.
+### Read path for each method
 
-## Pick your read path
+Every account-read method is served by one of these. Standard RPC covers the methods the node answers directly; the rest route through a specialized service.
 
-| Capability                                  |  Standard RPC   |    Cloudbreak    |          Account Sync          |    DAS API    |
-| ------------------------------------------- | :-------------: | :--------------: | :----------------------------: | :-----------: |
-| `getAccountInfo` / `getMultipleAccounts`    |        ✓        |         ✓        |                ✓               |       ✗       |
-| `getProgramAccounts` at scale               |      scans      |    ✓ (indexed)   |                ✗               |       ✗       |
-| SPL token queries (owner / mint / delegate) |        ✓        |    ✓ (indexed)   |                ✗               |       ✗       |
-| NFT, cNFT, and token metadata               |        ✗        |         ✗        |                ✗               |       ✓       |
-| Live-synced reads (no polling)              |        ✗        |         ✗        |                ✓               |       ✗       |
-| Interface                                   | Solana JSON-RPC |  Solana JSON-RPC | Triton SDK (drop-in web3.js)   | DAS JSON-RPC  |
-| Client changes                              |       none      |       none       |       one-line import swap      |  DAS methods  |
+| Service                                                                             | Account-read methods                                                                                                                                                                                                                             |
+| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Standard RPC** (Agave node polling, unless using Account Sync)                    | `getTokenLargestAccounts`, `getTokenSupply`, `getVoteAccounts`, `getStakeMinimumDelegation`, `getMinimumBalanceForRentExemption`                                                                                                                 |
+| **Cloudbreak** (your requests route through it by default, no changes on your side) | `getProgramAccounts`, `getAccountInfo`, `getMultipleAccounts`, `getTokenAccountsByOwner`, `getTokenAccountsByDelegate`, `getSlot`, `getTokenAccountsByMint`, `getBalance`, `getTokenAccountBalance`, `getVersion`, `getGenesisHash`, `getHealth` |
+| **Account Sync** (served from RAM via SDK)                                          | `getAccountInfo`, `getMultipleAccountsInfo`, `getParsedAccountInfo`, `getMultipleParsedAccounts` (and `*AndContext` variants)                                                                                                                    |
+| **DAS API** (Metaplex JSON-RPC extension)                                           | `getAsset`, `getAssets`, `getAssetProof`, `getAssetsByOwner`, `getAssetsByAuthority`, `getAssetsByCreator`, `getAssetsByGroup`, `searchAssets`, `getTokenAccounts`, `getNftEditions`, `getSignaturesForAsset`                                    |
 
-* **Standard RPC** is the baseline. Every Triton endpoint serves the full Solana JSON-RPC account methods. Use it when account sets are small and per-call freshness is fine.
-* **Cloudbreak** answers `getProgramAccounts`, account lookups, and SPL token queries from a purpose-built index, so they stay fast even for programs with millions of accounts. It serves the same standard methods, so there is nothing to change on your side. It is the Accounts module of RPC 2.0.
-* **Account Sync** keeps a live account stream open and serves `getAccountInfo` and `getMultipleAccounts` from an in-memory buffer that the stream keeps fresh, so you stop polling. It ships as a drop-in `@solana/web3.js` replacement, so adopting it is a one-line import swap.
-* **DAS API** reads digital assets, regular and compressed NFTs, and SPL and Token-2022 tokens, via the Metaplex Digital Asset Standard.
+{% hint style="info" %}
+The single and multiple account reads (`getAccountInfo`, `getMultipleAccounts`) route through Cloudbreak by default, but you can also use Account Sync (the `@triton-one/triton-sdk` SDK) to resolve them from your local cache, faster and cheaper.
+{% endhint %}
 
-It is normal to combine them. Common patterns:
+Depending on your use case, your build might combine multiple read paths:
 
-* **App reading many program accounts (DEX, lending):** Cloudbreak for indexed `getProgramAccounts`.
-* **Frontend or bot tracking a known set of accounts live:** Account Sync, no polling.
-* **Wallet or NFT app:** DAS API for assets, Cloudbreak or Account Sync for balances.
+* **Reading many program accounts at scale** (DEX, lending, indexers): Cloudbreak serves indexed `getProgramAccounts` and token queries 500x+ faster on repeated filter shapes.
+* **Tracking a set of accounts live** (any frontend or backend with a large polling codebase): Account Sync keeps your existing code, stores it locally in RAM, backed by a stream, and serves your reads from there for lower latency and cost.
+* **Wallets and NFT apps**: DAS API fetches assets and metadata you need in one call, while Cloudbreak or Account Sync handle user balances lookups.
+* **Low-latency trading and market making**: to get the fastest data, we recommend streaming it with gRPC ([Dragon's Mouth](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc)). If you want account reads in a web3.js-shaped client, Account Sync cuts read latency significantly compared to polling.
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-database">:database:</i> <strong>Cloudbreak</strong></td><td>Indexed account reads. Fast getProgramAccounts and SPL token queries.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/cloudbreak-indexed-accounts">Cloudbreak</a></td></tr><tr><td><i class="fa-arrows-rotate">:arrows-rotate:</i> <strong>Account Sync</strong></td><td>Streaming-backed local cache for account reads. No polling, one-line SDK swap.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/account-sync">Account Sync</a></td></tr><tr><td><i class="fa-image">:image:</i> <strong>DAS API</strong></td><td>Read NFTs, cNFTs, and tokens via the Metaplex Digital Asset Standard.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/metaplex-das-api">DAS API</a></td></tr></tbody></table>
+## Limitations
 
-## Compressed accounts
-
-Light Protocol (ZK Compression) accounts are not served by `getProgramAccounts` or the streams.
+* **Excluded methods.** `getLargestAccounts` is not served on shared endpoints. `getTokenLargestAccounts` does not accept JSON-RPC batch requests.
+* **Light Protocol (ZK Compression) accounts** are not served by `getProgramAccounts` or the Yellowstone streams.
+* **Commitment.** Cloudbreak ingests from a gRPC stream at `confirmed` commitment, so `processed` is not served on the methods routed through Cloudbreak.
 
 ## Pricing
 
-Standard RPC and Cloudbreak account reads are billed at `$0.08 / GB` of bandwidth plus `$10 / million` requests. DAS API requests are `$0.08 / GB` plus `$50 / million`. Account Sync streams under the hood, so it is billed on bandwidth at `$0.08 / GB`.
+| Service | Price |
+| --- | --- |
+| Standard RPC | `$0.08 / GB` of bandwidth plus `$10 / million` calls |
+| Cloudbreak | Billed as standard RPC: `$0.08 / GB` plus `$10 / million` calls. Indexing is included by default and isn't charged separately |
+| Account Sync | Bandwidth only, `$0.08 / GB` of streamed data. The first read of each account is one standard JSON-RPC fetch; every read after resolves locally, with no per-call charge |
+| DAS API | `$0.08 / GB` of bandwidth plus `$50 / million` requests |
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Read account state with standard RPC and Account Sync in a few minutes.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/quickstart">Quickstart</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Get the most out of Triton's account-read products.</td><td><a href="https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/reading-account-state/best-practices">Best practices</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Query account state via JSON-RPC and set up Account Sync in under 2 minutes.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/quickstart">Quickstart</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>How to reach the lowest latency, maximum performance, and minimum cost on your account state reads.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/best-practices">Best practices</a></td></tr></tbody></table>
 
 ***
 

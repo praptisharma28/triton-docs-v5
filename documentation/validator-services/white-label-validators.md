@@ -4,31 +4,41 @@ description: A Solana validator run on Triton infrastructure under your own bran
 
 # White-label validators
 
-Triton runs a Solana validator under your brand and your keys. You keep your branded validator and your delegators; Triton runs the infrastructure.
+Running a validator helps protect and decentralize the Solana network and earns continued rewards through the stake you can attract to your validator.
 
-## What it is
+Our hosted validators utilize the infrastructure we have built over time as a top RPC provider and running validators on the Solana network.
 
-Triton operates the validator node on its bare-metal infrastructure while it runs under your identity and your branding. Your delegators stake to your validator, and block and staking rewards flow to you in SOL. You get a professionally operated validator without running the hardware, the monitoring, or the upgrades yourself.
+On the validators we run, we ensure:
 
-## No vendor lock-in
+* Access by a limited team.
+* Node identity keys in-memory only.
+* 24/7 monitoring to ensure consistent voting.
 
-You are not tied to Triton. You can move your validator to another operator without downtime, migration friction, or losing your delegators, and your delegations and all staking rewards stay in SOL. That is the difference from starting over elsewhere, where your delegators would be left staking to a dormant validator.
+Triton One owns the validator identity key. You or your team control the vote account withdrawal authority. Control over the withdrawal authority means you have complete control over the vote account.
 
-## Your keys stay yours
+Before you commit to running a validator, you should make sure that:
 
-A Solana validator uses an identity key for the node, a vote account, and a stake account, with separate stake and withdraw authorities. The authorities that control your validator and its funds stay with you and are never shared with the operator. Triton runs the node; you hold the keys. See [vote-account setup](white-label-validators/vote-account-setup.md) and [node-identity protection](white-label-validators/node-identity-protection.md).
+1. You are willing to fund vote fees until you have attracted enough stake to break even; this is approximately 1 SOL/day.
+2. You can attract enough delegations to break even (TX fees - voting expenses) and make a profit eventually. Currently, this is in the range of 375,000 delegated SOL.
 
-## Who it's for
+If you merely wish to access staking rewards, you can also stake with existing validators without running your own; see [validators.app](https://validators.app/) for details about existing validators and stake pools.
 
-Teams, companies, and ecosystem projects that want their own branded Solana validator without operating the infrastructure themselves.
+## Supported validator clients
 
-## Getting set up
+Validators deployed through Triton are compatible with all current Solana validator clients that adhere to protocol specifications. The choice of client is left entirely to the validator owner. Triton monitors compatibility and vote performance across supported clients, which include:
 
-White-label validators are set up with our team, with a know-your-customer step and a contract. Every setup is custom and agreed on a call. Start at [contact sales](https://triton.one/contact).
+* **Agave**: the official reference implementation of the Solana validator, maintained by [Anza](https://anza.xyz/). Agave is feature-complete and receives all protocol updates first, serving as the baseline for all other clients.
+* **Jito-Solana**: a fork of Agave maintained by [Jito Labs](https://jito.network/), integrating an MEV auction system. This client allows validators to receive transaction bundles from a private relay and earn additional rewards through MEV tips, with minimal configuration overhead.
+* **Paladin**: a fork of Jito-Solana maintained by the [Paladin](https://github.com/paladin-bladesmith) team. It offers stricter bundle filtering and supports a protected transaction pathway that mitigates frontrunning and sandwich attacks. It is designed to improve fairness in MEV distribution while remaining fully compatible with Solana's consensus.
+* **Frankendancer**: a hybrid validator client maintained by [Jump Crypto](https://jumpcrypto.com/firedancer/), combining a Firedancer networking and block ingestion stack with consensus execution provided by Agave. It is engineered for high performance and low-latency block processing and is already in production on mainnet with active participation.
 
-## Performance
+Each of these clients is capable of full validator participation. Triton validates client behavior continuously to ensure correct protocol operation.
 
-Validator performance is public on-chain. Track any validator's vote rate, skip rate, stake, and uptime on [validators.app](https://www.validators.app).
+To participate in the Triton SWQoS (Cascade Routing Layer), which provides a prioritized stream of transactions and the opportunity to generate additional revenue, non-Triton validators must configure their infrastructure to accept authenticated traffic from Triton's transaction distribution layer. This system is opt-in and compatible with supported clients. For configuration and operational details, see [Providing Transaction Bandwidth](https://docs.triton.one/chains/solana/cascade/providing-transaction-bandwidth).
+
+## What's next
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-key">:key:</i> <strong>Vote account setup</strong></td><td>The three keys behind a validator, and how the vote account is created and controlled.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/validator-services/white-label-validators/vote-account-setup">Vote account setup</a></td></tr><tr><td><i class="fa-shield">:shield:</i> <strong>Node identity protection</strong></td><td>How Triton keeps the node identity key in-memory only, never stored unencrypted.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/validator-services/white-label-validators/node-identity-protection">Node identity protection</a></td></tr></tbody></table>
 
 ***
 

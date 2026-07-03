@@ -10,7 +10,7 @@ description: >-
 
 <summary>My transactions aren't landing successfully. What should I do?</summary>
 
-Triton ensures reliable transaction delivery to the network, but for optimal transaction finalisation, we recommend configuring appropriate priority fees. See our [Priority Fees API](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/sending-transactions/priority-fees-api) for how to set them.
+Triton ensures reliable transaction delivery to the network, but for optimal transaction finalisation, we recommend configuring appropriate priority fees. See our [Priority Fees API](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/priority-fees-api) for how to set them.
 
 </details>
 
@@ -27,6 +27,38 @@ Staked validators have access to a much larger, reserved connection pool for sen
 <summary>Can a <code>processed</code> transaction on Solana still be dropped?</summary>
 
 Yes. A transaction is only final once it reaches `confirmed` or `finalized` commitment. Slots containing `processed` transactions can still be dropped during minority forks or network congestion.
+
+</details>
+
+<details>
+
+<summary>What's the difference between <code>sendtx</code> and <code>sendTransaction</code>?</summary>
+
+Both route through our specialised transaction-sending Jet engine with SWQoS on by default, so the difference is entirely in the request format. `sendTransaction` is the standard JSON-RPC method, which requires the server to parse a JSON-RPC envelope before submitting it. `/sendtx` is a direct HTTP endpoint: you POST the raw transaction bytes (or a base58/base64 string), which skips the envelope, the server-side JSON parsing, and the browser CORS preflight, for lower latency. The one tradeoff is that `/sendtx` always submits without a preflight simulation, so it does not support `skipPreflight: false`.
+
+</details>
+
+<details>
+
+<summary>Do I need to set up stake-weighted QoS (SWQoS)?</summary>
+
+No. SWQoS routing applies by default to standard `sendTransaction` and `/sendtx` calls on your existing Solana mainnet endpoint, so there’s nothing to configure client-side.
+
+</details>
+
+<details>
+
+<summary>Is there a minimum priority fee?</summary>
+
+No. Solana's default `getRecentPrioritizationFees` returns the recent minimum, which is often zero, so use Triton's `percentile` parameter to set a fee that is competitive during congestion. See [Priority Fees API](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/priority-fees-api).
+
+</details>
+
+<details>
+
+<summary>Do you support sponsored transactions or gas sponsorship?</summary>
+
+No. For transaction sending, Triton offers SWQoS delivery, [Yellowstone Shield](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/shield-mev-protection) validator policies, and priority-fee tooling.
 
 </details>
 

@@ -27,18 +27,18 @@ If some answers are “no”, that’s ok, we just want you to get the full pict
     Cloud Lambdas, like AWS, do not play well with streaming connections. They can leave many open connections on the servers, which can degrade service.
 *   #### I'm not using vanilla NodeJS
 
-    Vanilla NodeJS is too slow for Solana and requires a special client library. Use Rust, Golang, or the special NodeJS/TypeScript client discussed on our [gRPC Subscriptions page](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc).
+    Vanilla NodeJS is too slow for Solana and requires a special client library. Use Rust, Golang, or the special NodeJS/TypeScript client discussed on our [gRPC Subscriptions page](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc).
 *   #### I’ve tested my stream capacity with the test client
 
-    Use the client-ubuntu tool described on the [gRPC Subscriptions page](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/dragon-s-mouth-grpc) to benchmark your streaming setup. If it outputs a ping message every 10 seconds and you get a total between 60-80 Mbps, it means your setup is keeping up great, and you can stay on the chain’s tip without any disconnections.\
+    Use the client-ubuntu tool described on the [gRPC Subscriptions page](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) to benchmark your streaming setup. If it outputs a ping message every 10 seconds and you get a total between 60-80 Mbps, it means your setup is keeping up great, and you can stay on the chain’s tip without any disconnections.\
     \
     Can be run using:\
-    `./client-ubuntu-22.04 --http2-adaptive-window true --compression zstd --endpoint http://aaa.mainnet.rpcpool.com --x-token <token> subscribe --transactions --accounts --stats`
+    `./client-ubuntu-22.04 --http2-adaptive-window true --compression zstd --endpoint http://aaa.mainnet.rpcpool.com --x-token <your-token> subscribe --transactions --accounts --stats`
 *   #### I’ve considered other Triton streaming options for my workload
 
     If you’re using Dragon’s Mouth, we assume your workload prioritises lowest latency over absolute data completeness, persistence, and redundancy.<br>
 
-    If you’d prefer the guarantees over speed, for example, if you run accounting, analytics, indexing, or compliance workloads, consider using [Fumarole](https://kate-6.gitbook.io/triton-one-docs-v5/documentation/solana/real-time-streaming/fumarole-persistent-streams) instead of raw gRPC.
+    If you’d prefer the guarantees over speed, for example, if you run accounting, analytics, indexing, or compliance workloads, consider using [Fumarole](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/fumarole-persistent-streams) instead of raw gRPC.
 
 ***
 
