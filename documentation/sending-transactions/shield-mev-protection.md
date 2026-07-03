@@ -28,7 +28,6 @@ Solana's leader schedule is deterministic, so you often know which validator wil
 %%{init: {'theme':'base','themeVariables':{'primaryColor':'#F2EDF6','primaryBorderColor':'#7A4BA0','primaryTextColor':'#171717','lineColor':'#956FB3','secondaryColor':'#E4DBEC','tertiaryColor':'#D7C9E3','edgeLabelBackground':'#F2EDF6'},'flowchart':{'nodeSpacing':20,'rankSpacing':35,'curve':'linear'}}}%%
 flowchart LR
     you["Your app"] -->|"tx + policy address"| rpc["Triton RPC / Jet"]
-    policy["On-chain policy<br/>(PDA + token)"] -.-> check
     rpc --> check["Policy check<br/>against current leader"]
     check -->|"leader allowed"| val["Validator"]
     check -->|"leader blocked"| drop["Dropped<br/>(not queued)"]
