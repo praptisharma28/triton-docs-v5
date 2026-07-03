@@ -1,5 +1,5 @@
 ---
-description: Triton's transaction-sending tools and swap APIs.
+description: Triton's transaction-sending tools, swap APIs, and SWQoS routing.
 layout:
   pagination:
     visible: false
@@ -24,7 +24,7 @@ Most transactions go through a Triton endpoint, where **Jet sender**, Triton's p
 | Interface             |    Solana JSON-RPC    |             HTTP POST             |       Rust library       |
 | Reaches the TPU via   | your endpoint (server-side) |       your endpoint (server-side)       |   your client (direct)   |
 | Overhead              |   JSON-RPC envelope   | minimal, no envelope or preflight |   operating the client   |
-| SWQoS                 |           ✓           |                 ✓                 |             ✓            |
+| SWQoS added by default (no extra charge) | ✓ | ✓ | ✓ |
 | Client to run         |          none         |                none               |            yes           |
 | Best for              |  broad compatibility  |       browsers, HFT backends      |   bots, custom routers   |
 
