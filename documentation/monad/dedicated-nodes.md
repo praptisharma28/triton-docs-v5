@@ -22,7 +22,7 @@ layout:
 
 # Dedicated nodes
 
-A dedicated Monad node is a private node provisioned for a single customer, with isolated capacity and no shared rate or connection limits. It serves the same APIs as the shared Monad pool: JSON-RPC over HTTPS and the WebSocket (WSS) API. Monad does not use gRPC.
+A dedicated Monad node is a private server provisioned for a single purpose, delivering isolated capacity and no shared rate or connection limits. It serves the same APIs as the shared Monad pool: JSON-RPC over HTTPS and the WebSocket (WSS) API.
 
 ## Getting a dedicated node
 

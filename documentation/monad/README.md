@@ -137,7 +137,7 @@ Subsequent messages stream each new block header:
 }
 ```
 
-_Note: JS examples are also available in the official documentation._
+_Note: JS examples are also available in the [official documentation](https://docs.monad.xyz/reference/websockets)._
 
 ***
 
