@@ -551,7 +551,7 @@ if accounts.contains(&incoming_pubkey) {
 }
 ```
 
-Full deep-dive: [Compressed filters for Yellowstone gRPC](https://blog.triton.one/compressed-filters-yellowstone-grpc).
+Full deep-dive: [Compressed filters for Yellowstone gRPC](https://blog.triton.one/compressed-filters-for-yellowstone-grpc-track-millions-of-accounts-with-10x-less-overhead).
 {% endtab %}
 {% endtabs %}
 

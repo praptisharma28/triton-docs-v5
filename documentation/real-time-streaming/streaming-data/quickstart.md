@@ -652,7 +652,7 @@ Then walk through this checklist:
 
 1. **Confirm the stream is open.** Your first matching event should arrive within 1-2 slots (\~800 ms). For Whirligig, you'll see a subscription-ID confirmation first: `{ "jsonrpc": "2.0", "result": 42, "id": 1 }`. For the rest of the services (running on gRPC), the client logs an active connection on `connect()` and events start arriving immediately.
 2. **Watch matching events flow.** If nothing arrives after 5 seconds, your filter is probably too narrow.
-3. **Keep long-lived connections alive.** Whirligig closes idle WebSocket connections after about 60 seconds, so send a `ping` periodically. gRPC clients handle transport keepalive automatically, but Dragon's Mouth also recommends periodic pings, since upstream providers like Cloudflare can close idle streams. See [Sending pings](dragon-s-mouth-grpc.md#sending-pings).
+3. **Keep long-lived connections alive.** Whirligig closes idle WebSocket connections after about 60 seconds, so send a `ping` periodically. gRPC clients handle transport keepalive automatically, but Dragon's Mouth also recommends periodic pings, since upstream providers like Cloudflare can close idle streams. See [Sending pings](../dragon-s-mouth-grpc.md#sending-pings).
 4. **Widen the filter to test, then tighten back.** Subscribe to all transactions or all writes for a busy program (e.g. SPL Token) to confirm data is reaching you. Once you see traffic, narrow the filter to what your app actually needs.
 
 ### Expected first message
