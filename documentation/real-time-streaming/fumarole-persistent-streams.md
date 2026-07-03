@@ -55,6 +55,19 @@ flowchart LR
     style you fill:#D6EAF8,stroke:#259DD0
 ```
 
+## Supported methods
+
+Fumarole is a gRPC service. You manage a **persistent subscriber** (a consumer group) and stream from it:
+
+| Method | What it does |
+| --- | --- |
+| `CreateConsumerGroup` | Create a persistent subscriber that tracks your position server-side. |
+| `ListConsumerGroups`, `GetConsumerGroupInfo`, `DeleteConsumerGroup` | Manage your persistent subscribers. |
+| `Subscribe`, `SubscribeV2` | Open the control-plane stream that manages your subscription session. |
+| `SubscribeData` | Open the data-plane stream that delivers your account and transaction updates. |
+| `DownloadBlock`, `DownloadBlockDataShard` | Replay a specific block, in parallel shards. |
+| `GetChainTip`, `GetSlotRange`, `Version` | Inspect the stream's current tip, available slot range, and version. |
+
 ## Get started
 
 Fumarole works with your existing mainnet subscription token, no separate access request needed.
@@ -186,19 +199,6 @@ The Rust client streams in three modes:
 Any mode can be paired with manual commitment, and all three use parallel shard downloads. Rust is the primary client; the TypeScript and Python clients don't support all three modes yet.
 
 By default Fumarole auto-advances your cursor as it delivers data. Set `auto_commit: false` to decide exactly when the cursor moves: write to your database first, and only commit receipt after the write succeeds.
-
-## Supported methods
-
-Fumarole is a gRPC service. You manage a **persistent subscriber** (a consumer group) and stream from it:
-
-| Method | What it does |
-| --- | --- |
-| `CreateConsumerGroup` | Create a persistent subscriber that tracks your position server-side. |
-| `ListConsumerGroups`, `GetConsumerGroupInfo`, `DeleteConsumerGroup` | Manage your persistent subscribers. |
-| `Subscribe`, `SubscribeV2` | Open the control-plane stream that manages your subscription session. |
-| `SubscribeData` | Open the data-plane stream that delivers your account and transaction updates. |
-| `DownloadBlock`, `DownloadBlockDataShard` | Replay a specific block, in parallel shards. |
-| `GetChainTip`, `GetSlotRange`, `Version` | Inspect the stream's current tip, available slot range, and version. |
 
 ## Migrating from Dragon's Mouth
 
