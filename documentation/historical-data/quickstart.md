@@ -178,7 +178,7 @@ A `data` array of transactions plus a `paginationToken`, all in one response:
         "meta": { ... }
       }
     ],
-    "paginationToken": "250000001:12"
+    "paginationToken": "XHLKq2uNiGAJs3YhjnmnwT7LuJoTkGDqf1k4WJsnUd4A6e9bfB26vHr4dKLfMqwZuPmuXDHih4RaojCSt61os33"
   },
   "id": 1
 }
@@ -197,7 +197,7 @@ curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
   }'
 ```
 
-Pass the `paginationToken` from the response in the next request to keep scanning. See [Historical data](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/historical-data) for every option, filter, and response shape.
+Pass the `paginationToken` from the response in the next request to keep scanning; treat it as an opaque token. See [Historical data](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/historical-data) for every option, filter, and response shape.
 
 ## What's next
 

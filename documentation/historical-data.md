@@ -231,7 +231,7 @@ When `transactionDetails` is `signatures`, each result contains transaction meta
         "confirmationStatus": "finalized"
       }
     ],
-    "paginationToken": "250000001:12"
+    "paginationToken": "XHLKq2uNiGAJs3YhjnmnwT7LuJoTkGDqf1k4WJsnUd4A6e9bfB26vHr4dKLfMqwZuPmuXDHih4RaojCSt61os33"
   },
   "id": 1
 }
@@ -254,7 +254,7 @@ When `transactionDetails` is `full`, each result contains the encoded transactio
         "meta": {}
       }
     ],
-    "paginationToken": "250000001:12"
+    "paginationToken": "XHLKq2uNiGAJs3YhjnmnwT7LuJoTkGDqf1k4WJsnUd4A6e9bfB26vHr4dKLfMqwZuPmuXDHih4RaojCSt61os33"
   },
   "id": 1
 }
@@ -310,7 +310,7 @@ Use the returned `paginationToken` in the next request to continue scanning.
     "AddressBase58",
     {
       "limit": 100,
-      "paginationToken": "250000001:12"
+      "paginationToken": "XHLKq2uNiGAJs3YhjnmnwT7LuJoTkGDqf1k4WJsnUd4A6e9bfB26vHr4dKLfMqwZuPmuXDHih4RaojCSt61os33"
     }
   ]
 }
