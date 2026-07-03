@@ -117,7 +117,7 @@ Each product is purpose-built for one job. Pick the category, then the product.
 {% endtabs %}
 {% endtab %}
 
-{% tab title="By use case (I know what I'm building)" %}
+{% tab title="By use case (I know what I’m building)" %}
 Pick the kind of app you're building. Each card jumps to the matching setup guide.
 
 <table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-coins">:coins:</i> <strong>Trading or market making</strong></td><td>Live prices, sub-slot tx landing, anti-MEV. Stack: Dragon's Mouth, Jet, Priority Fees, Shield.</td><td><a href="https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/use-cases/trading-and-market-making">Trading or market making</a></td></tr><tr><td><i class="fa-mobile-screen">:mobile-screen:</i> <strong>Wallet or consumer app</strong></td><td>Balances, history, NFT portfolio, live updates. Stack: Standard RPC, DAS API, Whirligig.</td><td><a href="https://app.gitbook.com/s/TpqU5Dqc6tdzY8J23dd7/solana/use-cases/building-a-wallet">Wallet or consumer app</a></td></tr><tr><td><i class="fa-ellipsis">:ellipsis:</i> <strong>More coming soon</strong></td><td>More use-case guides are on the way: DeFi, NFT marketplaces, indexers, gaming, and AI agents.</td><td></td></tr></tbody></table>
