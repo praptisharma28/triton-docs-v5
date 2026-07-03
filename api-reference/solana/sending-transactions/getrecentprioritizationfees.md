@@ -158,7 +158,7 @@ Prioritization fee, in micro-lamports per compute unit, observed for that slot.
 
 Solana's `getRecentPrioritizationFees` returns only the _minimum_ fee paid in recent blocks, which is often zero. Triton adds a `percentile` parameter so you can request a realistic market rate.
 
-`percentile` is an integer from 1 to 10000 (0.01% to 100.00%); `5000` is the 50th percentile (median). The response shape is unchanged: `prioritizationFee` reflects the requested percentile instead of the minimum. Omit it for the standard behaviour.
+`percentile` is an integer from 1 to 10000 (0.01% to 100.00%). Common choices: `5000` is the 50th percentile (median), `9000` the 90th, and `9500` the 95th for landing under heavy congestion. The response shape is unchanged: `prioritizationFee` reflects the requested percentile instead of the minimum. Omit it for the standard behaviour.
 
 ```bash
 curl "https://<your-endpoint>.mainnet.rpcpool.com/<your-token>" -s -X POST \
@@ -172,6 +172,20 @@ curl "https://<your-endpoint>.mainnet.rpcpool.com/<your-token>" -s -X POST \
       { "percentile": 5000 }
     ]
   }'
+```
+
+With `percentile` the fees reflect real market rates rather than minimums (truncated example):
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": [
+    { "slot": 430532356, "prioritizationFee": 3000 },
+    { "slot": 430532357, "prioritizationFee": 3558 },
+    { "slot": 430532358, "prioritizationFee": 2499 }
+  ],
+  "id": 1
+}
 ```
 
 ***

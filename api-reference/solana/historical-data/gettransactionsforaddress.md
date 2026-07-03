@@ -118,7 +118,7 @@ When `transactionDetails` is `signatures`, each result contains transaction meta
         "confirmationStatus": "finalized"
       }
     ],
-    "paginationToken": "250000001:12"
+    "paginationToken": "XHLKq2uNiGAJs3YhjnmnwT7LuJoTkGDqf1k4WJsnUd4A6e9bfB26vHr4dKLfMqwZuPmuXDHih4RaojCSt61os33"
   },
   "id": 1
 }
@@ -126,7 +126,7 @@ When `transactionDetails` is `signatures`, each result contains transaction meta
 {% endtab %}
 
 {% tab title="Full Transactions" %}
-When `transactionDetails` is `full`, each result contains the encoded transaction and metadata.
+When `transactionDetails` is `full`, each result contains the encoded transaction, its metadata, and its version.
 
 ```json
 {
@@ -138,10 +138,11 @@ When `transactionDetails` is `full`, each result contains the encoded transactio
         "transactionIndex": 12,
         "blockTime": 1700000000,
         "transaction": {...},
-        "meta": {...}
+        "meta": {...},
+        "version": 0
       }
     ],
-    "paginationToken": "250000001:12"
+    "paginationToken": "XHLKq2uNiGAJs3YhjnmnwT7LuJoTkGDqf1k4WJsnUd4A6e9bfB26vHr4dKLfMqwZuPmuXDHih4RaojCSt61os33"
   },
   "id": 1
 }
@@ -151,7 +152,7 @@ When `transactionDetails` is `full`, each result contains the encoded transactio
 
 ## Pagination
 
-Use the returned `paginationToken` in the next request to continue scanning.
+`paginationToken` is the signature of the last transaction in the page. Pass it back in the next request to continue scanning; treat it as an opaque token.
 
 ```json
 {
@@ -162,7 +163,7 @@ Use the returned `paginationToken` in the next request to continue scanning.
     "AddressBase58",
     {
       "limit": 100,
-      "paginationToken": "250000001:12"
+      "paginationToken": "XHLKq2uNiGAJs3YhjnmnwT7LuJoTkGDqf1k4WJsnUd4A6e9bfB26vHr4dKLfMqwZuPmuXDHih4RaojCSt61os33"
     }
   ]
 }

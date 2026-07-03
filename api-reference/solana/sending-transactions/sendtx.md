@@ -35,7 +35,7 @@ Send the serialized transaction as the request body, one of two ways:
 | ------------- | ------------------ | ----------- | --------------------------------------------------------------------- |
 | `encoding`    | `base58`, `base64` | No          | Encoding of a text-body transaction. Defaults to `base58`.            |
 | `response`    | `signature`        | Recommended | When set, the response body returns the transaction signature on success. |
-| `max_retries` | integer            | No          | Override the default retry count for this transaction.                 |
+| `max_retries` | integer            | No          | Server-side retry count for this transaction. Defaults to `0` (send once, no server-side retries); values are capped by the server's configured maximum. |
 
 ### Optional headers
 

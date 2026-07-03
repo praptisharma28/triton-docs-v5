@@ -24,6 +24,10 @@ layout:
 
 # getProgramAccounts
 
+{% hint style="warning" %}
+On Triton shared endpoints, `getProgramAccounts` requires filters for programs other than SPL Token and Token-2022. An unfiltered call against a custom program scans that program's entire account set and is rejected with error `-32602`. Include `dataSize` and/or `memcmp` filters, or use a dedicated node with Cloudbreak indexed reads for heavy program-wide queries.
+{% endhint %}
+
 ## Request
 
 {% tabs %}
