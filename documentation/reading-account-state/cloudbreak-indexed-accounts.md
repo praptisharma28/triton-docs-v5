@@ -20,7 +20,7 @@ layout:
     visible: true
 ---
 
-# Cloudbreak accounts
+# Cloudbreak Accounts
 
 Cloudbreak serves `getProgramAccounts`, account lookups, and SPL token queries from a purpose-built index, so they stay fast even for programs with millions of accounts. Supported methods are answered by the index automatically, and there is nothing to enable or route on your side.
 

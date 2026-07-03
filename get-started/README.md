@@ -24,7 +24,7 @@ We run premium infrastructure clusters for Solana, Sui, and Monad.
 
 {% tabs %}
 {% tab title="Solana" %}
-<table><thead><tr><th>Network</th><th width="119.1953125" align="center">JSON-RPC</th><th width="123.5" align="center">WebSocket</th><th width="128.99609375" align="center">Yellowstone gRPC</th><th width="109.296875" align="center">Fumarole gRPC</th><th width="126.1484375" align="center">Cloudbreak accounts</th><th width="120.12890625" align="center">Superbank archive</th></tr></thead><tbody><tr><td>Mainnet</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td></tr><tr><td>Devnet</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✗</td><td align="center">v1 only</td><td align="center">✓</td></tr></tbody></table>
+<table><thead><tr><th>Network</th><th width="119.1953125" align="center">JSON-RPC</th><th width="123.5" align="center">WebSocket</th><th width="128.99609375" align="center">Yellowstone gRPC</th><th width="109.296875" align="center">Fumarole gRPC</th><th width="126.1484375" align="center">Cloudbreak Accounts</th><th width="120.12890625" align="center">Superbank archive</th></tr></thead><tbody><tr><td>Mainnet</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td></tr><tr><td>Devnet</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✗</td><td align="center">v1 only</td><td align="center">✓</td></tr></tbody></table>
 {% endtab %}
 
 {% tab title="Sui" %}

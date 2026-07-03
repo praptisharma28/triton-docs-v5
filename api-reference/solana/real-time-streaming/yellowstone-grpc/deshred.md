@@ -4,7 +4,7 @@ description: >-
   executed.
 ---
 
-# Deshred transactions
+# Deshred Transactions gRPC
 
 ## Filter
 

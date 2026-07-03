@@ -27,7 +27,7 @@ description: How to keep Solana account, program, and token reads fast and fresh
 ## Stream instead of polling for live data
 
 * **For account or transaction changes as they happen, use Dragon's Mouth (Yellowstone gRPC), not polling.** Point-in-time reads answer "now"; a stream pushes updates as they occur.
-* **In a browser, use Whirligig WebSockets.** gRPC is server-to-server only and is not supported in web browsers.
+* **In a browser, use Whirligig WebSocket.** gRPC is server-to-server only and is not supported in web browsers.
 * **Or skip the rewrite with Account Sync.** The Triton SDK is a drop-in `@solana/web3.js` replacement that keeps account state live in a local buffer fed by a stream, so `getAccountInfo` stays current without polling and without changing your read code. See Account Sync.
 * **If your workload can't miss data (indexers, analytics, accounting), use Fumarole.** It persists your stream position with 4 days of retention and an at-least-once delivery guarantee, so you can disconnect, resume where you left off, and backfill anything you missed.
 

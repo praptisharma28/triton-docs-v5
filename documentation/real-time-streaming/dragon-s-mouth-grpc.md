@@ -16,7 +16,7 @@ It's the fastest live data path available for `processed` events and the recomme
 
 When not to use it:
 
-* Browsers and frontends cannot speak gRPC, so you should use [Whirligig WebSockets](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/whirligig-websockets) instead.
+* Browsers and frontends cannot speak gRPC, so you should use [Whirligig WebSocket](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/whirligig-websockets) instead.
 * If your pipeline cannot miss a block (indexing, analytics, compliance), use [Fumarole](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/fumarole-persistent-streams), which guarantees at-least-once delivery and auto-backfills up to 4 days of data on reconnect.
 
 ## Features and benefits
@@ -45,7 +45,7 @@ Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscr
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | Account writes       | Updates whenever a matching account's data, lamports, or owner changes                                                   |
 | Transactions         | Every transaction matching your filter, with full `meta` (logs, status, balance deltas)                                  |
-| Deshred transactions | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See Deshred transactions. |
+| Deshred Transactions gRPC | Transactions reconstructed from shreds _before_ execution. Separate `SubscribeDeshred` method. See Deshred Transactions gRPC. |
 | Entries              | Solana ledger entries (low-level, rare use case)                                                                         |
 | Block notifications  | Full blocks as they're produced, optionally with their transactions and accounts                                         |
 | Block metadata       | Block headers only, without the transaction payload                                                                      |
@@ -557,7 +557,7 @@ Full deep-dive: [Compressed filters for Yellowstone gRPC](https://blog.triton.on
 
 ### Transactions
 
-Use the `transactions` subscription to receive executed transactions at your chosen commitment level; `processed` delivers them as soon as the node processes them, while `confirmed` and `finalized` add latency. If you want the **earliest possible signal**, before execution, use [Deshred transactions](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions), a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the node executes them.
+Use the `transactions` subscription to receive executed transactions at your chosen commitment level; `processed` delivers them as soon as the node processes them, while `confirmed` and `finalized` add latency. If you want the **earliest possible signal**, before execution, use [Deshred Transactions gRPC](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions), a separate gRPC method on the same service that delivers transactions reconstructed from shreds **before** the node executes them.
 
 {% tabs %}
 {% tab title="All non-vote, non-failed" %}
@@ -1403,7 +1403,7 @@ Dragon's Mouth is billed at `$0.08 / GB` of bandwidth. You only pay for the data
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred transactions</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions">Deshred transactions</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSockets</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/whirligig-websockets">Whirligig WebSockets</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole reliable streams</strong></td><td>Redundant streaming layer with 4 days of stored data and built-in cursor resume.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/fumarole-persistent-streams">Fumarole reliable streams</a></td></tr><tr><td><i class="fa-compass">:compass:</i> <strong>Streaming overview</strong></td><td>Compare every Triton streaming service and choose the right fit for your workload.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming">Streaming overview</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-fire">:fire:</i> <strong>Deshred Transactions gRPC</strong></td><td>Pre-execution transactions reconstructed from raw shreds. Earliest intent signal for traders.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions">Deshred Transactions gRPC</a></td></tr><tr><td><i class="fa-rotate-right">:rotate-right:</i> <strong>Whirligig WebSocket</strong></td><td>Drop-in for native Solana WebSockets. Fastest real-time data for frontends, backed by gRPC.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/whirligig-websockets">Whirligig WebSocket</a></td></tr><tr><td><i class="fa-layer-group">:layer-group:</i> <strong>Fumarole Persistent gRPC</strong></td><td>Redundant streaming layer with 4 days of stored data and built-in cursor resume.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/fumarole-persistent-streams">Fumarole Persistent gRPC</a></td></tr><tr><td><i class="fa-compass">:compass:</i> <strong>Streaming overview</strong></td><td>Compare every Triton streaming service and choose the right fit for your workload.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming">Streaming overview</a></td></tr></tbody></table>
 
 ***
 

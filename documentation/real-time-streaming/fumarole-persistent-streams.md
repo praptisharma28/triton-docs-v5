@@ -20,7 +20,7 @@ layout:
     visible: true
 ---
 
-# Fumarole persistent streams
+# Fumarole Persistent gRPC
 
 Fumarole is reliable, persistent gRPC streaming for pipelines that can't miss a block: disconnect and resume exactly where you left off, with anything you missed backfilled automatically.
 

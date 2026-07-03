@@ -2,7 +2,7 @@
 description: Faster and more reliable Solana WebSocket API for browsers, backed by a gRPC stream.
 ---
 
-# Whirligig WebSockets
+# Whirligig WebSocket
 
 Whirligig is a Rust proxy between your client and a Dragon's Mouth gRPC stream, providing 100% compatibility with the standard Solana WebSocket API, plus additional features and higher limits. Triton was the first Solana RPC provider to enhance the native pubsub path with gRPC, and it's now a wide practice across the entire ecosystem.
 

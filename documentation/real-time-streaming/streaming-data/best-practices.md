@@ -7,8 +7,8 @@ description: Keep real-time Solana streams reliable and ensure lowest-latency in
 ## Pick the right stream
 
 * **Dragon's Mouth (gRPC), for lowest latency on a backend.** The ecosystem-standard gRPC stream: account and transaction updates pushed over a persistent connection as the node processes them, up to 400 ms faster than RPC polling. Server-to-server only.
-* **Whirligig WebSockets, for browsers and frontends.** The same intra-slot latency as gRPC, but over a standard, browser-compatible Solana WebSocket, more reliable and faster than the native one, and with a full-transaction subscription the native API lacks. gRPC isn't available in browsers.
-* **Fumarole, for reliability-first pipelines** (accounting, analytics, indexing, compliance). Adds persistence, redundancy, and replay on top of Dragon's Mouth, which trades completeness for latency.
+* **Whirligig WebSocket, for browsers and frontends.** The same intra-slot latency as gRPC, but over a standard, browser-compatible Solana WebSocket, more reliable and faster than the native one, and with a full-transaction subscription the native API lacks. gRPC isn't available in browsers.
+* **Fumarole, for reliability-first pipelines** (accounting, analytics, indexing, compliance). Adds persistence, redundancy, and 4 days of replay on top of Dragon's Mouth, which trades completeness for latency.
 * **Deshred, for the earliest possible signal** (arbitrage, market making, liquidations, HFT). Reconstructs transactions from shreds before execution, so no confirmation guarantee; pair it with the `transactions` stream when you need finality.
 
 ## Provision the subscriber

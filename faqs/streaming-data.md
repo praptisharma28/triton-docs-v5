@@ -56,7 +56,7 @@ Fumarole is a streaming system designed for reliable, scalable streaming of acco
 
 <summary>Can I use gRPC from a web browser?</summary>
 
-No, gRPC is not supported in web browsers due to HTTP/2 and protobuf limitations. It is designed for backend applications. For frontend use, use Whirligig WebSockets instead.
+No, gRPC is not supported in web browsers due to HTTP/2 and protobuf limitations. It is designed for backend applications. For frontend use, use Whirligig WebSocket instead.
 
 </details>
 
@@ -64,7 +64,7 @@ No, gRPC is not supported in web browsers due to HTTP/2 and protobuf limitations
 
 <summary>Do endpoints support WebSocket connections?</summary>
 
-Yes, on both shared and dedicated infrastructure. Your existing WebSocket connections automatically route through Whirligig WebSockets, our gRPC-backed WebSocket layer that delivers intra-slot account updates at `processed`, full `blockSubscribe` and `transactionSubscribe`, and significantly higher subscription limits than native pubsub. No code changes required.
+Yes, on both shared and dedicated infrastructure. Your existing WebSocket connections automatically route through Whirligig WebSocket, our gRPC-backed WebSocket layer that delivers intra-slot account updates at `processed`, full `blockSubscribe` and `transactionSubscribe`, and significantly higher subscription limits than native pubsub. No code changes required.
 
 </details>
 
@@ -98,7 +98,7 @@ Full guide: [Verify your gRPC endpoint](https://app.gitbook.com/s/VeEf321LwceAVl
 
 <summary>How do I get the earliest possible view of transactions?</summary>
 
-Use Deshred. It streams transactions reconstructed from shreds before execution, so you see them earlier than a regular gRPC transaction stream. Built for latency-sensitive work like trading and arbitrage. See [Deshred transactions](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions).
+Use Deshred. It streams transactions reconstructed from shreds before execution, so you see them earlier than a regular gRPC transaction stream. Built for latency-sensitive work like trading and arbitrage. See [Deshred Transactions gRPC](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/deshred-transactions).
 
 </details>
 

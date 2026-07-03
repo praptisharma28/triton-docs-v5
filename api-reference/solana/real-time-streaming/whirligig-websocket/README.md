@@ -20,7 +20,7 @@ layout:
     visible: true
 ---
 
-# Whirligig WebSockets
+# Whirligig WebSocket
 
 These push live updates for accounts and the programs that own them:
 
