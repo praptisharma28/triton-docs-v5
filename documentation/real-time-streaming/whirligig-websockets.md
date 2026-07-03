@@ -35,18 +35,18 @@ flowchart LR
 
 Whirligig has full parity with the [Solana WebSocket API](https://solana.com/docs/rpc/websocket): it serves the standard `solana-pubsub` endpoint, plus one added subscription, `transactionSubscribe`, that the native API does not have. Each subscribe method returns a subscription `id` and has a matching unsubscribe (see [Unsubscribe](#unsubscribe)). The methods with request and response examples below are the most common; the rest follow the standard Solana WebSocket spec.
 
-| Method | Subscribe to | Notes |
-| --- | --- | --- |
-| `accountSubscribe` | An account's data, on change | Solana-compatible |
-| `blockSubscribe` | New blocks | Solana-compatible |
-| `logsSubscribe` | Transaction logs mentioning an address | Solana-compatible |
-| `programSubscribe` | Accounts owned by a program, on change | Solana-compatible |
-| `signatureSubscribe` | A signature's confirmation status | Solana-compatible |
-| `slotSubscribe` | Each new slot | Solana-compatible |
-| `rootSubscribe` | Each new root (the highest finalized slot) | Solana-compatible |
-| `voteSubscribe` | Votes as they are observed in gossip | Solana-compatible (unstable Solana method) |
-| `slotsUpdatesSubscribe` | Detailed slot-status updates | Solana-compatible (unstable Solana method) |
-| `transactionSubscribe` | Full transactions matching a filter | Whirligig extension, not in the native Solana WS API |
+| Method | What it does |
+| --- | --- |
+| `accountSubscribe` | Subscribes to an account's data, on change |
+| `blockSubscribe` | Subscribes to new blocks |
+| `logsSubscribe` | Subscribes to transaction logs mentioning an address |
+| `programSubscribe` | Subscribes to accounts owned by a program, on change |
+| `signatureSubscribe` | Subscribes to a signature's confirmation status |
+| `slotSubscribe` | Subscribes to each new slot |
+| `rootSubscribe` | Subscribes to each new root (the highest finalized slot) |
+| `voteSubscribe` | Subscribes to votes as they are observed in gossip (unstable Solana method) |
+| `slotsUpdatesSubscribe` | Subscribes to detailed slot-status updates (unstable Solana method) |
+| `transactionSubscribe` | Subscribes to full transactions matching a filter. Whirligig extension, not in the native Solana WS API |
 
 ## Connection options
 

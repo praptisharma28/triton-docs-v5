@@ -65,20 +65,20 @@ A query with no matching index yet still returns correct results, it just runs s
 
 ## Supported methods
 
-| Method                       | Returns                                                        |
+| Method                       | What it does                                                        |
 | ---------------------------- | -------------------------------------------------------------- |
-| `getAccountInfo`             | A single account, or `null`.                                   |
-| `getMultipleAccounts`        | An array of accounts (each `null` if missing), in input order. |
-| `getBalance`                 | The lamport balance of an account.                             |
-| `getProgramAccounts`         | All accounts owned by a program, with filters.                 |
-| `getTokenAccountsByOwner`    | SPL Original and Token-2022 token accounts owned by a wallet.  |
-| `getTokenAccountsByDelegate` | SPL Original and Token-2022 accounts a delegate controls.      |
-| `getTokenAccountsByMint`     | SPL Original and Token-2022 accounts of a given mint.          |
-| `getTokenAccountBalance`     | The token amount held by a token account.                      |
-| `getSlot`                    | The current slot at a commitment level.                        |
-| `getVersion`                 | The upstream Solana version and Cloudbreak build.              |
-| `getGenesisHash`             | The cluster genesis hash.                                      |
-| `getHealth`                  | Service health.                                                |
+| `getAccountInfo`             | Returns A single account, or `null`. |
+| `getMultipleAccounts`        | Returns an array of accounts (each `null` if missing), in input order. |
+| `getBalance`                 | Returns the lamport balance of an account. |
+| `getProgramAccounts`         | Returns all accounts owned by a program, with filters. |
+| `getTokenAccountsByOwner`    | Returns SPL Original and Token-2022 token accounts owned by a wallet. |
+| `getTokenAccountsByDelegate` | Returns SPL Original and Token-2022 accounts a delegate controls. |
+| `getTokenAccountsByMint`     | Returns SPL Original and Token-2022 accounts of a given mint. |
+| `getTokenAccountBalance`     | Returns the token amount held by a token account. |
+| `getSlot`                    | Returns the current slot at a commitment level. |
+| `getVersion`                 | Returns the upstream Solana version and Cloudbreak build. |
+| `getGenesisHash`             | Returns the cluster genesis hash. |
+| `getHealth`                  | Returns service health. |
 
 ### getAccountInfo
 
@@ -545,12 +545,12 @@ Position 0 is the token account pubkey (base58), required. Position 1 is an opti
 
 These return service and chain metadata. None take account-specific parameters.
 
-| Method           | Returns                                                                                                                         |
+| Method           | What it does                                                                                                                         |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `getSlot`        | The current slot at the requested commitment. Accepts an optional `{ "commitment": ..., "minContextSlot": ... }` config.        |
-| `getVersion`     | A `{ "solana-core": "<version>-cloudbreak<version>" }` object identifying the upstream Solana version and the Cloudbreak build. |
-| `getGenesisHash` | The genesis hash of the cluster this index tracks.                                                                              |
-| `getHealth`      | `"ok"` when the index is healthy, or an error while it is bootstrapping a snapshot or repairing a slot gap.                     |
+| `getSlot`        | Returns the current slot at the requested commitment. Accepts an optional `{ "commitment": ..., "minContextSlot": ... }` config. |
+| `getVersion`     | Returns A `{ "solana-core": "<version>-cloudbreak<version>" }` object identifying the upstream Solana version and the Cloudbreak build. |
+| `getGenesisHash` | Returns the genesis hash of the cluster this index tracks. |
+| `getHealth`      | Returns `"ok"` when the index is healthy, or an error while it is bootstrapping a snapshot or repairing a slot gap. |
 
 {% tabs %}
 {% tab title="Request" %}
