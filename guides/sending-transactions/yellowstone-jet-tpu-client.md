@@ -6,7 +6,7 @@ description: >-
 
 # Yellowstone Jet TPU client
 
-The Yellowstone Jet TPU client is a standalone Rust crate that sends transactions directly to validator TPUs over QUIC. It is the sending core of [Yellowstone Jet](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/jet-sender), the open-source relay engine behind the Cascade Marketplace, pulled out into a library you can drop into your own stack.
+The Yellowstone Jet TPU client is a standalone Rust crate that sends transactions directly to validator TPUs over QUIC. It is the sending core of [Yellowstone Jet](https://github.com/rpcpool/yellowstone-jet), the open-source relay engine behind the Cascade Marketplace, pulled out into a library you can drop into your own stack.
 
 Writing a TPU client from scratch means handling every Agave release, managing QUIC connections, tracking the leader schedule, and caching connections without lock contention. This crate does all of that, and exposes the hooks a default client leaves out.
 

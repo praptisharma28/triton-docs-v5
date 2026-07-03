@@ -13,7 +13,7 @@ Solana's leader schedule is deterministic, so you often know which validator wil
 | Path                        | How                                                                                                                                                    | Use it when                                                            |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------- |
 | **Triton RPC (SWQoS)**    | Add `forwardingPolicies` to your `sendTransaction` call. Triton checks the policy and routes for you.                                                  | You send through Triton RPC and want zero extra infrastructure.        |
-| **Jet TPU client (direct)** | Call `send_txn_with_shield_policies` from the [Jet TPU client](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/jet-sender). Your code connects to validator TPUs and enforces the policy itself. | You run your own sender and need RPC-independent control over routing. |
+| **Jet TPU client (direct)** | Call `send_txn_with_shield_policies` from the [Jet TPU client](https://github.com/rpcpool/yellowstone-jet). Your code connects to validator TPUs and enforces the policy itself. | You run your own sender and need RPC-independent control over routing. |
 
 Either way the policy lives on-chain and the enforcement is identical: if the current leader is not allowed, the transaction is dropped, not queued.
 
@@ -49,7 +49,7 @@ Solana-ForwardingPolicies: "<your_policy_pda>,<your_policy_pda2>"
 
 ## Option B: Jet TPU client (direct)
 
-The [Jet TPU client](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/jet-sender) checks each leader against your policies inside your own process and sends only to allowed validators. Enable the `shield` feature and add `yellowstone-shield-store` (the workspace and `[patch.crates-io]` setup is on the [Jet TPU client](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/jet-sender) page).
+The [Jet TPU client](https://github.com/rpcpool/yellowstone-jet) checks each leader against your policies inside your own process and sends only to allowed validators. Enable the `shield` feature and add `yellowstone-shield-store` (the workspace and `[patch.crates-io]` setup is on the [Jet TPU client](https://github.com/rpcpool/yellowstone-jet) page).
 
 Build a `PolicyStore` that caches the on-chain policies and live-updates them over gRPC, wrap your policy addresses in a `ShieldBlockList`, then send. Here `sender` is a TPU sender created as shown in the [Jet TPU client crate docs](https://docs.rs/yellowstone-jet-tpu-client).
 
@@ -157,7 +157,7 @@ Shield is a filter, not a guarantee.
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Send a transaction with /sendtx in a few minutes.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/quickstart">Quickstart</a></td></tr><tr><td><i class="fa-paper-plane">:paper-plane:</i> <strong>Jet sender</strong></td><td>The managed sending engine Shield policies run on.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/jet-sender">Jet sender</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Land more transactions, faster.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/best-practices">Best practices</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Send a transaction with /sendtx in a few minutes.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/quickstart">Quickstart</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Land more transactions, faster.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/best-practices">Best practices</a></td></tr></tbody></table>
 
 ***
 
