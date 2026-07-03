@@ -1,24 +1,18 @@
 ---
 description: >-
-  Price priority fees against the real market rate with a percentile parameter
-  on getRecentPrioritizationFees, instead of the minimum fee.
+  Triton's enhanced getRecentPrioritizationFees method with a percentile
+  parameter for accurate fee estimation.
 ---
 
 # Priority fees API
 
-Triton extends Solana's `getRecentPrioritizationFees` with a `percentile` parameter, so you can price priority fees against the real market rate instead of the minimum.
-
-## The problem with standard priority fees
-
 Solana's default `getRecentPrioritizationFees` returns only the **minimum** priority fee paid in recent blocks. That figure is often zero, so it is a poor signal for the fee a transaction actually needs to land.
-
-## Percentile-based fees
 
 Triton's `getRecentPrioritizationFees` accepts a `percentile` parameter. Request a percentile (for example the 50th for the median, or the 90th for a high-end fee) to get an actionable estimate from recent on-chain activity.
 
 The method name is unchanged. `percentile` is an integer from 1 to 10,000, representing 0.01% to 100.00%, so `5000` is the 50th percentile (median). If you omit it, the method falls back to the standard behaviour and returns the minimum fee.
 
-## Request
+## Sending a request
 
 ```json
 {
@@ -32,7 +26,7 @@ The method name is unchanged. `percentile` is an integer from 1 to 10,000, repre
 }
 ```
 
-## Response
+## Expected response
 
 The response format matches the standard Solana RPC method, but `prioritizationFee` reflects the requested percentile instead of the minimum.
 
@@ -61,7 +55,7 @@ The Priority fees API is billed as standard RPC: `$0.08 / GB` of bandwidth plus 
 
 ## What's next
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Send a transaction with /sendtx in a few minutes.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/quickstart">Quickstart</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Land more transactions, faster.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/best-practices">Best practices</a></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-play">:play:</i> <strong>Quickstart</strong></td><td>Send a transaction via Triton endpoints in a few minutes.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/quickstart">Quickstart</a></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Best practices</strong></td><td>Land your transactions fast and reliably.</td><td><a href="https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/sending-transactions/best-practices">Best practices</a></td></tr></tbody></table>
 
 ***
 
