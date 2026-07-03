@@ -9,12 +9,11 @@ layout:
 
 You build and sign a transaction, then submit it so a validator includes it in a block. Landing reliably under load comes down to a few things:
 
-* **Delivery.** Reaching the current leader quickly.
+* **Delivery.** Reaching the current leader quickly through our Jet engine, which runs on its own traffic route and does not compete with your RPC requests.
 * **SWQoS.** Stake-weighted quality of service so your transaction is prioritised, added by default on every Triton endpoint.
 * **Fees.** Attaching a priority fee that reflects the real market rate.
 * **Protection.** Optionally restricting which validators can process your transaction, to avoid harmful MEV.
 
-Triton covers each of these while keeping standard Solana behaviour where you want it.
 
 ## Pick your send path
 
