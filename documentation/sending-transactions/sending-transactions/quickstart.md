@@ -11,7 +11,8 @@ In this quickstart we'll send a transaction two ways: **`/sendtx`**, the direct 
 
 ## 0. Prerequisites
 
-* A Triton Solana endpoint and token, from your [customer dashboard](https://customers.triton.one).
+* An active Triton subscription.
+* Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one).
 * A funded keypair and a way to build and sign a transaction (`@solana/web3.js`, `@solana/kit`, or your SDK of choice).
 
 ## 1. Build and sign a transaction
