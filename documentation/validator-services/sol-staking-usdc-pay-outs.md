@@ -21,8 +21,6 @@ For teams that want returns with zero overhead, Triton runs a long-standing trus
 * Teams with larger delegations (minimum 2,500 SOL) who want steady income to cover operating expenses.
 * Delegators in regions where converting staking rewards into stablecoins adds tax complexity, where receiving rewards directly in USDC is a smoother path.
 
-Triton also participates in Solana governance.
-
 ## Onboarding
 
 Because this is a private arrangement, it starts with an agreement between you and Triton.
