@@ -28,7 +28,7 @@ Because it's 100% compatible with the standard Solana JSON-RPC methods, existing
 
 ## Features and benefits
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-database">:database:</i> <strong>Complete ledger from genesis</strong></td><td>Every block, transaction, and entry, queryable back to genesis.</td><td></td></tr><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Faster historical queries</strong></td><td>At p50 against public RPC: 5x faster getSignaturesForAddress, 38x getSignatureStatuses, 3.3x getTransaction.</td><td></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Address history in one call</strong></td><td>getTransactionsForAddress returns a complete history (ATAs included) with server-side filters and a pagination cursor.</td><td></td></tr><tr><td><i class="fa-bolt">:bolt:</i> <strong>Sub-1 ms recent reads</strong></td><td>A head cache keeps the newest slots in memory, so recent reads return in under 1 ms.</td><td></td></tr><tr><td><i class="fa-coins">:coins:</i> <strong>Flat pricing at any depth</strong></td><td>Every historical query costs $0.08 / GB plus $10 / million calls, no matter how deep into history it reaches.</td><td></td></tr><tr><td><i class="fa-code-fork">:code-fork:</i> <strong>Open source under AGPL</strong></td><td>Run, audit, or self-host the full stack, with source-agnostic ingest.</td><td></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-database">:database:</i> <strong>Complete ledger from genesis</strong></td><td>Every block, transaction, and entry, queryable back to genesis.</td><td></td></tr><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Faster historical queries</strong></td><td>At p50 against public RPC: 5x faster getSignaturesForAddress, 38x getSignatureStatuses, 3.3x getTransaction.</td><td></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Address history in one call</strong></td><td>getTransactionsForAddress returns a complete history (ATAs included) with server-side filters and a pagination cursor.</td><td></td></tr><tr><td><i class="fa-bolt">:bolt:</i> <strong>Sub-1 ms recent reads</strong></td><td>A head cache keeps the newest slots in memory, so recent reads return in under 1 ms.</td><td></td></tr><tr><td><i class="fa-coins">:coins:</i> <strong>Flat pricing across all the epochs and methods</strong></td><td>Every historical query costs $0.08 / GB plus $10 / million calls, no matter how deep into history it reaches.</td><td></td></tr><tr><td><i class="fa-code-fork">:code-fork:</i> <strong>Open source under AGPL</strong></td><td>Run, audit, or self-host the full stack, with source-agnostic ingest.</td><td></td></tr></tbody></table>
 
 ## How it works
 
@@ -52,7 +52,8 @@ The complete ledger from genesis: every block, transaction, and entry. Most Supe
 | Methods | Features |
 | --- | --- |
 | `getBlock`, `getBlocks`, `getBlocksWithLimit`, `getBlockTime`, `getBlockHeight`, `getSlot`, `getTransactionCount`, `getLatestBlockhash`, `getFirstAvailableBlock`, `getInflationReward`, `getSignatureStatuses`, `getHealth`, `minimumLedgerSlot` | Standard Solana JSON-RPC |
-| `getTransaction`, `getSignaturesForAddress` | Triton's optional slot hint that lets you skip the database lookup and get the response faster when you already know the slot (`slot` on `getTransaction`; `beforeSlot`/`untilSlot` on `getSignaturesForAddress`) |
+| `getTransaction` | Standard, plus Triton's optional `slot` hint (`u64`): skips the ledger-wide signature search by querying that exact slot. The response is `null` if the signature isn't present in that slot |
+| `getSignaturesForAddress` | Standard, plus Triton's `beforeSlot`/`untilSlot` (`u64`): exclusive whole-slot bounds (`slot < beforeSlot`, `slot > untilSlot`), not signature-position cursors. `beforeSlot` can't be combined with `before`, nor `untilSlot` with `until` |
 | `getTransactionsForAddress` | Triton's extension: a complete address history in one call (ATAs included) with server-side filters (by status, slot, block time, and token accounts) and a pagination cursor |
 | `StreamBlocks`, `StreamTransactions` | Triton's gRPC streaming extension: replay bounded slot ranges of history as a stream, with server-side filters. See [Streaming historical data](#streaming-historical-data) |
 
@@ -62,20 +63,8 @@ Serving notes:
 
 * JSON-RPC batch envelopes are supported.
 * `minimumLedgerSlot` reports the lowest slot retained in Superbank's ClickHouse-backed block storage.
+* On `getSignaturesForAddress`, if the signature you pass as `before` or `until` can't be found, the call returns JSON-RPC error `-32020` (`Transaction <signature> not found`).
 * With the head cache, `processed` commitment is served on the signature and transaction methods (`getSignaturesForAddress`, `getSignatureStatuses`, `getTransaction`, `getTransactionsForAddress`) and the slot and block-list methods (`getSlot`, `getBlockHeight`, `getTransactionCount`, `getLatestBlockhash`, `getBlocks`, `getBlocksWithLimit`). `getBlock`, `getBlockTime`, `getFirstAvailableBlock`, and `getInflationReward` take `confirmed` or `finalized`.
-
-### Superbank extensions
-
-Every method takes the standard Solana parameters. Two add an optional slot hint that skips the signature-to-slot lookup:
-
-| Method | Extension | Behaviour |
-| --- | --- | --- |
-| `getTransaction` | `slot` (optional `u64`) | Queries that exact slot directly. The response is `null` if the signature isn't present in that slot. |
-| `getSignaturesForAddress` | `beforeSlot`, `untilSlot` (optional `u64`) | Exclusive whole-slot bounds (`slot < beforeSlot`, `slot > untilSlot`), not signature-position cursors. `beforeSlot` can't be combined with `before`; `untilSlot` can't be combined with `until`. |
-
-On `getSignaturesForAddress`, if the signature you pass as `before` or `until` can't be found, the call returns JSON-RPC error `-32020` (`Transaction <signature> not found`).
-
-`getTransactionsForAddress` is documented below; it also accepts `beforeSlot`/`untilSlot` as aliases for `filters.slot.lt`/`filters.slot.gt`.
 
 ## Streaming historical data
 
