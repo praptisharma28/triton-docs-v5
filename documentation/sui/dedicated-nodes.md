@@ -1,7 +1,7 @@
 ---
 description: >-
-  Private Sui nodes with isolated capacity, the full Sui service set, and your
-  own endpoint.
+  Private Sui node with isolated capacity, a flat monthly price, and the full
+  Sui service set on your own endpoint.
 layout:
   width: default
   title:
@@ -24,13 +24,16 @@ layout:
 
 # Dedicated nodes
 
-A dedicated Sui streaming node delivers isolated capacity, minimal latency through colocation, and maximum throughput. It serves the same gRPC Sui service as the shared infrastructure at a flat cost, while archival requests route to the archival storage endpoints on shared infrastructure.
+We offer premium bare-metal private Sui nodes for the lowest latency, highest throughput, no noisy neighbours, and fixed costs. A dedicated node serves the same gRPC Sui service as the shared infrastructure at a flat monthly price, while archival requests route to the archival storage endpoints on shared infrastructure.
 
 ## What you get
 
-* **Isolated capacity** on hardware reserved for you, with flexible rate and connection limits.
+* **Flexible rate and connection limits** on hardware reserved for you.
 * **Your own endpoint**, a per-customer subdomain in the form `<your-endpoint>.sui.rpcpool.com`. Archival is served from a separate endpoint, `archive-<your-endpoint>.sui.rpcpool.com`.
 * **The full Sui stack:** gRPC unary calls, gRPC streaming, and JSON-RPC (deprecating; see [Overview](./)).
+* **Your choice of region**: Europe, North America, Asia, or the Pacific, colocated near your systems.
+* **Access controls**: token auth and allowed origins on your endpoint.
+* **Your logging policy**: Max Privacy (no request parameters or payloads logged), Enhanced Privacy (the default: method parameters may be logged, but a transaction's signer is never linked to an originating IP), or GDPR Privacy (full logging for support, legal, or compliance needs). See [privacy and data protection](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/privacy-and-security).
 
 ## Hardware
 
@@ -39,13 +42,6 @@ Triton provisions dedicated Sui nodes well above Sui's minimum full-node require
 ## History and archival
 
 A dedicated full node retains roughly the most recent two days (two epochs) of history, the same as the shared pool. For older data, query the [Archival storage and services](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/sui/archival) endpoint, which serves the full history from genesis.
-
-## What you can configure
-
-* The hardware tier.
-* The region: dedicated nodes are available in Europe, North America, Asia, and the Pacific, colocated near your systems.
-* Access controls: token auth and allowed origins on your endpoint.
-* The logging policy: **Max Privacy** (no request parameters or payloads logged), **Enhanced Privacy** (the default: method parameters may be logged, but a transaction's signer is never linked to an originating IP), or **GDPR Privacy** (full logging for support, legal, or compliance needs). See [privacy and data protection](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/privacy-and-security).
 
 ## Pricing
 
@@ -67,19 +63,19 @@ Dedicated nodes are set up with our team, not self-serve.
 {% step %}
 ### Talk to us
 
-Reach out through [contact sales](https://triton.one/contact), or ask in your [customer dashboard](https://customers.triton.one) chat. A short know-your-customer step collects your contact and location details.
+Reach out through [contact sales](https://triton.one/contact), or ask in your [customer dashboard](https://customers.triton.one) chat, and we'll talk through the best options with you.
 {% endstep %}
 
 {% step %}
 ### Scope your node
 
-A discovery call covers your traffic volume, regions, and workload. You agree the specs, region, and number of nodes before anything is deployed.
+A discovery call covers your traffic volume, regions, and workload. We'll agree on the specs, region, and number of nodes being deployed.
 {% endstep %}
 
 {% step %}
 ### Provisioning
 
-Hardware is ordered to spec and set up as a dedicated subscription in your [customer dashboard](https://customers.triton.one). Because nodes are built to order rather than kept in stock, expect a short lead time. There are no same-day trials.
+Hardware is ordered to spec and set up as a dedicated subscription in your [customer dashboard](https://customers.triton.one).
 {% endstep %}
 
 {% step %}
