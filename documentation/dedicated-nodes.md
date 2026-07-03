@@ -18,6 +18,10 @@ Choose a dedicated node for:
 
 Not for front-ends, dashboards, or general production reads: shared infrastructure is cost-effective, globally distributed, and the right answer there. For the full breakdown, see [shared vs dedicated RPC infrastructure](https://blog.triton.one/practical-guide-to-enterprise-solana-rpc-infrastructure/).
 
+## Features and benefits
+
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Open rate limits</strong></td><td>No rate or connection limits on your endpoint. Push it as hard as your workload needs.</td><td></td></tr><tr><td><i class="fa-globe">:globe:</i> <strong>Your choice of region</strong></td><td>Europe, North America, Asia, or the Pacific, so you can colocate your backend next to the node.</td><td></td></tr><tr><td><i class="fa-shield">:shield:</i> <strong>Logging-policy control</strong></td><td>Pick the logging policy your legal or privacy requirements demand: Max Privacy, Enhanced Privacy (default), or GDPR Privacy.</td><td></td></tr><tr><td><i class="fa-arrows-rotate">:arrows-rotate:</i> <strong>Automatic failover</strong></td><td>If your node restarts or falls behind the tip, traffic fails over to the shared cluster and your stream keeps flowing.</td><td></td></tr></tbody></table>
+
 ## Shared vs dedicated
 
 | | Shared infrastructure | Dedicated node |
@@ -32,10 +36,6 @@ Not for front-ends, dashboards, or general production reads: shared infrastructu
 The cost cut-over is simple to estimate: at `$0.08 / GB`, streaming about 36 TB a month on shared costs the same as a `$2,900` dedicated node. Above that, or when you need guaranteed isolation, dedicated wins. Compare your own volume against the [pricing page](https://triton.one/pricing).
 
 This is also why the hybrid model is what most teams run: dedicated nodes carry the heavy backend workloads, streaming and indexing, while JSON-RPC reads (`getAccountInfo`, `getProgramAccounts`, `getTransaction`, and the rest) run on Triton's shared, globally distributed infrastructure.
-
-## Features and benefits
-
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Open rate limits</strong></td><td>No rate or connection limits on your endpoint. Push it as hard as your workload needs.</td><td></td></tr><tr><td><i class="fa-globe">:globe:</i> <strong>Your choice of region</strong></td><td>Europe, North America, Asia, or the Pacific, so you can colocate your backend next to the node.</td><td></td></tr><tr><td><i class="fa-shield">:shield:</i> <strong>Logging-policy control</strong></td><td>Pick the logging policy your legal or privacy requirements demand: Max Privacy, Enhanced Privacy (default), or GDPR Privacy.</td><td></td></tr><tr><td><i class="fa-arrows-rotate">:arrows-rotate:</i> <strong>Automatic failover</strong></td><td>If your node restarts or falls behind the tip, traffic fails over to the shared cluster and your stream keeps flowing.</td><td></td></tr></tbody></table>
 
 ## Getting started
 
