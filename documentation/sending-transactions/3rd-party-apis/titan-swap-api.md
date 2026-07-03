@@ -57,7 +57,7 @@ Each streamed quote carries the route information you need to execute:
 4. **Select a quote**: pick the best by your criteria, such as price or provider.
 5. **Execute**: each `SwapRoute` arrives with either instructions to build and sign a transaction, or a ready-to-sign transaction you can submit directly.
 
-For the request and response format and the full execution flow, see the [Titan Swap API docs](https://titan-exchange.gitbook.io/titan/titan-developer-docs/apis/swap-api#websocket-connections). A TypeScript SDK is available: [@titanexchange/sdk-ts](https://www.npmjs.com/package/@titanexchange/sdk-ts).
+For the request and response format and the full execution flow, see the [Titan Swap API docs](https://titan-exchange.gitbook.io/titan/developer-doc/dart-swap-api/overview). A TypeScript SDK is available: [@titanexchange/sdk-ts](https://www.npmjs.com/package/@titanexchange/sdk-ts).
 
 ## Pricing
 

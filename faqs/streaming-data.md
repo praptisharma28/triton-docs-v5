@@ -28,7 +28,7 @@ You don't need to install anything. All Geyser streaming products (Dragon's Mout
 
 <summary>What is the maximum number of accounts I can subscribe to using Yellowstone gRPC?</summary>
 
-For shared plans, the current limit is 200,000 subscriptions per IP. See [Rate and connection limits](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/get-started/rate-and-connection-limits) for connection caps and per-pool detail.
+For shared plans, the current limit is 200,000 subscriptions per IP. See [Rate and connection limits](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/rate-and-connection-limits) for connection caps and per-pool detail.
 
 For dedicated nodes, there's no set limit. However, opening too many subscriptions for your servers to ingest can cause backpressure from your backend, leading to poor streaming performance. Please check that your server can handle the amount of data you are subscribing to.
 

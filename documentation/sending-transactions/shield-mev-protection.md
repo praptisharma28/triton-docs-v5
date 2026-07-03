@@ -42,7 +42,7 @@ Shield only works with Shield-enabled senders (Triton RPC, or the Jet TPU client
 
 ## Finding and using an existing policy
 
-Browse the policy explorer at [validators.app/yellowstone-shield](https://www.validators.app/yellowstone-shield?locale=en\&network=mainnet) to see all existing policies, which validators each includes or excludes, and when it was last updated, then copy the policy address for your transactions. Common policy types:
+Browse the policy explorer at [validators.app/yellowstone-shield](https://www.validators.app/yellowstone-shield?network=mainnet) to see all existing policies, which validators each includes or excludes, and when it was last updated, then copy the policy address for your transactions. Common policy types:
 
 * **Allow lists**: top validators by stake, geographically distributed validators, performance-based selection.
 * **Block lists (deny lists)**: validators known for sandwich attacks or frontrunning, poor performers, community-flagged validators.

@@ -60,7 +60,7 @@ This doesn't affect transaction submission, as it's routed through a specialised
 
 <summary>What happens if I hit my rate limit?</summary>
 
-If you've received `HTTP 429` error, pause requests for 10 seconds to clear the limit. We strongly recommend implementing a backoff-and-retry mechanism. See Handle 429 rate-limit errors for the pattern, or the [Rate and connection limits](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/get-started/rate-and-connection-limits) page for the budgets and headers.
+If you've received `HTTP 429` error, pause requests for 10 seconds to clear the limit. We strongly recommend implementing a backoff-and-retry mechanism. See Handle 429 rate-limit errors for the pattern, or the [Rate and connection limits](https://app.gitbook.com/s/ACym6ZbIwDBDKhyKgDGy/rate-and-connection-limits) page for the budgets and headers.
 
 </details>
 
