@@ -41,13 +41,12 @@ After you get a quote from `/quote`:
 
 Metis builds the ready-to-sign transaction for you.
 
+For the full parameter set and response shapes, see the [Metis docs](https://metis.builders/docs/get-quote).
+
 ## Pricing
 
 The Metis swap API uses metered billing and is not rate-limited. It is `$0.08 / GB` of bandwidth plus `$80 / million` Metis queries. Because there are no rate limits, monitor your usage to avoid unexpected costs.
 
-## API documentation
-
-For the full parameter set and response shapes, see the [Metis docs](https://metis.builders/docs/get-quote). Background: [Metis API for Solana swaps is live on Triton](https://blog.triton.one/metis-api-for-solana-swaps-is-live-on-triton/).
 
 ***
 
