@@ -20,7 +20,7 @@ You build and sign a transaction, then submit it so a validator includes it in a
 Every transaction sent to a Triton endpoint is handled by **Jet**, Triton's SWQoS-powered production sending engine: it tracks the leader schedule and forwards your transaction directly to the leader's TPU. You can submit through two managed routes depending on your use case, or self-host the Jet TPU client for full client-side control.
 
 * **`sendTransaction`** is the standard Solana JSON-RPC method. We route it through our specialised Jet engine for the lowest latency and apply SWQoS for higher reliability.
-* **`/sendtx`** is a direct HTTP submission endpoint that takes the same delivery path as `sendTransaction`, but skips the JSON-RPC envelope, so there is no JSON parsing, no CORS preflight, and a smaller payload. It delivers lower latency and needs no RPC client library.
+* **`/sendtx`** is a direct HTTP submission endpoint that takes the same delivery path as `sendTransaction`, but skips the JSON-RPC envelope, so there is no JSON parsing or CORS preflight, and a smaller payload. It delivers lower latency and needs no RPC client library.
 * **[Jet TPU client](https://github.com/rpcpool/yellowstone-jet)** is an open-source Rust crate you self-host for full client-side control and absolute minimal latency: once you wire it up, it sends your transactions straight to validator TPUs over QUIC, with per-transaction callbacks, custom routing, and Shield integration out of the box.
 
 |                       |   `sendTransaction`   |             `/sendtx`             | Jet TPU client (self-hosted) |

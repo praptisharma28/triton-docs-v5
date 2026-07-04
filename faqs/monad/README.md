@@ -28,7 +28,7 @@ JSON-RPC over HTTPS and WebSocket (WSS) endpoints, served from shared RPC pools.
 
 <summary>Does Triton offer webhooks, a Data API, or custom indexing for Monad?</summary>
 
-No. On Monad, Triton provides standard JSON-RPC over HTTPS and WebSocket (WSS), plus a Triton-operated validator. There are no webhooks, no Data API, and no custom indexing.
+No. On Monad, Triton provides standard JSON-RPC over HTTPS and WebSocket (WSS), plus a Triton-operated validator. There are no webhooks, Data API, or custom indexing.
 
 </details>
 

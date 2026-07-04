@@ -41,7 +41,7 @@ Every Triton subscription gives you the complete feature set, free devnet, and f
 
 ### Dedicated nodes
 
-A single-purpose Solana node with isolated capacity, no noisy neighbours, no rate limits, and your choice of regions for easy colocation. It fits high-throughput workloads that need full bandwidth, dedicated compute, flat streaming costs, and the lowest, steadiest backend latency.
+A single-purpose Solana node with isolated capacity, no noisy neighbours or rate limits, and your choice of regions for easy colocation. It fits high-throughput workloads that need full bandwidth, dedicated compute, flat streaming costs, and the lowest, steadiest backend latency.
 
 gRPC streaming nodes are the most common dedicated setup. For other custom setups like indexing or history, we also offer managed solutions: [contact us](https://triton.one/contact). See [dedicated nodes](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/dedicated-nodes).
 
