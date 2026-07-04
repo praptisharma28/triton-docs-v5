@@ -24,7 +24,7 @@ layout:
 
 ## **Overview**
 
-An Endpoint is what clients will call to consume the RPC. Endpoints belong to a Subscription, which holds its metadata. An endpoint's name is assigned to you when it's created and is randomly assigned.
+An Endpoint is what clients will call to consume the RPC. Endpoints belong to a Subscription, which holds its metadata. An endpoint's name is randomly assigned when it's created.
 
 ## List endpoints
 
@@ -102,7 +102,7 @@ Returns a hash with the `endpoints` key containing an array of endpoints objects
 
 ## **Create endpoint**
 
-<mark style="color:red;">This API is only limited to account management API tokens created with the reseller role.</mark>
+<mark style="color:red;">This API is available only to account management API tokens created with the reseller role.</mark>
 
 <mark style="color:blue;">`POST /api/v1/subscriptions/:subscription_uuid/endpoints`</mark>
 
@@ -251,7 +251,7 @@ All submitted keys, plus the following are returned:
 
 ## **Activate endpoint**
 
-<mark style="color:red;">This API is only limited to accoutn management API tokens created with the reseller role.</mark>
+<mark style="color:red;">This API is available only to account management API tokens created with the reseller role.</mark>
 
 <mark style="color:blue;">`PUT /api/v1/endpoints/:endpoint_uuid/activate`</mark>
 
@@ -275,7 +275,7 @@ curl -X PUT 'https://customers.triton.one/api/v1/endpoints/74ea9d9a-4b2a-4f01-af
 
 ## **Deactivate endpoint**
 
-<mark style="color:red;">This API is only limited to account managemrnt API tokens created with the reseller role.</mark>
+<mark style="color:red;">This API is available only to account management API tokens created with the reseller role.</mark>
 
 <mark style="color:blue;">`PUT /api/v1/endpoints/:endpoint_uuid/deactivate`</mark>
 

@@ -151,14 +151,12 @@ Yes, all invoices are due within 7 days of the issue date.
 
 For invoiced customers, we accept:
 
-```
-- USDC (SPL on Solana, ERC-20 on Ethereum, Tron, Polygon)
-- Payments through hel.io (USDC)
-- Credit cards via Coinflow
-- Wire transfers in GBP and USD
+* USDC (SPL on Solana, ERC-20 on Ethereum, Tron, Polygon)
+* Payments through hel.io (USDC)
+* Credit cards via Coinflow
+* Wire transfers in GBP and USD
 
 For pay-as-you-go, we accept stablecoins only.
-```
 
 </details>
 
@@ -168,9 +166,7 @@ For pay-as-you-go, we accept stablecoins only.
 
 For pay-as-you-go customers, you can just stop using the service. Your prepaid balance stays valid for one year and expires after that. There's nothing to cancel.
 
-```
 For invoiced customers, give one calendar month's notice through the support channel in your [customer dashboard](https://customers.triton.one).
-```
 
 </details>
 

@@ -16,7 +16,7 @@ This is a standard list of common JSON-RPC error codes you may experience. For a
 | -32601     | Method not found > the method you are trying to use is either invalid or does not exist. Verify the method is enabled in your custom RPC configuration.  |
 | -32602     | Invalid method parameter(s). Double-check your request format against Solana's JSON-RPC spec.                                                            |
 | -32603     | Internal JSON-RPC error. Retry the request after a short delay.                                                                                          |
-| -32604     | Procedure is method > ID field not provided in the request, please check your configuration.                                                             |
+| -32604     | ID field not provided in the request; check your configuration.                                                             |
 | -32700     | JSON parse error > JSON received from the server fails to be parsed. Check your JSON structure.                                                          |
 
 ## List of uncommon Web3JS errors

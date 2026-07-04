@@ -166,7 +166,7 @@ Returns a hash with the `account` key containing an account object. The response
 
 ## **Create account**
 
-<mark style="color:red;">This API is only limited to account management API tokens created with the admin role.</mark>
+<mark style="color:red;">This API is available only to account management API tokens created with the admin role.</mark>
 
 ## **Update account**
 
@@ -178,7 +178,7 @@ Update account that the current authentication token has access to.
 
 All parameters are optional unless marked as required.
 
-<table><thead><tr><th width="311">Name</th><th width="155.33333333333331">Type</th><th>Description</th></tr></thead><tbody><tr><td>name <mark style="color:red;">*required</mark></td><td><code>string</code></td><td>A human readable display name to describe the subscription.</td></tr><tr><td>billing_address1</td><td><code>string</code></td><td></td></tr><tr><td>billing_address2</td><td><code>string</code></td><td></td></tr><tr><td>billing_address3</td><td><code>string</code></td><td></td></tr><tr><td>billing_city</td><td><code>string</code></td><td></td></tr><tr><td>billing_state_or_province</td><td><code>string</code></td><td></td></tr><tr><td>billing_postal_code</td><td><code>string</code></td><td></td></tr><tr><td>billing_country_code</td><td><code>string</code></td><td></td></tr><tr><td>telephone_country_code</td><td><code>string</code></td><td></td></tr><tr><td>telephone</td><td><code>string</code></td><td></td></tr></tbody></table>
+<table><thead><tr><th width="311">Name</th><th width="155.33333333333331">Type</th><th>Description</th></tr></thead><tbody><tr><td>name <mark style="color:red;">*required</mark></td><td><code>string</code></td><td>A human-readable display name to describe the account.</td></tr><tr><td>billing_address1</td><td><code>string</code></td><td></td></tr><tr><td>billing_address2</td><td><code>string</code></td><td></td></tr><tr><td>billing_address3</td><td><code>string</code></td><td></td></tr><tr><td>billing_city</td><td><code>string</code></td><td></td></tr><tr><td>billing_state_or_province</td><td><code>string</code></td><td></td></tr><tr><td>billing_postal_code</td><td><code>string</code></td><td></td></tr><tr><td>billing_country_code</td><td><code>string</code></td><td></td></tr><tr><td>telephone_country_code</td><td><code>string</code></td><td></td></tr><tr><td>telephone</td><td><code>string</code></td><td></td></tr></tbody></table>
 
 **Request**
 
@@ -204,7 +204,7 @@ curl -X PUT 'https://customers.triton.one/api/v1/accounts/c6b8c375-27ab-4531-94f
 
 **Response**
 
-Returns a hash with the `account` key containing an account object. The response data for account object is the same as for <mark style="color:blue;">`GET /api/v1/accounts/:account-uuid`</mark> nad <mark style="color:blue;">`GET /api/v1/accounts`</mark>
+Returns a hash with the `account` key containing an account object. The response data for account object is the same as for <mark style="color:blue;">`GET /api/v1/accounts/:account-uuid`</mark> and <mark style="color:blue;">`GET /api/v1/accounts`</mark>
 
 ```json
 {

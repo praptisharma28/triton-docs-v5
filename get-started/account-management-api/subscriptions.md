@@ -217,7 +217,7 @@ Returns a hash with the `subscription` key containing a subscription object. The
 
 ## **Create subscription**
 
-<mark style="color:red;">This API is only limited to account management API tokens created with the reseller role.</mark>
+<mark style="color:red;">This API is available only to account management API tokens created with the reseller role.</mark>
 
 <mark style="color:blue;">`POST /api/v1/subscriptions`</mark>
 
@@ -226,7 +226,7 @@ Returns a hash with the `subscription` key containing a subscription object. The
 | Name                                                          | Type       | Description                                                                                                                          |
 | ------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | account\_uuid <mark style="color:red;">\*required</mark>      | `string`   | Primary key of the account that the subscription should belong to.                                                                   |
-| subscription\_type <mark style="color:red;">\*required</mark> | `string`   | Name of the subscription type. Obtained from \<link>Subscription Types                                                               |
+| subscription\_type <mark style="color:red;">\*required</mark> | `string`   | Name of the subscription type. Obtained from [Subscription types](subscription-types.md)                                                               |
 | name <mark style="color:red;">\*required</mark>               | `string`   | A human readable display name to describe the subscription.                                                                          |
 | starts\_at                                                    | `datetime` | The scheduled timestamp for the subscription to become active. Defaults to null, which means the subscription is immediately active. |
 | ends\_at                                                      | `datetime` | The timestamp for which the subscription becomes inactive. Defaults to null, which means the subscription never becomes inactive.    |
@@ -338,7 +338,7 @@ curl -X PUT 'https://customers.triton.one/api/v1/subscriptions/c92a9cea-47cc-494
 
 **Response**
 
-Returns a hash with the `subscription` key containing a subscription object. The response data for subscription object is the same as for <mark style="color:blue;">`GET /api/v1/subscriptions/:subscription-uuid`</mark> nad <mark style="color:blue;">`GET /api/v1/subscription`</mark>
+Returns a hash with the `subscription` key containing a subscription object. The response data for subscription object is the same as for <mark style="color:blue;">`GET /api/v1/subscriptions/:subscription-uuid`</mark> and <mark style="color:blue;">`GET /api/v1/subscriptions`</mark>
 
 ```json
 {
@@ -375,7 +375,7 @@ Returns a hash with the `subscription` key containing a subscription object. The
 
 ## **Activate subscription**
 
-<mark style="color:red;">This API is only limited to account management API tokens created with the reseller role.</mark>
+<mark style="color:red;">This API is available only to account management API tokens created with the reseller role.</mark>
 
 <mark style="color:blue;">`PUT /api/v1/subscriptions/:subscription_uuid/activate`</mark>
 
@@ -399,7 +399,7 @@ curl -X PUT 'https://customers.triton.one/api/v1/subscriptions/74ea9d9a-4b2a-4f0
 
 ## **Deactivate subscription**
 
-<mark style="color:red;">This API is only limited to account management API tokens created with the reseller role.</mark>
+<mark style="color:red;">This API is available only to account management API tokens created with the reseller role.</mark>
 
 <mark style="color:blue;">`PUT /api/v1/subscriptions/:subscription_uuid/deactivate`</mark>
 

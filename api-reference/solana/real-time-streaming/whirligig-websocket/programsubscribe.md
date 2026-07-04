@@ -132,7 +132,7 @@ async fn main() -> Result<()> {
 
 ## Parameters
 
-**`0`** · string !required
+**`0`** · string · required
 
 Pubkey of the `program_id`, as base-58 encoded string
 
@@ -140,8 +140,9 @@ Pubkey of the `program_id`, as base-58 encoded string
 
 Optional configuration object.
 
-**`commitment`** · string !values processed confirmed finalized !default finalized
+**`commitment`** · string · default `finalized`
 
+Values: `processed`, `confirmed`, `finalized`
 The commitment describes how finalized a block is at that point in time. See [Configuring State Commitment](https://solana.com/docs/rpc#configuring-state-commitment).
 
 **`filters`** · array
@@ -152,8 +153,9 @@ Filter results using up to 4 filter objects. See [Filtering](https://solana.com/
 The node validates and optimizes the supplied filters before the subscription is created.
 {% endhint %}
 
-**`encoding`** · string !values base58 base64 base64+zstd binary jsonParsed !default binary
+**`encoding`** · string · default `binary`
 
+Values: `base58`, `base64`, `base64+zstd`, `binary`, `jsonParsed`
 Encoding format for account data.
 
 * `base58` is slow.
@@ -178,8 +180,9 @@ Data slicing is only available for `base58`, `base64`, `base64+zstd`, and `binar
 `base58` and `binary` use base-58 encoding and fail if the selected payload is more than 128 bytes after slicing. Use `base64` for larger accounts.
 {% endhint %}
 
-**`withContext`** · bool !values true false !default false
+**`withContext`** · bool · default `false`
 
+Values: `true`, `false`
 Accepted for compatibility.
 
 {% hint style="info" %}

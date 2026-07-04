@@ -104,7 +104,7 @@ Add a new token that can be used to access the Subscription's Endpoints
 | Name                                                  | Type     | Description                                                                                                                                       |
 | ----------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | name <mark style="color:red;">\*required</mark>       | `string` | A human readable name to describe the token.                                                                                                      |
-| rate\_tier <mark style="color:red;">\*required</mark> | `string` | The name of the \<link>Rate Tier for this token, which defines rate limits for it. Each token incurs costs based on the Rate Tier defined for it. |
+| rate\_tier <mark style="color:red;">\*required</mark> | `string` | The name of the [rate tier](rate-limits.md) for this token, which defines rate limits for it. Each token incurs costs based on the Rate Tier defined for it. |
 
 **Request**
 
@@ -127,7 +127,7 @@ All submitted keys, plus the following are returned:
 | Name           | Type     | Description                                                                |
 | -------------- | -------- | -------------------------------------------------------------------------- |
 | uuid           | `string` | The generated primary key to reference this token.                         |
-| auth\_username | `string` | A randomly generated value that can be for basic authentication if needed. |
+| auth\_username | `string` | A randomly generated value that can be used for basic authentication if needed. |
 | value          | `string` | The value used for authentication.                                         |
 
 ```json
@@ -146,7 +146,7 @@ All submitted keys, plus the following are returned:
 
 ## **Activate token**
 
-<mark style="color:red;">This API is only limited to account management API tokens created with the reseller and operator role.</mark>
+<mark style="color:red;">This API is available only to account management API tokens created with the reseller and operator role.</mark>
 
 <mark style="color:blue;">`PUT /api/v1/tokens/:token_uuid/activate`</mark>
 
@@ -170,7 +170,7 @@ curl -X PUT 'https://customers.triton.one/api/v1/tokens/74ea9d9a-4b2a-4f01-af47-
 
 ## **Deactivate token**
 
-<mark style="color:red;">This API is only limited to account management API tokens created with the reseller and operator role.</mark>
+<mark style="color:red;">This API is available only to account management API tokens created with the reseller and operator role.</mark>
 
 <mark style="color:blue;">`PUT /api/v1/tokens/:token_uuid/deactivate`</mark>
 

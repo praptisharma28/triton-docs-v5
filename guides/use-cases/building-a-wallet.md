@@ -252,7 +252,7 @@ Each line is a different SPL token the wallet holds. The address is the **mint**
 {% step %}
 ### Stream real-time balance updates with Dragon's Mouth
 
-Instead of polling on a timer, Dragon's Mouth pushes an update the moment an account changes, at confirmed commitment, typically within one slot of the transaction landing. Subscribe to your wallet's pubkey to get notified instantly when SOL is received or sent.
+Rather than making you poll on a timer, Dragon's Mouth pushes an update the moment an account changes, at confirmed commitment, typically within one slot of the transaction landing. Subscribe to your wallet's pubkey to get notified instantly when SOL is received or sent.
 
 {% tabs %}
 {% tab title="TypeScript" %}
@@ -851,7 +851,7 @@ Sent: 5ofMHS3yeHrLReLkij5V9SvcrTZoKajJYaLw8aos2UeM2cupWtARXp1Jrt9WsAKTCcqPbja2vQ
 Status: confirmed ✅
 ```
 
-The response is a base58-encoded transaction signature (88 characters). This is your receipt, use it to look up the transaction in an explorer or poll `getSignatureStatus` to confirm it landed.
+The response is a base58-encoded transaction signature (88 characters). This is your receipt: use it to look up the transaction in an explorer or poll `getSignatureStatus` to confirm it landed.
 {% endstep %}
 
 {% step %}

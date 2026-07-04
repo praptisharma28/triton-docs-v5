@@ -30,7 +30,7 @@ How to land Solana transactions reliably, especially under congestion.
 
 ## Route through staked validators (SWQoS)
 
-* **Add SWQoS transaction bandwidth to your endpoint** (now free on request) for extra stake-weighted delivery: your transactions go over the reserved private connection pools of staked validators, bypassing the congested public TPU ports and raising delivery success.
+* **Send through SWQoS-staked connections.** Stake-weighted QoS is applied on every Triton endpoint by default at no extra cost, so if you send through Triton, there is nothing to enable: your transactions go over the reserved private connection pools of staked validators, bypassing the congested public TPU ports and raising delivery success.
 * Combine with priority fees, or Jito, for more speed during contention.
 
 ## Use the direct submission endpoint for latency

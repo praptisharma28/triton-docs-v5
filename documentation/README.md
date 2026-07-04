@@ -19,7 +19,7 @@ We offer a complete Solana stack for any use case: shared infrastructure, dedica
 
 ### Shared infrastructure
 
-Every Triton subscription gives you the complete feature set, free devnet, and flexible connection and rate limits. We have split Solana's read layer into purpose-built, independent components that scale automatically and absorb spikes seamlessly. Combined with global distribution and instant auto-failover, the shared cluster is the right answer for most workloads.
+Every Triton subscription gives you the complete feature set, free devnet, and flexible connection and rate limits. We have split Solana's read layer into purpose-built, independent components that scale automatically and absorb spikes. Combined with global distribution and instant auto-failover, the shared cluster is the right answer for most workloads.
 
 {% tabs %}
 {% tab title="Reading state" %}

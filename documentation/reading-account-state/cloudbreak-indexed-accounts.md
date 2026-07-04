@@ -287,7 +287,7 @@ Without `withContext`, `result` is the array directly rather than the `{ context
 
 ### getTokenAccountsByOwner
 
-Returns the Original and Token-2022 token accounts owned by a wallet, both from the. Cloudbreak indexes the token owner and mint as dedicated columns, so this method stays fast even though the SPL Token program holds hundreds of millions of accounts. Compatible with the standard [Solana `getTokenAccountsByOwner` API](https://solana.com/docs/rpc/http/gettokenaccountsbyowner).
+Returns the Original and Token-2022 token accounts owned by a wallet. Cloudbreak indexes the token owner and mint as dedicated columns, so this method stays fast even though the SPL Token program holds hundreds of millions of accounts. Compatible with the standard [Solana `getTokenAccountsByOwner` API](https://solana.com/docs/rpc/http/gettokenaccountsbyowner).
 
 {% hint style="info" %}
 For SPL token data, use the token methods rather than a raw `getProgramAccounts` against the Token program. The token methods hit purpose-built indexes; an unfiltered `getProgramAccounts` over the entire Token program is not indexed and is not a supported access pattern.

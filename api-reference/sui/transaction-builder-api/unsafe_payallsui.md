@@ -36,7 +36,7 @@ curl "https://<your-endpoint>.mainnet.sui.rpcpool.com/<your-token>" -s -X POST \
 | `signer`      | SuiAddress          | Yes      | the transaction signer's Sui address                                              |
 | `input_coins` | array               | Yes      | the Sui coins to be used in this transaction, including the coin for gas payment. |
 | `recipient`   | SuiAddress          | Yes      | the recipient address,                                                            |
-| `gas_budget`  | BigInt\_for\_uint64 | Yes      | the gas budget, the transaction will fail if the gas cost exceed the budget       |
+| `gas_budget`  | BigInt\_for\_uint64 | Yes      | the gas budget; the transaction fails if the gas cost exceeds the budget       |
 
 ## Response
 

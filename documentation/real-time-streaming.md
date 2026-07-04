@@ -41,7 +41,7 @@ sequenceDiagram
 {% endcolumn %}
 {% endcolumns %}
 
-You get sub-slot latency, structured Protobuf payloads, and lower costs, also significantly cheaper than the equivalent polling traffic, as it only incurs bandwidth cost.
+You get sub-slot latency, structured Protobuf payloads, and significantly lower costs than the equivalent polling traffic, since streaming bills bandwidth only.
 
 For teams with heavy polling codebases, the [Account Sync](reading-account-state/account-sync.md) feature delivers streaming-grade read speed and pricing through a one-line SDK swap.
 
@@ -83,7 +83,7 @@ It's normal to combine more than one product in a pipeline. Common patterns:
 
 ## Limitations
 
-Light Protocol program is excluded from all our streams and is also unavailable via `getProgramAccounts`. At peak load, it accounted for over 50% of all Geyser traffic, making it impractical to include in standard streams
+The Light Protocol program is excluded from all our streams and is also unavailable via `getProgramAccounts`. At peak load, it accounted for over 50% of all Geyser traffic, making it impractical to include in standard streams.
 
 | Program                         | Address                                       |
 | ------------------------------- | --------------------------------------------- |

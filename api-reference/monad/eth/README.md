@@ -1,7 +1,7 @@
 ---
-description: Call Monad over the standard Ethereum JSON-RPC interface, which is EVM-equivalent.
-  The standard Ethereum `eth_*`, `net_*`, and `web3_*` methods, served by Triton
-  on Monad.
+description: >-
+  The standard Ethereum `eth_*`, `net_*`, and `web3_*` methods, served by
+  Triton on Monad.
 ---
 
 # Ethereum JSON-RPC

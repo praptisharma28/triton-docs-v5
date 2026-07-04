@@ -12,7 +12,7 @@ description: >-
 
 <summary>Do you support devnet?</summary>
 
-Yes. Triton offers devnet and testnet endpoints alongside mainnet, with Geyser gRPC and WebSocket streaming available on them. Contact support from your [customer dashboard](https://customers.triton.one) to set up a devnet endpoint.
+Yes. Triton offers devnet endpoints alongside mainnet, with Geyser gRPC and WebSocket streaming available on them. Contact support from your [customer dashboard](https://customers.triton.one) to set up a devnet endpoint.
 
 </details>
 
@@ -80,7 +80,7 @@ Replace `https` with `wss` in your RPC endpoint URL. For example: `wss://<your-e
 
 <summary>How can I use Geyser plugins?</summary>
 
-Geyser plugins can be enabled on our dedicated Solana nodes. They provide powerful, real-time streams of on-chain data. Contact our support team to discuss your specific needs and we can configure a node for you.
+Geyser plugins can be enabled on our dedicated Solana nodes. They provide real-time streams of on-chain data. Contact our support team to discuss your specific needs and we can configure a node for you.
 
 </details>
 
@@ -148,7 +148,7 @@ Your handler is processing events slower than they arrive. Filter more aggressiv
 
 <summary>Do I need to send keepalive pings?</summary>
 
-Sometimes. Some cloud providers (e.g. Cloudflare) close idle streams. If you see disconnections after periods of low traffic, send a periodic ping. Dragon's Mouth gRPC accepts a `ping` field on the subscribe request; Whirligig accepts `{"jsonrpc":"2.0","method":"ping"}`. The server returns `pong` every 15 seconds you can use to confirm liveness.
+Sometimes. Some cloud providers (e.g. Cloudflare) close idle streams. If you see disconnections after periods of low traffic, send a periodic ping. Dragon's Mouth gRPC accepts a `ping` field on the subscribe request; Whirligig accepts `{"jsonrpc":"2.0","method":"ping"}`. The server returns a `pong` every 15 seconds, which you can use to confirm liveness.
 
 </details>
 

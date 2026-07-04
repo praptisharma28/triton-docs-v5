@@ -72,7 +72,7 @@ description: >-
 
 **Problem:** Configuration mismatch or authentication server error on Triton One's side.
 
-**Explanation:** Our backend might have failed to update the whitelist or key permissions, potentially blocking legitimate access.
+**Explanation:** Our backend might have failed to update the whitelist or key permissions, potentially blocking legitimate access. Report any of these symptoms to support:
 
 * Latency
 * Slow response time

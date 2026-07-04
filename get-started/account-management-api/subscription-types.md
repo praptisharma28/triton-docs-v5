@@ -30,7 +30,7 @@ The developer subscription is used to encapsulate the devnet and testnet Solana 
 
 ## **List subscription types**
 
-<mark style="color:red;">This API is only limited to account management API tokens created with the reseller role.</mark>
+<mark style="color:red;">This API is available only to account management API tokens created with the reseller role.</mark>
 
 <mark style="color:blue;">`GET /api/v1/subscription_types`</mark>
 
@@ -86,7 +86,7 @@ Returns all subscription types that a Subscription can get created with.
 
 ## **Create subscription type / update subscription type**
 
-<mark style="color:red;">This API is only limited to account management API tokens created with the admin role.</mark>
+<mark style="color:red;">This API is available only to account management API tokens created with the admin role.</mark>
 
 ***
 

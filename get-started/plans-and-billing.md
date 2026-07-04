@@ -31,7 +31,7 @@ We've compared the billing and infrastructure types we offer, so you can pick th
 | **Geo-distribution**           | Routed across 10 cities on three continents                                                | Deployed in one location of your choosing                                                                |
 | **Feature coverage**           | Every service and network is included                                                      | Single-network streaming nodes and custom setups: [contact sales](https://triton.one/contact) to discuss |
 | **Latency**                    | Low: routed to the nearest data centre                                                     | Minimal: if colocated with your backend                                                                  |
-| **Spike absorption**           | Shared clusters are sized to absorb network-wide spikes seamlessly                         | Fixed node capacity, dedicated to your traffic; auto-failover to shared cluster                          |
+| **Spike absorption**           | Shared clusters are sized to absorb network-wide spikes                         | Fixed node capacity, dedicated to your traffic; auto-failover to shared cluster                          |
 | **Noisy neighbours**           | Low: we overprovision our infrastructure to avoid network-wide load affecting your traffic | None, the node serves only your traffic                                                                  |
 | **Minimum cost**               | $125 (Pay as you go, valid for 12 months)                                                  | Fixed monthly price, varies by workload                                                                  |
 | **Connection and rate limits** | Flexible, can be raised at no extra cost                                                   | None                                                                                                     |
@@ -72,7 +72,7 @@ On shared infrastructure, you pay as you go at the following rates:
 
 {% tabs %}
 {% tab title="Solana" %}
-<table><thead><tr><th width="322.87109375">Service</th><th>Rate</th></tr></thead><tbody><tr><td>Dragon's Mouth gRPC, Fumarole, Whirligig, WebSockets, other streaming</td><td>$0.08 / GB bandwidth</td></tr><tr><td>Standard RPC, unary gRPC, indexed accounts, ledger queries (plus gTFA)</td><td>$10 / million calls + $0.08 / GB</td></tr><tr><td>Streaming services, Titan Prime API</td><td>$0.08 / GB bandwidth</td></tr><tr><td>Metaplex DAS API</td><td>$50 / million calls + $0.08 / GB</td></tr><tr><td>Metis API</td><td>$80 / million calls + $0.08 / GB</td></tr></tbody></table>
+<table><thead><tr><th width="322.87109375">Service</th><th>Rate</th></tr></thead><tbody><tr><td>Dragon's Mouth gRPC, Fumarole, Whirligig, WebSockets, other streaming</td><td>$0.08 / GB bandwidth</td></tr><tr><td>Standard RPC, unary gRPC, indexed accounts, ledger queries (plus gTFA)</td><td>$10 / million calls + $0.08 / GB</td></tr><tr><td>Titan Prime API</td><td>$0.08 / GB bandwidth</td></tr><tr><td>Metaplex DAS API</td><td>$50 / million calls + $0.08 / GB</td></tr><tr><td>Metis API</td><td>$80 / million calls + $0.08 / GB</td></tr></tbody></table>
 {% endtab %}
 
 {% tab title="Sui" %}

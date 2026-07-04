@@ -44,7 +44,7 @@ curl "https://<your-endpoint>.mainnet.sui.rpcpool.com/<your-token>" -s -X POST \
 | `type_arguments`    | array                          | Yes      | the type arguments of the Move function                                                                                                   |
 | `arguments`         | array                          | Yes      | the arguments to be passed into the Move function, in [SuiJson](https://docs.sui.io/build/sui-json) format                                |
 | `gas`               | ObjectID                       | No       | gas object to be used in this transaction, node will pick one from the signer's possession if not provided                                |
-| `gas_budget`        | BigInt\_for\_uint64            | Yes      | the gas budget, the transaction will fail if the gas cost exceed the budget                                                               |
+| `gas_budget`        | BigInt\_for\_uint64            | Yes      | the gas budget; the transaction fails if the gas cost exceeds the budget                                                               |
 | `execution_mode`    | SuiTransactionBlockBuilderMode | No       | Whether this is a Normal transaction or a Dev Inspect Transaction. Default to be `SuiTransactionBlockBuilderMode::Commit` when it's None. |
 
 ## Response

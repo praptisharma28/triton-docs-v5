@@ -162,7 +162,7 @@ The response prints straight to your terminal.
 
 Then check:
 
-1. **You got a `result`, not an `error`.** A JSON-RPC error has an `error` object with a `code`. The common ones are in the FAQs below.
+1. **You got a `result`, not an `error`.** A JSON-RPC error has an `error` object with a `code`. The common ones are covered in [Error handling](https://app.gitbook.com/s/VeEf321LwceAVlSk9USV/solana/error-handling).
 2. **The account exists.** `getAccountInfo` returns `null` when the address holds no account. The USDC mint above always returns data.
 
 ### Expected response

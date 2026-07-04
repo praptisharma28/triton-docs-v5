@@ -1,5 +1,5 @@
 ---
-description: Build common transactions server-side, returning an unsigned transaction ready to sign.
+description: >-
   Build unsigned transactions server-side with the unsafe_* methods. Most
   applications should build transactions with the Sui SDK instead.
 ---

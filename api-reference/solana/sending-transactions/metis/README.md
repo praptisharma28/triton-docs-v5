@@ -28,7 +28,7 @@ These quote a swap and build it for signing:
 | -------- | ------------ |
 | `/price` | Token prices from the Metis engine. |
 | `/quote` | A swap route and quote. |
-| `/swap` | A signed-ready swap transaction built from a quote. |
+| `/swap` | A ready-to-sign swap transaction built from a quote. |
 
 ***
 

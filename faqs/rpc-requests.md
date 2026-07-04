@@ -86,7 +86,7 @@ Every endpoint exposes its live limits at `/ratelimits`. Run `curl https://<your
 
 <summary>Do you support devnet?</summary>
 
-Yes. Triton runs Solana mainnet, testnet, and devnet, with full compatibility with the standard JSON-RPC and WebSocket APIs across all three. Contact support from your [customer dashboard](https://customers.triton.one) to add a devnet endpoint.
+Yes. Triton runs Solana mainnet and devnet, with full compatibility with the standard JSON-RPC and WebSocket APIs on both. Contact support from your [customer dashboard](https://customers.triton.one) to add a devnet endpoint.
 
 </details>
 

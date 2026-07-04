@@ -1,5 +1,5 @@
 ---
-description: Returns the latest recent blockhash and its last valid block height.
+description: Returns the latest blockhash and its last valid block height.
 layout:
   width: default
   title:

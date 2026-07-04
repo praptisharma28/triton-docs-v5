@@ -34,7 +34,7 @@ Rate limits do not affect pricing. Our products are billed by usage (per million
 
 ## **Get rate limits**
 
-<mark style="color:red;">This API is only limited to account management API tokens created with the reseller role.</mark>
+<mark style="color:red;">This API is available only to account management API tokens created with the reseller role.</mark>
 
 <mark style="color:blue;">`GET /api/v1/rate_tiers`</mark>
 

@@ -59,7 +59,7 @@ Equal to Solana's [`RpcBlockSubscribeConfig`](https://docs.rs/solana-client/late
 
 ## Notification
 
-The subscribe call returns a subscription id (`{"jsonrpc":"2.0","result":70527,"id":1}`). Updates then arrive as `transactionNotification` messages, each with a `context` (slot) and a `value` carrying the slot and the full transaction — the encoded transaction, its `meta`, and its `version`. Long fields are truncated (`...`) in the example below:
+The subscribe call returns a subscription id (`{"jsonrpc":"2.0","result":70527,"id":1}`). Updates then arrive as `transactionNotification` messages, each with a `context` (slot) and a `value` carrying the slot and the full transaction: the encoded transaction, its `meta`, and its `version`. Long fields are truncated (`...`) in the example below:
 
 ```json
 {

@@ -270,7 +270,7 @@ Whether to populate the rewards array. If parameter not provided, the default in
 
 ## Result
 
-If specified block is not confirmed result will be `null`. Otherwise, an object containing:
+If the specified block is not confirmed, the result is `null`. Otherwise, an object containing:
 
 This top-level response uses the shared [Confirmed Blocks](https://solana.com/docs/rpc/json-structures#confirmed-blocks) structure.
 

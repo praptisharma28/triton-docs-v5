@@ -6,7 +6,7 @@ description: A Solana validator run on Triton infrastructure under your own bran
 
 Running a validator helps protect and decentralize the Solana network and earns continued rewards through the stake you can attract to your validator.
 
-Our hosted validators utilize the infrastructure we have built over time as a top RPC provider and running validators on the Solana network.
+Our hosted validators run on the infrastructure we have built as a top RPC provider and long-time validator operator on Solana.
 
 On the validators we run, we ensure:
 

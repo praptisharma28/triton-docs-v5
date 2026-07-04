@@ -29,7 +29,7 @@ Thorofare lives in the Triton GitHub. Clone, build, and point it at any RPC or g
 The full setup, profile examples, and metric interpretation are in the [Thorofare blog post](https://blog.triton.one/how-to-benchmark-solana-rpc-endpoints/).
 
 {% hint style="info" %}
-Thorofare runs on your machine. Run it from a backend close to where your real production traffic originates, benchmarking from a different region distorts every result.
+Thorofare runs on your machine. Run it from a backend close to where your real production traffic originates; benchmarking from a different region distorts every result.
 {% endhint %}
 
 ## Common pitfalls

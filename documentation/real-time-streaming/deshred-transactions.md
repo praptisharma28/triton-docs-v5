@@ -53,7 +53,7 @@ The example below subscribes to the `SubscribeDeshred` stream, filters out vote 
 {% tabs %}
 {% tab title="TypeScript" %}
 ```typescript
-
+import Client, {
   SubscribeDeshredRequest,
 } from "@triton-one/yellowstone-grpc";
 

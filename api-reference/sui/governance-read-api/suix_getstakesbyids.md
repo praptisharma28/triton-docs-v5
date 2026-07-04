@@ -1,6 +1,6 @@
 ---
 description: >-
-  Return one or more [DelegatedStake]. If a Stake was withdrawn its status will
+  Return one or more `DelegatedStake` objects. If a stake was withdrawn, its status will
   be Unstaked.
 ---
 
