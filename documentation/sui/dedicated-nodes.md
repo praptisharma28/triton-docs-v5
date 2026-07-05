@@ -45,7 +45,7 @@ A dedicated full node retains roughly the most recent two days (two epochs) of h
 
 ## Pricing
 
-Dedicated Sui nodes start at `$2,000 / month` per node. gRPC streaming is unmetered and included in the node price, with no overage fees. Included with every dedicated endpoint: isolated performance dedicated to your traffic, custom geolocated deployment, advanced controls and tuning for your workload, GeoDNS routing and automatic failover, 1-1 support from senior engineers, and the Seal and Walrus APIs.
+Dedicated Sui nodes start at `$2,000 / month` per node. gRPC streaming is unmetered and included in the node price, with no overage fees.
 
 Non-streaming services on a dedicated node are billed at the standard metered rates:
 
