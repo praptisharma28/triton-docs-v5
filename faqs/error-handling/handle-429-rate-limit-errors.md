@@ -62,10 +62,10 @@ async function rpcWithBackoff(url: string, body: unknown, maxAttempts = 5) {
 
 ## Reduce 429s before they happen
 
-* **Batch reads**: `getMultipleAccounts` instead of N parallel `getAccountInfo` calls
-* **Cache hot reads** at your application layer
-* **Move heavy reads** (program scans, signature crawls) to your backend
-* **Lower your concurrency** until the per-method headers stop ticking near zero
+* **Batch reads**: `getMultipleAccounts` instead of N parallel `getAccountInfo` calls.
+* **Cache hot reads** at your application layer.
+* **Move heavy reads** (program scans, signature crawls) to your backend.
+* **Lower your concurrency** until the per-method headers stop ticking near zero.
 * **Ask support** to raise your tier if you're consistently against the cap on legitimate traffic. Contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one).
 
 ## What's next

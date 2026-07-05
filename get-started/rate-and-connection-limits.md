@@ -36,7 +36,7 @@ New accounts on the shared service default to a tier sized for typical workloads
 Two request budgets apply to your endpoint at the same time, resetting every 10 seconds:
 
 * **Total requests.** Send up to 1,200 requests across all methods (e.g. your IP can send 600 `getBalance` and 600 `getSlot` during a 10s window).
-* **Per-method limits.** Heavy Solana methods have a lower cap applied on top (e.g. you can hit a `getProgramAccounts` cap after 50 requests, while your total is still under 1,200)
+* **Per-method limits.** Heavy Solana methods have a lower cap applied on top (e.g. you can hit a `getProgramAccounts` cap after 50 requests, while your total is still under 1,200).
 
 {% hint style="warning" %}
 If either check fails, you get `HTTP 429 Too Many Requests`. Pause all requests from that IP for the full 10-second window before retrying. Retrying sooner only returns more 429s and won't clear the limit.

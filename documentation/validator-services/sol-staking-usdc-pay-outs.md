@@ -12,9 +12,9 @@ Each generates rewards, but spending them is rarely simple: native staking means
 
 For teams that want returns with zero overhead, Triton runs a long-standing trusted validator that invests heavily in failover and reliability. It runs at 100% commission and distributes the rewards back to you in USDC every week. The payout combines:
 
-* staking rewards from Solana's native inflation,
-* part of the block rewards, and
-* MEV tips via Jito.
+* Staking rewards from Solana's native inflation
+* Part of the block rewards
+* MEV tips via Jito
 
 ## Who it's for
 

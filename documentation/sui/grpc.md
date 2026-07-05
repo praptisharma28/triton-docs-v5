@@ -238,7 +238,7 @@ Errors follow the [gRPC richer error model](https://grpc.io/docs/guides/error/#r
 * [Proto definitions, sui-apis on GitHub](https://github.com/MystenLabs/sui-apis/tree/main/proto)
 * [Official: What is gRPC?](https://docs.sui.io/develop/accessing-data/grpc/what-is-grpc)
 * [Official: Querying Data with gRPC](https://docs.sui.io/develop/accessing-data/grpc/using-grpc)
-* [grpcurl tool](https://github.com/fullstorydev/grpcurl)
+* The [grpcurl tool](https://github.com/fullstorydev/grpcurl)
 
 ***
 

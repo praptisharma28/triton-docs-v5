@@ -192,7 +192,7 @@ Authentication is the same `X-Token` header for both endpoint types.
 
 * [Official: Archival Store and Service](https://docs.sui.io/develop/accessing-data/archival-store)
 * [Official: Querying Historical Data with Archival Service](https://docs.sui.io/develop/accessing-data/archival-store/using-archival-store)
-* [grpcurl tool](https://github.com/fullstorydev/grpcurl)
+* The [grpcurl tool](https://github.com/fullstorydev/grpcurl)
 
 ***
 

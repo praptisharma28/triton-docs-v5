@@ -39,7 +39,7 @@ Add `--stats` to see total accounts, slots, and bandwidth in real time:
 ## Interpreting the result
 
 * **Stream is healthy, events are flowing.** The endpoint is fine. The error is in your application code, most often a filter that doesn't match what you think it does, an outdated client SDK version, or a parser that mis-handles a Protobuf field. Re-check your subscribe request and your data handler.
-* **Stream errors or won't connect.** Open a chat in your [customer dashboard](https://customers.triton.one) and include the exact `client-ubuntu` command you ran plus the error output.&#x20;
+* **Stream errors or won't connect.** Open a chat in your [customer dashboard](https://customers.triton.one) and include the exact `client-ubuntu` command you ran plus the error output.
 
 ***
 

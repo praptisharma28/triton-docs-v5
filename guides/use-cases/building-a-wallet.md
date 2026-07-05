@@ -26,8 +26,8 @@ By the end you'll have working code for each of these, plus a sending pattern th
 Before starting, make sure you have:
 
 * A Triton account with an active endpoint.
-* Your endpoint URL and token
-* Basic familiarity with Solana (accounts, public keys, transactions)
+* Your endpoint URL and token.
+* Basic familiarity with Solana (accounts, public keys, transactions).
 
 {% tabs %}
 {% tab title="TypeScript" %}
