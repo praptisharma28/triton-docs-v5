@@ -26,7 +26,7 @@ A dedicated Monad node is a private server provisioned for a single purpose, del
 
 ## What you get
 
-* **No shared rate or connection limits** on hardware reserved for you.
+* **No rate or connection limits**, as all the CPU and bandwidth are reserved for you.
 * **Your own endpoint**, a per-customer subdomain in the form `<your-endpoint>.<network>.monad.rpcpool.com`.
 * **The full Monad API set:** JSON-RPC over HTTPS and the WebSocket (WSS) API, with WebSocket streaming unmetered.
 * **Your choice of region**: Europe, North America, Asia, or the Pacific, colocated near your systems.
