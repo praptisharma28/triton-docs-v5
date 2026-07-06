@@ -6,11 +6,11 @@ description: >-
 
 # Welcome to Triton One
 
-This is the official documentation for Triton One's blockchain RPC services. Whether you're building your first dApp or managing a high-frequency trading operation, our goal is to provide you with performant and feature-rich infrastructure.
+This is the official documentation for Triton One's blockchain RPC services. From your first dApp to a high-frequency trading operation, our goal is the same: performant, feature-rich infrastructure.
 
 ## Why teams choose us
 
-Your app is only as reliable, fast, and accurate as the provider behind every call it makes to the network. That's why ecosystem's biggest protocols have built on Triton since 2021:
+Your app is only as reliable, fast, and accurate as the provider behind every call it makes to the network. That's why the ecosystem's biggest protocols have built on Triton since 2021:
 
 * **Hardware tuned to the job:** read clusters, streaming nodes, historical indexers, and transaction-routing nodes each run on machines configured for their specific role.
 * **Global distribution across 10 cities on 3 continents:** GeoDNS-routing with continuous health checks, load balancing, and automatic failover for minimal latency.

@@ -16,7 +16,7 @@ Choose a dedicated node for:
 * **Heavy indexing workloads** (DAS / History) that need full, uncontended throughput.
 * **Latency-sensitive backends** that require colocation with the data source for predictable speed and minimal jitter at all times.
 
-Not for front-ends, dashboards, or general production reads: shared infrastructure is cost-effective, globally distributed, and the right answer there. For the full breakdown, see [shared vs dedicated RPC infrastructure](https://blog.triton.one/practical-guide-to-enterprise-solana-rpc-infrastructure/).
+Don't use it for front-ends, dashboards, or standard JSON-RPC reads: our shared infrastructure endpoints are the right answer for these workloads.
 
 ## Features and benefits
 
@@ -33,9 +33,9 @@ Not for front-ends, dashboards, or general production reads: shared infrastructu
 | Billing | Usage-based: `$0.08 / GB` plus per-call rates. Minimum deposit `$125`, usable across all services, valid 12 months | Fixed monthly price per node; streaming nodes start at `$2,900 / month` with no overages |
 | JSON-RPC reads | Served in place | Routed to the shared cluster and billed separately, per usage |
 
-The cost cut-over is simple to estimate: at `$0.08 / GB`, streaming about 36 TB a month on shared costs the same as a `$2,900` dedicated node. Above that, or when you need guaranteed isolation, dedicated wins. Compare your own volume against the [pricing page](https://triton.one/pricing).
+At `$0.08 / GB` of bandwidth, once you stream more than 36 TB a month it makes sense, cost-wise, to look into a dedicated node.
 
-This is also why the hybrid model is what most teams run: dedicated nodes carry the heavy backend workloads, streaming and indexing, while JSON-RPC reads (`getAccountInfo`, `getProgramAccounts`, `getTransaction`, and the rest) run on Triton's shared, globally distributed infrastructure.
+Most teams run a hybrid model: dedicated for heavy streaming, and shared for JSON-RPC reads and transaction sending.
 
 ## Getting started
 
@@ -51,7 +51,7 @@ Reach out through [contact sales](https://triton.one/contact) and we'll talk thr
 {% step %}
 ### Scope your node
 
-A discovery call covers your streaming volume, regions, and the job the cluster will run (gRPC streaming, DAS, or indexing). We'll agree on the specs, region, and number of nodes being deployed.
+After learning your streaming volume and preferred region, we'll agree on the specs and number of nodes being deployed.
 {% endstep %}
 
 {% step %}
@@ -63,7 +63,7 @@ Hardware is ordered to spec and set up as a dedicated subscription in your [cust
 {% step %}
 ### Connect
 
-Your node has its own endpoint, `https://<your-endpoint>.mainnet.rpcpool.com`. Point your gRPC client at it with your endpoint URL and token, exactly as you would any Triton endpoint. For client code in TypeScript, Rust, and Go, see [Dragon's Mouth gRPC](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc).
+Your node has its own endpoint that you can find in the [customer dashboard](https://customers.triton.one), `https://<your-endpoint>.mainnet.rpcpool.com`. Point your gRPC client at it and you're good to go! For client code in TypeScript, Rust, and Go, see [Dragon's Mouth gRPC](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc).
 {% endstep %}
 {% endstepper %}
 

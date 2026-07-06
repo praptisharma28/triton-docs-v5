@@ -38,7 +38,7 @@ Your endpoints are already provisioned. In the [customer portal](https://custome
 {% step %}
 **Send your first request**
 
-The example below calls `getSlot` on Solana mainnet. Paste in your endpoint, secret token, and run it:
+The example below calls `getSlot` on Solana mainnet. Paste in your endpoint and secret token, then run it:
 
 {% tabs %}
 {% tab title="curl" %}

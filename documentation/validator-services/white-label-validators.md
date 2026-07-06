@@ -6,7 +6,7 @@ description: A Solana validator run on Triton infrastructure under your own bran
 
 Running a validator helps protect and decentralize the Solana network and earns continued rewards through the stake you can attract to your validator.
 
-Our hosted validators utilize the infrastructure we have built over time as a top RPC provider and running validators on the Solana network.
+Our hosted validators run on the infrastructure we have built as a top RPC provider and long-time validator operator on Solana.
 
 On the validators we run, we ensure:
 
@@ -18,7 +18,7 @@ Triton One owns the validator identity key. You or your team control the vote ac
 
 Before you commit to running a validator, you should make sure that:
 
-1. You are willing to fund vote fees until you have attracted enough stake to break even; this is approximately 1 SOL/day.
+1. You are willing to fund vote fees until you have attracted enough stake to break even; this is ~1 SOL/day.
 2. You can attract enough delegations to break even (TX fees - voting expenses) and make a profit eventually. Currently, this is in the range of 375,000 delegated SOL.
 
 If you merely wish to access staking rewards, you can also stake with existing validators without running your own; see [validators.app](https://validators.app/) for details about existing validators and stake pools.

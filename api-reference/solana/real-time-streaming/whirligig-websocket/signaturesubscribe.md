@@ -130,7 +130,7 @@ async fn main() -> Result<()> {
 
 ## Parameters
 
-**`signature`** · string !required
+**`signature`** · string · required
 
 Transaction signature, as a base-58 encoded string.
 
@@ -142,12 +142,14 @@ The signature must be the first signature from the transaction.
 
 Optional configuration object.
 
-**`commitment`** · string !values processed confirmed finalized !default finalized
+**`commitment`** · string · default `finalized`
 
+Values: `processed`, `confirmed`, `finalized`
 The commitment describes how finalized a block is at that point in time. See [Configuring State Commitment](https://solana.com/docs/rpc#configuring-state-commitment).
 
-**`enableReceivedNotification`** · boolean !values true false !default false
+**`enableReceivedNotification`** · boolean · default `false`
 
+Values: `true`, `false`
 Whether to also notify when the RPC first receives the signature, before it reaches the requested commitment.
 
 ## Response

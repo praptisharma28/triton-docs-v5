@@ -28,23 +28,32 @@ Over the last two years we've delivered major open-source enhancements to DAS: i
 
 ## Features and benefits
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-clock-rotate-left">:clock-rotate-left:</i> <strong>Asset transaction history</strong></td><td>The full on-chain signature history for any asset, compressed or standard, without reconstructing it from chain logs.</td><td></td></tr><tr><td><i class="fa-wallet">:wallet:</i> <strong>Token holders and balances</strong></td><td>Current holders and balances for a token in one call, with no iterating over individual token accounts.</td><td></td></tr><tr><td><i class="fa-filter">:filter:</i> <strong>Search and filter</strong></td><td>Find assets by owner, creator, authority, or collection, with no custom indexing to build or maintain.</td><td></td></tr><tr><td><i class="fa-shapes">:shapes:</i> <strong>Every asset type</strong></td><td>One interface across regular and programmable NFTs, compressed NFTs, MPL Core, fungible tokens, and Metaplex agent tokens.</td><td></td></tr><tr><td><i class="fa-box-open">:box-open:</i> <strong>Server-side decompression</strong></td><td>Merkle proofs and server-side decompression for compressed NFTs, so an asset and its metadata come back in a single call.</td><td></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-clock-rotate-left">:clock-rotate-left:</i> <strong>Asset transaction history</strong></td><td>The full on-chain signature history for any asset, both compressed and standard.</td><td></td></tr><tr><td><i class="fa-wallet">:wallet:</i> <strong>Easy token data</strong></td><td>Current holders and balances for any token.</td><td></td></tr><tr><td><i class="fa-filter">:filter:</i> <strong>Search and filter</strong></td><td>Find assets by owner, creator, authority, or collection.</td><td></td></tr><tr><td><i class="fa-shapes">:shapes:</i> <strong>Every asset type</strong></td><td>One interface across regular and programmable NFTs, compressed NFTs, MPL Core, fungible tokens, and Metaplex agent tokens.</td><td></td></tr><tr><td><i class="fa-box-open">:box-open:</i> <strong>Server-side decompression</strong></td><td>Decompressed Merkle proofs and metadata for any asset in a single call.</td><td></td></tr></tbody></table>
 
 ## Supported methods
 
-Every method's parameters and example request and response are in the [DAS API reference](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/readme/das-api). Grouped by what they do:
+Every method's parameters and example request and response are in the [DAS API reference](https://app.gitbook.com/s/wAm6H3EekvI7YDDlKRdD/solana/readme/das-api).
 
-| Group | Methods |
+| Method | Returns |
 | --- | --- |
-| **Read assets** | `getAsset`, `getAssets`, `getAssetBatch`, `getAssetProof`, `getAssetProofBatch` |
-| **List assets** | `getAssetsByOwner`, `getAssetsByAuthority`, `getAssetsByCreator`, `getAssetsByGroup`, `searchAssets` |
-| **Tokens, editions, and history** | `getTokenAccounts`, `getTokenLargestAccounts`, `getNftEditions`, `getSignaturesForAsset` |
+| `getAsset` | A single asset by ID: metadata, ownership, royalty, and collection |
+| `getAssets`, `getAssetBatch` | Multiple assets by ID in one call |
+| `getAssetProof`, `getAssetProofBatch` | Merkle proofs for compressed assets |
+| `getAssetsByOwner` | Assets owned by an address |
+| `getAssetsByAuthority` | Assets controlled by an authority |
+| `getAssetsByCreator` | Assets created by a creator address |
+| `getAssetsByGroup` | Assets in a group, for example a collection |
+| `searchAssets` | Assets matching your search criteria |
+| `getTokenAccounts` | Token accounts by owner or mint |
+| `getTokenLargestAccounts` | The largest token accounts for a mint |
+| `getNftEditions` | Edition NFTs printed from a master edition |
+| `getSignaturesForAsset` | Transaction signatures for a compressed asset |
 
 `getAssetsByGroup` is temporarily disabled for performance work.
 
 ## Get started
 
-DAS is enabled by default on every Triton endpoint. Point your DAS calls at your Triton endpoint:
+DAS is enabled by default on every Triton subscription. Just point DAS calls at your endpoint and you're good to go:
 
 * **Backend:** `https://<your-endpoint>.<network>.rpcpool.com/<your-token>`, or pass your token as an `x-token` header.
 * **Frontend:** `https://<your-endpoint>.<network>.rpcpool.com/`, with your domain set as an allowed origin in your [customer dashboard](https://customers.triton.one).
@@ -64,8 +73,6 @@ curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> \
     "params": { "id": "F9Lw3ki3hJ7PF9HQXsBzoY8GyE6sPoEZZdXJBsTTD2rk" }
   }'
 ```
-
-## Further reading
 
 Metaplex publishes a JavaScript DAS client with examples: [digital-asset-standard-api](https://github.com/metaplex-foundation/digital-asset-standard-api/tree/main/clients/js#examples). For the protocol and asset model, see [developers.metaplex.com/das-api](https://developers.metaplex.com/das-api).
 

@@ -53,15 +53,15 @@ Dragon's Mouth exposes two interfaces on the same gRPC service: streaming subscr
 {% endtab %}
 
 {% tab title="Unary operations" %}
-| Method                | Returns                                                              |
-| --------------------- | -------------------------------------------------------------------- |
+| Method | Returns |
+| --- | --- |
 | `getLatestBlockhash`  | The latest blockhash + last valid block height at a commitment level |
-| `getBlockHeight`      | The current block height at a commitment level                       |
-| `getSlot`             | The current slot at a commitment level                               |
-| `isValidBlockhash`    | Whether a given blockhash is still valid                             |
-| `subscribeReplayInfo` | Earliest slot still available for stream replay                      |
-| `getVersion`          | The Geyser gRPC plugin and Solana version                            |
-| `ping`                | Liveness check; the server replies with a `pong`                     |
+| `getBlockHeight`      | The current block height at a commitment level |
+| `getSlot`             | The current slot at a commitment level |
+| `isValidBlockhash`    | Whether a given blockhash is still valid |
+| `subscribeReplayInfo` | Earliest slot still available for stream replay |
+| `getVersion`          | The Geyser gRPC plugin and Solana version |
+| `ping`                | Liveness check; the server replies with a `pong` |
 {% endtab %}
 {% endtabs %}
 
@@ -192,7 +192,7 @@ Across multiple named filters in the same category (e.g. two transaction filters
 Before you start, make sure you have:
 
 * An active Triton subscription
-* Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/) (how to get them)
+* Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one/)
 * A backend environment in TypeScript, Rust, Go, or another language with a gRPC client
 * Familiarity with gRPC and Protocol Buffers
 
@@ -1270,7 +1270,7 @@ cargo run --bin client -- \
 {% endtab %}
 
 {% tab title="TypeScript / NodeJS" %}
-From `5.1.x` the TypeScript SDK is supercharged with a Rust NAPI backend. [More on the NAPI rewrite](https://blog.triton.one/grpc-js-alternative-napi-rust/).
+From `5.1.x` the TypeScript SDK runs on a Rust NAPI backend, ~400% faster than grpc-js. [More on the NAPI rewrite](https://blog.triton.one/grpc-js-alternative-napi-rust/).
 
 Install:
 

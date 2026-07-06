@@ -1,7 +1,6 @@
 ---
 description: >-
-  Stream pre-execution (deshred) transactions over gRPC, before they are
-  executed.
+  Stream deshredded transactions over gRPC before the validator executes them.
 ---
 
 # Deshred Transactions gRPC

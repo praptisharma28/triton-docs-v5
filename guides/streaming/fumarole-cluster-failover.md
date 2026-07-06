@@ -17,13 +17,13 @@ This guide walks through the full failover lifecycle: preparation, detection, cu
 This guide assumes:
 
 * You have an active Fumarole integration on one regional cluster (your **primary**).
-* You have access to a second regional cluster (your **secondary**), the same token works on both.
+* You have access to a second regional cluster (your **secondary**); the same token works on both.
 * You can implement client-side logic that tracks per-cluster state and reacts to outage signals.
 
-The example throughout this guide uses **EU (`ams.rpcpool.com`)** as primary and **US (`nyc.rpcpool.com`)** as secondary. The procedure is symmetric, it applies in either direction.
+The example throughout this guide uses **EU (`ams.rpcpool.com`)** as primary and **US (`nyc.rpcpool.com`)** as secondary. The procedure is symmetric; it applies in either direction.
 
 {% hint style="warning" %}
-Triton does **not** orchestrate failover for you, failover is **customer-managed**. We do not synchronize subscriber state, track your last-consumed slot, or trigger the cutover. Everything described below runs on your side. This page tells you exactly what to do.
+Triton does **not** orchestrate failover for you; failover is **customer-managed**. We do not synchronize subscriber state, track your last-consumed slot, or trigger the cutover. Everything described below runs on your side. This page tells you exactly what to do.
 {% endhint %}
 
 ## Before you start
@@ -92,7 +92,7 @@ fume --config ~/.fumarole/config-us.yaml create \
   --from_slot 312500001
 ```
 
-The same pattern applies whether you use the Fume CLI or the Rust / TypeScript SDK, create a fresh subscriber pointing at your recovery slot. The recovery slot must be within Fumarole's 4-day buffer: if the gap since `last_primary_slot` is longer, the create call fails, so start a fresh live subscriber instead and backfill the gap from historical sources.
+The same pattern applies whether you use the Fume CLI or the Rust / TypeScript SDK: create a fresh subscriber pointing at your recovery slot. The recovery slot must be within Fumarole's 4-day buffer: if the gap since `last_primary_slot` is longer, the create call fails, so start a fresh live subscriber instead and backfill the gap from historical sources.
 
 **Step 4: Begin consuming from the secondary**
 
@@ -128,7 +128,7 @@ Failback is a planned operation, not an emergency one. Schedule it during a low-
 * **Failing over on a transient blip.** A single dropped connection is not a cluster outage. Tune your detection thresholds so normal reconnects do not trip failover.
 * **Not persisting the last-consumed slot.** If you only hold it in memory and your process restarts mid-outage, you have lost your resume point. Persist it durably.
 * **Forgetting the subscriber starts at `last_slot + 1`.** Starting at `last_slot` itself replays the slot you already processed, which widens the duplicate window.
-* **Assuming token-or-permission errors mean an outage.** Authentication failures are not outage signals, they indicate a client configuration problem, not a cluster problem.
+* **Assuming token-or-permission errors mean an outage.** Authentication failures are not outage signals; they indicate a client configuration problem, not a cluster problem.
 
 ## Quick reference
 

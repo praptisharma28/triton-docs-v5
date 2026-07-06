@@ -6,9 +6,9 @@ description: Stream parsed, per-program Solana data with Vixen over gRPC.
 
 ## Introduction
 
-Program Data Streams are a high-performance gRPC endpoints that provides real-time, parsed Solana blockchain data streams by program. It solves the critical challenge of efficiently monitoring and reacting to on-chain activities by delivering pre-parsed account states and transaction instructions for specific Solana programs.
+Program Data Streams is a high-performance gRPC endpoint that provides real-time, parsed Solana blockchain data by program. It solves the critical challenge of efficiently monitoring and reacting to on-chain activities by delivering pre-parsed account states and transaction instructions for specific Solana programs.
 
-Powered by the [Yellowstone Vixen](https://github.com/rpcpool/yellowstone-vixen) open-source framework which provides the building blocks to create custom indexes for specific programs, accounts, and transactions. Vixen Streams enables developers to build responsive applications that can react to on-chain events without the complexity of building and maintaining custom parsing infrastructure.
+It is powered by the [Yellowstone Vixen](https://github.com/rpcpool/yellowstone-vixen) open-source framework, which provides the building blocks to create custom indexes for specific programs, accounts, and transactions. Vixen Streams enables developers to build responsive applications that can react to on-chain events without the complexity of building and maintaining custom parsing infrastructure.
 
 ### The problem
 

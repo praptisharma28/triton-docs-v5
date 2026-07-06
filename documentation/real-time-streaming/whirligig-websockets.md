@@ -8,15 +8,14 @@ Whirligig is a Rust proxy between your client and a Dragon's Mouth gRPC stream, 
 
 ## Use cases
 
-* **Real-time browser apps and extensions.** Frontends, dApps, and extensions can't speak gRPC. They subscribe over `wss://` and get gRPC-backed data with no library changes.
-* **Mobile apps.** The same drop-in WebSocket subscriptions work from iOS and Android clients.
+* **Real-time browser apps, extensions, and mobile apps.** They don't support gRPC, so they subscribe over `wss://` and get the same data through the 100% compatible Solana WebSocket API.
 * **Backends.** If you can run a gRPC client, [Dragon's Mouth](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/real-time-streaming/dragon-s-mouth-grpc) is the lower-latency path for server-side services, but Whirligig can also be used if you prefer a standard Solana WebSocket client.
 
 ## Features and benefits
 
 On top of the drop-in standard API, Whirligig adds:
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-bolt">:bolt:</i> <strong>transactionSubscribe</strong></td><td>A full-transaction subscription the native Solana WS API does not have, with account include, exclude, and required filters.</td><td></td></tr><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Intra-slot updates</strong></td><td>At processed commitment, account updates arrive up to 400 ms faster than native Solana WebSockets.</td><td></td></tr><tr><td><i class="fa-radio">:radio:</i> <strong>Backed by Dragon's Mouth</strong></td><td>Translates a Dragon's Mouth gRPC stream into WebSocket messages, so a browser gets gRPC-grade data.</td><td></td></tr><tr><td><i class="fa-code">:code:</i> <strong>jsonParsed encoding</strong></td><td><code>accountSubscribe</code> and <code>programSubscribe</code> return structured objects for parsable programs instead of raw byte arrays, with resolved mint metadata on token accounts.</td><td></td></tr><tr><td><i class="fa-cube">:cube:</i> <strong>Stable blockSubscribe</strong></td><td>Full block notifications with filters for commitment level, transaction detail, and reward visibility. The native method is flagged unstable.</td><td></td></tr><tr><td><i class="fa-network-wired">:network-wired:</i> <strong>Higher connection limits</strong></td><td>Triton's bare-metal streaming nodes are stress-tested under hundreds of thousands of concurrent subscriptions, allowing us to offer higher connection limits to our users.</td><td></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-bolt">:bolt:</i> <strong>transactionSubscribe</strong></td><td>A full-transaction subscription the native Solana WS API does not have, with account include, exclude, and required filters.</td><td></td></tr><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Intra-slot updates</strong></td><td>At processed commitment, account updates arrive up to 400 ms faster than native Solana WebSockets.</td><td></td></tr><tr><td><i class="fa-code">:code:</i> <strong>jsonParsed encoding</strong></td><td><code>accountSubscribe</code> and <code>programSubscribe</code> return structured objects for parsable programs instead of raw byte arrays, with resolved mint metadata on token accounts.</td><td></td></tr><tr><td><i class="fa-network-wired">:network-wired:</i> <strong>Higher connection limits</strong></td><td>Triton's bare-metal streaming nodes are stress-tested under hundreds of thousands of concurrent subscriptions, allowing us to offer higher connection limits to our users.</td><td></td></tr></tbody></table>
 
 ## How it works
 
@@ -35,18 +34,18 @@ flowchart LR
 
 Whirligig has full parity with the [Solana WebSocket API](https://solana.com/docs/rpc/websocket): it serves the standard `solana-pubsub` endpoint, plus one added subscription, `transactionSubscribe`, that the native API does not have. Each subscribe method returns a subscription `id` and has a matching unsubscribe (see [Unsubscribe](#unsubscribe)). The methods with request and response examples below are the most common; the rest follow the standard Solana WebSocket spec.
 
-| Method | Subscribe to | Notes |
-| --- | --- | --- |
-| `accountSubscribe` | An account's data, on change | Solana-compatible |
-| `blockSubscribe` | New blocks | Solana-compatible |
-| `logsSubscribe` | Transaction logs mentioning an address | Solana-compatible |
-| `programSubscribe` | Accounts owned by a program, on change | Solana-compatible |
-| `signatureSubscribe` | A signature's confirmation status | Solana-compatible |
-| `slotSubscribe` | Each new slot | Solana-compatible |
-| `rootSubscribe` | Each new root (the highest finalized slot) | Solana-compatible |
-| `voteSubscribe` | Votes as they are observed in gossip | Solana-compatible (unstable Solana method) |
-| `slotsUpdatesSubscribe` | Detailed slot-status updates | Solana-compatible (unstable Solana method) |
-| `transactionSubscribe` | Full transactions matching a filter | Whirligig extension, not in the native Solana WS API |
+| Method | Returns |
+| --- | --- |
+| `accountSubscribe` | An account's data, on change |
+| `blockSubscribe` | New blocks |
+| `logsSubscribe` | Transaction logs mentioning an address |
+| `programSubscribe` | Accounts owned by a program, on change |
+| `signatureSubscribe` | A signature's confirmation status |
+| `slotSubscribe` | Each new slot |
+| `rootSubscribe` | Each new root (the highest finalized slot) |
+| `voteSubscribe` | Votes as they are observed in gossip (unstable Solana method) |
+| `slotsUpdatesSubscribe` | Detailed slot-status updates (unstable Solana method) |
+| `transactionSubscribe` | Full transactions matching a filter. Whirligig extension, not in the native Solana WS API |
 
 ## Connection options
 

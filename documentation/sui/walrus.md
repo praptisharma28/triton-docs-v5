@@ -24,7 +24,7 @@ layout:
 
 # Walrus
 
-[Walrus](https://walrus.xyz/) is a decentralised, scalable, distributed, and fault-tolerant storage layer optimised for storing large binary blobs. Walrus uses Sui for coordination among other things.
+[Walrus](https://walrus.xyz/) is a decentralised, scalable, distributed, and fault-tolerant storage layer optimised for storing large binary blobs. Among other things, Walrus uses Sui for coordination.
 
 Walrus Publisher enables writing data on-chain. Aggregator enables reading data, and Storage nodes provide storage.
 

@@ -33,8 +33,6 @@ slippageBps=50'
 
 ### Executing a swap
 
-After you get a quote from `/quote`:
-
 1. **Get a quote**: call `/quote` as shown above.
 2. **Get swap instructions**: pass the quote response to `/swap` or `/swap-instructions` to build the transaction.
 3. **Sign and send**: sign with your wallet and submit to the network.

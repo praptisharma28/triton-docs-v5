@@ -43,7 +43,7 @@ When querying the original token program it is important to specify dataSize as 
 
 ### Token-2022
 
-When querying Token-2022 you do not add the dataSize parameter but instead filter by the byte on offset 165.
+When querying Token-2022, you do not add the dataSize parameter but instead filter by the byte at offset 165.
 
 {% tabs %}
 {% tab title="getProgramAccounts" %}
@@ -183,7 +183,7 @@ If you see this error, please double check that you have included the parameters
 
 ## Digital Assets API
 
-For a higher level API with better filtering functions, you can also use the Digital Assets API. This API supports both traditional tokens as well as compressed NFTs within the same interface, allowing you to query the full set of tokens owned by a user.
+For a higher level API with better filtering functions, you can also use the Digital Assets API. This API supports both traditional tokens and compressed NFTs within the same interface, allowing you to query the full set of tokens owned by a user.
 
 Read more about the [DAS API](https://app.gitbook.com/s/Xz3Ki4zincxsnRG91NNt/solana/reading-account-state/metaplex-das-api).
 

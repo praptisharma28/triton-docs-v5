@@ -1,7 +1,6 @@
 ---
 description: >-
-  Submit a signed raw transaction and wait for its receipt, returning the
-  receipt synchronously.
+  Submit a signed raw transaction and return its receipt synchronously.
 ---
 
 # eth\_sendRawTransactionSync

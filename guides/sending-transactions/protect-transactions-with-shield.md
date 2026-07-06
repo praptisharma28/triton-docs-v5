@@ -67,7 +67,7 @@ If you use Triton RPC with Cascade, you can apply Shield without writing any Rus
 }
 ```
 
-That route is the quickest to integrate, but it depends on the RPC's forwarding logic and gives you no direct control over routing. The TPU client connects to validators yourself, so you decide everything. Pick based on your workload:
+That route is the quickest to integrate, but it depends on the RPC's forwarding logic and gives you no direct control over routing. With the TPU client, you connect to validators yourself, so you decide everything. Pick based on your workload:
 
 | Feature                      | RPC Shield (Cascade)         | TPU client Shield            |
 | ---------------------------- | ---------------------------- | ---------------------------- |
@@ -481,7 +481,7 @@ sender.send_txn_with_shield_policies(sig, txn, shield).await?;
 {% endtab %}
 {% endtabs %}
 
-**Fail open** by setting `default_return_value: true`, so the transaction is sent even if every leader in the next few slots is blocked.
+**Fail open** by setting `default_return_value: true`, so the transaction is still sent if the policy check itself fails.
 
 ## Advanced usage
 

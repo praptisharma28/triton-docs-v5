@@ -70,7 +70,7 @@ We also offer white-label setups for DAOs, custodians, stake pools, and other in
 
 <summary>How do I get a Triton account?</summary>
 
-You can self-onboard at [customers.triton.one](https://customers.triton.one/users/sign-up) in about 2 minutes. For a dedicated gRPC node or other custom requirements, [contact sales](https://triton.one/contact).
+You can self-onboard at [customers.triton.one](https://customers.triton.one/users/sign-up) in ~2 minutes. For a dedicated gRPC node or other custom requirements, [contact sales](https://triton.one/contact).
 
 </details>
 

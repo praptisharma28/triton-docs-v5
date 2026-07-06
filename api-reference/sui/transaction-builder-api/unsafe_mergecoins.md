@@ -35,7 +35,7 @@ curl "https://<your-endpoint>.mainnet.sui.rpcpool.com/<your-token>" -s -X POST \
 | `primary_coin`  | ObjectID            | Yes      | the coin object to merge into, this coin will remain after the transaction                                 |
 | `coin_to_merge` | ObjectID            | Yes      | the coin object to be merged, this coin will be destroyed, the balance will be added to `primary_coin`     |
 | `gas`           | ObjectID            | No       | gas object to be used in this transaction, node will pick one from the signer's possession if not provided |
-| `gas_budget`    | BigInt\_for\_uint64 | Yes      | the gas budget, the transaction will fail if the gas cost exceed the budget                                |
+| `gas_budget`    | BigInt\_for\_uint64 | Yes      | the gas budget; the transaction fails if the gas cost exceeds the budget                                |
 
 ## Response
 

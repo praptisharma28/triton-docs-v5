@@ -85,7 +85,7 @@ Comparison object example:
 }
 ```
 
-## Token Account Filtering
+## Token account filtering
 
 `tokenAccounts` controls whether token-account activity owned by the requested address is included.
 
@@ -169,7 +169,7 @@ When `transactionDetails` is `full`, each result contains the encoded transactio
 }
 ```
 
-## Example: Successful Transactions Only
+## Example: successful transactions only
 
 ```json
 {
@@ -187,7 +187,7 @@ When `transactionDetails` is `full`, each result contains the encoded transactio
 }
 ```
 
-## Example: Token Balance Changes
+## Example: token balance changes
 
 ```json
 {
@@ -205,7 +205,7 @@ When `transactionDetails` is `full`, each result contains the encoded transactio
 }
 ```
 
-## Example: Slot Range
+## Example: slot range
 
 ```json
 {

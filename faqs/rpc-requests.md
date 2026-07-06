@@ -24,7 +24,7 @@ If any node falls behind, requests are routed to a shared backup pool while the 
 
 It's a big topic, but at a high level, we do it through:
 
-* **Anycast:** routes traffic from anywhere to the nearest server
+* **Anycast:** routes traffic from anywhere to the nearest server.
 * **HTTP/3:** RPC over QUIC, with fewer connection round-trips and no head-of-line blocking, which especially helps clients connecting from outside our data centres.
 * **Custom shred network:** our staked validators forward shreds straight to the RPC nodes, so they receive new block data among the first in Solana's fanout instead of last, where unstaked nodes normally sit.
 * **Custom indexes:** Cloudbreak optimises `getProgramAccounts` (gPA) calls to improve query performance.
@@ -86,7 +86,7 @@ Every endpoint exposes its live limits at `/ratelimits`. Run `curl https://<your
 
 <summary>Do you support devnet?</summary>
 
-Yes. Triton runs Solana mainnet, testnet, and devnet, with full compatibility with the standard JSON-RPC and WebSocket APIs across all three. Contact support from your [customer dashboard](https://customers.triton.one) to add a devnet endpoint.
+Yes. Triton runs Solana mainnet and devnet, with full compatibility with the standard JSON-RPC and WebSocket APIs on both. Contact support from your [customer dashboard](https://customers.triton.one) to add a devnet endpoint.
 
 </details>
 

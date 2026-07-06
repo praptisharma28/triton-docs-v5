@@ -11,7 +11,8 @@ In this quickstart we'll send a transaction two ways: **`/sendtx`**, the direct 
 
 ## 0. Prerequisites
 
-* A Triton Solana endpoint and token, from your [customer dashboard](https://customers.triton.one).
+* An active Triton subscription.
+* Your endpoint URL and secret token from the [customer dashboard](https://customers.triton.one).
 * A funded keypair and a way to build and sign a transaction (`@solana/web3.js`, `@solana/kit`, or your SDK of choice).
 
 ## 1. Build and sign a transaction
@@ -95,6 +96,12 @@ Query parameters: `encoding` (`base58` or `base64`, for text bodies; default `ba
 {% hint style="warning" %}
 `/sendtx` is submission only and always skips preflight, so `skipPreflight: false` and simulation are not supported on it. Use `sendTransaction` if you need preflight, though we recommend running `simulateTransaction` as a separate call either way.
 {% endhint %}
+
+With `response=signature`, the response body is the transaction signature as plain text, not JSON:
+
+```text
+5j7s4Hk3vQmPq8nLZ9xTe8oP...
+```
 {% endtab %}
 
 {% tab title="sendTransaction" %}
@@ -121,21 +128,7 @@ curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
 ```
 {% endtab %}
 {% endtabs %}
-{% endtab %}
-{% endtabs %}
 
-### Expected response
-
-{% tabs %}
-{% tab title="/sendtx" %}
-With `response=signature`, the body is the transaction signature as plain text, not JSON:
-
-```
-5j7s4Hk3vQmPq8nLZ9xTe8oP...
-```
-{% endtab %}
-
-{% tab title="sendTransaction" %}
 The JSON-RPC result is the transaction signature:
 
 ```json
@@ -148,6 +141,8 @@ The JSON-RPC result is the transaction signature:
 
 With `response=signature`, the POST returns the signature. Confirm it landed:
 
+{% tabs %}
+{% tab title="curl" %}
 ```bash
 curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
   -H "Content-Type: application/json" \
@@ -158,7 +153,9 @@ curl https://<your-endpoint>.mainnet.rpcpool.com/<your-token> -s -X POST \
     "params": [["YOUR_SIGNATURE"], { "searchTransactionHistory": true }]
   }'
 ```
+{% endtab %}
 
+{% tab title="Response" %}
 The response shows the signature's confirmation status:
 
 ```json
@@ -173,6 +170,8 @@ The response shows the signature's confirmation status:
   "id": 1
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 A `confirmationStatus` of `confirmed` or `finalized` means it landed.
 

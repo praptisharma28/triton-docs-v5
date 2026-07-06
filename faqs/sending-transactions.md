@@ -18,7 +18,7 @@ Triton ensures reliable transaction delivery to the network, but for optimal tra
 
 <summary>What is the advantage of sending transactions through a staked validator?</summary>
 
-Staked validators have access to a much larger, reserved connection pool for sending transactions. During congestion, that's a significant advantage over the contested public connection pools. We provide stake-weighted QoS routing for free on every Triton subscription, contact support by clicking the chat icon in the bottom right of your [customer dashboard](https://customers.triton.one) to enable it on your endpoint.
+Staked validators have access to a much larger, reserved connection pool for sending transactions. During congestion, that's a significant advantage over the contested public connection pools. We provide stake-weighted QoS routing for free on every Triton subscription; it's applied by default on your mainnet endpoint.
 
 </details>
 

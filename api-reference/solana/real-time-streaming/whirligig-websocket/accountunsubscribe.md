@@ -39,7 +39,7 @@ layout:
 
 ## Parameters
 
-**`subscription id`** · integer !required
+**`subscription id`** · integer · required
 
 Subscription id returned by `accountSubscribe`.
 

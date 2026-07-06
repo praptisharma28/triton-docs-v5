@@ -103,7 +103,7 @@ If a token ends up in a public GitHub repo, a frontend bundle, a committed confi
 1. **Contact support immediately.** Use the chat in your [customer dashboard](https://customers.triton.one/). We'll rotate the token and issue a new one. The old token becomes invalid as soon as the new one is issued.
 2. **Check your billing dashboard.** Look at the RPC Metrics tab for unusual traffic spikes or unfamiliar methods since the suspected leak.
 3. **Audit your codebase.** Search for the token string across all repos, config files, CI/CD pipelines, and environment files. GitHub secret scanning helps automate this.
-4. **Review your allowed origins.** Make sure the list is tight, no wildcards, no overly broad entries.
+4. **Review your allowed origins.** Make sure the list is tight: no wildcards or overly broad entries.
 5. **Rotate related credentials.** If the token was reused across environments or stored alongside other secrets, treat those as compromised too.
 
 ## Why we advise against proxying

@@ -33,7 +33,7 @@ As one of the original validators on Sui we provide full-service Sui API access.
 | Seal open server                             |    ✗    |    ✓    |
 | Seal permissioned server                     |    ✓    |    ✓    |
 
-Sui is rolling out GraphQL alpha, indexed-based APIs, and Triton will support them in Q3 2026.
+Sui is rolling out a GraphQL alpha and index-based APIs; Triton will support them in Q3 2026.
 
 ***
 

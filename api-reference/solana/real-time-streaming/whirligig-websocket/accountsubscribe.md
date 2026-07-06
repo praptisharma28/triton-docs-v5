@@ -125,7 +125,7 @@ async fn main() -> Result<()> {
 
 ## Parameters
 
-**`0`** · string !required
+**`0`** · string · required
 
 Account Pubkey, as base-58 encoded string
 
@@ -133,12 +133,14 @@ Account Pubkey, as base-58 encoded string
 
 Optional configuration object.
 
-**`commitment`** · string !values processed confirmed finalized !default finalized
+**`commitment`** · string · default `finalized`
 
+Values: `processed`, `confirmed`, `finalized`
 The commitment describes how finalized a block is at that point in time. See [Configuring State Commitment](https://solana.com/docs/rpc#configuring-state-commitment).
 
-**`encoding`** · string !values base58 base64 base64+zstd binary jsonParsed !default binary
+**`encoding`** · string · default `binary`
 
+Values: `base58`, `base64`, `base64+zstd`, `binary`, `jsonParsed`
 Encoding format for account data.
 
 * `base58` is slow.

@@ -252,8 +252,8 @@ Slot and API version the node used to answer this request.
 
 Array containing either:
 
-* `null` - if the account at that Pubkey doesn't exist, or
-* an account object with the following fields:
+* `null` if the account at that Pubkey doesn't exist
+* An account object with the following fields:
 
 Each non-null element uses the shared [Account Data](https://solana.com/docs/rpc/json-structures#account-data) structure.
 

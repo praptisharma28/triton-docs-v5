@@ -4,41 +4,35 @@ description: Patterns for landing Solana transactions reliably under congestion.
 
 # Best practices
 
-How to land Solana transactions reliably, especially under congestion.
-
 ## Build and sign correctly
 
-* **Use a recent blockhash from `confirmed` or `finalized` commitment. Never use `processed` for blockhashes.**
-* **Set a tight compute-unit budget.** The default is often too high; an accurate budget helps validators pack your transaction (a simple SOL transfer uses only \~500 CUs).
-* **Include a competitive priority fee.** Check the prevailing market rate for the accounts your transaction write-locks.
-
-## Handle retries yourself
-
-* **Do not rely on the RPC node to retry.** Its legacy retry queue saturates under high traffic and causes widespread failures.
-* **Always send with `maxRetries: 0`** so the node does not use that queue.
-* **`/sendtx` handles retries differently:** unlike `sendTransaction` (where `maxRetries: 0` lets Jet fan out retries for you), `/sendtx` retries according to its `max_retries` parameter. Set it above 0 (for example `3`); leaving it at 0 can drop your landing rate.
-* **Build your own asynchronous retry logic:** re-fetch a recent blockhash and re-sign every few seconds.
-
-## Separate simulation from sending
-
-* **Simulate first with `simulateTransaction()`, then send with `sendTransaction()` and `skipPreflight: true`.** Triton's send path has more delivery pathways for sends that skip pre-flight, and leaving `skipPreflight: false` bills your send twice.
+* **Use a recent blockhash from `confirmed` or `finalized` commitment.** Never use `processed` for blockhashes.
+* **Set a tight compute-unit budget.** The default is often too high; an accurate budget helps validators pack your transaction (a simple SOL transfer uses \~500 CUs).
 
 ## Price priority fees with percentiles
 
-* **Don't use the default `getRecentPrioritizationFees`** for fee estimation. It returns only the minimum paid in recent blocks, which is often zero.
-* **Use the percentile parameter** (an integer 1 to 10,000, where `5000` is the median) to get a realistic, actionable estimate from recent on-chain activity.
+* **Don't use the default `getRecentPrioritizationFees` for fee estimation.** It returns only the minimum paid in recent blocks, which is often zero.
+* **Pass the `percentile` parameter** (an integer 1 to 10,000, where `5000` is the median) to get a realistic market rate for the accounts your transaction write-locks.
+
+## Simulate, then send without preflight
+
+* **Simulate with `simulateTransaction()`, then send with `skipPreflight: true`.** Triton's send path has more delivery pathways for sends that skip preflight, and `skipPreflight: false` bills your send twice.
 
 ## Route through staked validators (SWQoS)
+
+* **Nothing to enable: SWQoS is applied on every Triton endpoint by default, at no extra cost.** Your sends travel the reserved private connection pools of staked validators instead of the congested public TPU ports, raising delivery success.
+
+## Handle retries yourself
 
 * **SWQoS transaction bandwidth is free and enabled by default on every endpoint** — no need to request it. Your transactions go over the reserved private connection pools of staked validators, bypassing the congested public TPU ports and raising delivery success.
 * Combine with priority fees, or Jito, for more speed during contention.
 
-## Use the direct submission endpoint for latency
+## Use `/sendtx` for latency-sensitive sends
 
-* **For latency-sensitive sends, use `POST /sendtx`** instead of JSON-RPC `sendTransaction`. It removes the JSON-RPC envelope, JSON parsing, and CORS overhead.
+* **Prefer `POST /sendtx` over JSON-RPC `sendTransaction` when latency matters.** It removes the JSON-RPC envelope, JSON parsing, and CORS overhead. It is submission only; simulate through the normal RPC interface.
 * **Send with `Content-Type: application/octet-stream` or `text/plain`** so browsers skip the preflight `OPTIONS` round-trip.
+* **Set `max_retries` above 0** (for example `3`). Unlike `sendTransaction`, `/sendtx` retries only according to this parameter, and leaving it at 0 can drop your landing rate.
 * **Track signatures client-side** (the signature is deterministic and derivable before sending); request `response=signature` only if you need it back.
-* `/sendtx` is submission only. Use the normal RPC interface for simulation and for full `sendTransaction` options.
 
 ## Confirm before you trust
 
@@ -50,10 +44,10 @@ How to land Solana transactions reliably, especially under congestion.
 * **Shield only works on Shield-enabled RPCs** (those using Jet sender); standard Solana RPCs ignore the policy.
 * **Maintain your lists every epoch** and treat Shield as a filter, not a guarantee. Be careful with strict policies on time-critical sends (arbitrage, liquidations): Shield drops, rather than queues, a transaction when no eligible validator is available.
 
-## Jito Bundle Simulation
+## Simulate Jito bundles on Triton
 
-* **Simulate bundles with `simulateBundle`** (Jito RPC is available on all plans).
-* **`sendBundle` is Jito-exclusive** and requires your IP to be whitelisted with Jito's Block Engine.
+* **Use `simulateBundle`** on Triton's Jito-enabled RPC, available on all plans.
+* **Submitting (`sendBundle`) is Jito-exclusive:** it goes to Jito's Block Engine and requires your IP to be whitelisted there.
 
 ## Stay within limits and reuse connections
 

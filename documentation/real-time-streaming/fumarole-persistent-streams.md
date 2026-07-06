@@ -59,7 +59,7 @@ flowchart LR
 
 Fumarole is a gRPC service. You manage a **persistent subscriber** (a consumer group) and stream from it:
 
-| Method | What it does |
+| Method | Returns |
 | --- | --- |
 | `CreateConsumerGroup` | Create a persistent subscriber that tracks your position server-side. |
 | `ListConsumerGroups`, `GetConsumerGroupInfo`, `DeleteConsumerGroup` | Manage your persistent subscribers. |

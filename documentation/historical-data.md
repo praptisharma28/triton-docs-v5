@@ -1,5 +1,5 @@
 ---
-description: The complete Solana ledger, made faster and easier-to-use with Superbank.
+description: Query the complete Solana ledger faster and easier with Superbank.
 layout:
   width: default
   title:
@@ -28,7 +28,7 @@ Because it's 100% compatible with the standard Solana JSON-RPC methods, existing
 
 ## Features and benefits
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-database">:database:</i> <strong>Complete ledger from genesis</strong></td><td>Every block, transaction, and entry, queryable back to genesis.</td><td></td></tr><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Faster historical queries</strong></td><td>At p50 against public RPC: 5x faster getSignaturesForAddress, 38x getSignatureStatuses, 3.3x getTransaction.</td><td></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Address history in one call</strong></td><td>getTransactionsForAddress returns a complete history (ATAs included) with server-side filters and a pagination cursor.</td><td></td></tr><tr><td><i class="fa-bolt">:bolt:</i> <strong>Sub-1 ms recent reads</strong></td><td>A head cache keeps the newest slots in memory, so recent reads return in under 1 ms.</td><td></td></tr><tr><td><i class="fa-coins">:coins:</i> <strong>Flat pricing across all the epochs and methods</strong></td><td>Every historical query costs $0.08 / GB plus $10 / million calls, no matter how deep into history it reaches.</td><td></td></tr><tr><td><i class="fa-code-fork">:code-fork:</i> <strong>Open source under AGPL</strong></td><td>Run, audit, or self-host the full stack, with source-agnostic ingest.</td><td></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th><th></th><th data-hidden data-card-target data-type="content-ref"></th></tr></thead><tbody><tr><td><i class="fa-gauge-high">:gauge-high:</i> <strong>Faster historical queries</strong></td><td>At p50 against public RPC: 5x faster getSignaturesForAddress, 38x getSignatureStatuses, 3.3x getTransaction.</td><td></td></tr><tr><td><i class="fa-list-check">:list-check:</i> <strong>Address history in one call</strong></td><td>getTransactionsForAddress returns a complete history (ATAs included) with server-side filters and a pagination cursor.</td><td></td></tr><tr><td><i class="fa-bolt">:bolt:</i> <strong>Sub-1 ms recent reads</strong></td><td>A head cache keeps the newest slots in memory, so recent reads return in under 1 ms.</td><td></td></tr><tr><td><i class="fa-coins">:coins:</i> <strong>Flat pricing across all the epochs and methods</strong></td><td>Every historical query (gTFA included) costs $0.08 / GB plus $10 / million calls.</td><td></td></tr></tbody></table>
 
 ## How it works
 
@@ -43,21 +43,19 @@ flowchart LR
     style you fill:#D6EAF8,stroke:#259DD0
 ```
 
-The full architecture (storage layout, materialised views, tiered storage) matters mostly if you self-host. See [Self-hosting](#self-hosting) below.
+For the full architecture (storage layout, materialised views, tiered storage) see [Inside Superbank](https://blog.triton.one/inside-superbank-architecture-breakdown/).
 
 ## Supported methods
 
 The complete ledger from genesis: every block, transaction, and entry. Most Superbank methods match standard Solana JSON-RPC exactly; a few add an optional parameter or extend it.
 
-| Methods | Features |
+| Method | Returns |
 | --- | --- |
 | `getBlock`, `getBlocks`, `getBlocksWithLimit`, `getBlockTime`, `getBlockHeight`, `getSlot`, `getTransactionCount`, `getLatestBlockhash`, `getFirstAvailableBlock`, `getInflationReward`, `getSignatureStatuses`, `getHealth`, `minimumLedgerSlot` | Standard Solana JSON-RPC |
 | `getTransaction` | Standard, plus Triton's optional `slot` hint (`u64`): skips the ledger-wide signature search by querying that exact slot. The response is `null` if the signature isn't present in that slot |
 | `getSignaturesForAddress` | Standard, plus Triton's `beforeSlot`/`untilSlot` (`u64`): exclusive whole-slot bounds (`slot < beforeSlot`, `slot > untilSlot`), not signature-position cursors. `beforeSlot` can't be combined with `before`, nor `untilSlot` with `until` |
 | `getTransactionsForAddress` | Triton's extension: a complete address history in one call (ATAs included) with server-side filters (by status, slot, block time, and token accounts) and a pagination cursor |
 | `StreamBlocks`, `StreamTransactions` | Triton's gRPC streaming extension: replay bounded slot ranges of history as a stream, with server-side filters. See [Streaming historical data](#streaming-historical-data) |
-
-`getTransactionsForAddress` is documented below. Responses are spec-compliant, so no client changes are needed when a method moves to Superbank from Old Faithful.
 
 Serving notes:
 
@@ -66,41 +64,6 @@ Serving notes:
 * On `getSignaturesForAddress`, if the signature you pass as `before` or `until` can't be found, the call returns JSON-RPC error `-32020` (`Transaction <signature> not found`).
 * With the head cache, `processed` commitment is served on the signature and transaction methods (`getSignaturesForAddress`, `getSignatureStatuses`, `getTransaction`, `getTransactionsForAddress`) and the slot and block-list methods (`getSlot`, `getBlockHeight`, `getTransactionCount`, `getLatestBlockhash`, `getBlocks`, `getBlocksWithLimit`). `getBlock`, `getBlockTime`, `getFirstAvailableBlock`, and `getInflationReward` take `confirmed` or `finalized`.
 
-## Streaming historical data
-
-Superbank also serves history as gRPC streams alongside JSON-RPC, for server-side-filtered bulk pulls where paginating JSON-RPC calls would be the slow path. Both methods replay bounded, inclusive slot ranges straight from ClickHouse.
-
-{% tabs %}
-{% tab title="StreamBlocks" %}
-Streams one message per block in the range, with block metadata, rewards, and transaction payloads:
-
-```bash
-grpcurl -proto superbank.proto \
-  -d '{ "start_slot": 250000000, "end_slot": 250000009 }' \
-  <your-endpoint>:10000 superbank.Superbank/StreamBlocks
-```
-{% endtab %}
-
-{% tab title="StreamTransactions" %}
-Streams one message per matching transaction. Filter server-side by accounts, votes, and success or failure:
-
-```bash
-grpcurl -proto superbank.proto \
-  -d '{
-    "start_slot": 250000000,
-    "end_slot": 250000009,
-    "filter": {
-      "vote": false,
-      "failed": false,
-      "account_include": ["EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"]
-    }
-  }' \
-  <your-endpoint>:10000 superbank.Superbank/StreamTransactions
-```
-{% endtab %}
-{% endtabs %}
-
-The proto lives at [superbank.proto](https://github.com/solana-rpc/superbank/blob/main/crates/superbank-rpc/proto/superbank.proto), and `10000` is the default gRPC port. The proto also defines unary methods and a bidirectional `Get` for compatibility; in v1 they return `UNIMPLEMENTED`.
 
 ## getTransactionsForAddress
 
@@ -318,6 +281,42 @@ When `transactionDetails` is `full`, each result contains the encoded transactio
 ```
 {% endtab %}
 {% endtabs %}
+
+## Streaming historical data
+
+Superbank also serves history as gRPC streams alongside JSON-RPC, for server-side-filtered bulk pulls where paginating JSON-RPC calls would be the slow path. Both methods replay bounded, inclusive slot ranges straight from ClickHouse.
+
+{% tabs %}
+{% tab title="StreamBlocks" %}
+Streams one message per block in the range, with block metadata, rewards, and transaction payloads:
+
+```bash
+grpcurl -proto superbank.proto \
+  -d '{ "start_slot": 250000000, "end_slot": 250000009 }' \
+  <your-endpoint>:10000 superbank.Superbank/StreamBlocks
+```
+{% endtab %}
+
+{% tab title="StreamTransactions" %}
+Streams one message per matching transaction. Filter server-side by accounts, votes, and success or failure:
+
+```bash
+grpcurl -proto superbank.proto \
+  -d '{
+    "start_slot": 250000000,
+    "end_slot": 250000009,
+    "filter": {
+      "vote": false,
+      "failed": false,
+      "account_include": ["EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"]
+    }
+  }' \
+  <your-endpoint>:10000 superbank.Superbank/StreamTransactions
+```
+{% endtab %}
+{% endtabs %}
+
+The proto lives at [superbank.proto](https://github.com/solana-rpc/superbank/blob/main/crates/superbank-rpc/proto/superbank.proto), and `10000` is the default gRPC port. The proto also defines unary methods and a bidirectional `Get` for compatibility; in v1 they return `UNIMPLEMENTED`.
 
 ## Self-hosting
 

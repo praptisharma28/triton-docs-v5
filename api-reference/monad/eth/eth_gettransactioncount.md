@@ -2,7 +2,7 @@
 description: >-
   Returns the nonce of an account in the state. NOTE: The name
   eth_getTransactionCount reflects the historical fact that an account's nonce
-  and sent transaction count were the same. After the Pectra for.
+  and sent transaction count were the same.
 ---
 
 # eth\_getTransactionCount

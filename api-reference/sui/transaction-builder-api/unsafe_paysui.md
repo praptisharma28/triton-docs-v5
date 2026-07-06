@@ -38,7 +38,7 @@ curl "https://<your-endpoint>.mainnet.sui.rpcpool.com/<your-token>" -s -X POST \
 | `input_coins` | array               | Yes      | the Sui coins to be used in this transaction, including the coin for gas payment. |
 | `recipients`  | array               | Yes      | the recipients' addresses, the length of this vector must be the same as amounts. |
 | `amounts`     | array               | Yes      | the amounts to be transferred to recipients, following the same order             |
-| `gas_budget`  | BigInt\_for\_uint64 | Yes      | the gas budget, the transaction will fail if the gas cost exceed the budget       |
+| `gas_budget`  | BigInt\_for\_uint64 | Yes      | the gas budget; the transaction fails if the gas cost exceeds the budget       |
 
 ## Response
 

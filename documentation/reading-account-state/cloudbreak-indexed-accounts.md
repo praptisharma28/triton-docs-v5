@@ -65,20 +65,20 @@ A query with no matching index yet still returns correct results, it just runs s
 
 ## Supported methods
 
-| Method                       | Returns                                                        |
-| ---------------------------- | -------------------------------------------------------------- |
-| `getAccountInfo`             | A single account, or `null`.                                   |
+| Method | Returns |
+| --- | --- |
+| `getAccountInfo`             | A single account, or `null`. |
 | `getMultipleAccounts`        | An array of accounts (each `null` if missing), in input order. |
-| `getBalance`                 | The lamport balance of an account.                             |
-| `getProgramAccounts`         | All accounts owned by a program, with filters.                 |
-| `getTokenAccountsByOwner`    | SPL Original and Token-2022 token accounts owned by a wallet.  |
-| `getTokenAccountsByDelegate` | SPL Original and Token-2022 accounts a delegate controls.      |
-| `getTokenAccountsByMint`     | SPL Original and Token-2022 accounts of a given mint.          |
-| `getTokenAccountBalance`     | The token amount held by a token account.                      |
-| `getSlot`                    | The current slot at a commitment level.                        |
-| `getVersion`                 | The upstream Solana version and Cloudbreak build.              |
-| `getGenesisHash`             | The cluster genesis hash.                                      |
-| `getHealth`                  | Service health.                                                |
+| `getBalance`                 | The lamport balance of an account. |
+| `getProgramAccounts`         | All accounts owned by a program, with filters. |
+| `getTokenAccountsByOwner`    | SPL Original and Token-2022 token accounts owned by a wallet. |
+| `getTokenAccountsByDelegate` | SPL Original and Token-2022 accounts a delegate controls. |
+| `getTokenAccountsByMint`     | SPL Original and Token-2022 accounts of a given mint. |
+| `getTokenAccountBalance`     | The token amount held by a token account. |
+| `getSlot`                    | The current slot at a commitment level. |
+| `getVersion`                 | The upstream Solana version and Cloudbreak build. |
+| `getGenesisHash`             | The cluster genesis hash. |
+| `getHealth`                  | Service health. |
 
 ### getAccountInfo
 
@@ -287,7 +287,7 @@ Without `withContext`, `result` is the array directly rather than the `{ context
 
 ### getTokenAccountsByOwner
 
-Returns the Original and Token-2022 token accounts owned by a wallet, both from the. Cloudbreak indexes the token owner and mint as dedicated columns, so this method stays fast even though the SPL Token program holds hundreds of millions of accounts. Compatible with the standard [Solana `getTokenAccountsByOwner` API](https://solana.com/docs/rpc/http/gettokenaccountsbyowner).
+Returns the Original and Token-2022 token accounts owned by a wallet. Cloudbreak indexes the token owner and mint as dedicated columns, so this method stays fast even though the SPL Token program holds hundreds of millions of accounts. Compatible with the standard [Solana `getTokenAccountsByOwner` API](https://solana.com/docs/rpc/http/gettokenaccountsbyowner).
 
 {% hint style="info" %}
 For SPL token data, use the token methods rather than a raw `getProgramAccounts` against the Token program. The token methods hit purpose-built indexes; an unfiltered `getProgramAccounts` over the entire Token program is not indexed and is not a supported access pattern.
@@ -545,12 +545,12 @@ Position 0 is the token account pubkey (base58), required. Position 1 is an opti
 
 These return service and chain metadata. None take account-specific parameters.
 
-| Method           | Returns                                                                                                                         |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `getSlot`        | The current slot at the requested commitment. Accepts an optional `{ "commitment": ..., "minContextSlot": ... }` config.        |
+| Method | Returns |
+| --- | --- |
+| `getSlot`        | The current slot at the requested commitment. Accepts an optional `{ "commitment": ..., "minContextSlot": ... }` config. |
 | `getVersion`     | A `{ "solana-core": "<version>-cloudbreak<version>" }` object identifying the upstream Solana version and the Cloudbreak build. |
-| `getGenesisHash` | The genesis hash of the cluster this index tracks.                                                                              |
-| `getHealth`      | `"ok"` when the index is healthy, or an error while it is bootstrapping a snapshot or repairing a slot gap.                     |
+| `getGenesisHash` | The genesis hash of the cluster this index tracks. |
+| `getHealth`      | `"ok"` when the index is healthy, or an error while it is bootstrapping a snapshot or repairing a slot gap. |
 
 {% tabs %}
 {% tab title="Request" %}

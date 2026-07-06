@@ -14,7 +14,7 @@ To protect the node identity, we adopt a setup that ensures in-memory-only keys.
 
 One of our node operators will then authenticate with our secured, encrypted secret storage and enable the validator node to perform a one-time fetch of the real node identity, which is then activated in the Solana validator's memory.
 
-This ensures that the node identity is never stored in an unencrypted form anywhere. It is also never transferred anywhere between the validator node and our encrypted storage. This transit of the node key happens over an entirely authenticated and encrypted stream.
+This ensures that the node identity is never stored in an unencrypted form anywhere. It moves only between our encrypted storage and the validator node, over an authenticated, encrypted stream.
 
 Without access to the validator memory space, you would be unable to retrieve the node identity, and there is no durable storage of the identity on the node itself.
 

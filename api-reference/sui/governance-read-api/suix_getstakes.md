@@ -1,5 +1,5 @@
 ---
-description: Return all [DelegatedStake].
+description: Return all `DelegatedStake` objects.
 ---
 
 # suix\_getStakes

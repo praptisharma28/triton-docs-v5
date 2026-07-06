@@ -76,7 +76,7 @@ Expected result:
 
 The WebSocket API is also available in Monad. You can find the official documentation [here](https://docs.monad.xyz/reference/websockets)
 
-See an example below how to test WebSocket using the `wscat` utility:
+The example below shows how to test the WebSocket API with the `wscat` utility:
 
 **Install node-ws in Linux**:
 
@@ -137,7 +137,7 @@ Subsequent messages stream each new block header:
 }
 ```
 
-_Note: JS examples are also available in the official documentation._
+_Note: JS examples are also available in the [official documentation](https://docs.monad.xyz/reference/websockets)._
 
 ***
 

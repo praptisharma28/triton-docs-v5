@@ -35,7 +35,7 @@ curl "https://<your-endpoint>.mainnet.sui.rpcpool.com/<your-token>" -s -X POST \
 | `coin_object_id` | ObjectID            | Yes      | the coin object to be split                                                                                |
 | `split_amounts`  | array               | Yes      | the amounts to split out from the coin                                                                     |
 | `gas`            | ObjectID            | No       | gas object to be used in this transaction, node will pick one from the signer's possession if not provided |
-| `gas_budget`     | BigInt\_for\_uint64 | Yes      | the gas budget, the transaction will fail if the gas cost exceed the budget                                |
+| `gas_budget`     | BigInt\_for\_uint64 | Yes      | the gas budget; the transaction fails if the gas cost exceeds the budget                                |
 
 ## Response
 

@@ -121,7 +121,7 @@ async fn main() -> Result<()> {
 
 ## Parameters
 
-**`filter`** · string | object !required
+**`filter`** · string | object · required
 
 Filter describing which transactions should emit log notifications.
 
@@ -137,8 +137,9 @@ The `mentions` filter currently supports exactly one address. Listing more than 
 
 Optional configuration object.
 
-**`commitment`** · string !values processed confirmed finalized !default finalized
+**`commitment`** · string · default `finalized`
 
+Values: `processed`, `confirmed`, `finalized`
 The commitment describes how finalized a block is at that point in time. See [Configuring State Commitment](https://solana.com/docs/rpc#configuring-state-commitment).
 
 ## Response

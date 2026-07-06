@@ -322,7 +322,7 @@ console.log(JSON.stringify(decoded, null, 2));
 
 ## Step 2: Get the earliest signal with Deshred
 
-Deshred reconstructs transactions from shreds before execution, delivering them \~20 ms ahead of standard Dragon's Mouth gRPC at p75 (p50 is \~6.3 ms). It uses a separate RPC method, `SubscribeDeshred`: on the same endpoint and token as Dragon's Mouth.
+Deshred reconstructs transactions from shreds before execution, delivering them \~20 ms ahead of standard Dragon's Mouth gRPC at p75 (p50 is \~6.3 ms). It uses a separate RPC method, `SubscribeDeshred`, on the same endpoint and token as Dragon's Mouth.
 
 Important limitations to understand before using Deshred:
 
@@ -487,7 +487,7 @@ asyncio.run(stream_deshred())
 Deshred tx (pre-execution): 5Vk5mYDpFq3vQtXm8ZkRj2PnCwBsHeLfY6gNuoA1T9Kd... slot: 307152834
 ```
 
-The signature is base58-encoded. The transaction data in `data.deshredTransaction.transaction` contains the instructions and account keys, you can see exactly which pools and wallets are involved, and in which direction. What you **cannot** see: whether it will succeed, what the balance changes will be, or any logs.
+The signature is base58-encoded. The transaction data in `data.deshredTransaction.transaction` contains the instructions and account keys, so you can see exactly which pools and wallets are involved, and in which direction. What you **cannot** see: whether it will succeed, what the balance changes will be, or any logs.
 
 Use this signal to detect incoming order flow and react, for example, detecting a large swap into a pool you're quoting. Always cross-reference with your Dragon's Mouth stream to confirm the transaction actually executed.
 
@@ -715,7 +715,7 @@ def send_with_jet(serialized_tx: bytes, endpoint: str, token: str) -> str:
 {% endtabs %}
 
 {% hint style="warning" %}
-Set `maxRetries: 0` to disable server-side retries, then implement your own retry logic (re-fetch a recent blockhash and re-sign every few seconds). There is a known issue with the Agave `sendTx` library where server-side retry queues overflow under congestion, client-managed retries are more reliable and give your strategy direct control.
+Set `maxRetries: 0` to disable server-side retries, then implement your own retry logic (re-fetch a recent blockhash and re-sign every few seconds). There is a known issue with the Agave `sendTx` library where server-side retry queues overflow under congestion; client-managed retries are more reliable and give your strategy direct control.
 {% endhint %}
 
 **Verify it works:** the signature should appear on-chain within 1-3 slots under normal conditions. Check at solscan.io or via `getSignatureStatuses`.
@@ -859,7 +859,7 @@ Two paths for two types of teams:
 
 <summary>Do I need all five products?</summary>
 
-Dragon's Mouth and Jet cover the minimum, real-time data in, transactions out. Add Deshred if your strategy depends on acting before the network processes a transaction. Priority Fee API prevents you from overbidding during quiet periods. Shield is free on Triton and enforces your validator allowlist or blocklist on every send.
+Dragon's Mouth and Jet cover the minimum: real-time data in, transactions out. Add Deshred if your strategy depends on acting before the network processes a transaction. Priority Fee API prevents you from overbidding during quiet periods. Shield is free on Triton and enforces your validator allowlist or blocklist on every send.
 
 </details>
 
