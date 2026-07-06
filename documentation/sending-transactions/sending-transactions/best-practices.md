@@ -30,7 +30,7 @@ How to land Solana transactions reliably, especially under congestion.
 
 ## Route through staked validators (SWQoS)
 
-* **Add SWQoS transaction bandwidth to your endpoint** (now free on request) for extra stake-weighted delivery: your transactions go over the reserved private connection pools of staked validators, bypassing the congested public TPU ports and raising delivery success.
+* **SWQoS transaction bandwidth is free and enabled by default on every endpoint** — no need to request it. Your transactions go over the reserved private connection pools of staked validators, bypassing the congested public TPU ports and raising delivery success.
 * Combine with priority fees, or Jito, for more speed during contention.
 
 ## Use the direct submission endpoint for latency

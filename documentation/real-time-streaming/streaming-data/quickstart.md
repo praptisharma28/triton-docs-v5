@@ -43,7 +43,8 @@ yellowstone-grpc-client = "13"
 yellowstone-grpc-proto = "12"
 tokio = { version = "1", features = ["full"] }
 futures = "0.3"
-tonic = { version = "0.14", features = ["tls"] }
+tonic = { version = "0.14", features = ["tls-native-roots"] }
+anyhow = "1"
 ```
 {% endtab %}
 
@@ -96,10 +97,13 @@ Fumarole adds a persistent-subscriber layer on top of Dragon's Mouth.
 ```bash
 mkdir fumarole-stream && cd fumarole-stream
 npm init -y
+npm pkg set type=module
 npm install @triton-one/yellowstone-fumarole
 npm install --save-dev typescript ts-node @types/node
 npx tsc --init
 ```
+
+The Fumarole package is ESM-only, so `"type": "module"` is required; run with `npx ts-node --esm main.ts`.
 {% endtab %}
 
 {% tab title="Rust" %}
@@ -109,6 +113,8 @@ yellowstone-fumarole-client = "0.6"
 yellowstone-grpc-proto = "12"
 tokio = { version = "1", features = ["full"] }
 futures = "0.3"
+serde_yaml = "0.9"
+anyhow = "1"
 ```
 {% endtab %}
 {% endtabs %}
@@ -136,7 +142,7 @@ yellowstone-grpc-proto = "12"
 solana-signature = "2"
 tokio = { version = "1", features = ["full"] }
 futures = "0.3"
-tonic = { version = "0.14", features = ["tls"] }
+tonic = { version = "0.14", features = ["tls-native-roots"] }
 anyhow = "1"
 ```
 {% endtab %}
@@ -383,9 +389,9 @@ Connect to a regional endpoint (`ams.rpcpool.com` for Europe, `nyc.rpcpool.com` 
 ```typescript
 import {
   FumaroleClient,
-  InitialOffsetPolicy,
+  CommitmentLevel,
+  SubscribeRequest,
 } from "@triton-one/yellowstone-fumarole";
-import { CommitmentLevel, SubscribeRequest } from "@triton-one/yellowstone-grpc";
 
 const TOKEN_ADDRESS = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
 const subscriberName = "helloworld";
@@ -396,6 +402,8 @@ const client = await FumaroleClient.connect({
   maxDecodingMessageSizeBytes: 100 * 1024 * 1024,
 });
 ```
+
+`CommitmentLevel` and `SubscribeRequest` come from the Fumarole package itself; the types in `@triton-one/yellowstone-grpc` are not interchangeable with them.
 {% endtab %}
 {% endtabs %}
 
@@ -438,10 +446,7 @@ Create the persistent subscriber and consume:
 {% tabs %}
 {% tab title="TypeScript" %}
 ```typescript
-await client.createPersistentSubscriber({
-  consumerGroupName: subscriberName,
-  initialOffsetPolicy: InitialOffsetPolicy.LATEST,
-});
+await client.createPersistentSubscriber(subscriberName);
 
 const { sink: _sink, source } = await client.dragonsmouthSubscribe(
   subscriberName,
@@ -452,26 +457,32 @@ await source.forEach((update) => {
   console.log("Update:", update);
 });
 ```
+
+`createPersistentSubscriber` errors if the name already exists — on reconnect, skip it and call `dragonsmouthSubscribe` directly to resume from the cursor.
 {% endtab %}
 
 {% tab title="Rust" %}
 ```rust
 use {
     futures::StreamExt,
-    yellowstone_fumarole_client::{config::FumaroleConfig, FumaroleClient},
+    yellowstone_fumarole_client::{
+        config::FumaroleConfig,
+        proto::{CreateConsumerGroupRequest, InitialOffsetPolicy},
+        FumaroleClient,
+    },
     yellowstone_grpc_proto::geyser::{
-        CommitmentLevel, SubscribeRequest, SubscribeRequestFilterAccounts,
-        subscribe_update::UpdateOneof,
+        subscribe_update::UpdateOneof, CommitmentLevel, SubscribeRequest,
+        SubscribeRequestFilterAccounts,
     },
 };
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    let config = FumaroleConfig {
-        endpoint: std::env::var("FUMAROLE_ENDPOINT")?,
-        x_token: Some(std::env::var("FUMAROLE_X_TOKEN")?),
-        ..Default::default()
-    };
+    let config: FumaroleConfig = serde_yaml::from_str(&format!(
+        "endpoint: {}\nx-token: {}",
+        std::env::var("FUMAROLE_ENDPOINT")?,
+        std::env::var("FUMAROLE_X_TOKEN")?,
+    ))?;
     let mut client = FumaroleClient::connect(config).await?;
 
     let mut accounts = std::collections::HashMap::new();
@@ -491,9 +502,23 @@ async fn main() -> anyhow::Result<()> {
         ..Default::default()
     };
 
-    let (_sink, mut source) = client
-        .dragonsmouth_subscribe("helloworld", request)
-        .await?;
+    // Create the persistent subscriber (skip if it already exists from a previous run)
+    let created = client
+        .create_consumer_group(CreateConsumerGroupRequest {
+            consumer_group_name: "helloworld".to_string(),
+            initial_offset_policy: InitialOffsetPolicy::Latest.into(),
+            from_slot: None,
+        })
+        .await;
+    if let Err(status) = created {
+        if status.code() != tonic::Code::AlreadyExists {
+            return Err(status.into());
+        }
+    }
+
+    let subscription = client.subscribe("helloworld", request).await?;
+    let (_sink, source) = subscription.split();
+    let mut source = source.like_dragonsmouth();
 
     while let Some(update) = source.next().await {
         if let Some(UpdateOneof::Account(acc)) = update?.update_oneof {
@@ -533,6 +558,7 @@ stream.on("data", (data) => {
 });
 
 const request: SubscribeDeshredRequest = {
+  slots: {},
   deshredTransactions: {
     client: {
       vote: false,
@@ -591,7 +617,7 @@ async fn main() -> anyhow::Result<()> {
                 account_required: vec![],
             },
         )]),
-        ping: None,
+        ..Default::default()
     };
 
     let (mut tx, mut stream) =
@@ -611,7 +637,7 @@ async fn main() -> anyhow::Result<()> {
                 })
                 .await?;
             }
-            Some(UpdateOneof::Pong(_)) => {}
+            Some(_) => {}
             None => break,
         }
     }

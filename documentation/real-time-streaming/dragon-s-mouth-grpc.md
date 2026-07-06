@@ -896,7 +896,7 @@ To unsubscribe from everything but keep the connection open:
 
 ## Sending pings
 
-Some cloud providers (e.g. Cloudflare) close idle streams. To avoid this, you need to keep sending pings to the server. The server responds with a `pong` message every 15 seconds.
+Some cloud providers (e.g. Cloudflare) close idle streams. To avoid this, keep sending pings to the server; it replies to each with a `pong`. The server also sends its own `ping` update on the stream roughly every 10 seconds to detect dead clients — you can ignore those or use them as a liveness signal.
 
 {% tabs %}
 {% tab title="TypeScript" %}

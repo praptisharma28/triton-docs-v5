@@ -45,10 +45,13 @@ anyhow = "1"
 ```bash
 mkdir account-sync && cd account-sync
 npm init -y
+npm pkg set type=module
 npm install @triton-one/triton-sdk
 npm install --save-dev typescript ts-node @types/node
 npx tsc --init
 ```
+
+The SDK is ESM-only, so `"type": "module"` is required; run with `npx ts-node --esm main.ts`.
 {% endtab %}
 {% endtabs %}
 
@@ -68,9 +71,11 @@ const connection = new Connection(
 );
 
 const usdcMint = new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v");
-const account = await connection.getParsedAccountInfo(usdcMint);
 
-console.log(account.value);
+(async () => {
+  const account = await connection.getParsedAccountInfo(usdcMint);
+  console.log(account.value);
+})();
 ```
 {% endtab %}
 
@@ -145,7 +150,11 @@ Run your code:
 {% tabs %}
 {% tab title="TypeScript" %}
 ```bash
+# Standard RPC
 npx ts-node main.ts
+
+# Account Sync (ESM package — needs the --esm flag)
+npx ts-node --esm main.ts
 ```
 {% endtab %}
 

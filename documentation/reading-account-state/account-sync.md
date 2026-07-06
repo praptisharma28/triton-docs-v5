@@ -201,6 +201,8 @@ Supported encodings: `binary`, `base58`, `base64`, `base64+zstd`, `jsonParsed`. 
 npm install @triton-one/triton-sdk
 ```
 
+The SDK is ESM-only: your project needs `"type": "module"` in `package.json` (`npm pkg set type=module`), and `ts-node` needs the `--esm` flag. Importing it from a CommonJS project fails at the import.
+
 The SDK re-exports web3.js types and helpers, so most apps import from one package:
 
 ```ts
